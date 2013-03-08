@@ -21,7 +21,7 @@ buildLogic.startConstruction = function (building) {
 *	A builder has done a build action on this building, its progress is updated.
 */
 buildLogic.updateConstruction = function (building) {
-	building.constructionProgress += 100 / (gameThread.FPS * building.timeConstruction);
+	building.constructionProgress += 100 / building.timeConstruction;
 	building.color = building.constructionColors[parseInt((building.constructionColors.length - 1) * building.constructionProgress / 100)];
 	if(building.constructionProgress >= 100) {
 		building.constructionProgress = 100;

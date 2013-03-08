@@ -30,7 +30,12 @@ gameManager.createNewGame = function(map, players) {
 }
 
 
+/**
+*	Returns a new player.
+*/
+gameManager.createPlayer = function (race, army, status, resources) {
 
+}
 
 //start game
 //TODO : remove and handle the game creation in a correct way

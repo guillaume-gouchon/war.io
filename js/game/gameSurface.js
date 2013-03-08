@@ -27,6 +27,10 @@ gameSurface.init = function () {
 	gameSurface.canvas.width = document.width;
 	gameSurface.ctx = canvas.getContext("2d");
 	gameSurface.updateGameWindowSize();
+
+	gameSurface.grd = gameSurface.ctx.createLinearGradient(0,0,200,0);
+	gameSurface.grd.addColorStop(0,"white");
+	gameSurface.grd.addColorStop(1,"green");
 }
 
 
@@ -59,9 +63,21 @@ gameSurface.draw = function () {
 							  element.shape.length * gameLogic.PIXEL_BY_NODE);
 
 			if(element.family == gameData.FAMILIES.building) {
+				if(element.queueProgression > 0) {
+					this.ctx.fillStyle = this.grd;
+					this.ctx.fillRect((element.position.x - this.window.x) * gameLogic.PIXEL_BY_NODE - gameLogic.PIXEL_BY_NODE * parseInt(element.shape[0].length / 2),
+							   	 (element.position.y - this.window.y) * gameLogic.PIXEL_BY_NODE  - gameLogic.PIXEL_BY_NODE * parseInt(element.shape.length / 2),
+							   	  element.queueProgression / 100 * gameLogic.PIXEL_BY_NODE * element.shape[0].length, 5);
+				}
+				if(element.constructionProgress < 100) {
+					this.ctx.fillStyle = this.grd;
+					this.ctx.fillRect((element.position.x - this.window.x) * gameLogic.PIXEL_BY_NODE - gameLogic.PIXEL_BY_NODE * parseInt(element.shape[0].length / 2),
+							   	 (element.position.y - this.window.y) * gameLogic.PIXEL_BY_NODE  - gameLogic.PIXEL_BY_NODE * parseInt(element.shape.length / 2),
+							   	  element.constructionProgress / 100 * gameLogic.PIXEL_BY_NODE * element.shape[0].length, 5);
+				}
 				for(var p in element.queue) {
 					var stuff = element.queue[p];
-					this.ctx.fillStyle = '#ccc';
+					this.ctx.fillStyle = '#ff0';
 					this.ctx.fillRect((element.position.x - this.window.x) * gameLogic.PIXEL_BY_NODE + p * gameLogic.PIXEL_BY_NODE - gameLogic.PIXEL_BY_NODE * parseInt(element.shape[0].length / 2), 
 									   (element.position.y - this.window.y) * gameLogic.PIXEL_BY_NODE, 
 									   gameLogic.PIXEL_BY_NODE, 
