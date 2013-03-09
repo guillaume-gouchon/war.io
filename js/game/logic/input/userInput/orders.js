@@ -62,6 +62,21 @@ userInput.dispatchUnitAction = function (x, y) {
 					actions.attack(gameLogic.selected, element);
 					return;
 				}
+			} else if (element.family == gameData.FAMILIES.terrain 
+						&& element.resourceType >= 0) {
+				//resource terrain element
+				for(var i in gameLogic.selected) {
+					var selectedUnit = gameLogic.selected[i];
+					if(selectedUnit.isBuilder) {
+						//builders are sent to gather resources
+						actions.gather([selectedUnit], element);
+						selectedUnit.action = element;
+					} else {
+						//non-builders are given a move order
+						actions.move([selectedUnit], destination.x, destination.y);
+					}
+				}
+				return;
 			}
 		}
 	}

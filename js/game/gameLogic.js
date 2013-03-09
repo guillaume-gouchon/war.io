@@ -47,10 +47,10 @@ gameLogic.grid = [];
 */
 gameLogic.updateGameLogic = function() {
 	this.updateGameWindow();
-	this.updateGrid();
 	this.resolveActions();
 	this.updateMoves();
 	this.removeDeads();
+	this.updateGrid();
 	this.checkGameOver();
 	this.updateBuildings();
 	this.updateFogOfWar();
@@ -114,8 +114,19 @@ gameLogic.resolveActions = function () {
 					//close enough
 					if (element.isBuilder && element.action.family == gameData.FAMILIES.building
 						&& fightLogic.isAlly(element.action)) {
-						//build / repair
-						actions.doTheBuild(element, element.action);
+						if(element.action.constructionProgress < 100) {
+							//build
+							actions.doTheBuild(element, element.action);	
+						} else {
+							if(element.gathering != null) {
+								//come back with some resources
+								buildLogic.getBackResources(element);
+							}
+							//TODO : repair
+						}
+					} else if (element.isBuilder && element.action.family == gameData.FAMILIES.terrain) {
+						//gathering resources
+						actions.doTheGathering(element, element.action);
 					} else if (!fightLogic.isAlly(element.action)) {
 						//attack
 						actions.doTheAttack(element, element.action);
@@ -138,7 +149,8 @@ gameLogic.resolveActions = function () {
 gameLogic.removeDeads= function () {
 	var n = gameLogic.gameElements.length;
 	while(n--) {
-		if(gameLogic.gameElements[n].life <= 0) {
+		if(gameLogic.gameElements[n].life <= 0
+			|| gameLogic.gameElements[n].resourceAmount == 0) {
 			fightLogic.removeElement(n);
 		}
 	}

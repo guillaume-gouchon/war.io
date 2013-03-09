@@ -20,6 +20,10 @@ gameData.Unit = function (unit, x, y, army) {
 	this.buttons = unit.buttons;
 	this.timeConstruction = unit.timeConstruction;
 	this.frags = 0;
+	this.gatheringSpeed = unit.gatheringSpeed;
+	this.maxGathering = unit.maxGathering;
+	this.gathering = null;
+	this.patrol = null;
 
 	//fight-related data
 	this.life = unit.life;

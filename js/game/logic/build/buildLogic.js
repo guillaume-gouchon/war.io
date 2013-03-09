@@ -61,3 +61,34 @@ buildLogic.getWhatCanBeBuilt = function (buildings) {
 	}
 	return array;
 }
+
+
+/**
+*	A builder is gathering resources.
+*/
+buildLogic.gatherResources = function (builder, resource) {
+	//reset resources if different from previous one
+	if (builder.gathering == null || builder.gathering.type != resource.resourceType) {
+		builder.gathering = {type : resource.resourceType, amount : 0};
+	}
+
+	var amount = Math.min(builder.maxGathering - builder.gathering.amount, 5, resource.resourceAmount);
+	builder.gathering.amount += amount;
+	resource.resourceAmount -= amount;
+
+	if (builder.gathering.amount == builder.maxGathering) {
+		builder.action = gameLogic.gameElements[0];
+	}
+}
+
+
+/**
+*	A builder is coming back to a building with some resources
+*/
+buildLogic.getBackResources = function (builder) {
+	gameManager.players[builder.army].resources[builder.gathering.type] += builder.gathering.amount;
+	builder.gathering = null;
+	if(builder.patrol != null) {
+		builder.action = builder.patrol;
+	}
+}

@@ -128,6 +128,12 @@ gameSurface.draw = function () {
 		this.ctx.fillRect(10 + i * 90, gameSurface.canvas.height - 80 , 80, 80);
 	}
 
+	//draw resources
+	this.ctx.font="20px Arial black";
+	for(var i = 0; i < gameManager.players[gameManager.myArmy].resources.length; i++) {
+		this.ctx.fillText(gameManager.players[gameManager.myArmy].resources[i], 20 + i * 100, 20 );
+	}
+
 }
 
 

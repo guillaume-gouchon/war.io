@@ -21,3 +21,13 @@ actions.doTheAttack = function (element, target) {
 		fightLogic.attack(element, target);
 	}
 }
+
+
+/**
+*	Basic gathering action.
+*/
+actions.doTheGathering = function (element, resource) {
+	if(gameManager.iterate % element.gatheringSpeed == 0) {
+		buildLogic.gatherResources(element, resource);
+	}
+}

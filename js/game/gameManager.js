@@ -41,7 +41,7 @@ gameManager.createPlayer = function (race, army, status, resources) {
 //TODO : remove and handle the game creation in a correct way
 gameManager.myArmy = 0;
 gameManager.players = [
-	{race : 0, army : 0, status: [gameData.STATUSES.me, gameData.STATUSES.neutral]}, 
-	{race : 0, army : 1, status: [gameData.STATUSES.enemy, gameData.STATUSES.me]}, 
+	{race : 0, army : 0, status: [gameData.STATUSES.me, gameData.STATUSES.neutral], resources : [0, 0, 0, 0]}, 
+	{race : 0, army : 1, status: [gameData.STATUSES.enemy, gameData.STATUSES.me], resources : [0, 0, 0, 0]}, 
 ];
 gameManager.createNewGame(gameData.RANDOM_MAPS.small, gameManager.players);

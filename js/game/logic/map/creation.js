@@ -13,11 +13,12 @@ mapLogic.staticGrid = [];
 */
 mapLogic.createRandomMap = function (map, players) {
 	this.initGrid(map.size);
-	this.createTerrain(map);
 	var playerPositions = this.getPlayersPositions(map.size, players.length);
 	for(var i in players) {
 		this.setupBasecamp(players[i], playerPositions[i]);
 	}
+
+	this.createTerrain(map);
 
 }
 
@@ -44,6 +45,13 @@ mapLogic.createTerrain = function (map) {
 	for(var i = 0; i < nbTrees; i++) {
 		var position = [parseInt(Math.random() * map.size.x), parseInt(Math.random() * map.size.y)];
 		gameLogic.gameElements.push(new gameData.Terrain(gameData.TERRAINS.tree, position[0], position[1]));
+		this.staticGrid[position[0]][position[1]].isWall = true;
+	}
+
+	var nbStone = parseInt(5 * Math.random());
+	for(var i = 0; i < nbStone; i++) {
+		var position = [parseInt(Math.random() * map.size.x), parseInt(Math.random() * map.size.y)];
+		gameLogic.gameElements.push(new gameData.Terrain(gameData.TERRAINS.stone, position[0], position[1]));
 		this.staticGrid[position[0]][position[1]].isWall = true;
 	}
 }

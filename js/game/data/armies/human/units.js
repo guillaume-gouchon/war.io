@@ -14,7 +14,9 @@ gameData.HUMAN_UNITS = {
 		attack : 5, 
 		defense : 0,
 		weaponType : 0,
-		armorType : 0
+		armorType : 0,
+		gatheringSpeed : 1,
+		maxGathering : 20
 	},
 	swordsman : {
 		race : 0,

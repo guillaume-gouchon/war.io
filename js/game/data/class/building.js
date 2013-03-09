@@ -9,7 +9,7 @@ gameData.Building = function (building, x, y, army, isBuilt) {
 	this.position = {x : x, y : y};
 	this.shape = building.shape;
 	this.constructionColors = building.constructionColors;
-	this.color = this.constructionColors[0];
+	this.color = (isBuilt ? this.constructionColors[this.constructionColors.length - 1] : this.constructionColors[0]);;
 	
 	//game-related data
 	this.selected = false;

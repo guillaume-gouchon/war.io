@@ -4,6 +4,10 @@
 		"selected_items":
 		[
 			[
+				"queue",
+				"queueProgression"
+			],
+			[
 				"input",
 				"inputDispatcher"
 			],
@@ -106,10 +110,6 @@
 			[
 				"time",
 				"timeConstruction"
-			],
-			[
-				"queue",
-				"queueProgress"
 			],
 			[
 				"buil",
@@ -520,10 +520,26 @@
 	"buffers":
 	[
 		{
-			"file": ".git/config",
+			"file": "js/game/gameSurface.js",
 			"settings":
 			{
-				"buffer_size": 289,
+				"buffer_size": 5947,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "js/game/gameLogic.js",
+			"settings":
+			{
+				"buffer_size": 3960,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "js/game/logic/map/creation.js",
+			"settings":
+			{
+				"buffer_size": 2735,
 				"line_ending": "Unix"
 			}
 		}
@@ -556,13 +572,14 @@
 	},
 	"file_history":
 	[
+		"/home/guillaume/Bureau/web/rts/.git/config",
+		"/home/guillaume/Bureau/web/rts/js/game/logic/build/buildLogic.js",
+		"/home/guillaume/Bureau/web/rts/js/game/gameManager.js",
 		"/home/guillaume/Bureau/web/rts/js/game/logic/input/inputDispatcher.js",
 		"/home/guillaume/Bureau/web/rts/js/game/logic/input/userInput/interactions.js",
-		"/home/guillaume/Bureau/web/rts/.git/config",
 		"/home/guillaume/Bureau/web/rts/js/game/input/mouseInput.js",
 		"/home/guillaume/Bureau/web/rts/js/game/gameLogic.js",
 		"/home/guillaume/Bureau/web/rts/index.html",
-		"/home/guillaume/Bureau/web/rts/js/game/logic/build/buildLogic.js",
 		"/home/guillaume/Bureau/web/rts/js/game/GUI/index.js",
 		"/home/guillaume/Bureau/web/rts/js/game/GUI/toolbar.js",
 		"/home/guillaume/Bureau/web/rts/js/game/logic/movement/moveLogic.js",
@@ -579,7 +596,6 @@
 		"/home/guillaume/Bureau/web/rts/js/game/logic/input/index.js",
 		"/home/guillaume/Bureau/web/rts/js/game/logic/input/userInput.js/index.js",
 		"/home/guillaume/Bureau/web/rts/js/game/gameSurface.js",
-		"/home/guillaume/Bureau/web/rts/js/game/gameManager.js",
 		"/home/guillaume/Bureau/web/rts/js/game/input/keyboardInput.js",
 		"/home/guillaume/Bureau/web/rts/js/game/data/global.js",
 		"/home/guillaume/Bureau/web/rts/js/game/data/map/terrains.js",
@@ -691,7 +707,7 @@
 	},
 	"find_in_files":
 	{
-		"height": 93.0,
+		"height": 0.0,
 		"where_history":
 		[
 			"/home/guillaume/Bureau/web/rts",
@@ -883,31 +899,85 @@
 	"groups":
 	[
 		{
-			"selected": 0,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": ".git/config",
+					"file": "js/game/gameSurface.js",
 					"settings":
 					{
-						"buffer_size": 289,
+						"buffer_size": 5947,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								101,
-								104
+								3174,
+								3174
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/Text/Plain text.tmLanguage"
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1581.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "js/game/gameLogic.js",
+					"settings":
+					{
+						"buffer_size": 3960,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1290,
+								1290
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 969.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "js/game/logic/map/creation.js",
+					"settings":
+					{
+						"buffer_size": 2735,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								925,
+								925
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 357.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"

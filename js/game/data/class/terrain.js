@@ -10,4 +10,6 @@ gameData.Terrain = function (terrain, x, y) {
 
 	//game-related data
 	this.canMoveIn = terrain.canMoveIn;
+	this.resourceType = terrain.resourceType;
+	this.resourceAmount = terrain.resourceAmount;
 }
