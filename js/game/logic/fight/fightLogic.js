@@ -14,7 +14,7 @@ fightLogic.weaponsEfficiency = [
 *	Checks if element is an enemy to me.
 */
 fightLogic.isEnemy = function (element) {
-	if(gameManager.players[gameManager.myArmy].status[element.army] == gameData.STATUSES.ennemy) {
+	if(gameManager.players[gameManager.myArmy].status[element.owner] == gameData.STATUSES.ennemy) {
 		return true;
 	} else {
 		return false;
@@ -26,8 +26,8 @@ fightLogic.isEnemy = function (element) {
 *	Checks if element is my ally or not.
 */
 fightLogic.isAlly = function (element) {
-	if(gameManager.players[gameManager.myArmy].status[element.army] == gameData.STATUSES.me
-		|| gameManager.players[gameManager.myArmy].status[element.army] == gameData.STATUSES.ally) {
+	if(gameManager.players[gameManager.myArmy].status[element.owner] == gameData.STATUSES.me
+		|| gameManager.players[gameManager.myArmy].status[element.owner] == gameData.STATUSES.ally) {
 		return true;
 	} else {
 		return false;

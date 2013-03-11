@@ -46,6 +46,7 @@ gameLogic.grid = [];
 * 	It also checks if the game is ending.
 */
 gameLogic.updateGameLogic = function() {
+	this.updateToolbar();
 	this.updateGameWindow();
 	this.resolveActions();
 	this.updateMoves();
@@ -83,6 +84,14 @@ gameLogic.updateGrid = function () {
 			}
 		}
 	}
+}
+
+
+/**
+*	Updates the toolbar.
+*/
+gameLogic.updateToolbar = function () { 
+	GUI.updateToolbar();
 }
 
 
@@ -148,11 +157,15 @@ gameLogic.resolveActions = function () {
 */
 gameLogic.removeDeads= function () {
 	var n = gameLogic.gameElements.length;
-	while(n--) {
+	while (n--) {
 		var element = gameLogic.gameElements[n]; 
-		if(element.life <= 0 || element.resourceAmount == 0) {
-			if(element.family == gameData.FAMILIES.terrain) {
+		if (element.life <= 0 || element.resourceAmount == 0) {
+			if (element.family == gameData.FAMILIES.terrain) {
 				mapLogic.staticGrid[element.position.x][element.position.y].isWall = false;
+			} else if (element.family == gameData.FAMILIES.building) {
+				buildLogic.removeBuilding(element);
+			} else if (element.family == gameData.FAMILIES.unit) {
+				buyLogic.removeUnit(element);
 			}
 			fightLogic.removeElement(n);
 		}

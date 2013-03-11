@@ -1,9 +1,9 @@
-gameData.Building = function (building, x, y, army, isBuilt) {
+gameData.Building = function (building, x, y, owner, isBuilt) {
 	//personal data
 	this.id = gameData.createUniqueId();
 	this.family = gameData.FAMILIES.building;
 	this.type = building.type;
-	this.army = army;
+	this.owner = owner;
 
 	//drawing-related data
 	this.position = {x : x, y : y};
@@ -20,6 +20,8 @@ gameData.Building = function (building, x, y, army, isBuilt) {
 	this.buttons = building.buttons;
 	this.queue = [];
 	this.queueProgression = 0;
+	this.population = building.population;
+	this.needs = building.needs;
 
 	//fight-related data
 	this.life = building.life;

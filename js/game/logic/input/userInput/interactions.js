@@ -10,17 +10,19 @@ userInput.SCROLL_THRESHOLD = 30;
 * 	@param button : the button that was clicked
 */
 userInput.clickOnToolbar = function (button) {
-	if(button == GUI.TOOLBAR_BUTTONS.build) {
-		//build something
-		GUI.toolbar = buildLogic.getBuildingButtons();
-	} else if (button.constructionColors != null && button.isEnabled) {
-		//building
-		this.enterConstructionMode(button);
-	} else if (button.speed != null) {
-		//unit
-		buildLogic.buyElement(button);
-	} else {
-		//skill
+	if(button.isEnabled) {
+		if(button == GUI.TOOLBAR_BUTTONS.build) {
+			//build something
+			GUI.showBuildings = true;
+		} else if (button.constructionColors != null && button.isEnabled) {
+			//building
+			this.enterConstructionMode(button);
+		} else if (button.speed != null) {
+			//unit
+			buildLogic.buyElement(button);
+		} else {
+			//skill
+		}
 	}
 }
 
@@ -76,6 +78,7 @@ userInput.updateConstructionMode = function (x, y) {
 */
 userInput.leaveConstructionMode = function () {
 	gameLogic.building = null;
+	GUI.showBuildings = false;
 }
 
 

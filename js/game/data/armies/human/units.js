@@ -16,7 +16,9 @@ gameData.HUMAN_UNITS = {
 		weaponType : 0,
 		armorType : 0,
 		gatheringSpeed : 1,
-		maxGathering : 20
+		maxGathering : 20,
+		population : 1,
+		needs : [{type : gameData.RESOURCES.gold, value : 20}]
 	},
 	swordsman : {
 		race : 0,
@@ -33,7 +35,9 @@ gameData.HUMAN_UNITS = {
 		attack : 10, 
 		defense : 2,
 		weaponType : 0,
-		armorType : 0
+		armorType : 0,
+		population : 1,
+		needs : [{type : gameData.RESOURCES.gold, value : 50}]
 	},
 	knight : {
 		race : 0,
@@ -50,6 +54,8 @@ gameData.HUMAN_UNITS = {
 		attack : 20, 
 		defense : 5,
 		weaponType : 0,
-		armorType : 0
+		armorType : 0,
+		population : 2,
+		needs : [{type : gameData.RESOURCES.gold, value : 100}]
 	}
 }

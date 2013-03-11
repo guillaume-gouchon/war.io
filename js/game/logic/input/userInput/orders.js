@@ -6,7 +6,7 @@ userInput.tryBuildHere = function () {
 		actions.buildThatHere(gameLogic.selected, gameLogic.building, 
 							  gameLogic.building.position.x, 
 							  gameLogic.building.position.y,
-							  gameLogic.selected[0].army);
+							  gameLogic.selected[0].owner);
 	} else {//cannot be built here !
 	}
 }

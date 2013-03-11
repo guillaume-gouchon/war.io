@@ -29,8 +29,8 @@ actions.build = function (units, building) {
 }
 
 
-actions.buildThatHere = function (builders, buildingType, x, y, army) {
-	var  building = new gameData.Building(buildingType, x, y, army);
+actions.buildThatHere = function (builders, buildingType, x, y, owner) {
+	var  building = new gameData.Building(buildingType, x, y, owner);
 	buildLogic.startConstruction(building);
 	this.build(builders, building);
 }

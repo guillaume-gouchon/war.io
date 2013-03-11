@@ -9,6 +9,8 @@ userInput.SELECTION_RECTANGLE_THRESHOLD = 2; //in pixels
 * 	@param (x, y) : coordinates of the click
 */
 userInput.clickToSelect = function (x, y) {
+	this.leaveConstructionMode();
+
 	//reset the selection rectangle
 	gameLogic.selectionRectangle = [];
 	gameLogic.selectionRectangle[0] = x;
@@ -27,13 +29,11 @@ userInput.clickToSelect = function (x, y) {
 	  		element.isSelected = true;
 	  		gameLogic.selected.push(element);
 	  	} else {
-  		//unselect the others
-  		element.isSelected = false;
+	  		//unselect the others
+	  		element.isSelected = false;
 		}
 	}
 
-	//update toolbar depending on the new selection
-	GUI.updateToolbar();
 }
 
 
@@ -100,8 +100,6 @@ userInput.selectGroup = function (x, y) {
 				}
 			}
 
-			//update toolbar depending on the new selection
-			GUI.updateToolbar();
 		}
 }
 

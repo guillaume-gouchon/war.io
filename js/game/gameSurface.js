@@ -124,15 +124,23 @@ gameSurface.draw = function () {
 	//draw toolbar
 	for(var i = 0; i < GUI.toolbar.length; i++) {
 		var button = GUI.toolbar[i];
-		this.ctx.fillStyle = '#000';
+		if(button.isEnabled) {
+			this.ctx.fillStyle = '#000';
+		} else {
+			this.ctx.fillStyle = '#f00';
+		}
 		this.ctx.fillRect(10 + i * 90, gameSurface.canvas.height - 80 , 80, 80);
 	}
 
 	//draw resources
 	this.ctx.font="20px Arial";
 	for(var i = 0; i < gameManager.players[gameManager.myArmy].resources.length; i++) {
-		this.ctx.fillText(gameManager.players[gameManager.myArmy].resources[i], 20 + i * 100, 20 );
+		this.ctx.fillText(gameManager.players[gameManager.myArmy].resources[i], 20 + i * 100, 20);
 	}
+
+	//draw population
+	this.ctx.fillText(gameManager.players[gameManager.myArmy].population.current + '/'
+					+ gameManager.players[gameManager.myArmy].population.max, canvas.width - 60, 20);
 
 	//draw order, rallying point
 	if(gameLogic.selected.length > 0 && fightLogic.isAlly(gameLogic.selected[0])) {

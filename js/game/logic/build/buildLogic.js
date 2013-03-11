@@ -12,9 +12,11 @@ buildLogic.STATUS_CAN_BUILD_HERE = 10;
 *	The user has chosen where to build the structure.
 */
 buildLogic.startConstruction = function (building) {
-	gameLogic.gameElements.push(building);
-	userInput.leaveConstructionMode();
-	GUI.updateToolbar();
+	if (this.canBuyIt(building.owner, building)) {
+		this.paysForElement(building.owner, building);
+		gameLogic.gameElements.push(building);
+		userInput.leaveConstructionMode();
+	}
 }
 
 /**
@@ -24,8 +26,28 @@ buildLogic.updateConstruction = function (building) {
 	building.constructionProgress += 100 / building.timeConstruction;
 	building.color = building.constructionColors[parseInt((building.constructionColors.length - 1) * building.constructionProgress / 100)];
 	if(building.constructionProgress >= 100) {
-		building.constructionProgress = 100;
-		GUI.updateToolbar();
+		this.finishConstruction(building);
+	}
+}
+
+
+/**
+*	A building has just been finised to construct.
+*/
+buildLogic.finishConstruction = function (building) {
+	building.constructionProgress = 100;
+	if(building.population > 0) {
+		gameManager.players[building.owner].population.max += building.population;
+	}
+}
+
+
+/**
+*	A building has been destroyed / cancelled
+*/
+buildLogic.removeBuilding = function (building) {
+	if(building.population > 0) {
+		gameManager.players[building.owner].population.max -= building.population;
 	}
 }
 
@@ -37,29 +59,11 @@ buildLogic.getBuildingButtons = function () {
 	switch(gameLogic.selected[0].race) {
 		
 		case gameData.ARMIES.human :
-			return this.getWhatCanBeBuilt(gameData.HUMAN_BUILDINGS);
+			return this.getWhatCanBeBought(gameLogic.selected[0].owner, gameData.HUMAN_BUILDINGS);
 		break;
 
 		//...
 	}
-}
-
-
-/**
-*	Filters the list of buildings which can be build depending 
-*	on its needs (resources, researchs, etc...).
-*/
-buildLogic.getWhatCanBeBuilt = function (buildings) {
-	var array = [];
-	for(var key in buildings) {
-		var building = buildings[key];
-		for(var i in building.needs) {
-			var need = building.needs[i];
-		}
-		building.isEnabled = true;
-		array.push(building);
-	}
-	return array;
 }
 
 
@@ -87,7 +91,7 @@ buildLogic.gatherResources = function (builder, resource) {
 *	A builder is coming back to a building with some resources
 */
 buildLogic.getBackResources = function (builder) {
-	gameManager.players[builder.army].resources[builder.gathering.type] += builder.gathering.amount;
+	gameManager.players[builder.owner].resources[builder.gathering.type] += builder.gathering.amount;
 	builder.gathering = null;
 	if(builder.patrol != null) {
 		builder.action = builder.patrol;

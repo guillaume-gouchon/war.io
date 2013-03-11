@@ -6,7 +6,9 @@ buildLogic.buyElement = function (element) {
 		var building = gameLogic.selected[i];
 		if(building.type == gameLogic.selected[0].type
 			&& building.constructionProgress == 100
-			&& building.queue.length < 5) {
+			&& building.queue.length < 5
+			&& this.canBuyIt(building.owner, element)) {
+				this.paysForElement(building.owner, element);
 				building.queue.push(element);
 		}
 	}
@@ -20,35 +22,98 @@ buildLogic.buyElement = function (element) {
 buildLogic.updateQueueProgress = function (building) {
 	building.queueProgression += 100 / (gameThread.FPS * building.queue[0].timeConstruction);
 	if(building.queueProgression >= 100) {
-		//element is ready
-		building.queueProgression = 0;
-		if(building.queue[0].speed != null) {
+		var canGoToNext = true;
+		if(building.queue[0].speed > 0) {
 			//unit
-			this.createNewUnit(building.queue[0], building);	
+			canGoToNext = this.createNewUnit(building.queue[0], building);	
+		}
+
+
+		if (canGoToNext) {
+			//element is ready
+			building.queueProgression = 0;
+			
+			//update queue
+			building.queue.splice(0, 1);
+		} else {
+			building.queueProgression = 100;
 		}
 		
-		//update queue
-		building.queue.splice(0, 1);
 	}
 }
 
 
 /**
-*	The unit just pops up from the factory.
+*	The unit just pops up from the factory if there is place and population is not exceeding.
 */
 buildLogic.createNewUnit = function (unit, factory) {
 	var possiblePositions = tools.getTilesAroundElements(factory);
-	if(possiblePositions.length > 0) {
+	var playerPopulation = gameManager.players[factory.owner].population;
+	if(possiblePositions.length > 0 && playerPopulation.current + unit.population <= playerPopulation.max) {
 		var position = possiblePositions[possiblePositions.length - 1];
-		var unit = new gameData.Unit(unit, position.x, position.y, factory.army);
-		
+		var unit = new gameData.Unit(unit, position.x, position.y, factory.owner);
+
+		//updates population
+		gameManager.players[factory.owner].population.current += unit.population;
+
 		//moves the unit to the rallying point
 		if(factory.rallyingPoint != null) {
 			unit.moveTo = {x : factory.rallyingPoint.x, y : factory.rallyingPoint.y};
 		}
 
 		gameLogic.gameElements.push(unit);
+		return true;
+	} else {
+		return false;	
 	}
 }
 
 
+/**
+* 	A unit has just been killed / cancelled
+*/
+buildLogic.removeUnit = function (unit) {
+	if(unit.population > 0) {
+		gameManager.players[building.owner].population.current -= unit.population;
+	}
+}
+
+
+/**
+*	Filters the list of things which can be bought depending 
+*	on its needs (resources, researchs, etc...).
+*/
+buildLogic.getWhatCanBeBought = function (owner, elements) {
+	var array = [];
+	for(var key in elements) {
+		var element = elements[key];
+		element.isEnabled = this.canBuyIt(owner, element);
+		array.push(element);
+	}
+	return array;
+}
+
+
+/**
+*	Check if we can afford this element.
+*/
+buildLogic.canBuyIt = function (owner, element) {
+	for(var i in element.needs) {
+		var need = element.needs[i];
+		if(need.value > gameManager.players[owner].resources[need.type]) {
+			return false;
+		}
+	}
+	return true;
+}
+
+
+/**
+*	Pays for the element.
+*/
+buildLogic.paysForElement = function (owner, element) {
+	for(var i in element.needs) {
+		var need = element.needs[i];
+		gameManager.players[owner].resources[need.type] -= need.value;
+	}
+}

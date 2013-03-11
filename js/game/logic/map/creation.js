@@ -64,14 +64,14 @@ mapLogic.setupBasecamp = function (player, position) {
 	var basecamp = gameData.BASECAMPS[player.race];
 
 	//place town hall
-	var townHall = new gameData.Building(basecamp.buildings[0], position.x, position.y, player.army, true);
+	var townHall = new gameData.Building(basecamp.buildings[0], position.x, position.y, player.owner, true);
 	gameLogic.gameElements.push(townHall);
 	gameLogic.updateGrid();
 	
 	//place units
 	var aroundTownHall = tools.getTilesAroundElements(townHall);
 	for(var i in basecamp.units) {
-		gameLogic.gameElements.push(new gameData.Unit(basecamp.units[i], aroundTownHall[i].x, aroundTownHall[i].y, player.army));
+		gameLogic.gameElements.push(new gameData.Unit(basecamp.units[i], aroundTownHall[i].x, aroundTownHall[i].y, player.owner));
 	}
 }
 

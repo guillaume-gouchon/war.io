@@ -1,11 +1,11 @@
-gameData.Unit = function (unit, x, y, army) {
+gameData.Unit = function (unit, x, y, owner) {
 	//personal data
 	this.id = gameData.createUniqueId();
 	this.family = gameData.FAMILIES.unit;
 	this.type = unit.type;
 	this.speed = unit.speed;
 	this.race = unit.race;
-	this.army = army;
+	this.owner = owner;
 
 	//drawing-related data
 	this.position = {x : x, y : y};
@@ -24,6 +24,8 @@ gameData.Unit = function (unit, x, y, army) {
 	this.maxGathering = unit.maxGathering;
 	this.gathering = null;
 	this.patrol = null;
+	this.population = unit.population;
+	this.needs = unit.needs;
 
 	//fight-related data
 	this.life = unit.life;
