@@ -13,6 +13,7 @@ GUI.BUTTONS_WIDTH = 80;
 GUI.BUTTONS_SPACE = 10;
 GUI.TOOLBAR_BUTTONS = {
 	build : {color : '#aaa', isEnabled : true},
+	cancel : {color : '#ff0', isEnabled : true},
 }
 
 
@@ -28,7 +29,7 @@ GUI.updateToolbar = function () {
 			//building(s) selected
 			if (gameLogic.selected[0].constructionProgress < 100) {
 				//building is not finished yet
-				this.toolbar = [];
+				this.toolbar = [GUI.TOOLBAR_BUTTONS.cancel];
 			} else {
 				this.toolbar = buildLogic.getWhatCanBeBought(gameLogic.selected[0].owner, gameLogic.selected[0].buttons);
 			}

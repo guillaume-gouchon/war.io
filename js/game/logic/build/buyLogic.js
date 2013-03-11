@@ -74,7 +74,7 @@ buildLogic.createNewUnit = function (unit, factory) {
 */
 buildLogic.removeUnit = function (unit) {
 	if(unit.population > 0) {
-		gameManager.players[building.owner].population.current -= unit.population;
+		gameManager.players[unit.owner].population.current -= unit.population;
 	}
 }
 
@@ -115,5 +115,16 @@ buildLogic.paysForElement = function (owner, element) {
 	for(var i in element.needs) {
 		var need = element.needs[i];
 		gameManager.players[owner].resources[need.type] -= need.value;
+	}
+}
+
+
+/**
+*	Sells the element.
+*/
+buildLogic.sellsElement = function (owner, element) {
+	for(var i in element.needs) {
+		var need = element.needs[i];
+		gameManager.players[owner].resources[need.type] += parseInt(need.value / 2);
 	}
 }

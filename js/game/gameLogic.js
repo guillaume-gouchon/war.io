@@ -70,7 +70,7 @@ gameLogic.updateGameWindow = function () {
 *	Updates the grid used for A*.
 */
 gameLogic.updateGrid = function () {
-	this.grid = mapLogic.staticGrid;
+	this.grid = tools.cloneObject(mapLogic.staticGrid);
 	for(var n in this.gameElements) {
 		var element  = this.gameElements[n];
 		for(var i in element.shape) {
@@ -165,9 +165,17 @@ gameLogic.removeDeads= function () {
 			} else if (element.family == gameData.FAMILIES.building) {
 				buildLogic.removeBuilding(element);
 			} else if (element.family == gameData.FAMILIES.unit) {
-				buyLogic.removeUnit(element);
+				buildLogic.removeUnit(element);
 			}
 			fightLogic.removeElement(n);
+
+			//remove from selection
+			for(var i in gameLogic.selected) {
+				if (gameLogic.selected[i].id == element.id) {
+					gameLogic.selected.splice(i, 1);
+					break;
+				}
+			}
 		}
 	}
 }

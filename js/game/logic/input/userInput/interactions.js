@@ -10,13 +10,16 @@ userInput.SCROLL_THRESHOLD = 30;
 * 	@param button : the button that was clicked
 */
 userInput.clickOnToolbar = function (button) {
-	if(button.isEnabled) {
-		if(button == GUI.TOOLBAR_BUTTONS.build) {
+	if (button.isEnabled) {
+		if (button == GUI.TOOLBAR_BUTTONS.build) {
 			//build something
 			GUI.showBuildings = true;
 		} else if (button.constructionColors != null && button.isEnabled) {
 			//building
 			this.enterConstructionMode(button);
+		} else if (button == GUI.TOOLBAR_BUTTONS.cancel) {
+			//cancel construction
+			buildLogic.cancelConstruction(gameLogic.selected);
 		} else if (button.speed != null) {
 			//unit
 			buildLogic.buyElement(button);

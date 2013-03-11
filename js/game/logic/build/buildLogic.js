@@ -32,6 +32,20 @@ buildLogic.updateConstruction = function (building) {
 
 
 /**
+*	The user cancels the construction of a building.
+*/
+buildLogic.cancelConstruction = function (buildings) {
+	for (var i in buildings) {
+		var building = buildings[i];
+		if (building.constructionProgress < 100) {
+			building.life = 0;
+			this.sellsElement(building.owner, building);
+		}
+	}
+}
+
+
+/**
 *	A building has just been finised to construct.
 */
 buildLogic.finishConstruction = function (building) {
@@ -46,7 +60,7 @@ buildLogic.finishConstruction = function (building) {
 *	A building has been destroyed / cancelled
 */
 buildLogic.removeBuilding = function (building) {
-	if(building.population > 0) {
+	if(building.population > 0 && building.constructionProgress == 100) {
 		gameManager.players[building.owner].population.max -= building.population;
 	}
 }
