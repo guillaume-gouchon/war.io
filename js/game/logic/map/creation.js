@@ -87,8 +87,8 @@ mapLogic.getPlayersPositions = function (mapSize, nbPlayers) {
 
 	var occupied = [[0, 0, 0], [0, 1, 0], [0, 0, 0]];
 	for (var i = 0; i < nbPlayers; i++) {
-		var x = 2;
-		var y = 2;
+		var x = 1;
+		var y = 1;
 		while(occupied[x][y] > 0) {
 			x = parseInt(Math.random() * 3);
 			y = parseInt(Math.random() * 3);

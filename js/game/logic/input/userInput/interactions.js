@@ -122,6 +122,37 @@ userInput.stopMapScrolling = function () {
 
 
 /**
+*	Updates mouse icon when scrolling
+*/
+userInput.updateMouseIcon = function (mouseX, mouseY) {
+	var position = gameSurface.getAbsolutePositionFromPixel(mouseX, mouseY);
+	var x = gameSurface.scroll.dx;
+	var y =  - gameSurface.scroll.dy;
+	if (x > 0 && y > 0) {
+		display.updateMouse(display.MOUSE_ICONS.arrowTopRight);
+	} else if (x > 0 && y == 0) {
+		display.updateMouse(display.MOUSE_ICONS.arrowRight);
+	} else if (x > 0 && y < 0) {
+		display.updateMouse(display.MOUSE_ICONS.arrowBottomRight);
+	} else if (x < 0 && y > 0) {
+		display.updateMouse(display.MOUSE_ICONS.arrowTopLeft);
+	} else if (x < 0 && y == 0) {
+		display.updateMouse(display.MOUSE_ICONS.arrowLeft);
+	} else if (x < 0 && y < 0) {
+		display.updateMouse(display.MOUSE_ICONS.arrowBottomLeft);
+	} else if (x == 0 && y > 0) {
+		display.updateMouse(display.MOUSE_ICONS.arrowTop);
+	} else if (x == 0 && y < 0) {
+		display.updateMouse(display.MOUSE_ICONS.arrowBottom);
+	} else if (tools.getElementUnder(position.x, position.y) != null) {
+		display.updateMouse(display.MOUSE_ICONS.select);
+	} else {
+		display.updateMouse(display.MOUSE_ICONS.default);
+	}
+}
+
+
+/**
 *	Scrolls the map by moving the mouse on the edge
 */
 userInput.checkIfMapScrolling = function (x, y) {
@@ -140,5 +171,6 @@ userInput.checkIfMapScrolling = function (x, y) {
 	} else {
 		userInput.updateVerticalScrolling(0);
 	}
+
 }
 

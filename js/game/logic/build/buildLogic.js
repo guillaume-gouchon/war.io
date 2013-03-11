@@ -77,6 +77,7 @@ buildLogic.gatherResources = function (builder, resource) {
 	resource.resourceAmount -= amount;
 
 	if (builder.gathering.amount == builder.maxGathering) {
+		//TODO : get closest town hall
 		builder.action = gameLogic.gameElements[0];
 	}
 }

@@ -100,3 +100,17 @@ tools.getTilesAroundElements = function (element) {
 	}
 	return array;
 }
+
+
+/**
+*	Returns the game element under the mouse/	
+*/
+tools.getElementUnder = function (x, y) {
+	for(var i in gameLogic.gameElements) {
+		var element = gameLogic.gameElements[i];
+	  	if(tools.isElementThere(element, {x : x, y : y})) {
+	  		return element;
+	  	}
+	}
+	return null;
+}

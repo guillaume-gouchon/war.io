@@ -54,7 +54,8 @@ inputDispatcher.onRightClick = function (event) {
 	//leave the construction mode if activated
 	if(gameLogic.building != null) {
 		userInput.leaveConstructionMode();
-	} else if(gameLogic.selected.length > 0) {
+	} else if(gameLogic.selected.length > 0 
+		&& 	fightLogic.isAlly(gameLogic.selected[0])) {
 		//give order to units
 		if(gameLogic.selected[0].family == gameData.FAMILIES.unit) {
 			userInput.dispatchUnitAction(event.x, event.y);
@@ -75,6 +76,7 @@ inputDispatcher.onMouseMove = function (event) {
 	userInput.selectGroup(event.x, event.y);
 	userInput.updateConstructionMode(event.x, event.y);
 	userInput.checkIfMapScrolling(event.x, event.y);
+	userInput.updateMouseIcon(event.x, event.y);
 	this.mousePosition = {x : event.x, y : event.y};
 }
 

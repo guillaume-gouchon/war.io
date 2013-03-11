@@ -4,6 +4,54 @@
 		"selected_items":
 		[
 			[
+				"game",
+				"gameLogic"
+			],
+			[
+				"fa",
+				"family"
+			],
+			[
+				"ga",
+				"gathering"
+			],
+			[
+				"fn",
+				"function"
+			],
+			[
+				"sele",
+				"selectedUnit2"
+			],
+			[
+				"gam",
+				"gameElements"
+			],
+			[
+				"res",
+				"resourceAmount"
+			],
+			[
+				"resou",
+				"resource"
+			],
+			[
+				"re",
+				"resourceAmount"
+			],
+			[
+				"gar",
+				"gathering"
+			],
+			[
+				"buil",
+				"buildLogic"
+			],
+			[
+				"is",
+				"isBuilder"
+			],
+			[
 				"queue",
 				"queueProgression"
 			],
@@ -28,10 +76,6 @@
 				"gameLogic"
 			],
 			[
-				"game",
-				"gameManager"
-			],
-			[
 				"ar",
 				"armorType"
 			],
@@ -46,10 +90,6 @@
 			[
 				"fight",
 				"fightLogic"
-			],
-			[
-				"ga",
-				"gameElements"
 			],
 			[
 				"attack",
@@ -112,20 +152,12 @@
 				"timeConstruction"
 			],
 			[
-				"buil",
-				"building"
-			],
-			[
 				"to",
 				"toolbar"
 			],
 			[
 				"fill",
 				"fillRect"
-			],
-			[
-				"is",
-				"isWall"
 			],
 			[
 				"end",
@@ -154,14 +186,6 @@
 			[
 				"build",
 				"buildLogic"
-			],
-			[
-				"sele",
-				"selected"
-			],
-			[
-				"fa",
-				"FAMILIES"
 			],
 			[
 				"bui",
@@ -282,10 +306,6 @@
 			[
 				"pl",
 				"players"
-			],
-			[
-				"res",
-				"results"
 			],
 			[
 				"fun",
@@ -494,36 +514,16 @@
 			[
 				"bt",
 				"battles"
-			],
-			[
-				"un",
-				"units"
-			],
-			[
-				"next",
-				"nextTurn"
-			],
-			[
-				"create",
-				"createUniqueId"
-			],
-			[
-				"sta",
-				"standardMap"
-			],
-			[
-				"crea",
-				"createMap"
 			]
 		]
 	},
 	"buffers":
 	[
 		{
-			"file": "js/game/gameSurface.js",
+			"file": "js/game/logic/build/buildLogic.js",
 			"settings":
 			{
-				"buffer_size": 5947,
+				"buffer_size": 2387,
 				"line_ending": "Unix"
 			}
 		},
@@ -531,15 +531,7 @@
 			"file": "js/game/gameLogic.js",
 			"settings":
 			{
-				"buffer_size": 3960,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "js/game/logic/map/creation.js",
-			"settings":
-			{
-				"buffer_size": 2735,
+				"buffer_size": 4557,
 				"line_ending": "Unix"
 			}
 		}
@@ -572,21 +564,31 @@
 	},
 	"file_history":
 	[
-		"/home/guillaume/Bureau/web/rts/.git/config",
-		"/home/guillaume/Bureau/web/rts/js/game/logic/build/buildLogic.js",
+		"/home/guillaume/Bureau/web/rts/js/game/logic/map/creation.js",
 		"/home/guillaume/Bureau/web/rts/js/game/gameManager.js",
+		"/home/guillaume/Bureau/web/rts/js/game/gameSurface.js",
+		"/home/guillaume/Bureau/web/rts/js/game/data/armies/human/units.js",
+		"/home/guillaume/Bureau/web/rts/js/game/data/class/unit.js",
+		"/home/guillaume/Bureau/web/rts/js/game/gameLogic.js",
+		"/home/guillaume/Bureau/web/rts/js/game/logic/actions/orders.js",
+		"/home/guillaume/Bureau/web/rts/js/game/logic/input/userInput/orders.js",
+		"/home/guillaume/Bureau/web/rts/js/game/data/class/terrain.js",
+		"/home/guillaume/Bureau/web/rts/js/game/logic/build/buildLogic.js",
+		"/home/guillaume/Bureau/web/rts/js/game/logic/actions/actions.js",
+		"/home/guillaume/Bureau/web/rts/js/game/logic/movement/moveLogic.js",
 		"/home/guillaume/Bureau/web/rts/js/game/logic/input/inputDispatcher.js",
+		"/home/guillaume/Bureau/web/rts/js/game/data/map/terrains.js",
+		"/home/guillaume/Bureau/web/rts/js/game/data/map/maps.js",
+		"/home/guillaume/Bureau/web/rts/js/game/data/index.js",
+		"/home/guillaume/Bureau/web/rts/js/game/data/map/resources.js",
+		"/home/guillaume/Bureau/web/rts/index.html",
+		"/home/guillaume/Bureau/web/rts/js/game/data/class/building.js",
+		"/home/guillaume/Bureau/web/rts/.git/config",
 		"/home/guillaume/Bureau/web/rts/js/game/logic/input/userInput/interactions.js",
 		"/home/guillaume/Bureau/web/rts/js/game/input/mouseInput.js",
-		"/home/guillaume/Bureau/web/rts/js/game/gameLogic.js",
-		"/home/guillaume/Bureau/web/rts/index.html",
 		"/home/guillaume/Bureau/web/rts/js/game/GUI/index.js",
 		"/home/guillaume/Bureau/web/rts/js/game/GUI/toolbar.js",
-		"/home/guillaume/Bureau/web/rts/js/game/logic/movement/moveLogic.js",
-		"/home/guillaume/Bureau/web/rts/js/game/logic/map/creation.js",
 		"/home/guillaume/Bureau/web/rts/js/game/logic/fight/fightLogic.js",
-		"/home/guillaume/Bureau/web/rts/js/game/logic/actions/orders.js",
-		"/home/guillaume/Bureau/web/rts/js/game/logic/actions/actions.js",
 		"/home/guillaume/Bureau/web/rts/js/game/logic/build/buyLogic.js",
 		"/home/guillaume/Bureau/web/rts/js/game/logic/tools/mapTools.js",
 		"/home/guillaume/Bureau/web/rts/js/game/logic/tools/index.js",
@@ -595,17 +597,10 @@
 		"/home/guillaume/Bureau/web/rts/js/game/logic/input/userInput.js/interactions.js",
 		"/home/guillaume/Bureau/web/rts/js/game/logic/input/index.js",
 		"/home/guillaume/Bureau/web/rts/js/game/logic/input/userInput.js/index.js",
-		"/home/guillaume/Bureau/web/rts/js/game/gameSurface.js",
 		"/home/guillaume/Bureau/web/rts/js/game/input/keyboardInput.js",
 		"/home/guillaume/Bureau/web/rts/js/game/data/global.js",
-		"/home/guillaume/Bureau/web/rts/js/game/data/map/terrains.js",
 		"/home/guillaume/Bureau/web/rts/js/game/data/armies/human/buildings.js",
-		"/home/guillaume/Bureau/web/rts/js/game/data/armies/human/units.js",
 		"/home/guillaume/Bureau/web/rts/js/game/data/armies/basecamps.js",
-		"/home/guillaume/Bureau/web/rts/js/game/data/class/terrain.js",
-		"/home/guillaume/Bureau/web/rts/js/game/data/class/building.js",
-		"/home/guillaume/Bureau/web/rts/js/game/data/class/unit.js",
-		"/home/guillaume/Bureau/web/rts/js/game/data/map/maps.js",
 		"/home/guillaume/Bureau/web/rts/js/game/data/config.js",
 		"/home/guillaume/Bureau/web/rts/js/game/logic/userActions/selections.js",
 		"/home/guillaume/Bureau/web/rts/js/game/gameData/config.js",
@@ -696,10 +691,7 @@
 		"/home/guillaume/Bureau/java/android/TZr/src/com/giggs/brainteaser/Home.java",
 		"/home/guillaume/Bureau/java/android/facebook-android-sdk-master/samples/SessionLoginSample/src/com/facebook/samples/sessionlogin/LoginUsingActivityActivity.java",
 		"/home/guillaume/Bureau/java/android/facebook-android-sdk-master/samples/Scrumptious/src/com/facebook/scrumptious/MainActivity.java",
-		"/home/guillaume/Bureau/java/android/facebook-android-sdk-master/samples/Scrumptious/src/com/facebook/scrumptious/SelectionFragment.java",
-		"/home/guillaume/Bureau/java/android/facebook-android-sdk-master/samples/Scrumptious/src/com/facebook/scrumptious/ScrumptiousApplication.java",
-		"/home/guillaume/Bureau/java/android/facebook-android-sdk-master/samples/SessionLoginSample/src/com/facebook/samples/sessionlogin/LoginUsingLoginFragmentActivity.java",
-		"/home/guillaume/Bureau/java/android/facebook-android-sdk-master/samples/SessionLoginSample/src/com/facebook/samples/sessionlogin/SessionLoginSampleActivity.java"
+		"/home/guillaume/Bureau/java/android/facebook-android-sdk-master/samples/Scrumptious/src/com/facebook/scrumptious/SelectionFragment.java"
 	],
 	"find":
 	{
@@ -719,6 +711,7 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			".action",
 			"userActions",
 			"gameEle",
 			"gameele",
@@ -845,8 +838,7 @@
 			"plateco",
 			"update",
 			".type == 1",
-			"1",
-			"productId"
+			"1"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -899,22 +891,23 @@
 	"groups":
 	[
 		{
+			"selected": 1,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "js/game/gameSurface.js",
+					"file": "js/game/logic/build/buildLogic.js",
 					"settings":
 					{
-						"buffer_size": 5947,
+						"buffer_size": 2387,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3174,
-								3174
+								2192,
+								2192
 							]
 						],
 						"settings":
@@ -923,7 +916,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1581.0,
+						"translation.y": 1377.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -933,15 +926,15 @@
 					"file": "js/game/gameLogic.js",
 					"settings":
 					{
-						"buffer_size": 3960,
+						"buffer_size": 4557,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1290,
-								1290
+								3581,
+								3581
 							]
 						],
 						"settings":
@@ -950,34 +943,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 969.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "js/game/logic/map/creation.js",
-					"settings":
-					{
-						"buffer_size": 2735,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								925,
-								925
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 357.0,
+						"translation.y": 2275.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"

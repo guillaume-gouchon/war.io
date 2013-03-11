@@ -149,8 +149,11 @@ gameLogic.resolveActions = function () {
 gameLogic.removeDeads= function () {
 	var n = gameLogic.gameElements.length;
 	while(n--) {
-		if(gameLogic.gameElements[n].life <= 0
-			|| gameLogic.gameElements[n].resourceAmount == 0) {
+		var element = gameLogic.gameElements[n]; 
+		if(element.life <= 0 || element.resourceAmount == 0) {
+			if(element.family == gameData.FAMILIES.terrain) {
+				mapLogic.staticGrid[element.position.x][element.position.y].isWall = false;
+			}
 			fightLogic.removeElement(n);
 		}
 	}

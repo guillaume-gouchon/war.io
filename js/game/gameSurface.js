@@ -92,7 +92,7 @@ gameSurface.draw = function () {
 	if(gameLogic.selectionRectangle.length == 4) {
 		this.ctx.fillStyle="#0000ff";
 		this.ctx.strokeRect(gameLogic.selectionRectangle[0], gameLogic.selectionRectangle[1], 
-					   gameLogic.selectionRectangle[2], gameLogic.selectionRectangle[3]);	
+					   gameLogic.selectionRectangle[2], gameLogic.selectionRectangle[3]);
 	}
 
 
@@ -129,9 +129,32 @@ gameSurface.draw = function () {
 	}
 
 	//draw resources
-	this.ctx.font="20px Arial black";
+	this.ctx.font="20px Arial";
 	for(var i = 0; i < gameManager.players[gameManager.myArmy].resources.length; i++) {
 		this.ctx.fillText(gameManager.players[gameManager.myArmy].resources[i], 20 + i * 100, 20 );
+	}
+
+	//draw order, rallying point
+	if(gameLogic.selected.length > 0 && fightLogic.isAlly(gameLogic.selected[0])) {
+		this.ctx.strokeStyle="#ff00ff";
+		if (gameLogic.selected[0].action != null) {
+			this.ctx.strokeRect((gameLogic.selected[0].action.position.x - this.window.x) * gameLogic.PIXEL_BY_NODE,
+								(gameLogic.selected[0].action.position.y - this.window.y) * gameLogic.PIXEL_BY_NODE, 
+					   			 gameLogic.PIXEL_BY_NODE, 
+					   			 gameLogic.PIXEL_BY_NODE);
+		} else if (gameLogic.selected[0].moveTo != null 
+				&& gameLogic.selected[0].moveTo.x != null) {
+			this.ctx.strokeRect((gameLogic.selected[0].moveTo.x - this.window.x) * gameLogic.PIXEL_BY_NODE,
+								(gameLogic.selected[0].moveTo.y - this.window.y) * gameLogic.PIXEL_BY_NODE, 
+					   			 gameLogic.PIXEL_BY_NODE, 
+					   			 gameLogic.PIXEL_BY_NODE);
+		} else if (gameLogic.selected[0].family == gameData.FAMILIES.building
+					&& gameLogic.selected[0].rallyingPoint != null) {
+			this.ctx.strokeRect((gameLogic.selected[0].rallyingPoint.x - this.window.x) * gameLogic.PIXEL_BY_NODE,
+								(gameLogic.selected[0].rallyingPoint.y - this.window.y) * gameLogic.PIXEL_BY_NODE, 
+					   			 gameLogic.PIXEL_BY_NODE, 
+					   			 gameLogic.PIXEL_BY_NODE);
+		}
 	}
 
 }

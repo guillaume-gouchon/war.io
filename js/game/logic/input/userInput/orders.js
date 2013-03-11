@@ -19,7 +19,9 @@ userInput.tryBuildHere = function () {
 userInput.changeRallyingPoint = function (x, y) {
 	var destination = gameSurface.getAbsolutePositionFromPixel(x, y);
 	for(var i in gameLogic.selected) {
-		gameLogic.selected[i].rallyingPoint = {x: destination.x, y: destination.y};
+		if(gameLogic.selected[i].buttons.length > 0) {
+			gameLogic.selected[i].rallyingPoint = {x: destination.x, y: destination.y};
+		}
 	}
 }
 

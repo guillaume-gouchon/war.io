@@ -19,17 +19,17 @@ userInput.clickToSelect = function (x, y) {
 
 	var position = gameSurface.getAbsolutePositionFromPixel(x, y);
 
+
 	for(var i in gameLogic.gameElements) {
-		var element = gameLogic.gameElements[i]
-	  	if(element.family != gameData.FAMILIES.terrain
-  			&& tools.isElementThere(element, position)) {
-	  			//select the clicked element
-		  		element.isSelected = true;
-		  		gameLogic.selected.push(element);
+		var element = gameLogic.gameElements[i];
+	  	if(tools.isElementThere(element, {x : position.x, y : position.y})) {
+	  		//select the clicked element
+	  		element.isSelected = true;
+	  		gameLogic.selected.push(element);
 	  	} else {
-		  		//unselect the others
-		  		element.isSelected = false;
-	  	}
+  		//unselect the others
+  		element.isSelected = false;
+		}
 	}
 
 	//update toolbar depending on the new selection
@@ -45,6 +45,8 @@ userInput.selectGroup = function (x, y) {
 	if(gameLogic.selectionRectangle.length > 0 
 		&& Math.abs(x - gameLogic.selectionRectangle[0]) > this.SELECTION_RECTANGLE_THRESHOLD
 		&& Math.abs(y - gameLogic.selectionRectangle[1]) > this.SELECTION_RECTANGLE_THRESHOLD) {
+			display.updateMouse(display.MOUSE_ICONS.select);
+
 			//get the last coordinates of the selection rectangle
 			gameLogic.selectionRectangle[2] = x - gameLogic.selectionRectangle[0];
 			gameLogic.selectionRectangle[3] = y - gameLogic.selectionRectangle[1];
@@ -105,9 +107,8 @@ userInput.selectGroup = function (x, y) {
 
 
 /**
-*		Removes the selection rectangle
+*	Removes the selection rectangle
 */
 userInput.removeSelectionRectangle = function () {
 	gameLogic.selectionRectangle = [];
 }
-
