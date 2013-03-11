@@ -1,4 +1,4 @@
-gameData.HUMAN_UNITS = {
+gameData.UNITS.push({
 	builder : {
 		race : 0,
 		type : 10,
@@ -58,4 +58,4 @@ gameData.HUMAN_UNITS = {
 		population : 2,
 		needs : [{type : gameData.RESOURCES.gold, value : 100}]
 	}
-}
+});

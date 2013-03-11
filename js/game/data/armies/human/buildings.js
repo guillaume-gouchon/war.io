@@ -1,10 +1,10 @@
-gameData.HUMAN_BUILDINGS = {
+gameData.BUILDINGS.push({
 	townhall : {
 		type: 0,
 		shape: [[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1]],
 		timeConstruction: 60,
 		constructionColors: ['#000', '#555', '#888', '#ccc'],
-		buttons: [gameData.HUMAN_UNITS.builder],
+		buttons: [gameData.UNITS[gameData.RACES.human].builder],
 		needs : [{type : gameData.RESOURCES.wood, value : 100}, {type : gameData.RESOURCES.stone, value : 100}],
 		life : 500,
 		defense : 3,
@@ -28,10 +28,10 @@ gameData.HUMAN_BUILDINGS = {
 		shape: [[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1], [0, 1, 1, 0]],
 		timeConstruction: 40,
 		constructionColors: ['#000', '#555', '#888', '#ccc'],
-		buttons: [gameData.HUMAN_UNITS.swordsman, gameData.HUMAN_UNITS.knight],
+		buttons: [gameData.UNITS[gameData.RACES.human].swordsman, gameData.UNITS[gameData.RACES.human].knight],
 		needs : [{type : gameData.RESOURCES.wood, value : 100}, {type : gameData.RESOURCES.stone, value : 50}],
 		life : 250,
 		defense : 2,
 		armorType : 1
 	}
-}
+});

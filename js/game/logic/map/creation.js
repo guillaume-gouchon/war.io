@@ -38,21 +38,44 @@ mapLogic.initGrid = function (size) {
 
 
 /**
-*	Creates the natural terrain and resources of the map.
+*	Creates the natural terrain tiles and resources of the map.
 */
 mapLogic.createTerrain = function (map) {
 	var nbTrees = parseInt(100 * Math.random());
 	for(var i = 0; i < nbTrees; i++) {
 		var position = [parseInt(Math.random() * map.size.x), parseInt(Math.random() * map.size.y)];
-		gameLogic.gameElements.push(new gameData.Terrain(gameData.TERRAINS.tree, position[0], position[1]));
-		this.staticGrid[position[0]][position[1]].isWall = true;
+		this.addTerrainElement(new gameData.Terrain(gameData.TERRAINS.tree, position[0], position[1]));
 	}
 
 	var nbStone = parseInt(5 * Math.random());
 	for(var i = 0; i < nbStone; i++) {
 		var position = [parseInt(Math.random() * map.size.x), parseInt(Math.random() * map.size.y)];
-		gameLogic.gameElements.push(new gameData.Terrain(gameData.TERRAINS.stone, position[0], position[1]));
-		this.staticGrid[position[0]][position[1]].isWall = true;
+		this.addTerrainElement(new gameData.Terrain(gameData.TERRAINS.stone, position[0], position[1]));
+	}
+}
+
+
+/**
+* Adds a terrain element on the map.
+*/
+mapLogic.addTerrainElement = function (element) {
+	gameLogic.gameElements.push(element);
+	gameLogic.terrainElements.push(element);
+	this.staticGrid[element.position.x][element.position.y].isWall = true;
+}
+
+
+/**
+* Removes a terrain element from the map.
+*/
+mapLogic.removeTerrain = function (element, n) {
+	var n = gameLogic.terrainElements.length;
+	while (n--) {
+		var element = gameLogic.terrainElements[n]; 
+		if (element.resourceAmount == 0) {
+			gameLogic.terrainElements.splice(n, 1);
+			this.staticGrid[element.position.x][element.position.y].isWall = false;
+		}
 	}
 }
 

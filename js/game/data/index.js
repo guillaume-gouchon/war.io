@@ -14,9 +14,13 @@ gameData.FAMILIES = {
 /**
 *	Ids of the different armies.
 */
-gameData.ARMIES = {
+gameData.RACES = {
 	human : 0
 }
+
+
+gameData.UNITS = [];
+gameData.BUILDINGS = [];
 
 
 /**

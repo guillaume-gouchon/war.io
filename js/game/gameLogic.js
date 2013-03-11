@@ -18,6 +18,13 @@ gameLogic.gameElements = [];
 
 
 /**
+* 	Helpers to improve performance when searching elements.
+*/
+gameLogic.terrainElements = [];
+gameLogic.buildingElements = [];
+
+
+/**
 *	Contains the current selected elements of gameElements.
 */
 gameLogic.selected = [];
@@ -161,7 +168,6 @@ gameLogic.removeDeads= function () {
 		var element = gameLogic.gameElements[n]; 
 		if (element.life <= 0 || element.resourceAmount == 0) {
 			if (element.family == gameData.FAMILIES.terrain) {
-				mapLogic.staticGrid[element.position.x][element.position.y].isWall = false;
 			} else if (element.family == gameData.FAMILIES.building) {
 				buildLogic.removeBuilding(element);
 			} else if (element.family == gameData.FAMILIES.unit) {
@@ -178,6 +184,8 @@ gameLogic.removeDeads= function () {
 			}
 		}
 	}
+
+	mapLogic.removeTerrain();
 }
 
 

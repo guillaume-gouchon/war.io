@@ -70,14 +70,7 @@ buildLogic.removeBuilding = function (building) {
 *	Returns the list of the buildings which can be built by the builder(s) selected.
 */
 buildLogic.getBuildingButtons = function () {
-	switch(gameLogic.selected[0].race) {
-		
-		case gameData.ARMIES.human :
-			return this.getWhatCanBeBought(gameLogic.selected[0].owner, gameData.HUMAN_BUILDINGS);
-		break;
-
-		//...
-	}
+	return this.getWhatCanBeBought(gameLogic.selected[0].owner, gameData.BUILDINGS[gameLogic.selected[0].owner]);
 }
 
 
@@ -85,6 +78,7 @@ buildLogic.getBuildingButtons = function () {
 *	A builder is gathering resources.
 */
 buildLogic.gatherResources = function (builder, resource) {
+
 	//reset resources if different from previous one
 	if (builder.gathering == null || builder.gathering.type != resource.resourceType) {
 		builder.gathering = {type : resource.resourceType, amount : 0};
@@ -94,9 +88,9 @@ buildLogic.gatherResources = function (builder, resource) {
 	builder.gathering.amount += amount;
 	resource.resourceAmount -= amount;
 
-	if (builder.gathering.amount == builder.maxGathering) {
-		//TODO : get closest town hall
-		builder.action = gameLogic.gameElements[0];
+	if (builder.gathering.amount == builder.maxGathering || resource.resourceAmount == 0) {
+		var closestTownHall = mapLogic.getNearestBuilding(builder, gameData.BUILDINGS[gameManager.players[builder.owner].race].townhall.type);
+		builder.action = closestTownHall;
 	}
 }
 
@@ -108,6 +102,13 @@ buildLogic.getBackResources = function (builder) {
 	gameManager.players[builder.owner].resources[builder.gathering.type] += builder.gathering.amount;
 	builder.gathering = null;
 	if(builder.patrol != null) {
-		builder.action = builder.patrol;
+		if(builder.patrol.resourceAmount == 0) {
+			//gather closest resource if this one is finished
+			var nearestResource = mapLogic.getNearestResource(builder, builder.patrol.resourceType);
+			builder.action = nearestResource;
+			builder.patrol = nearestResource;
+		} else {
+			builder.action = builder.patrol;
+		}
 	}
 }

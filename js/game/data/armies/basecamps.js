@@ -4,8 +4,10 @@
 gameData.BASECAMPS = [
 
 	{
-		buildings : [gameData.HUMAN_BUILDINGS.townhall],
-		units : [gameData.HUMAN_UNITS.builder, gameData.HUMAN_UNITS.builder, gameData.HUMAN_UNITS.builder]
+		buildings : [gameData.BUILDINGS[gameData.RACES.human].townhall],
+		units : [gameData.UNITS[gameData.RACES.human].builder, 
+				gameData.UNITS[gameData.RACES.human].builder, 
+				gameData.UNITS[gameData.RACES.human].builder]
 	}
 
 ]
