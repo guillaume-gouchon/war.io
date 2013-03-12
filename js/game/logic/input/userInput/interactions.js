@@ -153,7 +153,7 @@ userInput.updateMouseIcon = function (mouseX, mouseY) {
 	} else if (tools.getElementUnder(position.x, position.y) != null) {
 		display.updateMouse(display.MOUSE_ICONS.select);
 	} else {
-		display.updateMouse(display.MOUSE_ICONS.default);
+		display.updateMouse(display.MOUSE_ICONS.standard);
 	}
 }
 

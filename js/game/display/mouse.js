@@ -1,5 +1,5 @@
 display.MOUSE_ICONS = {
-	default : 'default', 
+	standard : 'default', 
 	arrowTop : 'n-resize',
 	arrowTopRight : 'ne-resize',
 	arrowTopLeft : 'nw-resize',
@@ -7,7 +7,7 @@ display.MOUSE_ICONS = {
 	arrowBottomRight : 'se-resize',
 	arrowBottomLeft : 'sw-resize',
 	arrowRight : 'e-resize',
-	arrotLeft : 'w-resize',
+	arrowLeft : 'w-resize',
 	select : 'crosshair'
 }
 

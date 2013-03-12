@@ -1,7 +1,5 @@
 var gameSurface = {};
 
-gameSurface.canvas = document.getElementById("canvas");
-
 
 /**
 *	VARIABLES
@@ -23,9 +21,10 @@ gameSurface.scroll = {
 *	Initializes the game surface
 */
 gameSurface.init = function () {
+	gameSurface.canvas = document.getElementById("canvas");
 	gameSurface.canvas.height = document.height;
 	gameSurface.canvas.width = document.width;
-	gameSurface.ctx = canvas.getContext("2d");
+	gameSurface.ctx = gameSurface.canvas.getContext("2d");
 	gameSurface.updateGameWindowSize();
 
 	gameSurface.grd = gameSurface.ctx.createLinearGradient(0,0,200,0);
@@ -159,9 +158,9 @@ gameSurface.draw = function () {
 		} else if (gameLogic.selected[0].family == gameData.FAMILIES.building
 					&& gameLogic.selected[0].rallyingPoint != null) {
 			this.ctx.strokeRect((gameLogic.selected[0].rallyingPoint.x - this.window.x) * gameLogic.PIXEL_BY_NODE,
-								(gameLogic.selected[0].rallyingPoint.y - this.window.y) * gameLogic.PIXEL_BY_NODE, 
-					   			 gameLogic.PIXEL_BY_NODE, 
-					   			 gameLogic.PIXEL_BY_NODE);
+				(gameLogic.selected[0].rallyingPoint.y - this.window.y) * gameLogic.PIXEL_BY_NODE, 
+	   			 gameLogic.PIXEL_BY_NODE, 
+	   			 gameLogic.PIXEL_BY_NODE);
 		}
 	}
 

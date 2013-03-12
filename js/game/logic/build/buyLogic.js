@@ -58,7 +58,7 @@ buildLogic.createNewUnit = function (unit, factory) {
 
 		//moves the unit to the rallying point
 		if(factory.rallyingPoint != null) {
-			unit.moveTo = {x : factory.rallyingPoint.x, y : factory.rallyingPoint.y};
+			userInput.convertDestinationToOrder([unit], factory.rallyingPoint);
 		}
 
 		gameLogic.gameElements.push(unit);

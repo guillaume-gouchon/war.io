@@ -13,12 +13,15 @@ mapLogic.staticGrid = [];
 */
 mapLogic.createRandomMap = function (map, players) {
 	this.initGrid(map.size);
+
+	this.createTerrain(map);
+	gameLogic.grid = tools.cloneObject(mapLogic.staticGrid);
+	
 	var playerPositions = this.getPlayersPositions(map.size, players.length);
 	for(var i in players) {
 		this.setupBasecamp(players[i], playerPositions[i]);
 	}
 
-	this.createTerrain(map);
 
 }
 
@@ -49,7 +52,7 @@ mapLogic.createTerrain = function (map) {
 
 	var nbStone = parseInt(5 * Math.random());
 	for(var i = 0; i < nbStone; i++) {
-		var position = [parseInt(Math.random() * map.size.x), parseInt(Math.random() * map.size.y)];
+		var position = [parseInt( 2 + Math.random() * map.size.x - 4), parseInt( 2 + Math.random() * map.size.y - 4)];
 		this.addTerrainElement(new gameData.Terrain(gameData.TERRAINS.stone, position[0], position[1]));
 	}
 }
@@ -60,23 +63,7 @@ mapLogic.createTerrain = function (map) {
 */
 mapLogic.addTerrainElement = function (element) {
 	gameLogic.gameElements.push(element);
-	gameLogic.terrainElements.push(element);
 	this.staticGrid[element.position.x][element.position.y].isWall = true;
-}
-
-
-/**
-* Removes a terrain element from the map.
-*/
-mapLogic.removeTerrain = function (element, n) {
-	var n = gameLogic.terrainElements.length;
-	while (n--) {
-		var element = gameLogic.terrainElements[n]; 
-		if (element.resourceAmount == 0) {
-			gameLogic.terrainElements.splice(n, 1);
-			this.staticGrid[element.position.x][element.position.y].isWall = false;
-		}
-	}
 }
 
 
@@ -89,7 +76,7 @@ mapLogic.setupBasecamp = function (player, position) {
 	//place town hall
 	var townHall = new gameData.Building(basecamp.buildings[0], position.x, position.y, player.owner, true);
 	gameLogic.gameElements.push(townHall);
-	gameLogic.updateGrid();
+	gameLogic.updateGrid(townHall);
 	
 	//place units
 	var aroundTownHall = tools.getTilesAroundElements(townHall);

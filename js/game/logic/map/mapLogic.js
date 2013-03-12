@@ -4,8 +4,8 @@
 mapLogic.getNearestResource = function (element, resourceType) {
 	var min = -1;
 	var closestTerrain = null;
-	for (var i in gameLogic.terrainElements) {
-		var terrain = gameLogic.terrainElements[i];
+	for (var i in gameLogic.gameElements) {
+		var terrain = gameLogic.gameElements[i];
 		if (terrain.resourceType == resourceType) {
 			var distance = tools.getElementsDistance(element, terrain);
 			if(distance < 2) {

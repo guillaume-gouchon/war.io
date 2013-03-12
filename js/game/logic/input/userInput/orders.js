@@ -19,9 +19,7 @@ userInput.tryBuildHere = function () {
 userInput.changeRallyingPoint = function (x, y) {
 	var destination = gameSurface.getAbsolutePositionFromPixel(x, y);
 	for(var i in gameLogic.selected) {
-		if(gameLogic.selected[i].buttons.length > 0) {
-			gameLogic.selected[i].rallyingPoint = {x: destination.x, y: destination.y};
-		}
+		gameLogic.selected[i].rallyingPoint = {x: destination.x, y: destination.y};	
 	}
 }
 
@@ -31,59 +29,62 @@ userInput.changeRallyingPoint = function (x, y) {
 */
 userInput.dispatchUnitAction = function (x, y) {
 	var destination = gameSurface.getAbsolutePositionFromPixel(x, y);
+	this.convertDestinationToOrder(gameLogic.selected, destination);
+}
+
+
+userInput.convertDestinationToOrder = function (elements, destination) {
 	if (destination.x >= gameLogic.grid[0].length
 		|| destination.y >= gameLogic.grid.length) {
 		return;
 	}
-	for (var i in gameLogic.gameElements) {
-		var element = gameLogic.gameElements[i];
-		if (tools.isElementThere(element, destination)) {
-			//something is under the click
-			if (element.family == gameData.FAMILIES.unit) {
-				if (!fightLogic.isAlly(element)) {
-					//enemy unit
-					actions.attack(gameLogic.selected, element);
-					return;
-				}
-			} else if (element.family == gameData.FAMILIES.building) {
-				if (fightLogic.isAlly(element)) {
-					//friend building
-					for(var i in gameLogic.selected) {
-						var selectedUnit = gameLogic.selected[i];
-						if(selectedUnit.isBuilder) {
-							//builders are sent to build / repair
-							actions.build([selectedUnit], element);
-						} else {
-							//non-builders are given a move order
-							actions.move([selectedUnit], destination.x, destination.y);
-						}
-					}
-					return;
-				} else {
-					//enemy building
-					actions.attack(gameLogic.selected, element);
-					return;
-				}
-			} else if (element.family == gameData.FAMILIES.terrain 
-						&& element.resourceType >= 0) {
-				//resource terrain element
-				for(var i in gameLogic.selected) {
-					var selectedUnit = gameLogic.selected[i];
+
+	var element = tools.getElementUnder(destination.x, destination.y);
+	if (element != null) {
+		//something is under the click
+		if (element.family == gameData.FAMILIES.unit) {
+			if (!fightLogic.isAlly(element)) {
+				//enemy unit
+				actions.attack(elements, element);
+				return;
+			}
+		} else if (element.family == gameData.FAMILIES.building) {
+			if (fightLogic.isAlly(element)) {
+				//friend building
+				for(var i in elements) {
+					var selectedUnit = elements[i];
 					if(selectedUnit.isBuilder) {
-						//builders are sent to gather resources
-						actions.gather([selectedUnit], element);
-						selectedUnit.action = element;
+						//builders are sent to build / repair
+						actions.build([selectedUnit], element);
 					} else {
 						//non-builders are given a move order
 						actions.move([selectedUnit], destination.x, destination.y);
 					}
 				}
 				return;
+			} else {
+				//enemy building
+				actions.attack(elements, element);
+				return;
 			}
+		} else if (element.family == gameData.FAMILIES.terrain 
+					&& element.resourceType >= 0) {
+			//resource terrain element
+			for(var i in elements) {
+				var selectedUnit = elements[i];
+				if(selectedUnit.isBuilder) {
+					//builders are sent to gather resources
+					actions.gather([selectedUnit], element);
+					selectedUnit.action = element;
+				} else {
+					//non-builders are given a move order
+					actions.move([selectedUnit], destination.x, destination.y);
+				}
+			}
+			return;
 		}
 	}
 
-	//if no target = no action, just a move order
-	actions.move(gameLogic.selected, destination.x, destination.y);
+	//if no target = no action, just give a move order
+	actions.move(elements, destination.x, destination.y);
 }
-

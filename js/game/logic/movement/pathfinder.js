@@ -1,5 +1,5 @@
 var astar = {
-  tries: 0,
+  
   init: function(grid) {
       for(var x = 0, xl = grid.length; x < xl; x++) {
           for(var y = 0, yl = grid[x].length; y < yl; y++) {
@@ -20,7 +20,6 @@ var astar = {
       });
   },
   search: function(grid, start, end, diagonal, heuristic) {
-    this.tries ++;
     astar.init(grid);
     heuristic = heuristic || astar.manhattan;
     diagonal = !!diagonal;
@@ -35,7 +34,7 @@ var astar = {
       var currentNode = openHeap.pop();
 
       // End case -- result has been found, return the traced path.
-      if(currentNode === end) {
+      if(currentNode === end || openHeap.size > 4) {
           var curr = currentNode;
           var ret = [];
           while(curr.parent) {
@@ -44,7 +43,6 @@ var astar = {
           }
           return ret.reverse();
       }
-
       // Normal case -- move currentNode from open to closed, process each of its neighbors.
       currentNode.closed = true;
 
@@ -83,23 +81,8 @@ var astar = {
       }
     }
 
-    if(this.tries < 4) {
-      var counter = 0;
-      while(end.isWall && counter < 4) {
-        var endNeighbors = this.neighbors(grid, end, true);
-        for(var i in endNeighbors){
-          if(!endNeighbors[i].isWall) {
-            end = endNeighbors[i];
-            break;
-          }
-        }
-        counter++;
-      }
-      return this.search(grid, start, end, true, null);
-    } else {
-      // No result was found - empty array signifies failure to find path.
-      return [];
-    }    
+    // No result was found - empty array signifies failure to find path.
+    return [];   
   },
   manhattan: function(pos0, pos1) {
       // See list of heuristics: http://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html

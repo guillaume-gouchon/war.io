@@ -105,7 +105,8 @@ inputDispatcher.onMouseWheel = function (event) {
 */
 inputDispatcher.onKeyDown = function (event) {
 	//map navigation
-	switch(event.keyCode) {
+	var keyCode = (window.event) ? event.which : event.keyCode;
+	switch(keyCode) {
 		case 38 :
 			userInput.updateVerticalScrolling(1);
 			event.preventDefault();
@@ -130,7 +131,7 @@ inputDispatcher.onKeyDown = function (event) {
 	//toolbar's keyboard shortcuts
 	for(var i in this.TOOLBAR_KEYBOARD_SHORTCUTS) {
 		var shortcut = this.TOOLBAR_KEYBOARD_SHORTCUTS[i];
-		if(shortcut == event.keyCode) {
+		if(shortcut == keyCode) {
 			userInput.pressToolbarShortcut(i);
 			return false;
 		}
@@ -145,7 +146,8 @@ inputDispatcher.onKeyDown = function (event) {
 */
 inputDispatcher.onKeyUp = function (event) {
 	//map navigation
-	switch(event.keyCode) {
+	var keyCode = (window.event) ? event.which : event.keyCode;
+	switch(keyCode) {
 		case 38 :
 			userInput.updateVerticalScrolling(0);
 			return false;

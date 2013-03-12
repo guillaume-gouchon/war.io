@@ -5,15 +5,95 @@
 		[
 			[
 				"game",
-				"gameLogic"
+				"gameSurface"
+			],
+			[
+				"bui",
+				"building"
+			],
+			[
+				"cloest",
+				"closestTownHall"
+			],
+			[
+				"buil",
+				"buildingType"
+			],
+			[
+				"resou",
+				"resourceType"
+			],
+			[
+				"terra",
+				"terrainElements"
+			],
+			[
+				"map",
+				"mapLogic"
+			],
+			[
+				"static",
+				"staticGrid"
+			],
+			[
+				"ga",
+				"gameElements"
+			],
+			[
+				"selec",
+				"selected"
+			],
+			[
+				"constru",
+				"constructionProgress"
+			],
+			[
+				"T",
+				"TOOLBAR_BUTTONS"
+			],
+			[
+				"can",
+				"canBuyIt"
+			],
+			[
+				"show",
+				"showBuilding"
+			],
+			[
+				"is",
+				"isEnabled"
+			],
+			[
+				"p",
+				"population"
+			],
+			[
+				"gan",
+				"gameElements"
+			],
+			[
+				"fini",
+				"finishConstruction"
+			],
+			[
+				"update",
+				"updateMouseScrollIcon"
+			],
+			[
+				"mouse",
+				"mouseIcon"
+			],
+			[
+				"sel",
+				"selected"
+			],
+			[
+				"strok",
+				"strokeStyle"
 			],
 			[
 				"fa",
 				"family"
-			],
-			[
-				"ga",
-				"gathering"
 			],
 			[
 				"fn",
@@ -32,10 +112,6 @@
 				"resourceAmount"
 			],
 			[
-				"resou",
-				"resource"
-			],
-			[
 				"re",
 				"resourceAmount"
 			],
@@ -44,24 +120,12 @@
 				"gathering"
 			],
 			[
-				"buil",
-				"buildLogic"
-			],
-			[
-				"is",
-				"isBuilder"
-			],
-			[
 				"queue",
 				"queueProgression"
 			],
 			[
 				"input",
 				"inputDispatcher"
-			],
-			[
-				"mouse",
-				"mousePosition"
 			],
 			[
 				"muse",
@@ -114,10 +178,6 @@
 			[
 				"town",
 				"townHall"
-			],
-			[
-				"map",
-				"mapSize"
 			],
 			[
 				"base",
@@ -176,20 +236,12 @@
 				"moveUnits"
 			],
 			[
-				"selec",
-				"selectedUnit"
-			],
-			[
 				"con",
 				"constructionProgress"
 			],
 			[
 				"build",
 				"buildLogic"
-			],
-			[
-				"bui",
-				"building"
 			],
 			[
 				"building",
@@ -462,76 +514,24 @@
 			[
 				"random",
 				"randomTile"
-			],
-			[
-				"defender",
-				"defenderBonus"
-			],
-			[
-				"defe",
-				"defenderBonus"
-			],
-			[
-				"cr",
-				"cronTasks"
-			],
-			[
-				"process",
-				"processTurn"
-			],
-			[
-				"reg",
-				"registrationIds"
-			],
-			[
-				"gcm",
-				"gcmId"
-			],
-			[
-				"ma",
-				"maxLife"
-			],
-			[
-				"mo",
-				"moveOrder"
-			],
-			[
-				"Terra",
-				"terrainTile"
-			],
-			[
-				"j",
-				"j"
-			],
-			[
-				"n",
-				"nbPlayers"
-			],
-			[
-				"batt",
-				"battle"
-			],
-			[
-				"bt",
-				"battles"
 			]
 		]
 	},
 	"buffers":
 	[
 		{
-			"file": "js/game/logic/build/buildLogic.js",
+			"file": "js/game/gameSurface.js",
 			"settings":
 			{
-				"buffer_size": 2387,
+				"buffer_size": 7689,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "js/game/gameLogic.js",
+			"file": "/home/guillaume/Bureau/strings.txt",
 			"settings":
 			{
-				"buffer_size": 4557,
+				"buffer_size": 10626,
 				"line_ending": "Unix"
 			}
 		}
@@ -564,34 +564,44 @@
 	},
 	"file_history":
 	[
-		"/home/guillaume/Bureau/web/rts/js/game/logic/map/creation.js",
-		"/home/guillaume/Bureau/web/rts/js/game/gameManager.js",
-		"/home/guillaume/Bureau/web/rts/js/game/gameSurface.js",
+		"/home/guillaume/Bureau/strings.xml",
+		"/home/guillaume/Bureau/web/rts/index.html",
+		"/home/guillaume/Bureau/excanvas_r3/excanvas.compiled.js",
+		"/home/guillaume/Bureau/excanvas_r3/excanvas.js",
+		"/home/guillaume/Bureau/web/rts/js/game/logic/input/inputDispatcher.js",
+		"/home/guillaume/Bureau/web/rts/js/game/display/mouse.js",
+		"/home/guillaume/Bureau/web/rts/js/game/logic/input/userInput/interactions.js",
+		"/home/guillaume/Bureau/web/rts/js/game/logic/build/buildLogic.js",
+		"/home/guillaume/Bureau/web/rts/js/game/logic/map/mapLogic.js",
+		"/home/guillaume/Bureau/web/rts/js/game/data/index.js",
 		"/home/guillaume/Bureau/web/rts/js/game/data/armies/human/units.js",
-		"/home/guillaume/Bureau/web/rts/js/game/data/class/unit.js",
+		"/home/guillaume/Bureau/web/rts/js/game/data/armies/basecamps.js",
+		"/home/guillaume/Bureau/web/rts/js/game/data/armies/human/buildings.js",
+		"/home/guillaume/Bureau/web/rts/js/game/logic/map/creation.js",
 		"/home/guillaume/Bureau/web/rts/js/game/gameLogic.js",
+		"/home/guillaume/Bureau/web/rts/js/game/gameThread.js",
+		"/home/guillaume/Bureau/web/rts/js/game/logic/tools/index.js",
+		"/home/guillaume/Bureau/web/rts/js/game/logic/build/buyLogic.js",
+		"/home/guillaume/Bureau/web/rts/js/game/GUI/toolbar.js",
+		"/home/guillaume/Bureau/web/rts/js/game/gameManager.js",
+		"/home/guillaume/Bureau/web/rts/js/game/logic/actions/actions.js",
 		"/home/guillaume/Bureau/web/rts/js/game/logic/actions/orders.js",
 		"/home/guillaume/Bureau/web/rts/js/game/logic/input/userInput/orders.js",
+		"/home/guillaume/Bureau/web/rts/js/game/data/class/building.js",
+		"/home/guillaume/Bureau/web/rts/js/game/data/class/unit.js",
+		"/home/guillaume/Bureau/web/rts/js/game/logic/input/userInput/selections.js",
+		"/home/guillaume/Bureau/web/rts/js/game/gameSurface.js",
+		"/home/guillaume/Bureau/web/rts/js/game/logic/fight/fightLogic.js",
+		"/home/guillaume/Bureau/web/rts/js/game/logic/tools/mapTools.js",
 		"/home/guillaume/Bureau/web/rts/js/game/data/class/terrain.js",
-		"/home/guillaume/Bureau/web/rts/js/game/logic/build/buildLogic.js",
-		"/home/guillaume/Bureau/web/rts/js/game/logic/actions/actions.js",
+		"/home/guillaume/Bureau/web/rts/js/game/display/index.js",
 		"/home/guillaume/Bureau/web/rts/js/game/logic/movement/moveLogic.js",
-		"/home/guillaume/Bureau/web/rts/js/game/logic/input/inputDispatcher.js",
 		"/home/guillaume/Bureau/web/rts/js/game/data/map/terrains.js",
 		"/home/guillaume/Bureau/web/rts/js/game/data/map/maps.js",
-		"/home/guillaume/Bureau/web/rts/js/game/data/index.js",
 		"/home/guillaume/Bureau/web/rts/js/game/data/map/resources.js",
-		"/home/guillaume/Bureau/web/rts/index.html",
-		"/home/guillaume/Bureau/web/rts/js/game/data/class/building.js",
 		"/home/guillaume/Bureau/web/rts/.git/config",
-		"/home/guillaume/Bureau/web/rts/js/game/logic/input/userInput/interactions.js",
 		"/home/guillaume/Bureau/web/rts/js/game/input/mouseInput.js",
 		"/home/guillaume/Bureau/web/rts/js/game/GUI/index.js",
-		"/home/guillaume/Bureau/web/rts/js/game/GUI/toolbar.js",
-		"/home/guillaume/Bureau/web/rts/js/game/logic/fight/fightLogic.js",
-		"/home/guillaume/Bureau/web/rts/js/game/logic/build/buyLogic.js",
-		"/home/guillaume/Bureau/web/rts/js/game/logic/tools/mapTools.js",
-		"/home/guillaume/Bureau/web/rts/js/game/logic/tools/index.js",
 		"/home/guillaume/Bureau/web/rts/js/game/logic/input/userInput.js/orders.js",
 		"/home/guillaume/Bureau/web/rts/js/game/logic/input/userInput.js/selections.js",
 		"/home/guillaume/Bureau/web/rts/js/game/logic/input/userInput.js/interactions.js",
@@ -599,8 +609,6 @@
 		"/home/guillaume/Bureau/web/rts/js/game/logic/input/userInput.js/index.js",
 		"/home/guillaume/Bureau/web/rts/js/game/input/keyboardInput.js",
 		"/home/guillaume/Bureau/web/rts/js/game/data/global.js",
-		"/home/guillaume/Bureau/web/rts/js/game/data/armies/human/buildings.js",
-		"/home/guillaume/Bureau/web/rts/js/game/data/armies/basecamps.js",
 		"/home/guillaume/Bureau/web/rts/js/game/data/config.js",
 		"/home/guillaume/Bureau/web/rts/js/game/logic/userActions/selections.js",
 		"/home/guillaume/Bureau/web/rts/js/game/gameData/config.js",
@@ -616,7 +624,6 @@
 		"/home/guillaume/Bureau/web/rts/js/game/gameData/armies/human/units.js",
 		"/home/guillaume/Bureau/web/rts/js/game/logic/userActions/interactions.js",
 		"/home/guillaume/Bureau/web/rts/js/game/userInput/keyboardInput.js",
-		"/home/guillaume/Bureau/web/rts/js/game/gameThread.js",
 		"/home/guillaume/Bureau/web/rts/js/game/gameData/armies/human/basecamps.js",
 		"/home/guillaume/Bureau/web/rts/js/game/gameData/armies/human/basecamp.js",
 		"/home/guillaume/Bureau/web/rts/js/game/elements/human/buildings.js",
@@ -684,14 +691,7 @@
 		"/home/guillaume/Bureau/node/server/daos/playerDao.js",
 		"/home/guillaume/Bureau/Webtrends-1.2.0.18-Android.zip/readme.txt",
 		"/home/guillaume/Bureau/Webtrends-1.2.0.18-Android.zip/webtrends.xml",
-		"/home/guillaume/Bureau/node/server/services/gameService.js",
-		"/home/guillaume/Bureau/java/android/oldHiFive/src/com/orange/labs/airkiss/Home.java",
-		"/home/guillaume/Bureau/java/android/oldHiFive/src/com/orange/labs/airkiss/util/FBConnect.java",
-		"/home/guillaume/Bureau/java/android/oldHiFive/src/com/orange/labs/airkiss/util/EasyFBConnection.java",
-		"/home/guillaume/Bureau/java/android/TZr/src/com/giggs/brainteaser/Home.java",
-		"/home/guillaume/Bureau/java/android/facebook-android-sdk-master/samples/SessionLoginSample/src/com/facebook/samples/sessionlogin/LoginUsingActivityActivity.java",
-		"/home/guillaume/Bureau/java/android/facebook-android-sdk-master/samples/Scrumptious/src/com/facebook/scrumptious/MainActivity.java",
-		"/home/guillaume/Bureau/java/android/facebook-android-sdk-master/samples/Scrumptious/src/com/facebook/scrumptious/SelectionFragment.java"
+		"/home/guillaume/Bureau/node/server/services/gameService.js"
 	],
 	"find":
 	{
@@ -711,6 +711,19 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"<(.*?)>",
+			"\"<(.*?)>\"",
+			"\\[<\\](.*?)\\[>\\]",
+			"\\<(.*?)\\>",
+			"</string>",
+			" <string name=\"",
+			"army",
+			"staticGrid",
+			"console.log",
+			"getWhatCanBeBought",
+			"army",
+			".army",
+			"needs",
 			".action",
 			"userActions",
 			"gameEle",
@@ -825,27 +838,16 @@
 			"insecureUnits",
 			"\\",
 			"\"\\",
-			"\\\"",
-			"addStartPosition",
-			"contactFight",
-			"multiple",
-			"devices",
-			"multiple",
-			" =",
-			"stats",
-			"inarray",
-			"\"",
-			"plateco",
-			"update",
-			".type == 1",
-			"1"
+			"\\\""
 		],
 		"highlight": true,
 		"in_selection": false,
 		"preserve_case": false,
-		"regex": false,
+		"regex": true,
 		"replace_history":
 		[
+			"",
+			".owner",
 			"userInput",
 			"gameData",
 			"inputDispatcher",
@@ -884,7 +886,7 @@
 		],
 		"reverse": false,
 		"show_context": true,
-		"use_buffer2": true,
+		"use_buffer2": false,
 		"whole_word": false,
 		"wrap": true
 	},
@@ -896,18 +898,18 @@
 			[
 				{
 					"buffer": 0,
-					"file": "js/game/logic/build/buildLogic.js",
+					"file": "js/game/gameSurface.js",
 					"settings":
 					{
-						"buffer_size": 2387,
+						"buffer_size": 7689,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2192,
-								2192
+								370,
+								370
 							]
 						],
 						"settings":
@@ -916,34 +918,35 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1377.0,
+						"translation.y": 51.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
 					"buffer": 1,
-					"file": "js/game/gameLogic.js",
+					"file": "/home/guillaume/Bureau/strings.txt",
 					"settings":
 					{
-						"buffer_size": 4557,
+						"buffer_size": 10626,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3581,
-								3581
+								0,
+								0
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"translate_tabs_to_spaces": false
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2275.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
