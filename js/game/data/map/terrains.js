@@ -10,9 +10,16 @@ gameData.TERRAINS = {
 	stone : {
 		type : 2,
 		color : '#000',
-		shape : [[0, 1, 0], [1, 1, 1], [0, 1, 0]],
+		shape : [[1, 1, 1], [1, 1, 1], [1, 1, 1]],
 		canMoveIn : false,
 		resourceType : gameData.RESOURCES.stone,
 		resourceAmount : 500
+	},
+	gold : {
+		color : '#fc1',
+		shape : [[1, 1, 1], [1, 1, 1], [1, 1, 1]],
+		canMoveIn : false,
+		resourceType : gameData.RESOURCES.gold,
+		resourceAmount : 3000
 	}
 }

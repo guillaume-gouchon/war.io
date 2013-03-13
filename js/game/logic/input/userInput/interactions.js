@@ -134,7 +134,9 @@ userInput.updateMouseIcon = function (mouseX, mouseY) {
 	var position = gameSurface.getAbsolutePositionFromPixel(mouseX, mouseY);
 	var x = gameSurface.scroll.dx;
 	var y =  - gameSurface.scroll.dy;
-	if (x > 0 && y > 0) {
+	if (tools.getElementUnder(position.x, position.y) != null) {
+		display.updateMouse(display.MOUSE_ICONS.select);
+	} else if (x > 0 && y > 0) {
 		display.updateMouse(display.MOUSE_ICONS.arrowTopRight);
 	} else if (x > 0 && y == 0) {
 		display.updateMouse(display.MOUSE_ICONS.arrowRight);
@@ -150,8 +152,6 @@ userInput.updateMouseIcon = function (mouseX, mouseY) {
 		display.updateMouse(display.MOUSE_ICONS.arrowTop);
 	} else if (x == 0 && y < 0) {
 		display.updateMouse(display.MOUSE_ICONS.arrowBottom);
-	} else if (tools.getElementUnder(position.x, position.y) != null) {
-		display.updateMouse(display.MOUSE_ICONS.select);
 	} else {
 		display.updateMouse(display.MOUSE_ICONS.standard);
 	}

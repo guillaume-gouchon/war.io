@@ -2,17 +2,21 @@ var mapLogic = {};
 
 
 /**
+*	CONSTANTS
+*/
+mapLogic.ZONES_NUMBER = 10;
+mapLogic.PROBABILITY_TREE = 0.6;
+
+
+/**
 *	Creates a random map, sets up the terrain and the players basecamps.
 */
-mapLogic.createRandomMap = function (map, players) {
-	this.createGrid(map.size);
-	this.createTerrain(map);
-	
-	var playerPositions = this.getPlayersPositions(map.size, players.length);
-	for(var i in players) {
-		this.setupBasecamp(players[i], playerPositions[i]);
-	}
+mapLogic.createNewMap = function (map, players) {
+	this.initGrid(map.size);
 
+	if(map.type.id == gameData.MAP_TYPES.random.id) {
+		this.createRandomMap(map, players);
+	}
 
 }
 
@@ -20,7 +24,7 @@ mapLogic.createRandomMap = function (map, players) {
 /**
 *	Initializes the staticGrid.
 */
-mapLogic.createGrid = function (size) {
+mapLogic.initGrid = function (size) {
 	gameLogic.grid = [];
 	for(var i = 0; i < size.x; i++) {
 		gameLogic.grid[i] = [];
@@ -32,19 +36,113 @@ mapLogic.createGrid = function (size) {
 
 
 /**
-*	Creates the natural terrain tiles and resources of the map.
+*	Creates a random map.
 */
-mapLogic.createTerrain = function (map) {
-	var nbTrees = parseInt(100 * Math.random());
-	for(var i = 0; i < nbTrees; i++) {
-		var position = [parseInt(Math.random() * map.size.x), parseInt(Math.random() * map.size.y)];
-		this.addGameElement(new gameData.Terrain(gameData.TERRAINS.tree, position[0], position[1]));
+mapLogic.createRandomMap = function (map, players) {
+	//get zones size
+	var dx = parseInt(map.size.x / this.ZONES_NUMBER);
+	var dy = parseInt(map.size.y / this.ZONES_NUMBER); 
+
+	//init zones
+	var zones = []
+	for(var i = 0; i < this.ZONES_NUMBER; i++) {
+		zones.push([]);
+		for(var j = 0; j < this.ZONES_NUMBER; j++) {
+			zones[i].push(-10);
+		}
+	}
+	//dispatch players on the map
+	this.dispatchPlayers(zones, players, dx, dy);
+
+	//prepare the available zones according to the factors of the vegetation selected
+	var availableZones = [];
+	for(var i in map.vegetation.zones) {
+		var zone = map.vegetation.zones[i];
+		for(var n = 0; n < zone.factor; n++) {
+			availableZones.push(zone.type);
+		}
 	}
 
-	var nbStone = parseInt(5 * Math.random());
-	for(var i = 0; i < nbStone; i++) {
-		var position = [parseInt( 2 + Math.random() * map.size.x - 4), parseInt( 2 + Math.random() * map.size.y - 4)];
-		this.addGameElement(new gameData.Terrain(gameData.TERRAINS.stone, position[0], position[1]));
+	//dispatch zones on the map
+	for(var i = 0; i < this.ZONES_NUMBER; i++) {
+		for(var j = 0; j < this.ZONES_NUMBER; j++) {
+			if(zones[i][j] < 0) {
+				this.populateZone({x : i * dx + 1, y : j * dy + 1}, {x : (i + 1) * dx - 1, y : (j + 1) * dy - 1}, 
+							  availableZones[parseInt(Math.random() * availableZones.length)]);
+			} else {
+				this.populateZone({x : i * dx + 1, y : j * dy + 1}, {x : (i + 1) * dx - 1, y : (j + 1) * dy - 1}, 
+							  zones[i][j]);
+			}
+		}
+	}
+
+}
+
+
+/**
+*	Populates a zone with game elements.
+*/
+mapLogic.populateZone = function (from, to, zoneType) {
+	switch (zoneType) {
+		case gameData.ZONES.forest :
+			this.createForest(from, to);
+			break;
+		case gameData.ZONES.stonemine:
+			this.createStoneMine(from, to);
+			break;
+		case gameData.ZONES.goldmine:
+			this.createGoldMine(from, to);
+			break;
+	}
+}
+
+
+/**
+*	Creates a forest zone.
+*	@param from : top left-handed corner
+*	@param to : bottom right-handed corner
+*/
+mapLogic.createForest = function (from, to) {
+	for(var i = from.x; i < to.x; i++) {
+		for(var j = from.y; j < to.y; j++) {
+			if(Math.random() < this.PROBABILITY_TREE) {
+				this.addGameElement(new gameData.Terrain(gameData.TERRAINS.tree, i, j));
+			}
+		}
+	}
+}
+
+
+/**
+*	Creates a stone mine zone.
+*	@param from : top left-handed corner
+*	@param to : bottom right-handed corner
+*/
+mapLogic.createStoneMine = function (from, to) {
+	for(var i = from.x; i < to.x; i++) {
+		for(var j = from.y; j < to.y; j++) {
+			if(Math.random() < 0.1) {
+				this.addGameElement(new gameData.Terrain(gameData.TERRAINS.stone, i, j));
+				return;
+			}
+		}
+	}
+}
+
+
+/**
+*	Create a gold mine zone.
+*	@param from : top left-handed corner
+*	@param to : bottom right-handed corner
+*/
+mapLogic.createGoldMine = function (from, to) {
+	for(var i = from.x; i < to.x; i++) {
+		for(var j = from.y; j < to.y; j++) {
+			if(Math.random() < 0.1) {
+				this.addGameElement(new gameData.Terrain(gameData.TERRAINS.gold, i, j));
+				return;
+			}
+		}
 	}
 }
 
@@ -85,6 +183,71 @@ mapLogic.removeGameElement = function (element) {
 
 
 /**
+*	Dispatches the players' basecamps through the map.
+*/
+mapLogic.dispatchPlayers = function (zones, players, dx, dy) {
+	for (var i in players) {
+		var x = null;
+		var y = null;
+		while(x == null || zones[x][y] >= -1) {
+			console.log(1)
+			x = parseInt(Math.random() * zones[0].length);
+			y = parseInt(Math.random() * zones.length);
+		}
+		//this zone is now owned by the player
+		zones[x][y] = gameData.ZONES.basecamp;
+		var campPosition = {
+			x : x * dx + parseInt(dx / 4) + parseInt(Math.random() * dx / 2), 
+			y : y * dy + parseInt(dy / 4) + parseInt(Math.random() * dy / 2)
+		}
+		this.setupBasecamp(players[i], campPosition);
+
+		//let's remove closest zones to the available zones
+		if(x < zones[0].length - 1) {
+			zones[x + 1][y] = -1;
+			if(y > 0) { 
+				zones[x + 1][y - 1] = -1;
+				zones[x][y - 1] = -1;
+			}
+			if(y < zones.length - 1) {
+				zones[x + 1][y + 1] = -1;
+				zones[x][y + 1] = -1;
+			}
+		}
+		if(x > 0) {
+			zones[x - 1][y] = -1;
+			if(y > 0) { 
+				zones[x - 1][y - 1] = -1;
+				zones[x][y - 1] = -1;
+			}
+			if(y < zones.length - 1) {
+				zones[x - 1][y + 1] = -1;
+				zones[x][y + 1] = -1;
+			}
+		}
+		//add a gold mine and a forest around the basecamp
+		this.placeZoneRandomlyAround(gameData.ZONES.goldmine, zones, x, y);
+		this.placeZoneRandomlyAround(gameData.ZONES.forest, zones, x, y);
+	}
+
+}
+
+
+/**
+*	Adds a terrain zone randomly around another zone
+*/
+mapLogic.placeZoneRandomlyAround = function (zoneToPlace, zones, aroundX, aroundY) {
+	var x = null;
+	var y = null;
+	while(x == null || zones[x][y] > 0) {
+		x = Math.min(zones[0].length - 1, Math.max(0, parseInt(aroundX + Math.random() * 4 - 2)));
+		y = Math.min(zones.length - 1, Math.max(0, parseInt(aroundY + Math.random() * 4 - 2)));
+	}
+	zones[x][y] = zoneToPlace;
+}
+
+
+/**
 *	Sets up a base camp for a player.
 */
 mapLogic.setupBasecamp = function (player, position) {
@@ -99,49 +262,4 @@ mapLogic.setupBasecamp = function (player, position) {
 	for(var i in basecamp.units) {
 		this.addGameElement(new gameData.Unit(basecamp.units[i], aroundTownHall[i].x, aroundTownHall[i].y, player.owner));
 	}
-}
-
-
-/**
-*	Dispatches the players' basecamps through the map.
-*/
-mapLogic.getPlayersPositions = function (mapSize, nbPlayers) {
-	var array = [];
-
-	var dx = parseInt(mapSize.x / 3);
-	var dy = parseInt(mapSize.y / 3);
-
-	var occupied = [[0, 0, 0], [0, 1, 0], [0, 0, 0]];
-	for (var i = 0; i < nbPlayers; i++) {
-		var x = 1;
-		var y = 1;
-		while(occupied[x][y] > 0) {
-			x = parseInt(Math.random() * 3);
-			y = parseInt(Math.random() * 3);
-		}
-		occupied[x][y] = 1;
-		if(x == 0) {
-			occupied[x + 1][y] = 1;
-		} else if (x == 1) {
-			occupied[x + 1][y] = 1;
-			occupied[x - 1][y] = 1;
-		} else {
-			occupied[x - 1][y] = 1;
-		}
-		if(y == 0) {
-			occupied[x][y + 1] = 1;
-		} else if (y == 1) {
-			occupied[x][y + 1] = 1;
-			occupied[x][y - 1] = 1;
-		} else {
-			occupied[x][y - 1] = 1;
-		}
-
-		x = x * dx + parseInt(dx / 4) + parseInt(Math.random() * dx / 2);
-		y = y * dy + parseInt(dy / 4) + parseInt(Math.random() * dy / 2);
-
-		array.push({x : x, y : y});
-	}
-
-	return array;
 }

@@ -74,20 +74,6 @@ gameLogic.updateGameWindow = function () {
 
 
 /**
-*	Updates the grid used for pathfinding.
-*/
-gameLogic.initGrid = function (element) {
-	//reset grid
-	this.grid = tools.cloneObject(mapLogic.staticGrid);
-
-	for(var n in this.gameElements) {
-		var element  = this.gameElements[n];
-		
-	}
-}
-
-
-/**
 *	Updates the toolbar.
 */
 gameLogic.updateToolbar = function () { 

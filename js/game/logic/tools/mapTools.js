@@ -2,7 +2,7 @@
 *	Returns the distance between two positions.
 */
 tools.getPositionsDistance = function (position1, position2) {
-	return Math.max(Math.abs(position1.x - position2.x) + Math.abs(position1.y - position2.y));
+	return Math.max(Math.abs(position1.x - position2.x), Math.abs(position1.y - position2.y));
 }
 
 

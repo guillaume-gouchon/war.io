@@ -88,9 +88,11 @@ buildLogic.gatherResources = function (builder, resource) {
 	builder.gathering.amount += amount;
 	resource.resourceAmount -= amount;
 
-	if (builder.gathering.amount == builder.maxGathering || resource.resourceAmount == 0) {
+	if (builder.gathering.amount == builder.maxGathering) {
 		var closestTownHall = mapLogic.getNearestBuilding(builder, gameData.BUILDINGS[gameManager.players[builder.owner].race].townhall.type);
 		builder.action = closestTownHall;
+	} else if (resource.resourceAmount == 0) {
+		AI.searchForNewResources(builder, builder, builder.patrol.resourceType);
 	}
 }
 
@@ -104,9 +106,7 @@ buildLogic.getBackResources = function (builder) {
 	if(builder.patrol != null) {
 		if(builder.patrol.resourceAmount == 0) {
 			//gather closest resource if this one is finished
-			var nearestResource = mapLogic.getNearestResource(builder, builder.patrol.resourceType);
-			builder.action = nearestResource;
-			builder.patrol = nearestResource;
+			AI.searchForNewResources(builder, builder.patrol, builder.patrol.resourceType);
 		} else {
 			builder.action = builder.patrol;
 		}

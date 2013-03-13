@@ -39,10 +39,9 @@ gameManager.createNewGame = function(map, players) {
 		}
 	}
 
-	mapLogic.createRandomMap (map, players);
+	mapLogic.createNewMap(map, players);
 	gameSurface.init();
 	gameThread.startGame();
-
 }
 
 
@@ -50,6 +49,10 @@ gameManager.createNewGame = function(map, players) {
 //TODO : remove and handle the game creation in a correct way
 gameManager.myArmy = 0;
 gameManager.players = [
-	new gameData.Player(0, 0), new gameData.Player(1, 0) 
+	new gameData.Player(0, 0), new gameData.Player(1, 0)
 ];
-gameManager.createNewGame(gameData.RANDOM_MAPS.small, gameManager.players);
+gameManager.map = new gameData.Map(gameData.MAP_TYPES.random,
+									gameData.MAP_SIZES.small,
+									gameData.VEGETATION_TYPES.standard,
+									gameData.INITIAL_RESOURCES.standard);
+gameManager.createNewGame(gameManager.map, gameManager.players);

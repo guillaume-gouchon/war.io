@@ -4,12 +4,7 @@ var gameSurface = {};
 /**
 *	VARIABLES
 */
-gameSurface.window = {
-	width : 0,
-	height : 0,
-	x : 0,
-	y : 0
-}
+
 
 gameSurface.scroll = {
 	dx : 0,
@@ -25,11 +20,20 @@ gameSurface.init = function () {
 	gameSurface.canvas.height = document.height;
 	gameSurface.canvas.width = document.width;
 	gameSurface.ctx = gameSurface.canvas.getContext("2d");
-	gameSurface.updateGameWindowSize();
 
 	gameSurface.grd = gameSurface.ctx.createLinearGradient(0,0,200,0);
 	gameSurface.grd.addColorStop(0,"white");
 	gameSurface.grd.addColorStop(1,"green");
+
+	gameSurface.window = {
+		width : 0,
+		height : 0,
+		x : 0,
+		y : 0
+	}
+
+	gameSurface.updateGameWindowSize();
+
 }
 
 
