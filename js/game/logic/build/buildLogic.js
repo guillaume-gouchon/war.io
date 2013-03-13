@@ -14,7 +14,7 @@ buildLogic.STATUS_CAN_BUILD_HERE = 10;
 buildLogic.startConstruction = function (building) {
 	if (this.canBuyIt(building.owner, building)) {
 		this.paysForElement(building.owner, building);
-		gameLogic.gameElements.push(building);
+		mapLogic.addGameElement(building);
 		userInput.leaveConstructionMode();
 	}
 }

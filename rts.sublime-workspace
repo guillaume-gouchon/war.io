@@ -5,7 +5,23 @@
 		[
 			[
 				"game",
-				"gameSurface"
+				"gameData"
+			],
+			[
+				"gam",
+				"gameData"
+			],
+			[
+				"e",
+				"else"
+			],
+			[
+				"element",
+				"elementUnder"
+			],
+			[
+				"open",
+				"openHeap"
 			],
 			[
 				"bui",
@@ -102,10 +118,6 @@
 			[
 				"sele",
 				"selectedUnit2"
-			],
-			[
-				"gam",
-				"gameElements"
 			],
 			[
 				"res",
@@ -226,10 +238,6 @@
 			[
 				"getP",
 				"getPartPosition"
-			],
-			[
-				"element",
-				"element2"
 			],
 			[
 				"move",
@@ -506,32 +514,16 @@
 			[
 				"uni",
 				"unitId"
-			],
-			[
-				"rn",
-				"randomTile"
-			],
-			[
-				"random",
-				"randomTile"
 			]
 		]
 	},
 	"buffers":
 	[
 		{
-			"file": "js/game/gameSurface.js",
+			"file": "js/game/gameManager.js",
 			"settings":
 			{
-				"buffer_size": 7689,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/home/guillaume/Bureau/strings.txt",
-			"settings":
-			{
-				"buffer_size": 10626,
+				"buffer_size": 1096,
 				"line_ending": "Unix"
 			}
 		}
@@ -564,40 +556,48 @@
 	},
 	"file_history":
 	[
-		"/home/guillaume/Bureau/strings.xml",
+		"/home/guillaume/Bureau/java/android/warlords online/src/com/giggs/apps/chaos/GCMIntentService.java",
+		"/home/guillaume/Bureau/java/android/warlords online/src/com/giggs/apps/chaos/Home.java",
+		"/home/guillaume/Bureau/java/android/warlords online/AndroidManifest.xml",
+		"/home/guillaume/Bureau/web/rts/js/game/data/class/player.js",
+		"/home/guillaume/Bureau/web/rts/js/game/data/map/maps.js",
 		"/home/guillaume/Bureau/web/rts/index.html",
+		"/home/guillaume/Bureau/web/rts/js/game/logic/input/userInput/orders.js",
+		"/home/guillaume/Bureau/web/rts/js/game/gameLogic.js",
+		"/home/guillaume/Bureau/web/rts/js/game/logic/fight/fightLogic.js",
+		"/home/guillaume/Bureau/web/rts/js/game/gameSurface.js",
+		"/home/guillaume/Bureau/web/rts/js/game/data/index.js",
+		"/home/guillaume/Bureau/web/rts/README.md",
+		"/home/guillaume/Bureau/web/rts/js/game/logic/build/buyLogic.js",
+		"/home/guillaume/Bureau/web/rts/js/game/logic/input/inputDispatcher.js",
+		"/home/guillaume/Bureau/web/rts/js/game/logic/map/creation.js",
+		"/home/guillaume/Bureau/web/rts/js/game/logic/movement/moveLogic.js",
+		"/home/guillaume/Bureau/web/rts/js/game/logic/movement/pathfinder.js",
+		"/home/guillaume/Bureau/web/rts/js/game/logic/map/mapLogic.js",
+		"/home/guillaume/Bureau/web/rts/rts.sublime-workspace",
+		"/home/guillaume/Bureau/strings.txt",
+		"/home/guillaume/Bureau/strings.xml",
 		"/home/guillaume/Bureau/excanvas_r3/excanvas.compiled.js",
 		"/home/guillaume/Bureau/excanvas_r3/excanvas.js",
-		"/home/guillaume/Bureau/web/rts/js/game/logic/input/inputDispatcher.js",
 		"/home/guillaume/Bureau/web/rts/js/game/display/mouse.js",
 		"/home/guillaume/Bureau/web/rts/js/game/logic/input/userInput/interactions.js",
 		"/home/guillaume/Bureau/web/rts/js/game/logic/build/buildLogic.js",
-		"/home/guillaume/Bureau/web/rts/js/game/logic/map/mapLogic.js",
-		"/home/guillaume/Bureau/web/rts/js/game/data/index.js",
 		"/home/guillaume/Bureau/web/rts/js/game/data/armies/human/units.js",
 		"/home/guillaume/Bureau/web/rts/js/game/data/armies/basecamps.js",
 		"/home/guillaume/Bureau/web/rts/js/game/data/armies/human/buildings.js",
-		"/home/guillaume/Bureau/web/rts/js/game/logic/map/creation.js",
-		"/home/guillaume/Bureau/web/rts/js/game/gameLogic.js",
 		"/home/guillaume/Bureau/web/rts/js/game/gameThread.js",
 		"/home/guillaume/Bureau/web/rts/js/game/logic/tools/index.js",
-		"/home/guillaume/Bureau/web/rts/js/game/logic/build/buyLogic.js",
 		"/home/guillaume/Bureau/web/rts/js/game/GUI/toolbar.js",
 		"/home/guillaume/Bureau/web/rts/js/game/gameManager.js",
 		"/home/guillaume/Bureau/web/rts/js/game/logic/actions/actions.js",
 		"/home/guillaume/Bureau/web/rts/js/game/logic/actions/orders.js",
-		"/home/guillaume/Bureau/web/rts/js/game/logic/input/userInput/orders.js",
 		"/home/guillaume/Bureau/web/rts/js/game/data/class/building.js",
 		"/home/guillaume/Bureau/web/rts/js/game/data/class/unit.js",
 		"/home/guillaume/Bureau/web/rts/js/game/logic/input/userInput/selections.js",
-		"/home/guillaume/Bureau/web/rts/js/game/gameSurface.js",
-		"/home/guillaume/Bureau/web/rts/js/game/logic/fight/fightLogic.js",
 		"/home/guillaume/Bureau/web/rts/js/game/logic/tools/mapTools.js",
 		"/home/guillaume/Bureau/web/rts/js/game/data/class/terrain.js",
 		"/home/guillaume/Bureau/web/rts/js/game/display/index.js",
-		"/home/guillaume/Bureau/web/rts/js/game/logic/movement/moveLogic.js",
 		"/home/guillaume/Bureau/web/rts/js/game/data/map/terrains.js",
-		"/home/guillaume/Bureau/web/rts/js/game/data/map/maps.js",
 		"/home/guillaume/Bureau/web/rts/js/game/data/map/resources.js",
 		"/home/guillaume/Bureau/web/rts/.git/config",
 		"/home/guillaume/Bureau/web/rts/js/game/input/mouseInput.js",
@@ -631,7 +631,6 @@
 		"/home/guillaume/Bureau/web/rts/js/game/elements/human/basecamp.js",
 		"/home/guillaume/Bureau/java/workspace/InformationScience/server/infoscience/src/test/resources/config.properties",
 		"/home/guillaume/Bureau/java/android/dq/res/values/strings.xml",
-		"/home/guillaume/Bureau/strings.txt",
 		"/home/guillaume/Bureau/java/workspace/InformationScience/server/sdk-rest/src/test/resources/config.properties",
 		"/home/guillaume/Bureau/web/rts/css/style.css",
 		"/home/guillaume/Bureau/web/rts/js/game/userInput/mouseInput.js",
@@ -639,7 +638,6 @@
 		"/home/guillaume/Bureau/web/rts/js/game/elements/basic/unit.js",
 		"/home/guillaume/Bureau/web/rts/js/game/elements/human/units.js",
 		"/home/guillaume/Bureau/web/rts/js/game/elements/config.js",
-		"/home/guillaume/Bureau/web/rts/js/game/logic/movement/pathfinder.js",
 		"/home/guillaume/Bureau/web/rts/js/game/logic/userActions/orders.js",
 		"/home/guillaume/Bureau/web/rts/js/game/logic/tools/distanceTools.js",
 		"/home/guillaume/Bureau/new Project",
@@ -685,13 +683,7 @@
 		"/home/guillaume/Bureau/web/webgl/glMatrix-0.9.5.min.js",
 		"/home/guillaume/workspace/GeoTexting/src/com/giggs/apps/geotexting/Main.java",
 		"/home/guillaume/workspace/GeoTexting/AndroidManifest.xml",
-		"/home/guillaume/Bureau/java/android/Rajawali/LICENSE.txt",
-		"/home/guillaume/Bureau/WO-stats",
-		"/home/guillaume/Bureau/node/server/front/players.js",
-		"/home/guillaume/Bureau/node/server/daos/playerDao.js",
-		"/home/guillaume/Bureau/Webtrends-1.2.0.18-Android.zip/readme.txt",
-		"/home/guillaume/Bureau/Webtrends-1.2.0.18-Android.zip/webtrends.xml",
-		"/home/guillaume/Bureau/node/server/services/gameService.js"
+		"/home/guillaume/Bureau/java/android/Rajawali/LICENSE.txt"
 	],
 	"find":
 	{
@@ -711,6 +703,20 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"status",
+			"STATUSES",
+			"status",
+			"resolveActions",
+			"updateGrid",
+			"resolveActions",
+			"distance",
+			"Distance",
+			"distance",
+			"orders",
+			"resolveActions",
+			"heurist",
+			"buildingE",
+			"terrainElements",
 			"<(.*?)>",
 			"\"<(.*?)>\"",
 			"\\[<\\](.*?)\\[>\\]",
@@ -824,26 +830,12 @@
 			"GameModel",
 			"playTurn",
 			"army ",
-			"army",
-			"el",
-			"a.terrain[j][i].content[0].owner",
-			"arm",
-			"armies",
-			"\n	",
-			");\n	",
-			");\n",
-			"Math.random()",
-			"length * Math.random()",
-			"MoveOrder",
-			"insecureUnits",
-			"\\",
-			"\"\\",
-			"\\\""
+			"army"
 		],
 		"highlight": true,
 		"in_selection": false,
 		"preserve_case": false,
-		"regex": true,
+		"regex": false,
 		"replace_history":
 		[
 			"",
@@ -893,23 +885,23 @@
 	"groups":
 	[
 		{
-			"selected": 1,
+			"selected": 0,
 			"sheets":
 			[
 				{
 					"buffer": 0,
-					"file": "js/game/gameSurface.js",
+					"file": "js/game/gameManager.js",
 					"settings":
 					{
-						"buffer_size": 7689,
+						"buffer_size": 1096,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								370,
-								370
+								586,
+								586
 							]
 						],
 						"settings":
@@ -918,35 +910,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 51.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "/home/guillaume/Bureau/strings.txt",
-					"settings":
-					{
-						"buffer_size": 10626,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								0,
-								0
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/Text/Plain text.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 408.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -985,6 +949,10 @@
 		]
 	},
 	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 657.0
+	},
 	"replace":
 	{
 		"height": 64.0

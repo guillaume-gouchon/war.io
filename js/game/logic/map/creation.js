@@ -2,20 +2,11 @@ var mapLogic = {};
 
 
 /**
-*	Includes only semi-static elements (terrain)
-*	Used for pathfinding.
-*/
-mapLogic.staticGrid = [];
-
-
-/**
 *	Creates a random map, sets up the terrain and the players basecamps.
 */
 mapLogic.createRandomMap = function (map, players) {
-	this.initGrid(map.size);
-
+	this.createGrid(map.size);
 	this.createTerrain(map);
-	gameLogic.grid = tools.cloneObject(mapLogic.staticGrid);
 	
 	var playerPositions = this.getPlayersPositions(map.size, players.length);
 	for(var i in players) {
@@ -29,12 +20,12 @@ mapLogic.createRandomMap = function (map, players) {
 /**
 *	Initializes the staticGrid.
 */
-mapLogic.initGrid = function (size) {
-	this.staticGrid = [];
+mapLogic.createGrid = function (size) {
+	gameLogic.grid = [];
 	for(var i = 0; i < size.x; i++) {
-		this.staticGrid[i] = [];
+		gameLogic.grid[i] = [];
 		for(var j = 0; j < size.y; j++) {
-			this.staticGrid[i][j] = {x : i, y : j, isWall : false};
+			gameLogic.grid[i][j] = {x : i, y : j, isWall : false};
 		}
 	}
 }
@@ -47,23 +38,49 @@ mapLogic.createTerrain = function (map) {
 	var nbTrees = parseInt(100 * Math.random());
 	for(var i = 0; i < nbTrees; i++) {
 		var position = [parseInt(Math.random() * map.size.x), parseInt(Math.random() * map.size.y)];
-		this.addTerrainElement(new gameData.Terrain(gameData.TERRAINS.tree, position[0], position[1]));
+		this.addGameElement(new gameData.Terrain(gameData.TERRAINS.tree, position[0], position[1]));
 	}
 
 	var nbStone = parseInt(5 * Math.random());
 	for(var i = 0; i < nbStone; i++) {
 		var position = [parseInt( 2 + Math.random() * map.size.x - 4), parseInt( 2 + Math.random() * map.size.y - 4)];
-		this.addTerrainElement(new gameData.Terrain(gameData.TERRAINS.stone, position[0], position[1]));
+		this.addGameElement(new gameData.Terrain(gameData.TERRAINS.stone, position[0], position[1]));
 	}
 }
 
 
 /**
-* Adds a terrain element on the map.
+* Adds a game element on the map.
 */
-mapLogic.addTerrainElement = function (element) {
+mapLogic.addGameElement = function (element) {
 	gameLogic.gameElements.push(element);
-	this.staticGrid[element.position.x][element.position.y].isWall = true;
+	for(var i in element.shape) {
+		var row = element.shape[i];
+		for(var j in row) {
+			var part = row[j];
+			if(part > 0) {
+				var position = tools.getPartPosition(element, i, j);
+				gameLogic.grid[position.x][position.y].isWall = true;
+			}
+		}
+	}
+}
+
+
+/**
+* Adds a game element on the map.
+*/
+mapLogic.removeGameElement = function (element) {
+	for(var i in element.shape) {
+		var row = element.shape[i];
+		for(var j in row) {
+			var part = row[j];
+			if(part > 0) {
+				var position = tools.getPartPosition(element, i, j);
+				gameLogic.grid[position.x][position.y].isWall = false;
+			}
+		}
+	}
 }
 
 
@@ -75,13 +92,12 @@ mapLogic.setupBasecamp = function (player, position) {
 
 	//place town hall
 	var townHall = new gameData.Building(basecamp.buildings[0], position.x, position.y, player.owner, true);
-	gameLogic.gameElements.push(townHall);
-	gameLogic.updateGrid(townHall);
+	this.addGameElement(townHall);
 	
 	//place units
 	var aroundTownHall = tools.getTilesAroundElements(townHall);
 	for(var i in basecamp.units) {
-		gameLogic.gameElements.push(new gameData.Unit(basecamp.units[i], aroundTownHall[i].x, aroundTownHall[i].y, player.owner));
+		this.addGameElement(new gameData.Unit(basecamp.units[i], aroundTownHall[i].x, aroundTownHall[i].y, player.owner));
 	}
 }
 

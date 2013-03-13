@@ -24,24 +24,32 @@ gameManager.updateGame = function () {
 * Sets up a new game and launch it.
 */
 gameManager.createNewGame = function(map, players) {
+	for (var i in players) {
+		var player = players[i];
+		for(var n in map.initialResources.resources) {
+			player.resources.push(map.initialResources.resources[n].value);
+		}
+
+		for(var j in players) {
+			if(j == i) {
+				player.ranks.push(gameData.RANKS.me);
+			} else {
+				player.ranks.push(gameData.RANKS.enemy);
+			}
+		}
+	}
+
 	mapLogic.createRandomMap (map, players);
 	gameSurface.init();
 	gameThread.startGame();
-}
-
-
-/**
-*	Returns a new player.
-*/
-gameManager.createPlayer = function (race, owner, status, resources) {
 
 }
+
 
 //start game
 //TODO : remove and handle the game creation in a correct way
 gameManager.myArmy = 0;
 gameManager.players = [
-	{race : 0, owner : 0, status: [gameData.STATUSES.me, gameData.STATUSES.neutral], resources : [100, 200, 100, 100], population : {max : 8, current : 3}}, 
-	{race : 0, owner : 1, status: [gameData.STATUSES.enemy, gameData.STATUSES.me], resources : [0, 0, 0, 0], population : {max : 8, current : 3}}, 
+	new gameData.Player(0, 0), new gameData.Player(1, 0) 
 ];
 gameManager.createNewGame(gameData.RANDOM_MAPS.small, gameManager.players);

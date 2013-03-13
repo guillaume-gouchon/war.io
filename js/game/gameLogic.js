@@ -49,8 +49,6 @@ gameLogic.updateGameLogic = function() {
 	this.updateGameWindow();
 	this.updateToolbar();
 
-	this.updateGrid(element);
-
 	for(var n in this.gameElements) {
 		var element  = this.gameElements[n];
 		if(gameManager.iterate % 5 == 0) {
@@ -78,22 +76,13 @@ gameLogic.updateGameWindow = function () {
 /**
 *	Updates the grid used for pathfinding.
 */
-gameLogic.updateGrid = function (element) {
+gameLogic.initGrid = function (element) {
 	//reset grid
 	this.grid = tools.cloneObject(mapLogic.staticGrid);
 
 	for(var n in this.gameElements) {
 		var element  = this.gameElements[n];
-		for(var i in element.shape) {
-			var row = element.shape[i];
-			for(var j in row) {
-				var part = row[j];
-				if(part > 0) {
-					var position = tools.getPartPosition(element, i, j);
-					this.grid[position.x][position.y].isWall = true;
-				}
-			}
-		}
+		
 	}
 }
 
@@ -125,6 +114,9 @@ gameLogic.resolveActions = function (element) {
 		var distance = tools.getElementsDistance(element, element.action);
 		//dispatch orders
 		if (distance <= 1) {
+			//stop moving
+			element.moveTo = {x : null, y : null};
+			
 			//close enough
 			if (element.isBuilder && element.action.family == gameData.FAMILIES.building
 				&& fightLogic.isAlly(element.action)) {
@@ -164,13 +156,13 @@ gameLogic.removeDeads= function () {
 		var element = gameLogic.gameElements[n]; 
 		if (element.life <= 0 || element.resourceAmount == 0) {
 			if (element.family == gameData.FAMILIES.terrain) {
-				mapLogic.staticGrid[element.position.x][element.position.y].isWall = false;
 			} else if (element.family == gameData.FAMILIES.building) {
 				buildLogic.removeBuilding(element);
 			} else if (element.family == gameData.FAMILIES.unit) {
 				buildLogic.removeUnit(element);
 			}
 			fightLogic.removeElement(n);
+			mapLogic.removeGameElement(element);
 
 			//remove from selection
 			for(var i in gameLogic.selected) {

@@ -14,7 +14,7 @@ fightLogic.weaponsEfficiency = [
 *	Checks if element is an enemy to me.
 */
 fightLogic.isEnemy = function (element) {
-	if(gameManager.players[gameManager.myArmy].status[element.owner] == gameData.STATUSES.ennemy) {
+	if(gameManager.players[gameManager.myArmy].ranks[element.owner] == gameData.RANKS.ennemy) {
 		return true;
 	} else {
 		return false;
@@ -26,8 +26,8 @@ fightLogic.isEnemy = function (element) {
 *	Checks if element is my ally or not.
 */
 fightLogic.isAlly = function (element) {
-	if(gameManager.players[gameManager.myArmy].status[element.owner] == gameData.STATUSES.me
-		|| gameManager.players[gameManager.myArmy].status[element.owner] == gameData.STATUSES.ally) {
+	if(gameManager.players[gameManager.myArmy].ranks[element.owner] == gameData.RANKS.me
+		|| gameManager.players[gameManager.myArmy].ranks[element.owner] == gameData.RANKS.ally) {
 		return true;
 	} else {
 		return false;
@@ -50,7 +50,6 @@ fightLogic.attack = function (attacker, target) {
 *	Increments frag if any attacker.
 */
 fightLogic.applyDamage = function (damage, target, fragOwner) {
-	console.log(target.life + ' ' + damage);
 	target.life = target.life - damage;
 
 	//check if dead

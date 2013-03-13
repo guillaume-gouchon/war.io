@@ -61,7 +61,7 @@ buildLogic.createNewUnit = function (unit, factory) {
 			userInput.convertDestinationToOrder([unit], factory.rallyingPoint);
 		}
 
-		gameLogic.gameElements.push(unit);
+		mapLogic.addGameElement(unit);
 		return true;
 	} else {
 		return false;	

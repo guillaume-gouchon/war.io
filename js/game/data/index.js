@@ -26,7 +26,7 @@ gameData.BUILDINGS = [];
 /**
 *	Statuses ids of units and buildings' owners.
 */
-gameData.STATUSES = {
+gameData.RANKS = {
 	me : 0,
 	ally : 1,
 	neutral : 2,
@@ -41,7 +41,6 @@ gameData.RESOURCES = {
 	wood : 0,
 	gold : 1,
 	stone : 2,
-	food : 3
 }
 
 
