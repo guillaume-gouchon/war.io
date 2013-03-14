@@ -49,7 +49,7 @@ gameManager.createNewGame = function(map, players) {
 //TODO : remove and handle the game creation in a correct way
 gameManager.myArmy = 0;
 gameManager.players = [
-	new gameData.Player(0, 0), new gameData.Player(1, 0)
+	new gameData.Player(0, 0), new gameData.Player(1, 0), new gameData.Player(2, 0), new gameData.Player(3, 0)
 ];
 gameManager.map = new gameData.Map(gameData.MAP_TYPES.random,
 									gameData.MAP_SIZES.small,

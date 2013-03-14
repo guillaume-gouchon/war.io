@@ -1,6 +1,6 @@
 gameData.Map = function (type, size, vegetation, initialResources) {
-	this.type = type;
-	this.size = size;
-	this.vegetation = vegetation;
-	this.initialResources = initialResources;
+	this.type = type;//standard, random, campaign, ...
+	this.size = size;//small, normal, large, ...
+	this.vegetation = vegetation;//plain, forest, sea, ...
+	this.initialResources = initialResources;//amount of resources at game start
 }

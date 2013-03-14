@@ -186,48 +186,32 @@ mapLogic.removeGameElement = function (element) {
 *	Dispatches the players' basecamps through the map.
 */
 mapLogic.dispatchPlayers = function (zones, players, dx, dy) {
+	//get player's available initial zones
+	var availableInitialPositions = this.getAvailableInitialPositions(players.length);
+
 	for (var i in players) {
-		var x = null;
-		var y = null;
-		while(x == null || zones[x][y] >= -1) {
-			console.log(1)
-			x = parseInt(Math.random() * zones[0].length);
-			y = parseInt(Math.random() * zones.length);
+		var r = parseInt(availableInitialPositions.length * Math.random());
+		var playerZone = availableInitialPositions[r];
+		
+		//convert coordinates
+		playerZone = {
+			x : this.convertCoordinates(zones[0].length, playerZone.x),
+			y : this.convertCoordinates(zones.length, playerZone.y)
 		}
+
+		availableInitialPositions.splice(r, 1);
+
 		//this zone is now owned by the player
-		zones[x][y] = gameData.ZONES.basecamp;
+		zones[playerZone.x][playerZone.y] = gameData.ZONES.basecamp;
 		var campPosition = {
-			x : x * dx + parseInt(dx / 4) + parseInt(Math.random() * dx / 2), 
-			y : y * dy + parseInt(dy / 4) + parseInt(Math.random() * dy / 2)
+			x : playerZone.x * dx + parseInt(dx / 4) + parseInt(Math.random() * dx / 2), 
+			y : playerZone.y * dy + parseInt(dy / 4) + parseInt(Math.random() * dy / 2)
 		}
 		this.setupBasecamp(players[i], campPosition);
 
-		//let's remove closest zones to the available zones
-		if(x < zones[0].length - 1) {
-			zones[x + 1][y] = -1;
-			if(y > 0) { 
-				zones[x + 1][y - 1] = -1;
-				zones[x][y - 1] = -1;
-			}
-			if(y < zones.length - 1) {
-				zones[x + 1][y + 1] = -1;
-				zones[x][y + 1] = -1;
-			}
-		}
-		if(x > 0) {
-			zones[x - 1][y] = -1;
-			if(y > 0) { 
-				zones[x - 1][y - 1] = -1;
-				zones[x][y - 1] = -1;
-			}
-			if(y < zones.length - 1) {
-				zones[x - 1][y + 1] = -1;
-				zones[x][y + 1] = -1;
-			}
-		}
 		//add a gold mine and a forest around the basecamp
-		this.placeZoneRandomlyAround(gameData.ZONES.goldmine, zones, x, y);
-		this.placeZoneRandomlyAround(gameData.ZONES.forest, zones, x, y);
+		this.placeZoneRandomlyAround(gameData.ZONES.forest, zones, playerZone.x, playerZone.y);
+		this.placeZoneRandomlyAround(gameData.ZONES.goldmine, zones, playerZone.x, playerZone.y);
 	}
 
 }
@@ -239,9 +223,9 @@ mapLogic.dispatchPlayers = function (zones, players, dx, dy) {
 mapLogic.placeZoneRandomlyAround = function (zoneToPlace, zones, aroundX, aroundY) {
 	var x = null;
 	var y = null;
-	while(x == null || zones[x][y] > 0) {
-		x = Math.min(zones[0].length - 1, Math.max(0, parseInt(aroundX + Math.random() * 4 - 2)));
-		y = Math.min(zones.length - 1, Math.max(0, parseInt(aroundY + Math.random() * 4 - 2)));
+	while (x == null || zones[x][y] == 1) {
+		x = Math.min(zones[0].length - 1, Math.max(0, parseInt(aroundX + Math.random() * 2 - 1)));
+		y = Math.min(zones.length - 1, Math.max(0, parseInt(aroundY + Math.random() * 2 - 1)));
 	}
 	zones[x][y] = zoneToPlace;
 }
@@ -261,5 +245,70 @@ mapLogic.setupBasecamp = function (player, position) {
 	var aroundTownHall = tools.getTilesAroundElements(townHall);
 	for(var i in basecamp.units) {
 		this.addGameElement(new gameData.Unit(basecamp.units[i], aroundTownHall[i].x, aroundTownHall[i].y, player.owner));
+	}
+}
+
+
+/**
+*	Returns players' available initial positions
+*/
+mapLogic.getAvailableInitialPositions = function (nbPlayers) {
+	var initialPositions = [];
+	if(nbPlayers != 4) {
+		var map = [[0, 0, 0], [0, 1, 0], [0, 0, 0]];
+		for(var i = 0; i < nbPlayers; i++) {
+			var x = null;
+			var y = null;
+			while(x == null || map[x][y] > 0) {
+				x = parseInt(Math.random() * 3);
+				y = parseInt(Math.random() * 3);
+			}
+
+			map[x][y] = 1;
+			initialPositions.push({x: x, y: y});
+
+			if(nbPlayers <= 3) {
+				if (x < 2) {
+					map[x + 1][y] = 1;
+				}
+				if (x > 0) {
+					map[x - 1][y] = 1;
+				}
+				if (y < 2) {
+					map[x][y + 1] = 1;
+				}
+				if (y > 0) {
+					map[x][y - 1] = 1;
+				}
+			}
+		}
+	} else {
+		//4-player map = positions are set up as crosses
+		if(Math.random() < 0.5) {
+			initialPositions.push({x: 0, y: 0});
+			initialPositions.push({x: 0, y: 2});
+			initialPositions.push({x: 2, y: 0});
+			initialPositions.push({x: 2, y: 2});
+		} else {
+			initialPositions.push({x: 1, y: 0});
+			initialPositions.push({x: 1, y: 2});
+			initialPositions.push({x: 0, y: 1});
+			initialPositions.push({x: 2, y: 1});
+		}
+	}
+	return initialPositions;
+}
+
+
+/**
+*	Converts a coordinate of a 3 x 3 map to real map's one.
+*/
+mapLogic.convertCoordinates = function (mapSize, coordinate) {
+	if(coordinate == 0) { 
+		return 1;
+	} else if (coordinate == 1) {
+		return parseInt(mapSize / 2);
+	} else {
+		return mapSize - 2;
 	}
 }

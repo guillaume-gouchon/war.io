@@ -18,10 +18,9 @@ gameData.RACES = {
 	human : 0
 }
 
-
 gameData.UNITS = [];
 gameData.BUILDINGS = [];
-
+gameData.TECHNOLOGIES = [];
 
 /**
 *	Statuses ids of units and buildings' owners.

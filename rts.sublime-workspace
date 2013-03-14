@@ -4,8 +4,76 @@
 		"selected_items":
 		[
 			[
+				"initi",
+				"initialPositions"
+			],
+			[
+				"cn",
+				"convertCoordinates"
+			],
+			[
+				"map",
+				"mapLogic"
+			],
+			[
+				"pla",
+				"playerZone"
+			],
+			[
+				"ava",
+				"availableInitialPositions"
+			],
+			[
+				"av",
+				"availableZones"
+			],
+			[
+				"zon",
+				"zones"
+			],
+			[
+				"zn",
+				"zones"
+			],
+			[
+				"dis",
+				"dispatchPlayers"
+			],
+			[
+				"zone",
+				"zoneType"
+			],
+			[
+				"avai",
+				"availableZones"
+			],
+			[
+				"get",
+				"getZone"
+			],
+			[
+				"stone",
+				"stonemine"
+			],
+			[
+				"gold",
+				"goldmine"
+			],
+			[
+				"ga",
+				"gathering"
+			],
+			[
+				"buil",
+				"builder"
+			],
+			[
+				"bui",
+				"builder"
+			],
+			[
 				"game",
-				"gameData"
+				"gameLogic"
 			],
 			[
 				"gam",
@@ -24,16 +92,8 @@
 				"openHeap"
 			],
 			[
-				"bui",
-				"building"
-			],
-			[
 				"cloest",
 				"closestTownHall"
-			],
-			[
-				"buil",
-				"buildingType"
 			],
 			[
 				"resou",
@@ -44,16 +104,8 @@
 				"terrainElements"
 			],
 			[
-				"map",
-				"mapLogic"
-			],
-			[
 				"static",
 				"staticGrid"
-			],
-			[
-				"ga",
-				"gameElements"
 			],
 			[
 				"selec",
@@ -176,10 +228,6 @@
 				"onKeyDown"
 			],
 			[
-				"get",
-				"getLocationFromPixel"
-			],
-			[
 				"key",
 				"keyCode"
 			],
@@ -298,10 +346,6 @@
 			[
 				"cal",
 				"callback"
-			],
-			[
-				"pla",
-				"playerDao"
 			],
 			[
 				"en",
@@ -470,63 +514,11 @@
 			[
 				"ra",
 				"random"
-			],
-			[
-				"find",
-				"findOne"
-			],
-			[
-				"sen",
-				"senderId"
-			],
-			[
-				"Turn",
-				"TurnModel"
-			],
-			[
-				"Ne",
-				"necromancer"
-			],
-			[
-				"Bowe",
-				"bowmen"
-			],
-			[
-				"unit",
-				"unitsThere"
-			],
-			[
-				"possibl",
-				"possibleTiles"
-			],
-			[
-				"at",
-				"attacker"
-			],
-			[
-				"pow",
-				"powAttacker"
-			],
-			[
-				"chec",
-				"checkDeads"
-			],
-			[
-				"uni",
-				"unitId"
 			]
 		]
 	},
 	"buffers":
 	[
-		{
-			"file": "js/game/gameManager.js",
-			"settings":
-			{
-				"buffer_size": 1096,
-				"line_ending": "Unix"
-			}
-		}
 	],
 	"build_system": "",
 	"command_palette":
@@ -556,21 +548,29 @@
 	},
 	"file_history":
 	[
+		"/home/guillaume/Bureau/web/rts/js/game/gameManager.js",
+		"/home/guillaume/Bureau/web/rts/js/game/logic/map/creation.js",
+		"/home/guillaume/Bureau/web/rts/js/game/data/index.js",
+		"/home/guillaume/Bureau/web/rts/js/game/data/map/maps.js",
+		"/home/guillaume/Bureau/web/rts/js/game/data/class/player.js",
+		"/home/guillaume/Bureau/web/rts/js/game/data/class/building.js",
+		"/home/guillaume/Bureau/web/rts/js/game/data/class/map.js",
+		"/home/guillaume/Bureau/web/rts/js/game/data/map/terrains.js",
+		"/home/guillaume/Bureau/web/rts/js/game/logic/input/userInput/interactions.js",
+		"/home/guillaume/Bureau/web/rts/js/game/logic/input/inputDispatcher.js",
+		"/home/guillaume/Bureau/web/rts/js/game/gameLogic.js",
+		"/home/guillaume/Bureau/web/rts/js/game/logic/AI/village.js",
+		"/home/guillaume/Bureau/web/rts/js/game/gameSurface.js",
+		"/home/guillaume/Bureau/web/rts/index.html",
+		"/home/guillaume/Bureau/web/rts/js/game/logic/tools/mapTools.js",
+		"/home/guillaume/Bureau/web/rts/js/game/logic/build/buildLogic.js",
+		"/home/guillaume/Bureau/web/rts/js/game/logic/build/buyLogic.js",
 		"/home/guillaume/Bureau/java/android/warlords online/src/com/giggs/apps/chaos/GCMIntentService.java",
 		"/home/guillaume/Bureau/java/android/warlords online/src/com/giggs/apps/chaos/Home.java",
 		"/home/guillaume/Bureau/java/android/warlords online/AndroidManifest.xml",
-		"/home/guillaume/Bureau/web/rts/js/game/data/class/player.js",
-		"/home/guillaume/Bureau/web/rts/js/game/data/map/maps.js",
-		"/home/guillaume/Bureau/web/rts/index.html",
 		"/home/guillaume/Bureau/web/rts/js/game/logic/input/userInput/orders.js",
-		"/home/guillaume/Bureau/web/rts/js/game/gameLogic.js",
 		"/home/guillaume/Bureau/web/rts/js/game/logic/fight/fightLogic.js",
-		"/home/guillaume/Bureau/web/rts/js/game/gameSurface.js",
-		"/home/guillaume/Bureau/web/rts/js/game/data/index.js",
 		"/home/guillaume/Bureau/web/rts/README.md",
-		"/home/guillaume/Bureau/web/rts/js/game/logic/build/buyLogic.js",
-		"/home/guillaume/Bureau/web/rts/js/game/logic/input/inputDispatcher.js",
-		"/home/guillaume/Bureau/web/rts/js/game/logic/map/creation.js",
 		"/home/guillaume/Bureau/web/rts/js/game/logic/movement/moveLogic.js",
 		"/home/guillaume/Bureau/web/rts/js/game/logic/movement/pathfinder.js",
 		"/home/guillaume/Bureau/web/rts/js/game/logic/map/mapLogic.js",
@@ -580,24 +580,18 @@
 		"/home/guillaume/Bureau/excanvas_r3/excanvas.compiled.js",
 		"/home/guillaume/Bureau/excanvas_r3/excanvas.js",
 		"/home/guillaume/Bureau/web/rts/js/game/display/mouse.js",
-		"/home/guillaume/Bureau/web/rts/js/game/logic/input/userInput/interactions.js",
-		"/home/guillaume/Bureau/web/rts/js/game/logic/build/buildLogic.js",
 		"/home/guillaume/Bureau/web/rts/js/game/data/armies/human/units.js",
 		"/home/guillaume/Bureau/web/rts/js/game/data/armies/basecamps.js",
 		"/home/guillaume/Bureau/web/rts/js/game/data/armies/human/buildings.js",
 		"/home/guillaume/Bureau/web/rts/js/game/gameThread.js",
 		"/home/guillaume/Bureau/web/rts/js/game/logic/tools/index.js",
 		"/home/guillaume/Bureau/web/rts/js/game/GUI/toolbar.js",
-		"/home/guillaume/Bureau/web/rts/js/game/gameManager.js",
 		"/home/guillaume/Bureau/web/rts/js/game/logic/actions/actions.js",
 		"/home/guillaume/Bureau/web/rts/js/game/logic/actions/orders.js",
-		"/home/guillaume/Bureau/web/rts/js/game/data/class/building.js",
 		"/home/guillaume/Bureau/web/rts/js/game/data/class/unit.js",
 		"/home/guillaume/Bureau/web/rts/js/game/logic/input/userInput/selections.js",
-		"/home/guillaume/Bureau/web/rts/js/game/logic/tools/mapTools.js",
 		"/home/guillaume/Bureau/web/rts/js/game/data/class/terrain.js",
 		"/home/guillaume/Bureau/web/rts/js/game/display/index.js",
-		"/home/guillaume/Bureau/web/rts/js/game/data/map/terrains.js",
 		"/home/guillaume/Bureau/web/rts/js/game/data/map/resources.js",
 		"/home/guillaume/Bureau/web/rts/.git/config",
 		"/home/guillaume/Bureau/web/rts/js/game/input/mouseInput.js",
@@ -681,9 +675,7 @@
 		"/home/guillaume/Bureau/web/webgl/index.html",
 		"/home/guillaume/Bureau/web/webgl/script.js",
 		"/home/guillaume/Bureau/web/webgl/glMatrix-0.9.5.min.js",
-		"/home/guillaume/workspace/GeoTexting/src/com/giggs/apps/geotexting/Main.java",
-		"/home/guillaume/workspace/GeoTexting/AndroidManifest.xml",
-		"/home/guillaume/Bureau/java/android/Rajawali/LICENSE.txt"
+		"/home/guillaume/workspace/GeoTexting/src/com/giggs/apps/geotexting/Main.java"
 	],
 	"find":
 	{
@@ -703,6 +695,9 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"whil",
+			"updateMouse",
+			"grid",
 			"status",
 			"STATUSES",
 			"status",
@@ -827,10 +822,7 @@
 			"	if(successSaveMessage){\n	    	\n	  	}",
 			"PlayerModel",
 			"MessageModel",
-			"GameModel",
-			"playTurn",
-			"army ",
-			"army"
+			"GameModel"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -885,36 +877,8 @@
 	"groups":
 	[
 		{
-			"selected": 0,
 			"sheets":
 			[
-				{
-					"buffer": 0,
-					"file": "js/game/gameManager.js",
-					"settings":
-					{
-						"buffer_size": 1096,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								586,
-								586
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 408.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				}
 			]
 		}
 	],
