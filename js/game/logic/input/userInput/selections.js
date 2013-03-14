@@ -105,8 +105,27 @@ userInput.selectGroup = function (x, y) {
 
 
 /**
-*	Removes the selection rectangle
+*	Removes the selection rectangle.
 */
 userInput.removeSelectionRectangle = function () {
 	gameLogic.selectionRectangle = [];
+}
+
+
+/**
+*	Selects all similar ally units.
+*/
+userInput.doubleClickToSelect = function (x, y) {
+	if(gameLogic.selected.length > 0 && fightLogic.isAlly(gameLogic.selected[0])) {
+		var selected = gameLogic.selected[0];
+		for(var i in gameLogic.gameElements) {
+			var element = gameLogic.gameElements[i];
+		  	if(element.family == selected.family && fightLogic.isAlly(element)
+		  		&& element.type == selected.type) {
+		  		//select the clicked element
+		  		element.isSelected = true;
+		  		gameLogic.selected.push(element);
+		  	}
+		}
+	}
 }

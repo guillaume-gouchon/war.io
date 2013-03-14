@@ -48,6 +48,19 @@ inputDispatcher.onLeftClick = function (event) {
 
 
 /**
+*	Left double click
+*/
+inputDispatcher.onDoubleClick = function (event) {
+	if(event.which == 1) {
+		var x = event.x;
+		var y = event.y;
+		userInput.doubleClickToSelect(x, y);
+	}
+	return false;
+}
+
+
+/**
 *	Single right click
 */
 inputDispatcher.onRightClick = function (event) {
