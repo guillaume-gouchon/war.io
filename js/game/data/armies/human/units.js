@@ -15,7 +15,7 @@ gameData.UNITS.push({
 		defense : 0,
 		weaponType : 0,
 		armorType : 0,
-		gatheringSpeed : 1,
+		gatheringSpeed : 2,
 		maxGathering : 20,
 		population : 1,
 		needs : [{type : gameData.RESOURCES.gold, value : 20}]

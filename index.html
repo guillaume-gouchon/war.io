@@ -19,19 +19,51 @@
 
 	<body>
 	  <canvas id="canvas"></canvas>
+	  <button onclick="startGame()">Start</button>
 	</body>
-	
-	<script type="text/javascript" src="js/game/gameLogic.js"></script>
-	
-	<script type="text/javascript" src="js/game/GUI/index.js"></script>
-	<script type="text/javascript" src="js/game/GUI/toolbar.js"></script>
 
-	<script type="text/javascript" src="js/game/data/index.js"></script>
-	<script type="text/javascript" src="js/game/data/class/map.js"></script>
-	<script type="text/javascript" src="js/game/data/class/player.js"></script>
-	<script type="text/javascript" src="js/game/data/class/unit.js"></script>
-	<script type="text/javascript" src="js/game/data/class/terrain.js"></script>
-	<script type="text/javascript" src="js/game/data/class/building.js"></script>
+
+	<!-- ENGINE -->
+	<script type="text/javascript" src="js/game/engine/gameData.js"></script>
+	<script type="text/javascript" src="js/game/engine/class/map.js"></script>
+	<script type="text/javascript" src="js/game/engine/class/player.js"></script>
+	<script type="text/javascript" src="js/game/engine/class/unit.js"></script>
+	<script type="text/javascript" src="js/game/engine/class/terrain.js"></script>
+	<script type="text/javascript" src="js/game/engine/class/building.js"></script>
+	<script type="text/javascript" src="js/game/engine/map/creation.js"></script>
+	<script type="text/javascript" src="js/game/engine/map/map.js"></script>
+	<script type="text/javascript" src="js/game/engine/AI.js"></script>
+	<script type="text/javascript" src="js/game/engine/action.js"></script>
+	<script type="text/javascript" src="js/game/engine/fight.js"></script>
+	<script type="text/javascript" src="js/game/engine/gameLogic.js"></script>
+	<script type="text/javascript" src="js/game/engine/gameLoop.js"></script>
+	<script type="text/javascript" src="js/game/engine/move.js"></script>
+	<script type="text/javascript" src="js/game/engine/order.js"></script>
+	<script type="text/javascript" src="js/game/engine/production.js"></script>
+	<script type="text/javascript" src="js/game/engine/rank.js"></script>
+	<script type="text/javascript" src="js/game/engine/tools.js"></script>
+	<script type="text/javascript" src="js/game/engine/engineManager.js"></script>
+
+
+	<!-- CLIENT -->
+	<script type="text/javascript" src="js/game/client/input/input.js"></script>
+	<script type="text/javascript" src="js/game/client/input/inputDispatcher.js"></script>
+	<script type="text/javascript" src="js/game/client/input/userInput/index.js"></script>
+	<script type="text/javascript" src="js/game/client/input/userInput/selections.js"></script>
+	<script type="text/javascript" src="js/game/client/input/userInput/interactions.js"></script>
+	<script type="text/javascript" src="js/game/client/input/userInput/orders.js"></script>
+	<script type="text/javascript" src="js/game/client/orderDispatcher.js"></script>
+	<script type="text/javascript" src="js/game/client/GUI.js"></script>
+	<script type="text/javascript" src="js/game/client/draw.js"></script>
+	<script type="text/javascript" src="js/game/client/gameContent.js"></script>
+	<script type="text/javascript" src="js/game/client/gameManager.js"></script>
+	<script type="text/javascript" src="js/game/client/gameThread.js"></script>
+	<script type="text/javascript" src="js/game/client/gameWindow.js"></script>
+	<script type="text/javascript" src="js/game/client/utils.js"></script>
+
+
+	<!-- GAME DATA -->
+	<script type="text/javascript" src="js/game/data/global.js"></script>
 	<script type="text/javascript" src="js/game/data/armies/human/units.js"></script>
 	<script type="text/javascript" src="js/game/data/armies/human/buildings.js"></script>
 	<script type="text/javascript" src="js/game/data/armies/basecamps.js"></script>
@@ -39,34 +71,6 @@
 	<script type="text/javascript" src="js/game/data/map/terrains.js"></script>
 
 
-	<script type="text/javascript" src="js/game/logic/AI/village.js"></script>
-	<script type="text/javascript" src="js/game/logic/actions/orders.js"></script>
-	<script type="text/javascript" src="js/game/logic/actions/actions.js"></script>
-	<script type="text/javascript" src="js/game/logic/build/buildLogic.js"></script>
-	<script type="text/javascript" src="js/game/logic/build/buyLogic.js"></script>
-	<script type="text/javascript" src="js/game/logic/fight/fightLogic.js"></script>
-	<script type="text/javascript" src="js/game/logic/input/inputDispatcher.js"></script>
-	<script type="text/javascript" src="js/game/logic/input/userInput/index.js"></script>
-	<script type="text/javascript" src="js/game/logic/input/userInput/selections.js"></script>
-	<script type="text/javascript" src="js/game/logic/input/userInput/interactions.js"></script>
-	<script type="text/javascript" src="js/game/logic/input/userInput/orders.js"></script>
-
-	<script type="text/javascript" src="js/game/logic/map/creation.js"></script>
-	<script type="text/javascript" src="js/game/logic/map/mapLogic.js"></script>
-	<script type="text/javascript" src="js/game/logic/movement/moveLogic.js"></script>
-	<script type="text/javascript" src="js/game/logic/movement/pathfinder.js"></script>
-	<script type="text/javascript" src="js/game/logic/tools/index.js"></script>
-	<script type="text/javascript" src="js/game/logic/tools/mapTools.js"></script>
-
-	<script type="text/javascript" src="js/game/display/index.js"></script>
-	<script type="text/javascript" src="js/game/display/mouse.js"></script>
-
-	<script type="text/javascript" src="js/game/gameSurface.js"></script>
-	<script type="text/javascript" src="js/game/gameThread.js"></script>
-	<script type="text/javascript" src="js/game/gameManager.js"></script>
-
-	<script type="text/javascript" src="js/game/input/mouseInput.js"></script>
-	<script type="text/javascript" src="js/game/input/keyboardInput.js"></script>
 
 
 </html>
