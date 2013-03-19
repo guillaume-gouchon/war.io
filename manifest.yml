@@ -1,0 +1,14 @@
+--- 
+applications: 
+  .: 
+    name: giggs-apps
+    mem: 256M
+    instances: 1
+    url: ${name}.${target-base}
+    framework: 
+      name: node
+      info: 
+        mem: 64M
+        exec: 
+        description: Node.js Application
+    infra: eu-aws
