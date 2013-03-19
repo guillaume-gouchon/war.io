@@ -37,6 +37,6 @@ Icon?
 ehthumbs.db
 Thumbs.db
 
-*.sublime-workspace
-*.sublime-project
+rts.sublime-workspace
+rts.sublime-project
 node_modules/
