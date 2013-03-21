@@ -12,28 +12,28 @@ gameData.MAP_TYPES = {
 gameData.INITIAL_RESOURCES = {
 	low : {
 		name : 'Low',
-		resources : [
-			{type : gameData.RESOURCES.wood, value : 50},
-			{type : gameData.RESOURCES.gold, value : 50},
-			{type : gameData.RESOURCES.stone, value : 30}
+		re : [
+			{t : gameData.RESOURCES.wood, value : 50},
+			{t : gameData.RESOURCES.gold, value : 50},
+			{t : gameData.RESOURCES.stone, value : 30}
 		]
 	},
 
 	standard : {
 		name : 'Standard',
-		resources : [
-			{type : gameData.RESOURCES.wood, value : 100},
-			{type : gameData.RESOURCES.gold, value : 100},
-			{type : gameData.RESOURCES.stone, value : 80}
+		re : [
+			{t : gameData.RESOURCES.wood, value : 100},
+			{t : gameData.RESOURCES.gold, value : 100},
+			{t : gameData.RESOURCES.stone, value : 80}
 		]
 	},
 
 	high : {
 		name : 'High',
-		resources : [
-			{type : gameData.RESOURCES.wood, value : 250},
-			{type : gameData.RESOURCES.gold, value : 250},
-			{type : gameData.RESOURCES.stone, value : 100}
+		re : [
+			{t : gameData.RESOURCES.wood, value : 250},
+			{t : gameData.RESOURCES.gold, value : 250},
+			{t : gameData.RESOURCES.stone, value : 100}
 		]
 	}
 }
@@ -71,10 +71,10 @@ gameData.VEGETATION_TYPES = {
 	standard : {
 		name : 'Standard',
 		zones : [
-			{type : gameData.ZONES.nothing, factor : 20},
-			{type : gameData.ZONES.forest, factor : 12},
-			{type : gameData.ZONES.goldmine, factor : 1},
-			{type : gameData.ZONES.stonemine, factor : 2}
+			{t : gameData.ZONES.nothing, factor : 20},
+			{t : gameData.ZONES.forest, factor : 12},
+			{t : gameData.ZONES.goldmine, factor : 1},
+			{t : gameData.ZONES.stonemine, factor : 2}
 		]
 	}
 }

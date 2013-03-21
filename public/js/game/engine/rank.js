@@ -4,8 +4,8 @@ var rank = {};
 /**
 *	Checks if element is an enemy to me.
 */
-rank.isEnemy = function (element) {
-	if(gameLogic.players[gameLogic.myArmy].ranks[element.owner] == gameData.RANKS.ennemy) {
+rank.isEnemy = function (me, element) {
+	if(gameLogic.players[me].ra[element.o] == gameData.RANKS.ennemy) {
 		return true;
 	} else {
 		return false;
@@ -16,9 +16,9 @@ rank.isEnemy = function (element) {
 /**
 *	Checks if element is my ally or not.
 */
-rank.isAlly = function (element) {
-	if(gameLogic.players[gameLogic.myArmy].ranks[element.owner] == gameData.RANKS.me
-		|| gameLogic.players[gameLogic.myArmy].ranks[element.owner] == gameData.RANKS.ally) {
+rank.isAlly = function (me, element) {
+	if(gameLogic.players[me].ra[element.o] == gameData.RANKS.me
+		|| gameLogic.players[me].ra[element.o] == gameData.RANKS.ally) {
 		return true;
 	} else {
 		return false;

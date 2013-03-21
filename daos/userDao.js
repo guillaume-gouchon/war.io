@@ -1,18 +1,18 @@
-var userModel = require('../models/user').userModel;
+var userModel = require('../models/user').model;
 
 module.exports = {
 	
 	userModel: userModel,
 
-	getAllUsers: function(callback){
+	getAll: function(callback){
 		userModel.find(callback);
 	},
 
-	getUserById: function(id, callback){
+	getById: function(id, callback){
 		userModel.findOne({_id: id}, callback);
 	},
 
-	saveUser: function(user, callback){
+	save: function(user, callback){
 		user.save(callback);
 	}
 	

@@ -47,10 +47,10 @@ input.onRightClick = function (event) {
 	if(gameContent.building != null) {
 		userInput.leaveConstructionMode();
 	} else if(gameContent.selected.length > 0 
-		&& rank.isAlly(gameContent.selected[0])) {
+		&& rank.isAlly(gameManager.myArmy, gameContent.selected[0])) {
 		//give an order
-		if(gameContent.selected[0].family == gameData.FAMILIES.unit
-			|| gameContent.selected[0].family == gameData.FAMILIES.building) {
+		if(gameContent.selected[0].f == gameData.FAMILIES.unit
+			|| gameContent.selected[0].f == gameData.FAMILIES.building) {
 			userInput.dispatchUnitAction(event.x, event.y);
 		} 
 	}

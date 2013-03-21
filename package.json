@@ -1,5 +1,4 @@
 {
-  "name" : "orange3",
-  "version" : "1.1.0",
-  "scripts": { "test": "vows test/*.js" }
+  "name" : "project-awesome",
+  "version" : "1.1.1"
 }

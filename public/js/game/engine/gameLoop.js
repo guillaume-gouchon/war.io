@@ -3,7 +3,7 @@ var gameLoop = {};
 /**
 *	Number of updates by second.
 */
-gameLoop.FREQUENCY = 20;
+gameLoop.FREQUENCY = 10;
 
 
 /**

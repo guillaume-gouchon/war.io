@@ -6,6 +6,6 @@ orderDispatcher.sendOrderToEngine = function (type, params) {
 		order.dispatchReceivedOrder(type, params);
 	} else {
 		//send order to external server
-		socket.emit('order', [type, params]);
+		gameManager.socket.emit('order', [type, params]);
 	}
 }

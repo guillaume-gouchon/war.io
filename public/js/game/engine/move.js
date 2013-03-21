@@ -5,7 +5,7 @@ var move = {};
 *	Moves an element closer to its destination.
 */
 move.moveElement = function (element) {
-	var destination = gameLogic.grid[element.moveTo.x][element.moveTo.y];
+	var destination = gameLogic.grid[element.mt.x][element.mt.y];
 	var counter = 0;
 	while(destination.isWall && counter < 20) {
 		counter++;
@@ -13,28 +13,32 @@ move.moveElement = function (element) {
 	    for(var i in endNeighbors){
 	      if(!endNeighbors[i].isWall) {
 	        destination = endNeighbors[i];
-	        element.moveTo = {x : destination.x, y : destination.y};
+	        element.mt = {x : destination.x, y : destination.y};
 	        break;
 	      }
 	    }
 	}
 	
 	//uses A* algorithm to find the path
-	var path = astar.search(gameLogic.grid, gameLogic.grid[element.position.x][element.position.y], 
+	var path = astar.search(gameLogic.grid, gameLogic.grid[element.p.x][element.p.y], 
 							destination, true);
 	if(path.length > 0) {
 
 		//take into account the speed of the element
-		var speed = gameData.ELEMENTS[element.family][element.race][element.type].speed;
+		var speed = gameData.ELEMENTS[element.f][element.r][element.t].speed;
 		while(speed > path.length) {
 			speed--;
 		}
+
+    if (path[speed - 1] == null) {
+      return;
+    }
 
 		var newPosition = {x : path[speed - 1].x, y : path[speed - 1].y};
 
 		if(!gameLogic.grid[newPosition.x][newPosition.y].isWall) {
 			//removes old position
-      var shape = gameData.ELEMENTS[element.family][element.race][element.type].shape;
+      var shape = gameData.ELEMENTS[element.f][element.r][element.t].shape;
 			for (var i in shape) {
 				for (var j in shape[i]) {
 					if (shape[i][j] > 0) {
@@ -44,7 +48,7 @@ move.moveElement = function (element) {
 				}
 			}
 			//updates new position
-			element.position = newPosition;
+			element.p = newPosition;
 			for (var i in shape) {
 				for (var j in shape[i]) {
 					if (shape[i][j] > 0) {
@@ -56,8 +60,8 @@ move.moveElement = function (element) {
 		}
 
 		//if element has arrived to its destination
-		if(element.moveTo.x == element.position.x && element.moveTo.y == element.position.y) {
-			element.moveTo = {x : null, y : null};
+		if(element.mt.x == element.p.x && element.mt.y == element.p.y) {
+			element.mt = {x : null, y : null};
 		}
 	}
 

@@ -29,46 +29,46 @@ gameSurface.draw = function () {
 		var element = gameContent.gameElements[i];
 
 		//check if element is in game window
-		if(element.position.x >= gameWindow.x 
-		  && element.position.x <= gameWindow.x + gameWindow.width
-		  && element.position.y >= gameWindow.y 
-		  && element.position.y <= gameWindow.y + gameWindow.height) {
-		  	var shape = gameData.ELEMENTS[element.family][element.race][element.type].shape;
+		if(element.p.x >= gameWindow.x 
+		  && element.p.x <= gameWindow.x + gameWindow.width
+		  && element.p.y >= gameWindow.y 
+		  && element.p.y <= gameWindow.y + gameWindow.height) {
+		  	var shape = gameData.ELEMENTS[element.f][element.r][element.t].shape;
 			if(element.isSelected) {
 				this.ctx.strokeStyle = '#00ff00';
-				this.ctx.strokeRect(-1 + (element.position.x - gameWindow.x) * gameWindow.PIXEL_BY_NODE - gameWindow.PIXEL_BY_NODE * parseInt(shape[0].length / 2),
-							  -1 + (element.position.y - gameWindow.y) * gameWindow.PIXEL_BY_NODE - gameWindow.PIXEL_BY_NODE * parseInt(shape.length / 2),
+				this.ctx.strokeRect(-1 + (element.p.x - gameWindow.x) * gameWindow.PIXEL_BY_NODE - gameWindow.PIXEL_BY_NODE * parseInt(shape[0].length / 2),
+							  -1 + (element.p.y - gameWindow.y) * gameWindow.PIXEL_BY_NODE - gameWindow.PIXEL_BY_NODE * parseInt(shape.length / 2),
 							  shape[0].length * gameWindow.PIXEL_BY_NODE + 2,
 							  shape.length * gameWindow.PIXEL_BY_NODE + 2);
 			}
-			if(element.color != null) {
-				this.ctx.fillStyle = element.color;
+			if(element.c != null) {
+				this.ctx.fillStyle = element.c;
 			} else {
-				this.ctx.fillStyle = gameData.ELEMENTS[element.family][element.race][element.type].color;
+				this.ctx.fillStyle = gameData.ELEMENTS[element.f][element.r][element.t].c;
 			}
-			this.ctx.fillRect((element.position.x - gameWindow.x) * gameWindow.PIXEL_BY_NODE - gameWindow.PIXEL_BY_NODE * parseInt(shape.length / 2),
-							  (element.position.y - gameWindow.y) * gameWindow.PIXEL_BY_NODE - gameWindow.PIXEL_BY_NODE * parseInt(shape.length / 2),
+			this.ctx.fillRect((element.p.x - gameWindow.x) * gameWindow.PIXEL_BY_NODE - gameWindow.PIXEL_BY_NODE * parseInt(shape.length / 2),
+							  (element.p.y - gameWindow.y) * gameWindow.PIXEL_BY_NODE - gameWindow.PIXEL_BY_NODE * parseInt(shape.length / 2),
 							  shape[0].length * gameWindow.PIXEL_BY_NODE,
 							  shape.length * gameWindow.PIXEL_BY_NODE);
 
-			if(element.family == gameData.FAMILIES.building) {
-				if(element.queueProgression > 0) {
+			if(element.f == gameData.FAMILIES.building) {
+				if(element.qp > 0) {
 					this.ctx.fillStyle = this.grd;
-					this.ctx.fillRect((element.position.x - gameWindow.x) * gameWindow.PIXEL_BY_NODE - gameWindow.PIXEL_BY_NODE * parseInt(shape.length / 2),
-							   	 (element.position.y - gameWindow.y) * gameWindow.PIXEL_BY_NODE  - gameWindow.PIXEL_BY_NODE * parseInt(shape.length / 2),
-							   	  element.queueProgression / 100 * gameWindow.PIXEL_BY_NODE * shape.length, 5);
+					this.ctx.fillRect((element.p.x - gameWindow.x) * gameWindow.PIXEL_BY_NODE - gameWindow.PIXEL_BY_NODE * parseInt(shape.length / 2),
+							   	 (element.p.y - gameWindow.y) * gameWindow.PIXEL_BY_NODE  - gameWindow.PIXEL_BY_NODE * parseInt(shape.length / 2),
+							   	  element.qp / 100 * gameWindow.PIXEL_BY_NODE * shape.length, 5);
 				}
-				if(element.constructionProgress < 100) {
+				if(element.cp < 100) {
 					this.ctx.fillStyle = this.grd;
-					this.ctx.fillRect((element.position.x - gameWindow.x) * gameWindow.PIXEL_BY_NODE - gameWindow.PIXEL_BY_NODE * parseInt(shape[0].length / 2),
-							   	 (element.position.y - gameWindow.y) * gameWindow.PIXEL_BY_NODE  - gameWindow.PIXEL_BY_NODE * parseInt(shape.length / 2),
-							   	  element.constructionProgress / 100 * gameWindow.PIXEL_BY_NODE * shape[0].length, 5);
+					this.ctx.fillRect((element.p.x - gameWindow.x) * gameWindow.PIXEL_BY_NODE - gameWindow.PIXEL_BY_NODE * parseInt(shape[0].length / 2),
+							   	 (element.p.y - gameWindow.y) * gameWindow.PIXEL_BY_NODE  - gameWindow.PIXEL_BY_NODE * parseInt(shape.length / 2),
+							   	  element.cp / 100 * gameWindow.PIXEL_BY_NODE * shape[0].length, 5);
 				}
-				for(var p in element.queue) {
-					var stuff = element.queue[p];
+				for(var p in element.q) {
+					var stuff = element.q[p];
 					this.ctx.fillStyle = '#ff0';
-					this.ctx.fillRect((element.position.x - gameWindow.x) * gameWindow.PIXEL_BY_NODE + p * gameWindow.PIXEL_BY_NODE - gameWindow.PIXEL_BY_NODE * parseInt(shape[0].length / 2), 
-									   (element.position.y - gameWindow.y) * gameWindow.PIXEL_BY_NODE, 
+					this.ctx.fillRect((element.p.x - gameWindow.x) * gameWindow.PIXEL_BY_NODE + p * gameWindow.PIXEL_BY_NODE - gameWindow.PIXEL_BY_NODE * parseInt(shape[0].length / 2), 
+									   (element.p.y - gameWindow.y) * gameWindow.PIXEL_BY_NODE, 
 									   gameWindow.PIXEL_BY_NODE, 
 									   gameWindow.PIXEL_BY_NODE);
 				}
@@ -87,14 +87,14 @@ gameSurface.draw = function () {
 
 	//draw building shadow
 	if(gameContent.building != null 
-		&& gameContent.building.position != null 
-		&& gameContent.building.position.x >= 0) {
+		&& gameContent.building.p != null 
+		&& gameContent.building.p.x >= 0) {
 		this.ctx.fillStyle = "#333";
 		for(var i in gameContent.building.shape) {
 			for(var j in gameContent.building.shape[i]) {
 				var part = gameContent.building.shape[i][j];
 				if(part > 0) {
-					if(part == 10) {
+					if(part == userInput.CAN_BE_BUILT_HERE) {
 						this.ctx.strokeStyle = '#00ff00';
 					} else {
 						this.ctx.strokeStyle = '#ff0000';
@@ -123,32 +123,32 @@ gameSurface.draw = function () {
 
 	//draw resources
 	this.ctx.font="20px Arial";
-	for(var i = 0; i < gameManager.players[gameManager.myArmy].resources.length; i++) {
-		this.ctx.fillText(gameManager.players[gameManager.myArmy].resources[i], 20 + i * 100, 20);
+	for(var i = 0; i < gameLogic.players[gameManager.myArmy].re.length; i++) {
+		this.ctx.fillText(gameLogic.players[gameManager.myArmy].re[i], 20 + i * 100, 20);
 	}
 
 	//draw population
-	this.ctx.fillText(gameManager.players[gameManager.myArmy].population.current + '/'
-					+ gameManager.players[gameManager.myArmy].population.max, canvas.width - 60, 20);
+	this.ctx.fillText(gameLogic.players[gameManager.myArmy].pop.current + '/'
+					+ gameLogic.players[gameManager.myArmy].pop.max, canvas.width - 60, 20);
 
 	//draw order, rallying point
-	if(gameContent.selected.length > 0 && rank.isAlly(gameContent.selected[0])) {
+	if(gameContent.selected.length > 0 && rank.isAlly(gameManager.myArmy, gameContent.selected[0])) {
 		this.ctx.strokeStyle="#ff00ff";
-		if (gameContent.selected[0].action != null) {
-			this.ctx.strokeRect((gameContent.selected[0].action.position.x - gameWindow.x) * gameWindow.PIXEL_BY_NODE,
-								(gameContent.selected[0].action.position.y - gameWindow.y) * gameWindow.PIXEL_BY_NODE, 
+		if (gameContent.selected[0].a != null) {
+			this.ctx.strokeRect((gameContent.selected[0].a.p.x - gameWindow.x) * gameWindow.PIXEL_BY_NODE,
+								(gameContent.selected[0].a.p.y - gameWindow.y) * gameWindow.PIXEL_BY_NODE, 
 					   			 gameWindow.PIXEL_BY_NODE, 
 					   			 gameWindow.PIXEL_BY_NODE);
-		} else if (gameContent.selected[0].moveTo != null 
-				&& gameContent.selected[0].moveTo.x != null) {
-			this.ctx.strokeRect((gameContent.selected[0].moveTo.x - gameWindow.x) * gameWindow.PIXEL_BY_NODE,
-								(gameContent.selected[0].moveTo.y - gameWindow.y) * gameWindow.PIXEL_BY_NODE, 
+		} else if (gameContent.selected[0].mt != null 
+				&& gameContent.selected[0].mt.x != null) {
+			this.ctx.strokeRect((gameContent.selected[0].mt.x - gameWindow.x) * gameWindow.PIXEL_BY_NODE,
+								(gameContent.selected[0].mt.y - gameWindow.y) * gameWindow.PIXEL_BY_NODE, 
 					   			 gameWindow.PIXEL_BY_NODE, 
 					   			 gameWindow.PIXEL_BY_NODE);
-		} else if (gameContent.selected[0].family == gameData.FAMILIES.building
-					&& gameContent.selected[0].rallyingPoint != null) {
-			this.ctx.strokeRect((gameContent.selected[0].rallyingPoint.x - gameWindow.x) * gameWindow.PIXEL_BY_NODE,
-				(gameContent.selected[0].rallyingPoint.y - gameWindow.y) * gameWindow.PIXEL_BY_NODE, 
+		} else if (gameContent.selected[0].f == gameData.FAMILIES.building
+					&& gameContent.selected[0].rp != null) {
+			this.ctx.strokeRect((gameContent.selected[0].rp.x - gameWindow.x) * gameWindow.PIXEL_BY_NODE,
+				(gameContent.selected[0].rp.y - gameWindow.y) * gameWindow.PIXEL_BY_NODE, 
 	   			 gameWindow.PIXEL_BY_NODE, 
 	   			 gameWindow.PIXEL_BY_NODE);
 		}

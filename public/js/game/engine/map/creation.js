@@ -13,8 +13,7 @@ mapLogic.PROBABILITY_TREE = 0.6;
 */
 mapLogic.createNewMap = function (map, players) {
 	this.initGrid(map.size);
-
-	if(map.type.id == gameData.MAP_TYPES.random.id) {
+	if(map.t.id == gameData.MAP_TYPES.random.id) {
 		this.createRandomMap(map, players);
 	}
 
@@ -56,10 +55,10 @@ mapLogic.createRandomMap = function (map, players) {
 
 	//prepare the available zones according to the factors of the vegetation selected
 	var availableZones = [];
-	for(var i in map.vegetation.zones) {
-		var zone = map.vegetation.zones[i];
+	for(var i in map.ve.zones) {
+		var zone = map.ve.zones[i];
 		for(var n = 0; n < zone.factor; n++) {
-			availableZones.push(zone.type);
+			availableZones.push(zone.t);
 		}
 	}
 
@@ -151,7 +150,7 @@ mapLogic.createGoldMine = function (from, to) {
 * Adds a game element on the map.
 */
 mapLogic.addGameElement = function (element) {
-	var shape = gameData.ELEMENTS[element.family][element.race][element.type].shape;
+	var shape = gameData.ELEMENTS[element.f][element.r][element.t].shape;
 	gameLogic.gameElements.push(element);
 	for(var i in shape) {
 		var row = shape[i];
@@ -170,7 +169,7 @@ mapLogic.addGameElement = function (element) {
 * Adds a game element on the map.
 */
 mapLogic.removeGameElement = function (element) {
-	var shape = gameData.ELEMENTS[element.family][element.race][element.type].shape;
+	var shape = gameData.ELEMENTS[element.f][element.r][element.t].shape;
 	for(var i in shape) {
 		var row = shape[i];
 		for(var j in row) {
@@ -237,16 +236,16 @@ mapLogic.placeZoneRandomlyAround = function (zoneToPlace, zones, aroundX, around
 *	Sets up a base camp for a player.
 */
 mapLogic.setupBasecamp = function (player, position) {
-	var basecamp = gameData.BASECAMPS[player.race];
+	var basecamp = gameData.BASECAMPS[player.r];
 
 	//place town hall
-	var townHall = new gameData.Building(basecamp.buildings[0], position.x, position.y, player.owner, true);
+	var townHall = new gameData.Building(basecamp.buildings[0], position.x, position.y, player.o, true);
 	this.addGameElement(townHall);
 	
 	//place units
 	var aroundTownHall = tools.getTilesAroundElements(townHall);
 	for(var i in basecamp.units) {
-		this.addGameElement(new gameData.Unit(basecamp.units[i], aroundTownHall[i].x, aroundTownHall[i].y, player.owner));
+		this.addGameElement(new gameData.Unit(basecamp.units[i], aroundTownHall[i].x, aroundTownHall[i].y, player.o));
 	}
 }
 

@@ -14,40 +14,35 @@
 
 	    <title>Project Awesome</title>
 
+	    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+	    <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
 	    <link href="css/style.css" rel="stylesheet">
 	</head>
 
 	<body>
-	  <canvas id="canvas"></canvas>
-	  <button onclick="startGame()">Start</button>
+
+	  <canvas id="canvas" class="hide"></canvas>
+
+	  <div id="playButton" class="fullScreen" onclick="gameManager.joinGame()">
+	  	<p><img src="img/play.png" title="Let's Play !"/></p>
+	  </div>
+
+	  <div id="connecting" class="fullScreen hide">
+	  	<p>Connecting...</p>
+	  </div>
+
 	</body>
 
 
 	<script src="/socket.io/socket.io.js"></script>
 
-
 	<!-- ENGINE -->
-	<script type="text/javascript" src="js/game/engine/gameData.js"></script>
-	<script type="text/javascript" src="js/game/engine/class/map.js"></script>
-	<script type="text/javascript" src="js/game/engine/class/player.js"></script>
-	<script type="text/javascript" src="js/game/engine/class/unit.js"></script>
-	<script type="text/javascript" src="js/game/engine/class/terrain.js"></script>
-	<script type="text/javascript" src="js/game/engine/class/building.js"></script>
-	<script type="text/javascript" src="js/game/engine/map/creation.js"></script>
-	<script type="text/javascript" src="js/game/engine/map/map.js"></script>
-	<script type="text/javascript" src="js/game/engine/AI.js"></script>
-	<script type="text/javascript" src="js/game/engine/action.js"></script>
-	<script type="text/javascript" src="js/game/engine/fight.js"></script>
-	<script type="text/javascript" src="js/game/engine/gameLogic.js"></script>
-	<script type="text/javascript" src="js/game/engine/gameLoop.js"></script>
-	<script type="text/javascript" src="js/game/engine/move.js"></script>
-	<script type="text/javascript" src="js/game/engine/order.js"></script>
-	<script type="text/javascript" src="js/game/engine/production.js"></script>
-	<script type="text/javascript" src="js/game/engine/rank.js"></script>
-	<script type="text/javascript" src="js/game/engine/tools.js"></script>
-	<script type="text/javascript" src="js/game/engine/engineManager.js"></script>
+	<script type="text/javascript" src="js/game/engine/engine.js"></script>
 
-
+	<!-- CLIENT <script type="text/javascript" src="js/game/client/client.js"></script>
+-->
+	
+	
 	<!-- CLIENT -->
 	<script type="text/javascript" src="js/game/client/input/input.js"></script>
 	<script type="text/javascript" src="js/game/client/input/inputDispatcher.js"></script>
@@ -61,17 +56,4 @@
 	<script type="text/javascript" src="js/game/client/gameThread.js"></script>
 	<script type="text/javascript" src="js/game/client/gameWindow.js"></script>
 	<script type="text/javascript" src="js/game/client/utils.js"></script>
-
-
-	<!-- GAME DATA -->
-	<script type="text/javascript" src="js/game/data/global.js"></script>
-	<script type="text/javascript" src="js/game/data/armies/human/units.js"></script>
-	<script type="text/javascript" src="js/game/data/armies/human/buildings.js"></script>
-	<script type="text/javascript" src="js/game/data/armies/basecamps.js"></script>
-	<script type="text/javascript" src="js/game/data/map/maps.js"></script>
-	<script type="text/javascript" src="js/game/data/map/terrains.js"></script>
-
-
-
-
 </html>

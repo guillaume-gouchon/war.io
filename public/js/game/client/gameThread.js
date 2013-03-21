@@ -4,7 +4,7 @@ var gameThread = {};
 /**
 *	Number of frames per second
 **/
-gameThread.FPS = 30;
+gameThread.FPS = 40;
 
 
 /**

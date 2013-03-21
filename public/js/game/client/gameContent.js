@@ -1,12 +1,3 @@
-if(!gameManager.isOfflineGame) {
-	var socket = io.connect('http://localhost:6969');
-	
-	socket.on('gameData', function (data) {
-	    gameContent.gameElements = data.gameElements;
-		gameContent.updateSelectedElements();
-	});
-}
-
 var gameContent = {};
 
 
@@ -45,21 +36,27 @@ gameContent.updateGameContent = function() {
 }
 
 gameContent.updateSelectedElements = function () {
-	for (var i in this.selected) {
+	var i = this.selected.length;
+	while (i--) {
 		var selected = this.selected[i];
+		var stillAlive = false;
 		for (var j in this.gameElements) {
 			var gameElement = this.gameElements[j];
 			if (gameElement.id == selected.id) {
+				stillAlive = true;
 				gameElement.isSelected = true;
-				if (gameElement.family == gameData.FAMILIES.unit) {
-					selected.action = gameElement.action;
-					selected.patrol = gameElement.patrol;
-					selected.moveTo = gameElement.moveTo;
-				} else if (gameElement.family == gameData.FAMILIES.building) {
-					selected.rallyingPoint = gameElement.rallyingPoint;
+				if (gameElement.f == gameData.FAMILIES.unit) {
+					selected.a = gameElement.a;
+					selected.pa = gameElement.pa;
+					selected.mt = gameElement.mt;
+				} else if (gameElement.f == gameData.FAMILIES.building) {
+					selected.rp = gameElement.rp;
 				}
 				break;
 			}
+		}
+		if (!stillAlive) {
+			this.selected.splice(i, 1);	
 		}
 	}
 }

@@ -1,0 +1,7 @@
+/* TEAM */
+  Mr Guillaume Gouchon
+
+/* THANKS */
+
+/* SITE */
+  Standards: HTML5

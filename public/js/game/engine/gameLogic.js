@@ -1,7 +1,5 @@
 var gameLogic = {};
 
-gameLogic.myArmy = 0;
-
 
 /**
 *	Game players.
@@ -44,7 +42,7 @@ gameLogic.update = function() {
 *	Updates moving units' positions.
 */
 gameLogic.updateMoves = function (element) {
-	if(element.moveTo != null && element.moveTo.x != null) {
+	if(element.mt != null && element.mt.x != null) {
 		move.moveElement(element);
 	}
 }
@@ -55,37 +53,37 @@ gameLogic.updateMoves = function (element) {
 *	and if close enough, resolve the action (build, fight...).
 */
 gameLogic.resolveActions = function (element) {
-	if (element.action != null) {
-		var distance = tools.getElementsDistance(element, element.action);
+	if (element.a != null) {
+		var distance = tools.getElementsDistance(element, element.a);
 		//dispatch orders
 		if (distance <= 1) {
 			//stop moving
-			element.moveTo = {x : null, y : null};
+			element.mt = {x : null, y : null};
 			
 			//close enough
-			if (gameData.ELEMENTS[element.family][element.race][element.type].isBuilder && element.action.family == gameData.FAMILIES.building
-				&& rank.isAlly(element.action)) {
-				if(element.action.constructionProgress < 100) {
+			if (gameData.ELEMENTS[element.f][element.r][element.t].isBuilder && element.a.f == gameData.FAMILIES.building
+				&& rank.isAlly(element.o, element.a)) {
+				if(element.a.cp < 100) {
 					//build
-					action.doTheBuild(element, element.action);	
+					action.doTheBuild(element, element.a);	
 				} else {
-					if(element.gathering != null) {
+					if(element.ga != null) {
 						//come back with some resources
 						production.getBackResources(element);
 					}
 					//TODO : repair
 				}
-			} else if (gameData.ELEMENTS[element.family][element.race][element.type].isBuilder && element.action.family == gameData.FAMILIES.terrain) {
+			} else if (gameData.ELEMENTS[element.f][element.r][element.t].isBuilder && element.a.f == gameData.FAMILIES.terrain) {
 				//gathering resources
-				action.doTheGathering(element, element.action);
-			} else if (!rank.isAlly(element.action)) {
+				action.doTheGathering(element, element.a);
+			} else if (!rank.isAlly(element.o, element.a)) {
 				//attack
-				action.doTheAttack(element, element.action);
+				action.doTheAttack(element, element.a);
 			}
 		} else {
 			//move closer in order to do the action
-			var closest = tools.getClosestPart(element, element.action);
-			element.moveTo = {x : closest.x, y : closest.y};
+			var closest = tools.getClosestPart(element, element.a);
+			element.mt = {x : closest.x, y : closest.y};
 		}
 
 	}
@@ -99,11 +97,11 @@ gameLogic.removeDeads= function () {
 	var n = gameLogic.gameElements.length;
 	while (n--) {
 		var element = gameLogic.gameElements[n]; 
-		if (element.life <= 0 || element.resourceAmount == 0) {
-			if (element.family == gameData.FAMILIES.terrain) {
-			} else if (element.family == gameData.FAMILIES.building) {
+		if (element.l <= 0 || element.ra == 0) {
+			if (element.f == gameData.FAMILIES.terrain) {
+			} else if (element.f == gameData.FAMILIES.building) {
 				production.removeBuilding(element);
-			} else if (element.family == gameData.FAMILIES.unit) {
+			} else if (element.f == gameData.FAMILIES.unit) {
 				production.removeUnit(element);
 			}
 			this.removeElement(n);
@@ -125,8 +123,8 @@ gameLogic.checkGameOver = function () {
 *	Updates buildings constructions, units production and research.
 */
 gameLogic.updateBuildings = function (building) {
-	if (building.family == gameData.FAMILIES.building) {
-		if (building.queue.length > 0) {
+	if (building.f == gameData.FAMILIES.building) {
+		if (building.q.length > 0) {
 			production.updateQueueProgress(building);
 		}
 	}

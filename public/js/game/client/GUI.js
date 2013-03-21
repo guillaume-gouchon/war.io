@@ -16,7 +16,7 @@ GUI.BUTTONS_WIDTH = 80;
 GUI.BUTTONS_SPACE = 10;
 GUI.TOOLBAR_BUTTONS = {
 	build : {id : 0, color : '#aaa', isEnabled : true},
-	cancel : {id : 1, color : '#ff0', isEnabled : true},
+	cancel : {id : 1, color : '#ff0', isEnabled : true}
 }
 GUI.MOUSE_ICONS = {
 	standard : 'default', 
@@ -48,20 +48,20 @@ GUI.update = function () {
 *	Updates the toolbar depending on the elements selected.
 */
 GUI.updateToolbar = function () {
-	if (gameContent.selected.length > 0 && rank.isAlly(gameContent.selected[0])) {
-		if (gameContent.selected[0].family == gameData.FAMILIES.building) {
+	if (gameContent.selected.length > 0 && rank.isAlly(gameManager.myArmy, gameContent.selected[0])) {
+		if (gameContent.selected[0].f == gameData.FAMILIES.building) {
 			//building(s) selected
-			if (gameContent.selected[0].constructionProgress < 100) {
+			if (gameContent.selected[0].cp < 100) {
 				//building is not finished yet
 				this.toolbar = [GUI.TOOLBAR_BUTTONS.cancel];
 			} else {
-				this.toolbar = production.getWhatCanBeBought(gameContent.selected[0].owner, gameData.ELEMENTS[gameData.FAMILIES.building][gameContent.selected[0].race][gameContent.selected[0].type].buttons);
+				this.toolbar = production.getWhatCanBeBought(gameContent.selected[0].o, gameData.ELEMENTS[gameData.FAMILIES.building][gameContent.selected[0].r][gameContent.selected[0].t].buttons);
 			}
-		} else if (gameContent.selected[0].family == gameData.FAMILIES.unit) {
+		} else if (gameContent.selected[0].f == gameData.FAMILIES.unit) {
 			if(this.showBuildings) {
 				this.toolbar = this.getBuildingButtons();
 			} else {
-				this.toolbar = gameData.ELEMENTS[gameData.FAMILIES.unit][gameContent.selected[0].race][gameContent.selected[0].type].buttons;
+				this.toolbar = gameData.ELEMENTS[gameData.FAMILIES.unit][gameContent.selected[0].r][gameContent.selected[0].t].buttons;
 			}
 		}
 	} else {
@@ -74,7 +74,7 @@ GUI.updateToolbar = function () {
 *	Returns the list of the buildings which can be built by the builder(s) selected.
 */
 GUI.getBuildingButtons = function () {
-	return production.getWhatCanBeBought(gameContent.selected[0].owner, gameData.ELEMENTS[gameData.FAMILIES.building][gameContent.selected[0].race]);
+	return production.getWhatCanBeBought(gameContent.selected[0].o, gameData.ELEMENTS[gameData.FAMILIES.building][gameContent.selected[0].r]);
 }
 
 

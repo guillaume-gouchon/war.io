@@ -15,10 +15,10 @@ tools.getPositionsDistance = function (position1, position2) {
 tools.getElementsDistance = function (element1, element2) {
 	var min = 10000;
 	if(element2 != null) {
-		var shape = gameData.ELEMENTS[element2.family][element2.race][element2.type].shape;
+		var shape = gameData.ELEMENTS[element2.f][element2.r][element2.t].shape;
 		for(var i in shape) {
 			for(var j in shape[i]) {
-				var distance = this.getPositionsDistance(element1.position, this.getPartPosition(element2, i, j));
+				var distance = this.getPositionsDistance(element1.p, this.getPartPosition(element2, i, j));
 				if(distance < min) {
 					min = distance;
 				}
@@ -39,10 +39,10 @@ tools.getElementsDistance = function (element1, element2) {
 tools.getClosestPart = function (element1, element2) {
 	var min = 10000;
 	var closest;
-	var shape = gameData.ELEMENTS[element2.family][element2.race][element2.type].shape;
+	var shape = gameData.ELEMENTS[element2.f][element2.r][element2.t].shape;
 	for(var i in shape) {
 		for(var j in shape[i]) {
-			var distance = this.getPositionsDistance(element1.position, this.getPartPosition(element2, i, j));
+			var distance = this.getPositionsDistance(element1.p, this.getPartPosition(element2, i, j));
 			if(distance < min) {
 				min = distance;
 				closest = this.getPartPosition(element2, i, j);
@@ -63,13 +63,13 @@ tools.getClosestPart = function (element1, element2) {
 tools.getPartPosition = function (element, i, j) {
 	var shape = null;
 	if(element.shape == null) {
-		shape = gameData.ELEMENTS[element.family][element.race][element.type].shape;
+		shape = gameData.ELEMENTS[element.f][element.r][element.t].shape;
 	} else {
 		shape = element.shape;
 	}
 	return {
-		x : parseInt(element.position.x + parseInt(i) - parseInt(shape[0].length / 2)),
-		y : parseInt(element.position.y + parseInt(j) - parseInt(shape.length / 2))
+		x : parseInt(element.p.x + parseInt(i) - parseInt(shape[0].length / 2)),
+		y : parseInt(element.p.y + parseInt(j) - parseInt(shape.length / 2))
 	}
 }
 
@@ -78,7 +78,7 @@ tools.getPartPosition = function (element, i, j) {
 *	Checks if an element is at this position (includes shape).
 */
 tools.isElementThere = function (element, position) {
-	var shape = gameData.ELEMENTS[element.family][element.race][element.type].shape;
+	var shape = gameData.ELEMENTS[element.f][element.r][element.t].shape;
 	for(var i in shape) {
 		for(var j in shape[i]) {
 			if(shape[i][j] > 0) {
@@ -98,7 +98,7 @@ tools.isElementThere = function (element, position) {
 */
 tools.getTilesAroundElements = function (element) {
 	var array = [];
-	var shape = gameData.ELEMENTS[element.family][element.race][element.type].shape;
+	var shape = gameData.ELEMENTS[element.f][element.r][element.t].shape;
 	for(var i in shape) {
 		for(var j in shape[i]) {
 			if(shape[i][j] > 0) {

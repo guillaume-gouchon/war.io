@@ -32,7 +32,7 @@ order.dispatchReceivedOrder = function (type, params) {
 
 order.buildThatHere = function (buildersIds, building, x, y) {
 	var builders = tools.getGameElementsFromIds(buildersIds);
-	var building = new gameData.Building(building, x, y, builders[0].owner);
+	var building = new gameData.Building(building, x, y, builders[0].o);
 	production.startConstruction(building);
 	this.build(builders, building);
 }
@@ -45,17 +45,17 @@ order.buy = function (buildingsIds, element) {
 
 
 order.cancelConstruction = function (buildingId) {
-	var building = tools.getGameElementsFromIds(buildingId);
-	production.cancelConstruction(building);
+	var building = tools.getGameElementsFromIds([buildingId]);
+	production.cancelConstruction(building[0]);
 }
 
 
 order.updateRallyingPoint = function (buildings, x, y) {
 	for (var i in buildings) {
 		var building = buildings[i];
-		var buttons = gameData.ELEMENTS[building.family][building.race][building.type].buttons;
+		var buttons = gameData.ELEMENTS[building.f][building.r][building.t].buttons;
 		if(buttons.length > 0) {
-			building.rallyingPoint = {x: x, y: y};
+			building.rp = {x: x, y: y};
 		}
 	}
 }
@@ -64,8 +64,8 @@ order.updateRallyingPoint = function (buildings, x, y) {
 order.attack = function (elements, target) {
 	for(var i in elements) {
 		var element = elements[i];
-		element.patrol = null;
-		element.action = target;
+		element.pa = null;
+		element.a = target;
 	}
 }
 
@@ -73,8 +73,8 @@ order.attack = function (elements, target) {
 order.build = function (builders, building) {
 	for(var i in builders) {
 		var element = builders[i];
-		element.patrol = null;
-		element.action = building;
+		element.pa = null;
+		element.a = building;
 	}
 }
 
@@ -82,9 +82,9 @@ order.build = function (builders, building) {
 order.move = function (units, x, y) {
 	for(var i in units) {
 		var element = units[i];
-		element.patrol = null;
-		element.action = null;
-		element.moveTo = {x : x, y : y};
+		element.pa = null;
+		element.a = null;
+		element.mt = {x : x, y : y};
 	}
 }
 
@@ -92,20 +92,20 @@ order.move = function (units, x, y) {
 order.gather = function (units, terrain) {
 	for(var i in units) {
 		var element = units[i];
-		element.action = terrain;
-		element.patrol = terrain;
+		element.a = terrain;
+		element.pa = terrain;
 	}
 }
 
 
 order.convertDestinationToOrder = function (elementsIds, x, y) {
 	var elements = tools.getGameElementsFromIds(elementsIds);
-	if (x >= gameLogic.grid[0].length
+	if (elements.length == 0 || x >= gameLogic.grid[0].length
 		|| y >= gameLogic.grid.length) {
 		return;
 	}
 
-	if(elements[0].family == gameData.FAMILIES.building) {
+	if(elements[0].f == gameData.FAMILIES.building) {
 		//buildings are selected
 		this.updateRallyingPoint(elements, x, y);
 
@@ -114,18 +114,18 @@ order.convertDestinationToOrder = function (elementsIds, x, y) {
 		var element = tools.getElementUnder(x, y);
 		if (element != null) {
 			//something is under the click
-			if (element.family == gameData.FAMILIES.unit) {
-				if (!rank.isAlly(element)) {
+			if (element.f == gameData.FAMILIES.unit) {
+				if (!rank.isAlly(elements[0].o, element)) {
 					//enemy unit
 					this.attack(elements, element);
 					return;
 				}
-			} else if (element.family == gameData.FAMILIES.building) {
-				if (rank.isAlly(element)) {
+			} else if (element.f == gameData.FAMILIES.building) {
+				if (rank.isAlly(elements[0].o, element)) {
 					//friend building
 					for(var i in elements) {
 						var e = elements[i];
-						if(gameData.ELEMENTS[e.family][e.race][e.type].isBuilder) {
+						if(gameData.ELEMENTS[e.f][e.r][e.t].isBuilder) {
 							//builders are sent to build / repair
 							order.build([e], element);
 						} else {
@@ -139,15 +139,15 @@ order.convertDestinationToOrder = function (elementsIds, x, y) {
 					order.attack(elements, element);
 					return;
 				}
-			} else if (element.family == gameData.FAMILIES.terrain 
-						&& gameData.ELEMENTS[element.family][0][element.type].resourceType >= 0) {
+			} else if (element.f == gameData.FAMILIES.terrain 
+						&& gameData.ELEMENTS[element.f][0][element.t].resourceType >= 0) {
 				//resource terrain element
 				for(var i in elements) {
 					var e = elements[i];
-					if(gameData.ELEMENTS[e.family][e.race][e.type].isBuilder) {
+					if(gameData.ELEMENTS[e.f][e.r][e.t].isBuilder) {
 						//builders are sent to gather resources
 						order.gather([e], element);
-						e.action = element;
+						e.a = element;
 					} else {
 						//non-builders are given a move order
 						order.move([e], x, y);

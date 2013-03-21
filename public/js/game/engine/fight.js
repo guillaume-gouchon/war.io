@@ -17,8 +17,8 @@ fightLogic.weaponsEfficiency = [
 *	Applies a basic attack.
 */
 fightLogic.attack = function (attacker, target) {
-	var attackFactor = this.weaponsEfficiency[gameData.ELEMENTS[attacker.family][attacker.race][attacker.type].weaponType][gameData.ELEMENTS[target.family][target.race][target.type].armorType]; 
-	var damage = parseInt(gameData.ELEMENTS[attacker.family][attacker.race][attacker.type].attack * attackFactor * (1 + 0.2 * Math.random())) - gameData.ELEMENTS[target.family][target.race][target.type].defense;
+	var attackFactor = this.weaponsEfficiency[gameData.ELEMENTS[attacker.f][attacker.r][attacker.t].weaponType][gameData.ELEMENTS[target.f][target.r][target.t].armorType]; 
+	var damage = parseInt(gameData.ELEMENTS[attacker.f][attacker.r][attacker.t].attack * attackFactor * (1 + 0.2 * Math.random())) - gameData.ELEMENTS[target.f][target.r][target.t].defense;
 	this.applyDamage(damage, target, attacker);
 }
 
@@ -28,12 +28,11 @@ fightLogic.attack = function (attacker, target) {
 *	Increments frag if any attacker.
 */
 fightLogic.applyDamage = function (damage, target, fragOwner) {
-	target.life = target.life - damage;
-
+	target.l = target.l - damage;
 	//check if dead
-	if(fragOwner != null && target.life <= 0) {
+	if(fragOwner != null && target.l <= 0) {
 		fragOwner.frag = fragOwner.frag + 1;
-		fragOwner.action = null;
+		fragOwner.a = null;
 	}
 
 }

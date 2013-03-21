@@ -7,20 +7,18 @@ var engineManager = {};
 engineManager.createNewGame = function(map, players) {
 	for (var i in players) {
 		var player = players[i];
-		for(var n in map.initialResources.resources) {
-			player.resources.push(map.initialResources.resources[n].value);
+		for(var n in map.ir.re) {
+			player.re.push(map.ir.re[n].value);
 		}
-
 		for(var j in players) {
 			if(j == i) {
-				player.ranks.push(gameData.RANKS.me);
+				player.ra.push(gameData.RANKS.me);
 			} else {
-				player.ranks.push(gameData.RANKS.enemy);
+				player.ra.push(gameData.RANKS.enemy);
 			}
 		}
 		gameLogic.players.push(player);
 	}
-
 	mapLogic.createNewMap(map, players);
 }
 

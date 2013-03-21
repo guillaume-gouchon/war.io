@@ -1,12 +1,12 @@
 gameData.Terrain = function (terrain, x, y) {
 	//personal data
-	this.family = gameData.FAMILIES.terrain;
-	this.type = terrain.type;
-	this.race = 0;
+	this.f = gameData.FAMILIES.terrain;
+	this.t = terrain.t;
+	this.r = 0;
 
 	//drawing-related data
-	this.position = {x : x, y : y};
+	this.p = {x : x, y : y};
 
 	//game-related data
-	this.resourceAmount = terrain.resourceAmount;
+	this.ra = terrain.ra;
 }

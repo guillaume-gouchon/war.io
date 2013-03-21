@@ -1,23 +1,22 @@
 gameData.Unit = function (unit, x, y, owner) {
 	//personal data
 	this.id = gameData.createUniqueId();
-	this.family = gameData.FAMILIES.unit;
-	this.type = unit.type;
-	this.race = unit.race;
-	this.owner = owner;
+	this.f = gameData.FAMILIES.unit;
+	this.t = unit.t;
+	this.r = unit.r;
+	this.o = owner;
 
 	//drawing-related data
-	this.position = {x : x, y : y};
+	this.p = {x : x, y : y};
 
 	//game-related data
-	this.moveTo = {x : null, y : null};
-	this.isSelected = false;
-	this.action = null;
-	this.frags = 0;
-	this.gathering = null;
-	this.patrol = null;
+	this.mt = {x : null, y : null};
+	this.a = null;
+	this.fr = 0;
+	this.ga = null;
+	this.pa = null;
 
 	//fight-related data
-	this.life = unit.life;
+	this.l = unit.l;
 }
 

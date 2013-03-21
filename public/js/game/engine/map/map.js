@@ -7,8 +7,8 @@ mapLogic.getNearestResource = function (element, resourceType) {
 	var closestTerrain = null;
 	for (var i in gameLogic.gameElements) {
 		var terrain = gameLogic.gameElements[i];
-		if (terrain.family == gameData.FAMILIES.terrain 
-			&& gameData.ELEMENTS[terrain.family][terrain.race][terrain.type].resourceType == resourceType) {
+		if (terrain.f == gameData.FAMILIES.terrain 
+			&& gameData.ELEMENTS[terrain.f][terrain.r][terrain.t].resourceType == resourceType) {
 			var distance = tools.getElementsDistance(element, terrain);
 			if(distance < 2) {
 				return terrain;
@@ -31,8 +31,8 @@ mapLogic.getNearestBuilding = function (element, buildingType) {
 	var closestBuilding = null;
 	for (var i in gameLogic.gameElements) {
 		var building = gameLogic.gameElements[i];
-		if (building.family == gameData.FAMILIES.building
-		&& rank.isAlly(building) && building.type == buildingType) {
+		if (building.f == gameData.FAMILIES.building
+		&& rank.isAlly(element.o, building) && building.t == buildingType) {
 			var distance = tools.getElementsDistance(element, building);
 			if(distance < 2) {
 				return building;

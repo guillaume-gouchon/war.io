@@ -2,6 +2,13 @@ var userInput = {};
 
 
 /**
+*	CONSTANTS
+*/
+userInput.CAN_BE_BUILT_HERE = 10;
+userInput.CANNOT_BE_BUILT_HERE = 1;
+
+
+/**
 *	The user clicked on a button in the toolbar.
 * 	@param button : the button that was clicked
 */
@@ -17,7 +24,7 @@ userInput.clickOnToolbar = function (button) {
 			//cancel construction
 			orderDispatcher.sendOrderToEngine(order.TYPES.cancelConstruction,
 							 					[gameContent.selected[0].id]);
-		} else if (gameContent.selected[0].family == gameData.FAMILIES.building) {
+		} else if (gameContent.selected[0].f == gameData.FAMILIES.building) {
 			orderDispatcher.sendOrderToEngine(order.TYPES.buy,
 					 					[this.getSelectedElementsIds(), button]);
 		}
@@ -44,7 +51,7 @@ userInput.updateConstructionMode = function (x, y) {
 	if(gameContent.building != null) {
 		try {
 			//updates building position
-			gameContent.building.position = gameWindow.getAbsolutePositionFromPixel(x, y);
+			gameContent.building.p = gameWindow.getAbsolutePositionFromPixel(x, y);
 			
 			//check if building can be built here
 			gameContent.building.canBeBuiltHere = true;
@@ -54,14 +61,14 @@ userInput.updateConstructionMode = function (x, y) {
 					var part = row[j];
 					if(part > 0) {
 						var position = tools.getPartPosition(gameContent.building, i, j);
-						//if(!gameContent.grid[position.x][position.y].isWall) {
+						if(!utils.getElementUnder(position.x, position.y)) {
 							//this part is OK
-							gameContent.building.shape[i][j] = 10;
-						/*} else {
+							gameContent.building.shape[i][j] = this.CAN_BE_BUILT_HERE;
+						} else {
 							//this part cannot be built here
-							gameContent.building.shape[i][j] = 1;
+							gameContent.building.shape[i][j] = this.CANNOT_BE_BUILT_HERE;
 							gameContent.building.canBeBuiltHere = false;
-						}*/
+						}
 					}
 				}
 			}
@@ -169,8 +176,9 @@ userInput.tryBuildHere = function () {
 		//let's start the construction
 		orderDispatcher.sendOrderToEngine(order.TYPES.buildThatHere,
 							 [this.getSelectedElementsIds(), gameContent.building, 
-							  gameContent.building.position.x, 
-							  gameContent.building.position.y]);
+							  gameContent.building.p.x, 
+							  gameContent.building.p.y]);
+		this.leaveConstructionMode();
 	} else {
 		//cannot be built here !
 	}
