@@ -6,7 +6,7 @@ gameData.ELEMENTS[gameData.FAMILIES.terrain].push(
 		c: '#0f0',
 		shape : [[1]],
 		canMoveIn : false,
-		resourceType : gameData.RESOURCES.wood,
+		resourceType : gameData.RESOURCES.wood.id,
 		ra : 75
 	},
 	{
@@ -15,7 +15,7 @@ gameData.ELEMENTS[gameData.FAMILIES.terrain].push(
 		c : '#000',
 		shape : [[1, 1, 1], [1, 1, 1], [1, 1, 1]],
 		canMoveIn : false,
-		resourceType : gameData.RESOURCES.stone,
+		resourceType : gameData.RESOURCES.stone.id,
 		ra : 500
 	},
 	{	
@@ -24,7 +24,7 @@ gameData.ELEMENTS[gameData.FAMILIES.terrain].push(
 		c : '#fc1',
 		shape : [[1, 1, 1], [1, 1, 1], [1, 1, 1]],
 		canMoveIn : false,
-		resourceType : gameData.RESOURCES.gold,
+		resourceType : gameData.RESOURCES.gold.id,
 		ra : 3000
 	}
 ]);

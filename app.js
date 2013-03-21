@@ -54,7 +54,7 @@ io.sockets.on('connection', function (socket) {
   socket.emit('askUserData', null);
 
   socket.on('userData', function (data) {
-    dispatchPlayer(socket, data.playerId);
+    dispatchPlayer(socket, data);
   });
 
   socket.on('disconnect', function() {
@@ -109,10 +109,10 @@ function startGame(game) {
   game.hasStarted = true;
 }
 
-function dispatchPlayer (socket, playerId) {
+function dispatchPlayer (socket, gameInitData) {
   for (var i in games) {
     for (var j in games[i].players) {
-      if(games[i].players[j].pid == playerId) {
+      if(games[i].players[j].pid == gameInitData.playerId) {
         games[i].sockets[j] = socket;
         if(games[i].hasStarted) {
           var gameInfo = {};
@@ -131,22 +131,23 @@ function dispatchPlayer (socket, playerId) {
 
   //no room available, create a new one
   if (games.length == 0 || games[games.length - 1].players.length == games[games.length - 1].nbPlayers) {
-    createNewGame();
+    createNewGame(gameInitData);
   }
 
-  addPlayerToGame(socket, games[games.length - 1], playerId);
+  addPlayerToGame(socket, games[games.length - 1], gameInitData.playerId);
 }
 
-function createNewGame () {
+function createNewGame (gameInitData) {
   var game = {};
   game.id = Math.random();
   game.nbPlayers = 2;
   game.players = [];
   game.sockets = [];
-  var map = new gameData.Map(gameData.MAP_TYPES.random,
-                    gameData.MAP_SIZES.small,
-                    gameData.VEGETATION_TYPES.standard,
-                    gameData.INITIAL_RESOURCES.standard);
+
+  var map = new gameData.Map(gameData.MAP_TYPES[gameInitData.gameInitData.mapType],
+                    gameData.MAP_SIZES[gameInitData.gameInitData.mapSize],
+                    gameData.VEGETATION_TYPES[gameInitData.gameInitData.vegetation],
+                    gameData.INITIAL_RESOURCES[gameInitData.gameInitData.initialResources]);
   game.map = map;
   games.push(game);
 }

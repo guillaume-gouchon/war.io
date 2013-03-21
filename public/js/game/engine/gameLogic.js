@@ -24,7 +24,7 @@ gameLogic.grid = [];
 *	Updates all the data related to the game logic itself : positions, life, ...
 * 	It also checks if the game is ending.
 */
-gameLogic.update = function() {
+gameLogic.update = function () {
 	for(var n in this.gameElements) {
 		var element  = this.gameElements[n];
 		this.resolveActions(element);

@@ -4,8 +4,8 @@ var mapLogic = {};
 /**
 *	CONSTANTS
 */
-mapLogic.ZONES_NUMBER = 10;
 mapLogic.PROBABILITY_TREE = 0.6;
+mapLogic.ZONE_SIZE = 8;
 
 
 /**
@@ -39,19 +39,19 @@ mapLogic.initGrid = function (size) {
 */
 mapLogic.createRandomMap = function (map, players) {
 	//get zones size
-	var dx = parseInt(map.size.x / this.ZONES_NUMBER);
-	var dy = parseInt(map.size.y / this.ZONES_NUMBER); 
+	var nX = parseInt(map.size.x / this.ZONE_SIZE);
+	var nY = parseInt(map.size.y / this.ZONE_SIZE); 
 
 	//init zones
 	var zones = []
-	for(var i = 0; i < this.ZONES_NUMBER; i++) {
+	for(var i = 0; i < nX; i++) {
 		zones.push([]);
-		for(var j = 0; j < this.ZONES_NUMBER; j++) {
+		for(var j = 0; j < nY; j++) {
 			zones[i].push(-10);
 		}
 	}
 	//dispatch players on the map
-	this.dispatchPlayers(zones, players, dx, dy);
+	this.dispatchPlayers(zones, players, nX, nY);
 
 	//prepare the available zones according to the factors of the vegetation selected
 	var availableZones = [];
@@ -63,13 +63,13 @@ mapLogic.createRandomMap = function (map, players) {
 	}
 
 	//dispatch zones on the map
-	for(var i = 0; i < this.ZONES_NUMBER; i++) {
-		for(var j = 0; j < this.ZONES_NUMBER; j++) {
+	for(var i = 0; i < nX; i++) {
+		for(var j = 0; j < nY; j++) {
 			if(zones[i][j] < 0) {
-				this.populateZone({x : i * dx + 1, y : j * dy + 1}, {x : (i + 1) * dx - 1, y : (j + 1) * dy - 1}, 
+				this.populateZone({x : i * this.ZONE_SIZE + 1, y : j * this.ZONE_SIZE + 1}, {x : (i + 1) * this.ZONE_SIZE - 1, y : (j + 1) * this.ZONE_SIZE - 1}, 
 							  availableZones[parseInt(Math.random() * availableZones.length)]);
 			} else {
-				this.populateZone({x : i * dx + 1, y : j * dy + 1}, {x : (i + 1) * dx - 1, y : (j + 1) * dy - 1}, 
+				this.populateZone({x : i * this.ZONE_SIZE + 1, y : j * this.ZONE_SIZE + 1}, {x : (i + 1) * this.ZONE_SIZE - 1, y : (j + 1) * this.ZONE_SIZE - 1}, 
 							  zones[i][j]);
 			}
 		}
@@ -205,8 +205,8 @@ mapLogic.dispatchPlayers = function (zones, players, dx, dy) {
 		//this zone is now owned by the player
 		zones[playerZone.x][playerZone.y] = gameData.ZONES.basecamp;
 		var campPosition = {
-			x : playerZone.x * dx + parseInt(dx / 4) + parseInt(Math.random() * dx / 2), 
-			y : playerZone.y * dy + parseInt(dy / 4) + parseInt(Math.random() * dy / 2)
+			x : playerZone.x * this.ZONE_SIZE + parseInt(this.ZONE_SIZE / 4) + parseInt(Math.random() * this.ZONE_SIZE / 2), 
+			y : playerZone.y * this.ZONE_SIZE + parseInt(this.ZONE_SIZE / 4) + parseInt(Math.random() * this.ZONE_SIZE / 2)
 		}
 		this.setupBasecamp(players[i], campPosition);
 

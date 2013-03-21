@@ -13,27 +13,27 @@ gameData.INITIAL_RESOURCES = {
 	low : {
 		name : 'Low',
 		re : [
-			{t : gameData.RESOURCES.wood, value : 50},
-			{t : gameData.RESOURCES.gold, value : 50},
-			{t : gameData.RESOURCES.stone, value : 30}
+			{t : gameData.RESOURCES.wood.id, value : 50},
+			{t : gameData.RESOURCES.gold.id, value : 50},
+			{t : gameData.RESOURCES.stone.id, value : 30}
 		]
 	},
 
 	standard : {
 		name : 'Standard',
 		re : [
-			{t : gameData.RESOURCES.wood, value : 100},
-			{t : gameData.RESOURCES.gold, value : 100},
-			{t : gameData.RESOURCES.stone, value : 80}
+			{t : gameData.RESOURCES.wood.id, value : 100},
+			{t : gameData.RESOURCES.gold.id, value : 100},
+			{t : gameData.RESOURCES.stone.id, value : 80}
 		]
 	},
 
 	high : {
 		name : 'High',
 		re : [
-			{t : gameData.RESOURCES.wood, value : 250},
-			{t : gameData.RESOURCES.gold, value : 250},
-			{t : gameData.RESOURCES.stone, value : 100}
+			{t : gameData.RESOURCES.wood.id, value : 250},
+			{t : gameData.RESOURCES.gold.id, value : 250},
+			{t : gameData.RESOURCES.stone.id, value : 100}
 		]
 	}
 }

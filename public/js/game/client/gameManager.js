@@ -11,21 +11,9 @@ gameManager.iterate = 0;
 
 
 /**
-*	Creates a new game.
+*	Starts the game.
 */
 gameManager.startGame = function () {
-	if(this.isOfflineGame) {
-		gameManager.myArmy = 0;
-		var players = [
-	    new gameData.Player(0, 0, 0), new gameData.Player(0, 1, 0)];
-	  	gameManager.map = new gameData.Map(gameData.MAP_TYPES.random,
-	                    gameData.MAP_SIZES.small,
-	                    gameData.VEGETATION_TYPES.standard,
-	                    gameData.INITIAL_RESOURCES.standard);
-		engineManager.createNewGame(this.map, players);
-		gameLoop.start();
-	}
-
 	gameSurface.init();
 	input.initInputs();
 	gameThread.start();
@@ -37,7 +25,7 @@ gameManager.startGame = function () {
 
 
 /**
-*	Handles the entire game loop.
+*	Updates the game content if offline, updates the display.
 */
 gameManager.updateGame = function () {
 	this.iterate = (this.iterate > 1000 ? 0 : this.iterate + 1);
@@ -50,27 +38,41 @@ gameManager.updateGame = function () {
 }
 
 
-gameManager.joinGame = function () {
+gameManager.joinGame = function (gameInitData) {
 	this.getPlayerId();
 
 	document.getElementById('connecting').className = 'fullScreen';
-	document.getElementById('playButton').className += ' hide';
+	document.getElementById('introScreen').className += ' hide';
 
 	if(!this.isOfflineGame) {
-		this.connectToServer();
+		this.connectToServer(gameInitData);
 	} else {
+		this.initOfflineGame(gameInitData);
 		this.startGame();
 	}
 }
 
+gameManager.initOfflineGame = function (gameInitData) {
+	gameManager.myArmy = 0;
+	var players = [
+    new gameData.Player(0, 0, 0), new gameData.Player(0, 1, 0)];
+  	gameManager.map = new gameData.Map(gameData.MAP_TYPES[gameInitData.mapType],
+                    gameData.MAP_SIZES[gameInitData.mapSize],
+                    gameData.VEGETATION_TYPES[gameInitData.vegetation],
+                    gameData.INITIAL_RESOURCES[gameInitData.initialResources]);
+	engineManager.createNewGame(this.map, players);
+	gameLoop.start();
+}
 
-gameManager.connectToServer = function () {
+
+gameManager.connectToServer = function (gameInitData) {
 	gameManager.socket = io.connect('http://localhost:6969');
 	
 	//the server asked for some player's info
 	this.socket.on('askUserData', function (data) {
 		var userData = {};
 		userData.playerId = gameManager.playerId;
+		userData.gameInitData = gameInitData;
 		gameManager.socket.emit('userData', userData);
 	});
 

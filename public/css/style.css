@@ -21,12 +21,7 @@ body {
 }
 
 .fullScreen p{
-	position:absolute;
-	top: 50%;
-    left: 50%;
-    margin-left: -125px;
-    margin-top: -125px; 
-    line-height: 250px;
+	text-align: center;
     font-size: 45px;
     color: #ccc;
 }

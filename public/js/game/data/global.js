@@ -1,16 +1,28 @@
 /**
-*	Ids of the different armies.
+*	The different races available.
 */
 gameData.RACES = {
-	human : 0
+	human : {
+		id: 0,
+		image : '#ccc'
+	}
 }
 
 
 /**
-*	List of resources ids.
+*	The different resources.
 */
 gameData.RESOURCES = {
-	wood : 0,
-	gold : 1,
-	stone : 2
+	wood : {
+		id: 0,
+		image : '#ccc'
+	},
+	gold : {
+		id: 1,
+		image : '#ccc'
+	},
+	stone : {
+		id: 2,
+		image : '#ccc'
+	}
 }

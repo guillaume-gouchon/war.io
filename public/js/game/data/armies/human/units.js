@@ -19,7 +19,7 @@ gameData.ELEMENTS[gameData.FAMILIES.unit].push(
 		gatheringSpeed : 2,
 		maxGathering : 20,
 		pop : 1,
-		needs : [{t : gameData.RESOURCES.gold, value : 20}]
+		needs : [{t : gameData.RESOURCES.gold.id, value : 20}]
 	},
 	{
 		name : 'swordsman',
@@ -38,7 +38,7 @@ gameData.ELEMENTS[gameData.FAMILIES.unit].push(
 		weaponType : 0,
 		armorType : 0,
 		pop : 1,
-		needs : [{t : gameData.RESOURCES.gold, value : 50}]
+		needs : [{t : gameData.RESOURCES.gold.id, value : 50}]
 	},
 	{
 		name : 'knight',
@@ -57,6 +57,6 @@ gameData.ELEMENTS[gameData.FAMILIES.unit].push(
 		weaponType : 0,
 		armorType : 0,
 		pop : 2,
-		needs : [{t : gameData.RESOURCES.gold, value : 100}]
+		needs : [{t : gameData.RESOURCES.gold.id, value : 100}]
 	}
 ]);
