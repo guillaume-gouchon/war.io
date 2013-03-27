@@ -4,9 +4,13 @@ var application_root = __dirname,
 
 var app = module.exports = express();
 var server = app.listen(6969);
+
+
+//initializes Socket IO
 var io = require('socket.io').listen(server);
 //removes debug logs
 io.set('log level', 1);
+
 
 //config 
 app.configure(function () {
@@ -28,19 +32,28 @@ colors.setTheme({
   debug: 'grey'
 });
 
+
 //database
 var db = require('./db')(app);
+
 
 //load packages
 require('./daos')(app);
 require('./front')(app);
 require('./services')(app);
 
+
+//setup index page
 app.get('/', function (req, res) {
   res.sendfile(__dirname + '/public/index.html');
 });
 
 app.on('close', db.close); // Close open DB connection when server exits
+
+
+
+
+
 
 
 //get the game engine

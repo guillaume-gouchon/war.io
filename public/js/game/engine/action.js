@@ -5,12 +5,13 @@ var action = {};
 *	Basic build action.
 */
 action.doTheBuild = function (element, building) {
-	if(building.cp < 100) {
-		production.updateConstruction(building);	
-	} else {
-		element.a = null;
+	if(gameLoop.iterate % 3 == 0) {
+		if(building.cp < 100) {
+			production.updateConstruction(building);	
+		} else {
+			element.a = null;
+		}
 	}
-	
 }
 
 

@@ -57,6 +57,7 @@ order.updateRallyingPoint = function (buildings, x, y) {
 		if(buttons.length > 0) {
 			building.rp = {x: x, y: y};
 		}
+		gameLogic.addUniqueElementToArray(gameLogic.modified, building);
 	}
 }
 
@@ -66,6 +67,7 @@ order.attack = function (elements, target) {
 		var element = elements[i];
 		element.pa = null;
 		element.a = target;
+		gameLogic.addUniqueElementToArray(gameLogic.modified, element);
 	}
 }
 
@@ -75,6 +77,7 @@ order.build = function (builders, building) {
 		var element = builders[i];
 		element.pa = null;
 		element.a = building;
+		gameLogic.addUniqueElementToArray(gameLogic.modified, element);
 	}
 }
 
@@ -85,6 +88,7 @@ order.move = function (units, x, y) {
 		element.pa = null;
 		element.a = null;
 		element.mt = {x : x, y : y};
+		gameLogic.addUniqueElementToArray(gameLogic.modified, element);
 	}
 }
 
@@ -94,6 +98,7 @@ order.gather = function (units, terrain) {
 		var element = units[i];
 		element.a = terrain;
 		element.pa = terrain;
+		gameLogic.addUniqueElementToArray(gameLogic.modified, element);
 	}
 }
 
@@ -159,7 +164,6 @@ order.convertDestinationToOrder = function (elementsIds, x, y) {
 
 		//if no target = no action, just give a move order
 		order.move(elements, x, y);
-
 	}
 	
 }

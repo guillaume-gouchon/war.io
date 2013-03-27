@@ -21,10 +21,22 @@ gameLogic.grid = [];
 
 
 /**
+*	List of elements modified during this game loop. 
+*/
+gameLogic.modified = [];
+gameLogic.added = [];
+gameLogic.removed = [];
+
+
+/**
 *	Updates all the data related to the game logic itself : positions, life, ...
 * 	It also checks if the game is ending.
 */
 gameLogic.update = function () {
+	this.modified = [];
+	this.added = [];
+	this.removed = [];
+	
 	for(var n in this.gameElements) {
 		var element  = this.gameElements[n];
 		this.resolveActions(element);
@@ -44,6 +56,7 @@ gameLogic.update = function () {
 gameLogic.updateMoves = function (element) {
 	if(element.mt != null && element.mt.x != null) {
 		move.moveElement(element);
+		this.addUniqueElementToArray(this.modified, element);
 	}
 }
 
@@ -85,7 +98,7 @@ gameLogic.resolveActions = function (element) {
 			var closest = tools.getClosestPart(element, element.a);
 			element.mt = {x : closest.x, y : closest.y};
 		}
-
+		this.addUniqueElementToArray(this.modified, element);
 	}
 }
 
@@ -106,7 +119,6 @@ gameLogic.removeDeads= function () {
 			}
 			this.removeElement(n);
 			mapLogic.removeGameElement(element);
-
 		}
 	}
 }
@@ -126,6 +138,7 @@ gameLogic.updateBuildings = function (building) {
 	if (building.f == gameData.FAMILIES.building) {
 		if (building.q.length > 0) {
 			production.updateQueueProgress(building);
+			this.addUniqueElementToArray(this.modified, building);
 		}
 	}
 }
@@ -145,3 +158,12 @@ gameLogic.updateFogOfWar = function () {
 gameLogic.removeElement = function (n) {
 	this.gameElements.splice(n, 1);
 }
+
+
+gameLogic.addUniqueElementToArray = function (array, element) {
+	var index = array.indexOf(element.id);
+	if (index == -1) {
+		array.push(element);
+	}
+}
+

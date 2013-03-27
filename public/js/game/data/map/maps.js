@@ -39,6 +39,11 @@ gameData.INITIAL_RESOURCES = {
 }
 
 gameData.MAP_SIZES = {
+	test : {
+		name : 'Test',
+		x : 80,
+		y : 80
+	},
 	small : {
 		name : 'Small',
 		x : 80,
@@ -64,7 +69,7 @@ gameData.ZONES = {
 	forest : 2,
 	goldmine : 3,
 	stonemine : 4,
-	water : 5	
+	water : 5
 }
 
 gameData.VEGETATION_TYPES = {

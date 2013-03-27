@@ -2,14 +2,14 @@ $(document).ready(function() {
 
 	initMapChooser();
 
-	$('#playButton').click(function () {
+	//$('#playButton').click(function () {
 		var gameInitData = {};
 		gameInitData.mapType = 'random';
 		gameInitData.mapSize = $('#mapSize').val();
 		gameInitData.vegetation = $('#vegetation').val();
 		gameInitData.initialResources = $('#initialResources').val();
-		gameManager.joinGame(gameInitData);
-	});
+		gameManager.playGame(gameInitData);
+	//});
 
 });
 

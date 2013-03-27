@@ -24,27 +24,27 @@ input.mousePosition = {
 */
 input.initMouse = function () {
 
-	gameSurface.canvas.onmousedown = function (event) {
+	document.onmousedown = function (event) {
 	  return input.onLeftClick(event);
 	}
 
-	gameSurface.canvas.oncontextmenu = function (event) {
+	document.oncontextmenu = function (event) {
 	  return input.onRightClick(event);
 	}
 
-	gameSurface.canvas.onmousemove = function (event) {
+	document.onmousemove = function (event) {
 		return input.onMouseMove(event); 
 	}
 
-	gameSurface.canvas.onmouseup = function (event) {
+	document.onmouseup = function (event) {
 	  return input.onMouseUp(event);
 	}
 
-	gameSurface.canvas.onmousewheel = function (event) {
+	document.onmousewheel = function (event) {
 	  return input.onMouseWheel(event);
 	}
 
-	gameSurface.canvas.ondblclick = function (event) {
+	document.ondblclick = function (event) {
 		return input.onDoubleClick(event);
 	}
 

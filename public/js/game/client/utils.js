@@ -2,17 +2,6 @@ var utils = {};
 
 
 /**
-*	Returns the tile position according to the pixel position and the window position.
-*/
-utils.getAbsolutePositionFromPixel = function (x, y) {
-	return {
-		x: parseInt(x / gameWindow.PIXEL_BY_NODE) + gameWindow.x, 
-		y: parseInt(y / gameWindow.PIXEL_BY_NODE) + gameWindow.y
-	};
-}
-
-
-/**
 *	Reads a cookie.
 */
 utils.readCookie = function (name) {
@@ -40,7 +29,7 @@ utils.createCookie = function (name, value) {
 */
 utils.getElementUnder = function (x, y) {
 	for(var i in gameContent.gameElements) {
-		var element = gameContent.gameElements[i];
+		var element = gameContent.gameElements[i].s;
 	  	if(tools.isElementThere(element, {x : x, y : y})) {
 	  		return true;
 	  	}

@@ -8,6 +8,7 @@ gameData.Unit = function (unit, x, y, owner) {
 
 	//drawing-related data
 	this.p = {x : x, y : y};
+	this.c = unit.c;
 
 	//game-related data
 	this.mt = {x : null, y : null};

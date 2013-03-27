@@ -48,20 +48,21 @@ GUI.update = function () {
 *	Updates the toolbar depending on the elements selected.
 */
 GUI.updateToolbar = function () {
-	if (gameContent.selected.length > 0 && rank.isAlly(gameManager.myArmy, gameContent.selected[0])) {
-		if (gameContent.selected[0].f == gameData.FAMILIES.building) {
+	if (gameContent.selected.length > 0 && rank.isAlly(gameContent.myArmy, gameContent.gameElements[gameContent.selected[0]].s)) {
+		var selected = gameContent.gameElements[gameContent.selected[0]].s;
+		if (selected.f == gameData.FAMILIES.building) {
 			//building(s) selected
-			if (gameContent.selected[0].cp < 100) {
+			if (selected.cp < 100) {
 				//building is not finished yet
 				this.toolbar = [GUI.TOOLBAR_BUTTONS.cancel];
 			} else {
-				this.toolbar = production.getWhatCanBeBought(gameContent.selected[0].o, gameData.ELEMENTS[gameData.FAMILIES.building][gameContent.selected[0].r][gameContent.selected[0].t].buttons);
+				this.toolbar = production.getWhatCanBeBought(selected.o, gameData.ELEMENTS[gameData.FAMILIES.building][selected.r][selected.t].buttons);
 			}
-		} else if (gameContent.selected[0].f == gameData.FAMILIES.unit) {
+		} else if (selected.f == gameData.FAMILIES.unit) {
 			if(this.showBuildings) {
-				this.toolbar = this.getBuildingButtons();
+				this.toolbar = this.getBuildingButtons(selected);
 			} else {
-				this.toolbar = gameData.ELEMENTS[gameData.FAMILIES.unit][gameContent.selected[0].r][gameContent.selected[0].t].buttons;
+				this.toolbar = gameData.ELEMENTS[gameData.FAMILIES.unit][selected.r][selected.t].buttons;
 			}
 		}
 	} else {
@@ -73,8 +74,8 @@ GUI.updateToolbar = function () {
 /**
 *	Returns the list of the buildings which can be built by the builder(s) selected.
 */
-GUI.getBuildingButtons = function () {
-	return production.getWhatCanBeBought(gameContent.selected[0].o, gameData.ELEMENTS[gameData.FAMILIES.building][gameContent.selected[0].r]);
+GUI.getBuildingButtons = function (builder) {
+	return production.getWhatCanBeBought(builder.o, gameData.ELEMENTS[gameData.FAMILIES.building][builder.r]);
 }
 
 

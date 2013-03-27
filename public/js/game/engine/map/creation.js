@@ -162,11 +162,12 @@ mapLogic.addGameElement = function (element) {
 			}
 		}
 	}
+	gameLogic.addUniqueElementToArray(gameLogic.added, element);
 }
 
 
 /**
-* Adds a game element on the map.
+* Removes a game element on the map.
 */
 mapLogic.removeGameElement = function (element) {
 	var shape = gameData.ELEMENTS[element.f][element.r][element.t].shape;
@@ -180,6 +181,7 @@ mapLogic.removeGameElement = function (element) {
 			}
 		}
 	}
+	gameLogic.addUniqueElementToArray(gameLogic.removed, element);
 }
 
 

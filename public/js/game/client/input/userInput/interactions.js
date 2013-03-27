@@ -22,11 +22,11 @@ userInput.clickOnToolbar = function (button) {
 			this.enterConstructionMode(button);
 		} else if (button == GUI.TOOLBAR_BUTTONS.cancel) {
 			//cancel construction
-			orderDispatcher.sendOrderToEngine(order.TYPES.cancelConstruction,
+			gameManager.sendOrderToEngine(order.TYPES.cancelConstruction,
 							 					[gameContent.selected[0].id]);
 		} else if (gameContent.selected[0].f == gameData.FAMILIES.building) {
-			orderDispatcher.sendOrderToEngine(order.TYPES.buy,
-					 					[this.getSelectedElementsIds(), button]);
+			gameManager.sendOrderToEngine(order.TYPES.buy,
+					 					[gameContent.selected, button]);
 		}
 	}
 }
@@ -51,7 +51,7 @@ userInput.updateConstructionMode = function (x, y) {
 	if(gameContent.building != null) {
 		try {
 			//updates building position
-			gameContent.building.p = gameWindow.getAbsolutePositionFromPixel(x, y);
+			gameContent.building.p = gameSurface.getAbsolutePositionFromPixel(x, y);
 			
 			//check if building can be built here
 			gameContent.building.canBeBuiltHere = true;
@@ -90,17 +90,8 @@ userInput.leaveConstructionMode = function () {
 /**
 *	The user changes the zoom
 */
-userInput.changeZoom = function (x, y, dz) {
-	gameWindow.zoom += dz;
-	gameWindow.zoom = Math.max(gameWindow.ZOOM_MIN, gameWindow.zoom);
-	gameWindow.zoom = Math.min(gameWindow.ZOOM_MAX, gameWindow.zoom);
-
-	var mousePosition = gameWindow.getAbsolutePositionFromPixel(x, y);
-	gameWindow.updateGameWindowSize();
-	if(dz > 0) {
-		/*gameSurface.moveGameWindowPositionTo(mousePosition.x - parseInt(gameSurface.window.width / 2), 
-										 	 mousePosition.y - parseInt(gameSurface.window.height / 2));*/
-	}
+userInput.changeZoom = function (dz) {
+	gameSurface.updateZoom(dz);
 }
 
 
@@ -115,12 +106,13 @@ userInput.pressToolbarShortcut = function (i) {
 
 
 /**
-*	Updates mouse icon when scrolling
+*	Updates mouse icon.
 */
 userInput.updateMouseIcon = function (mouseX, mouseY) {
-	var position = gameWindow.getAbsolutePositionFromPixel(mouseX, mouseY);
-	var x = gameWindow.scroll.dx;
-	var y =  - gameWindow.scroll.dy;
+	var position = gameSurface.getAbsolutePositionFromPixel(mouseX, mouseY);
+	var x = gameSurface.scroll.dx;
+	var y = gameSurface.scroll.dy;
+	
 	if (tools.getElementUnder(position.x, position.y) != null) {
 		GUI.updateMouse(GUI.MOUSE_ICONS.select);
 	} else if (x > 0 && y > 0) {
@@ -145,24 +137,27 @@ userInput.updateMouseIcon = function (mouseX, mouseY) {
 }
 
 
+userInput.SCROLL_THRESHOLD = 10;
+
+
 /**
 *	Scrolls the map by moving the mouse on the edge
 */
 userInput.checkIfMapScrolling = function (x, y) {
-	if (x < gameWindow.SCROLL_THRESHOLD) {
-		gameWindow.updateHorizontalScrolling(-1);
-	} else if(x > gameSurface.canvas.width - gameWindow.SCROLL_THRESHOLD) {
-		gameWindow.updateHorizontalScrolling(1);
+	if (x < this.SCROLL_THRESHOLD) {
+		gameSurface.updateHorizontalScrolling(-1);
+	} else if(x > gameSurface.width - this.SCROLL_THRESHOLD) {
+		gameSurface.updateHorizontalScrolling(1);
 	} else {
-		gameWindow.updateHorizontalScrolling(0);
+		gameSurface.updateHorizontalScrolling(0);
 	}
 
-	if (y < gameWindow.SCROLL_THRESHOLD) {
-		gameWindow.updateVerticalScrolling(1);
-	} else if (y > gameSurface.canvas.height - gameWindow.SCROLL_THRESHOLD) {
-		gameWindow.updateVerticalScrolling(-1);
+	if (y < this.SCROLL_THRESHOLD) {
+		gameSurface.updateVerticalScrolling(1);
+	} else if (y > gameSurface.height - this.SCROLL_THRESHOLD) {
+		gameSurface.updateVerticalScrolling(-1);
 	} else {
-		gameWindow.updateVerticalScrolling(0);
+		gameSurface.updateVerticalScrolling(0);
 	}
 
 }
@@ -174,8 +169,8 @@ userInput.checkIfMapScrolling = function (x, y) {
 userInput.tryBuildHere = function () {
 	if(gameContent.building.canBeBuiltHere) {
 		//let's start the construction
-		orderDispatcher.sendOrderToEngine(order.TYPES.buildThatHere,
-							 [this.getSelectedElementsIds(), gameContent.building, 
+		gameManager.sendOrderToEngine(order.TYPES.buildThatHere,
+							 [gameContent.selected, gameContent.building, 
 							  gameContent.building.p.x, 
 							  gameContent.building.p.y]);
 		this.leaveConstructionMode();
@@ -189,22 +184,10 @@ userInput.tryBuildHere = function () {
 *	Dispatches the action according to the order
 */
 userInput.dispatchUnitAction = function (x, y) {
-	var destination = gameWindow.getAbsolutePositionFromPixel(x, y);
-	orderDispatcher.sendOrderToEngine(order.TYPES.action,
-							 [this.getSelectedElementsIds(),
+	var destination = gameSurface.getAbsolutePositionFromPixel(x, y);
+	gameManager.sendOrderToEngine(order.TYPES.action,
+							 [gameContent.selected,
 							  destination.x, 
 							  destination.y]);
-}
-
-
-/**
-*	Returns ids of the selected elements.
-*/
-userInput.getSelectedElementsIds = function () {
-	var selectedIds = [];
-	for (var i in gameContent.selected) {
-		selectedIds.push(gameContent.selected[i].id);
-	}
-	return selectedIds;
 }
 

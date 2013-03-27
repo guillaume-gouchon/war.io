@@ -12,13 +12,8 @@ gameLoop.FREQUENCY = 10;
 gameLoop.iterate = 0;
 
 
-//used for testing
-gameLoop.start = function () {
-	setInterval(function(){gameLoop.update()}, 1000 / this.FREQUENCY);
-}
-
-
 gameLoop.update = function () {
 	this.iterate = (this.iterate > 100 ? 0 : this.iterate + 1);
 	gameLogic.update();
+	return engineManager.getGameData();
 }

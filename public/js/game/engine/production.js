@@ -108,6 +108,7 @@ production.buyElement = function (buildings, elementData) {
 			&& this.canBuyIt(building.o, elementData)) {
 				this.paysForElement(building.o, elementData);
 				building.q.push(elementData.t);
+				this.addUniqueElementToArray(this.modified, building);
 		}
 	}
 

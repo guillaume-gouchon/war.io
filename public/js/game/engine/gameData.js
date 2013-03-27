@@ -1,6 +1,5 @@
 var gameData = {}
 
-
 /**
 *	Ids to categorize the different game elements.
 */
@@ -10,7 +9,7 @@ gameData.FAMILIES = {
 	terrain : 2
 }
 
-gameData.ELEMENTS = [[], [], []];
+gameData.ELEMENTS = [[], [] ,[]];
 
 /**
 *	Statuses ids of units and buildings' owners.
@@ -33,7 +32,7 @@ gameData.unitId = 0;
 *	Creates a unique id for every unit and building.
 */
 gameData.createUniqueId = function () {
-	this.unitId += 10;
+	this.unitId += 1;
 	var m = new Date().getMilliseconds();
-	return m + this.unitId;
+	return m + 'i' + this.unitId;
 }

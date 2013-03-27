@@ -2,14 +2,22 @@ var gameContent = {};
 
 
 /**
-*	Main variable used during the game.
-*  	It contains all the maps' elements, units and buildings.
+*
 */
-gameContent.gameElements = [];
+gameContent.map = null;
+gameContent.players = null;
+gameContent.myArmy = null;
 
 
 /**
-*	Contains the current selected elements of gameElements.
+*	Main variable used during the game.
+*  	It contains all the terrain's elements, units and buildings.
+*/
+gameContent.gameElements = {};
+
+
+/**
+*	Contains the current selected elements ids.
 */
 gameContent.selected = [];
 
@@ -26,37 +34,47 @@ gameContent.building = null;
 gameContent.selectionRectangle = [];
 
 
+
 /**
-*	Retrieves the game content from the game engine.	
 *
 */
-gameContent.updateGameContent = function() {
-	this.gameElements = gameLogic.gameElements;
-    gameContent.updateSelectedElements();
+gameContent.init = function (data) {
+	//add new elements
+	for (var i in data) {
+		var element = data[i];
+		gameSurface.addElement(element);
+	}
 }
 
-gameContent.updateSelectedElements = function () {
-	var i = this.selected.length;
-	while (i--) {
-		var selected = this.selected[i];
-		var stillAlive = false;
-		for (var j in this.gameElements) {
-			var gameElement = this.gameElements[j];
-			if (gameElement.id == selected.id) {
-				stillAlive = true;
-				gameElement.isSelected = true;
-				if (gameElement.f == gameData.FAMILIES.unit) {
-					selected.a = gameElement.a;
-					selected.pa = gameElement.pa;
-					selected.mt = gameElement.mt;
-				} else if (gameElement.f == gameData.FAMILIES.building) {
-					selected.rp = gameElement.rp;
-				}
-				break;
-			}
+
+/**
+*	Updates the game content with the differences we have received from the engine.	
+*/
+gameContent.update = function (data) {
+	//add new elements
+	for (var i in data.added) {
+		var element = data.added[i];
+		if (this.gameElements[element.id] == null) {
+			gameSurface.addElement(element);
 		}
-		if (!stillAlive) {
-			this.selected.splice(i, 1);	
+	}
+	//remove some elements
+	for (var i in data.removed) {
+		var element = data.removed[i];
+		if (this.gameElements[element.id] != null) {
+			var index = this.selected.indexOf(element.id);
+			if (index >= 0) {
+				this.selected.splice(index, 1);
+			}
+			gameSurface.removeElement(element);
+		}
+	}
+	//update some modified elements
+	for (var i in data.modified) {
+		var element = data.modified[i];
+		if (this.gameElements[element.id] != null) {
+			gameSurface.updateElement(element);
 		}
 	}
 }
+

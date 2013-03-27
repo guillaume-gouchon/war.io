@@ -6,7 +6,7 @@ input.onLeftClick = function (event) {
 		var x = event.x;
 		var y = event.y;
 		//the user clicked on a toolbar's button
-		if(GUI.toolbar.length > 0 && y > gameSurface.canvas.height - GUI.TOOLBAR_HEIGHT 
+		if(GUI.toolbar.length > 0 && y > gameSurface.height - GUI.TOOLBAR_HEIGHT 
 			&& x / (GUI.BUTTONS_WIDTH + GUI.BUTTONS_SPACE) < GUI.toolbar.length 
 			&& x % (GUI.BUTTONS_WIDTH + GUI.BUTTONS_SPACE) > GUI.BUTTONS_SPACE) {
 				userInput.clickOnToolbar(GUI.toolbar[parseInt(x / (GUI.BUTTONS_WIDTH + GUI.BUTTONS_SPACE))]);
@@ -47,12 +47,10 @@ input.onRightClick = function (event) {
 	if(gameContent.building != null) {
 		userInput.leaveConstructionMode();
 	} else if(gameContent.selected.length > 0 
-		&& rank.isAlly(gameManager.myArmy, gameContent.selected[0])) {
-		//give an order
-		if(gameContent.selected[0].f == gameData.FAMILIES.unit
-			|| gameContent.selected[0].f == gameData.FAMILIES.building) {
-			userInput.dispatchUnitAction(event.x, event.y);
-		} 
+		&& rank.isAlly(gameContent.myArmy, gameContent.gameElements[gameContent.selected[0]].s)
+		&& (gameContent.gameElements[gameContent.selected[0]].s.f == gameData.FAMILIES.unit
+			|| gameContent.gameElements[gameContent.selected[0]].s.f == gameData.FAMILIES.building)) {
+			userInput.dispatchUnitAction(event.x, event.y); 
 	}
 	return false;
 }
@@ -66,7 +64,6 @@ input.onMouseMove = function (event) {
 	userInput.updateConstructionMode(event.x, event.y);
 	userInput.checkIfMapScrolling(event.x, event.y);
 	userInput.updateMouseIcon(event.x, event.y);
-	this.mousePosition = {x : event.x, y : event.y};
 }
 
 
@@ -83,7 +80,7 @@ input.onMouseUp = function () {
 */
 input.onMouseWheel = function (event) {
 	if(Math.abs(event.wheelDelta) > 0) {
-		userInput.changeZoom(event.clientX, event.clientY, event.wheelDelta / Math.abs(event.wheelDelta));
+		userInput.changeZoom(event.wheelDelta / Math.abs(event.wheelDelta));
 	}
 	return false;
 }
@@ -97,21 +94,21 @@ input.onKeyDown = function (event) {
 	var keyCode = (window.event) ? event.which : event.keyCode;
 	switch(keyCode) {
 		case 38 :
-			gameWindow.updateVerticalScrolling(1);
+			gameSurface.updateVerticalScrolling(1);
 			event.preventDefault();
 			return true;
 			break;
 		case 40 :
-			gameWindow.updateVerticalScrolling(-1);
+			gameSurface.updateVerticalScrolling(-1);
 			event.preventDefault();
 			return true;
 			break;
 		case 39 :
-			gameWindow.updateHorizontalScrolling(1);
+			gameSurface.updateHorizontalScrolling(1);
 			return true;
 			break;
 		case 37 :
-			gameWindow.updateHorizontalScrolling(-1);
+			gameSurface.updateHorizontalScrolling(-1);
 			event.preventDefault();
 			return true;
 			break;
@@ -138,19 +135,19 @@ input.onKeyUp = function (event) {
 	var keyCode = (window.event) ? event.which : event.keyCode;
 	switch(keyCode) {
 		case 38 :
-			gameWindow.updateVerticalScrolling(0);
+			gameSurface.updateVerticalScrolling(0);
 			return false;
 			break;
 		case 40 :
-			gameWindow.updateVerticalScrolling(0);
+			gameSurface.updateVerticalScrolling(0);
 			return false;
 			break;
 		case 39 :
-			gameWindow.updateHorizontalScrolling(0);
+			gameSurface.updateHorizontalScrolling(0);
 			return false;
 			break;
 		case 37 :
-			gameWindow.updateHorizontalScrolling(0);
+			gameSurface.updateHorizontalScrolling(0);
 			return false;
 			break;
 	}

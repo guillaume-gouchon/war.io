@@ -27,7 +27,6 @@ engineManager.createNewGame = function(map, players) {
 *	Starts the game.
 */
 engineManager.startGame = function () {
-	gameLoop.start();
 }
 
 
@@ -36,5 +35,26 @@ engineManager.startGame = function () {
 */
 engineManager.pauseGame = function () {
 
+}
+
+
+/**
+*	Returns updated game data.
+*/
+engineManager.getGameData = function () {
+	var data = {
+		modified : gameLogic.modified,
+		added: gameLogic.added,
+		removed: gameLogic.removed
+	}
+	return data;
+}
+
+
+/**
+*	Returns list of game elements.
+*/
+engineManager.getGameElements = function () {
+	return gameLogic.gameElements;
 }
 

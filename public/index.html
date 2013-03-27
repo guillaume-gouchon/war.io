@@ -21,22 +21,20 @@
 
 	<body>
 
-	  <canvas id="canvas" class="hide"></canvas>
-
 	  <div id="introScreen" class="fullScreen" >
 	  	<div class="row">
 		  	<div class="span4">
 			  	<label>Size of the Map</label>
 		  		<select id="mapSize"></select>
-  			</div>
-  			<div class="span4">
+				</div>
+				<div class="span4">
 			  	<label>Vegetation Type</label>
 	  			<select id="vegetation"></select>
-  			</div>
-  			<div class="span4">
+				</div>
+				<div class="span4">
 			  	<label>Initial Resources</label>
 	  			<select id="initialResources"></select>
-  			</div>
+				</div>
 		</div>
 	  		
 	  	<p><img id="playButton" src="img/play.png" title="Let's Play !" /></p>
@@ -55,22 +53,19 @@
 	<!-- ENGINE -->
 	<script type="text/javascript" src="js/game/engine/engine.js"></script>
 
-	<!-- CLIENT <script type="text/javascript" src="js/game/client/client.js"></script>
--->
+	<!-- CLIENT <script type="text/javascript" src="js/game/client/client.js"></script>-->
 	
-	
+	<script src="js/three.js"></script>
+
 	<!-- CLIENT -->
 	<script type="text/javascript" src="js/game/client/input/input.js"></script>
 	<script type="text/javascript" src="js/game/client/input/inputDispatcher.js"></script>
 	<script type="text/javascript" src="js/game/client/input/userInput/interactions.js"></script>
 	<script type="text/javascript" src="js/game/client/input/userInput/selections.js"></script>
-	<script type="text/javascript" src="js/game/client/orderDispatcher.js"></script>
 	<script type="text/javascript" src="js/game/client/GUI.js"></script>
-	<script type="text/javascript" src="js/game/client/draw.js"></script>
+	<script type="text/javascript" src="js/game/client/gameSurface.js"></script>
 	<script type="text/javascript" src="js/game/client/gameManager.js"></script>
 	<script type="text/javascript" src="js/game/client/gameContent.js"></script>
-	<script type="text/javascript" src="js/game/client/gameThread.js"></script>
-	<script type="text/javascript" src="js/game/client/gameWindow.js"></script>
 	<script type="text/javascript" src="js/game/client/utils.js"></script>
 
 	<!-- SCRIPTS -->
