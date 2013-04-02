@@ -11,12 +11,10 @@ GUI.toolbar = [];
 /**
 *	CONSTANTS
 */
-GUI.TOOLBAR_HEIGHT = 80;
-GUI.BUTTONS_WIDTH = 80;
-GUI.BUTTONS_SPACE = 10;
+GUI.BUTTONS_SIZE = 70;
 GUI.TOOLBAR_BUTTONS = {
-	build : {id : 0, color : '#aaa', isEnabled : true},
-	cancel : {id : 1, color : '#ff0', isEnabled : true}
+	build : {id : 0, image : 'build.png', isEnabled : true, name: 'build'},
+	cancel : {id : 1, image : 'cancel.png', isEnabled : true, name: 'cancel'}
 }
 GUI.MOUSE_ICONS = {
 	standard : 'default', 
@@ -35,11 +33,17 @@ GUI.MOUSE_ICONS = {
 GUI.showBuildings = false;
 
 
+GUI.init = function () {
+	this.createResourcesBar();
+}
+
 /**
 *	Updates the GUI.
 *	Called in the main thread.
 */
 GUI.update = function () {
+	this.updatePopulation();
+	this.updateResources();
 	this.updateToolbar();
 }
 
@@ -68,6 +72,14 @@ GUI.updateToolbar = function () {
 	} else {
 		this.toolbar = [];
 	}
+
+	$('#toolbar div').addClass('hide');
+
+	for (var i in this.toolbar) {
+		var button = this.toolbar[i];
+		this.createToolbarButton(button);
+	}
+
 }
 
 
@@ -84,4 +96,53 @@ GUI.getBuildingButtons = function (builder) {
 */
 GUI.updateMouse = function (mouseIcon) {
 	document.body.style.cursor = mouseIcon;
+}
+
+
+GUI.updateResources = function () {
+	var player = gameContent.players[gameContent.myArmy];
+	for (var i in gameData.RESOURCES) {
+		var resource = gameData.RESOURCES[i];
+		$('div', '#resource' + resource.id).html(player.re[resource.id]);
+	}
+}
+
+GUI.createResourcesBar = function () {
+	for (var i in gameData.RESOURCES) {
+		var resource = gameData.RESOURCES[i];
+		this.createResourceElement(resource);
+	}
+}
+
+GUI.createResourceElement = function (resource) {
+	var div = '<div id="resource' + resource.id + '"><img src="' + gameSurface.IMG_PATH + resource.image + '"/><div>0</div></div>';
+	$('#resources').append(div);
+}
+
+GUI.createToolbarButton = function (button) {
+	if ($('#toolbar' + button.name).html() != null) {
+		$('#toolbar' + button.name).removeClass('hide');
+	} else {
+		var div = '<div id="toolbar' + button.name + '" class="toolbarButton"><img src="' + gameSurface.IMG_PATH + button.image + '"/></div>';
+		$('#toolbar').append(div);
+	}
+	if(!button.isEnabled) {
+		$('#toolbar' + button.name).addClass('disabled');
+	} else {
+		$('#toolbar' + button.name).removeClass('disabled');
+	}
+}
+
+GUI.updatePopulation = function () {
+	var player = gameContent.players[gameContent.myArmy];
+	$('div', '#population').html(player.pop.current + ' / ' + player.pop.max);
+}
+
+
+GUI.selectButton = function (button) {
+	$('img', '#toolbar' + button.name).addClass('selected');
+}
+
+GUI.unselectButtons = function () {
+	$('img', '.toolbarButton').removeClass('selected');
 }

@@ -7,7 +7,8 @@ gameData.ELEMENTS[gameData.FAMILIES.terrain].push(
 		shape : [[1]],
 		canMoveIn : false,
 		resourceType : gameData.RESOURCES.wood.id,
-		ra : 75
+		ra : 75,
+		g : 'tree.js'
 	},
 	{
 		name : 'stone',
@@ -16,7 +17,8 @@ gameData.ELEMENTS[gameData.FAMILIES.terrain].push(
 		shape : [[1, 1, 1], [1, 1, 1], [1, 1, 1]],
 		canMoveIn : false,
 		resourceType : gameData.RESOURCES.stone.id,
-		ra : 500
+		ra : 500,
+		g : 'stonemine.js'
 	},
 	{	
 		name : 'gold',
@@ -25,6 +27,7 @@ gameData.ELEMENTS[gameData.FAMILIES.terrain].push(
 		shape : [[1, 1, 1], [1, 1, 1], [1, 1, 1]],
 		canMoveIn : false,
 		resourceType : gameData.RESOURCES.gold.id,
-		ra : 3000
+		ra : 3000,
+		g : 'goldmine.js'
 	}
 ]);

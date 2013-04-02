@@ -45,7 +45,8 @@ engineManager.getGameData = function () {
 	var data = {
 		modified : gameLogic.modified,
 		added: gameLogic.added,
-		removed: gameLogic.removed
+		removed: gameLogic.removed,
+		players: gameLogic.players
 	}
 	return data;
 }

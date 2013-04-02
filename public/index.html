@@ -45,17 +45,27 @@
 	  	<p>Waiting for Opponents...</p>
 	  </div>
 
+
+	  <div onmousedown="return false" id="gui" class="fullScreen">
+	  	<div id="resources"></div>
+	  	<div id="toolbar"></div>
+	  	<div id="population"><img src="js/game/data/g/population.png"/><div></div></div>
+	  </div>
+
 	</body>
 
 
 	<script src="/socket.io/socket.io.js"></script>
 
 	<!-- ENGINE -->
-	<script type="text/javascript" src="js/game/engine/engine.js"></script>
+	<script type="text/javascript" src="js/game/engine.js"></script>
 
-	<!-- CLIENT <script type="text/javascript" src="js/game/client/client.js"></script>-->
+	<!-- DATA -->
+	<script type="text/javascript" src="js/game/data.js"></script>
+
 	
 	<script src="js/three.js"></script>
+
 
 	<!-- CLIENT -->
 	<script type="text/javascript" src="js/game/client/input/input.js"></script>

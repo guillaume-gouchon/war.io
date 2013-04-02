@@ -8,7 +8,7 @@ gameData.ELEMENTS[gameData.FAMILIES.unit].push(
 		shape : [[1]],
 		speed : 1,
 		isBuilder : true,
-		buttons : [{id : 0, c : '#aaa', isEnabled : true}],
+		buttons : [{id : 0, image : 'build.png', isEnabled : true, name: 'build'}],
 		timeConstruction : 5,
 		l : 20,
 		attackSpeed : 3,
@@ -19,7 +19,9 @@ gameData.ELEMENTS[gameData.FAMILIES.unit].push(
 		gatheringSpeed : 2,
 		maxGathering : 20,
 		pop : 1,
-		needs : [{t : gameData.RESOURCES.gold.id, value : 20}]
+		needs : [{t : gameData.RESOURCES.gold.id, value : 20}],
+		g : 'dwarf.js',
+		image: 'builder.png'
 	},
 	{
 		name : 'swordsman',
@@ -38,7 +40,9 @@ gameData.ELEMENTS[gameData.FAMILIES.unit].push(
 		weaponType : 0,
 		armorType : 0,
 		pop : 1,
-		needs : [{t : gameData.RESOURCES.gold.id, value : 50}]
+		needs : [{t : gameData.RESOURCES.gold.id, value : 50}],
+		g : 'dwarf.js',
+		image: 'builder.png'
 	},
 	{
 		name : 'knight',
@@ -57,6 +61,8 @@ gameData.ELEMENTS[gameData.FAMILIES.unit].push(
 		weaponType : 0,
 		armorType : 0,
 		pop : 2,
-		needs : [{t : gameData.RESOURCES.gold.id, value : 100}]
+		needs : [{t : gameData.RESOURCES.gold.id, value : 100}],
+		g : 'dwarf.js',
+		image: 'builder.png'
 	}
 ]);

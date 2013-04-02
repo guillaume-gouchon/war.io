@@ -1,7 +1,7 @@
 var gameManager = {};
 
 
-gameManager.isOfflineGame = true;
+gameManager.isOfflineGame = false;
 
 
 /**
@@ -13,13 +13,12 @@ gameManager.playGame = function (gameInitData) {
 	document.getElementById('connecting').className = 'fullScreen';
 	document.getElementById('introScreen').className += ' hide';
 
+	GUI.init();
+	
 	if(!this.isOfflineGame) {
-		gameSurface.init();
-		input.initInputs();
 		this.connectToServer(gameInitData);
 	} else {
-		this.startGame();
-		this.initOfflineGame(gameInitData);
+		this.initOfflineGame(gameInitData);	
 	}
 }
 
@@ -30,10 +29,16 @@ gameManager.playGame = function (gameInitData) {
 gameManager.startGame = function () {
 	document.getElementById('connecting').className += ' hide';
 
+	if (gameManager.isOfflineGame) {
+		this.waitingData = engineManager.getGameElements();
+	}
+
+	gameContent.init(this.waitingData);
+
 	if (this.isOfflineGame) {
 		setInterval(function(){
 			gameContent.update(gameLoop.update());
-		}, 1000 / 10);
+		}, 1000 / 8);
 	}
 }
 
@@ -47,11 +52,8 @@ gameManager.initOfflineGame = function (gameInitData) {
                     gameData.VEGETATION_TYPES[gameInitData.vegetation],
                     gameData.INITIAL_RESOURCES[gameInitData.initialResources]);
 	engineManager.createNewGame(gameContent.map, gameContent.players);
-
 	gameSurface.init();
 	input.initInputs();
-
-	gameContent.init(engineManager.getGameElements());
 }
 
 
@@ -69,15 +71,17 @@ gameManager.connectToServer = function (gameInitData) {
 	//the server launched the game !
 	this.socket.on('gameStart', function (data) {
 		gameContent.players = data.players;
+		gameLogic.players = data.players;
 		gameContent.myArmy = data.myArmy;
 		gameContent.map = data.map;
-		gameManager.startGame();
+		gameManager.waitingData = data.initElements;
+		gameSurface.init();
+		input.initInputs();
 	});
 
 	//the server sent the game data
 	this.socket.on('gameData', function (data) {
-		gameLogic.players = data.players;
-		gameContent.update(data.gameData);
+		gameContent.update(data);
 	});
 }
 

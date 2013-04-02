@@ -14,6 +14,7 @@ userInput.CANNOT_BE_BUILT_HERE = 1;
 */
 userInput.clickOnToolbar = function (button) {
 	if (button.isEnabled) {
+
 		if (button.id == GUI.TOOLBAR_BUTTONS.build.id) {
 			//build something
 			GUI.showBuildings = true;
@@ -22,9 +23,8 @@ userInput.clickOnToolbar = function (button) {
 			this.enterConstructionMode(button);
 		} else if (button == GUI.TOOLBAR_BUTTONS.cancel) {
 			//cancel construction
-			gameManager.sendOrderToEngine(order.TYPES.cancelConstruction,
-							 					[gameContent.selected[0].id]);
-		} else if (gameContent.selected[0].f == gameData.FAMILIES.building) {
+			gameManager.sendOrderToEngine(order.TYPES.cancelConstruction, [gameContent.gameElements[gameContent.selected[0]].s.id]);
+		} else if (gameContent.gameElements[gameContent.selected[0]].s.f == gameData.FAMILIES.building) {
 			gameManager.sendOrderToEngine(order.TYPES.buy,
 					 					[gameContent.selected, button]);
 		}
@@ -38,6 +38,7 @@ userInput.clickOnToolbar = function (button) {
 */
 userInput.enterConstructionMode = function (building) {
 	gameContent.building = building;
+	GUI.selectButton(building);
 	this.updateConstructionMode(input.mousePosition.x, input.mousePosition.y);
 }
 
@@ -72,6 +73,9 @@ userInput.updateConstructionMode = function (x, y) {
 					}
 				}
 			}
+
+			gameSurface.updateBuilding();
+
 		} catch (e) {
 		}
 	}
@@ -83,6 +87,8 @@ userInput.updateConstructionMode = function (x, y) {
 */
 userInput.leaveConstructionMode = function () {
 	gameContent.building = null;
+	gameSurface.scene.remove(gameSurface.building);
+	GUI.unselectButtons();
 	GUI.showBuildings = false;
 }
 
@@ -185,9 +191,12 @@ userInput.tryBuildHere = function () {
 */
 userInput.dispatchUnitAction = function (x, y) {
 	var destination = gameSurface.getAbsolutePositionFromPixel(x, y);
-	gameManager.sendOrderToEngine(order.TYPES.action,
+	if (destination.x >= 0 && destination.y >= 0
+		&& destination.x < gameContent.map.size.x && destination.y < gameContent.map.size.y) {
+		gameManager.sendOrderToEngine(order.TYPES.action,
 							 [gameContent.selected,
 							  destination.x, 
 							  destination.y]);
+	}
 }
 

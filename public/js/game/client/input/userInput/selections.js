@@ -48,8 +48,6 @@ userInput.selectGroup = function (x, y) {
 
 			var unitSelected = false;
 
-			var rectangleOrigin = gameSurface.getAbsolutePositionFromPixel(gameContent.selectionRectangle[0], gameContent.selectionRectangle[1]);
-
 			var position = gameSurface.getAbsolutePositionFromPixel(x, y);
 			if (position.x < 0 || position.y < 0) {
 				return;
@@ -60,25 +58,20 @@ userInput.selectGroup = function (x, y) {
 			gameContent.selectionRectangle[3] = position.y;
 			gameSurface.updateSelectionRectangle(gameContent.selectionRectangle[0], gameContent.selectionRectangle[1], gameContent.selectionRectangle[2], gameContent.selectionRectangle[3]);
 
-			var rectangleSize = {
-				width : Math.abs(gameContent.selectionRectangle[0] - gameContent.selectionRectangle[2]),
-				height : Math.abs(gameContent.selectionRectangle[1] - gameContent.selectionRectangle[3])
-			};
-
 			for(var i in gameContent.gameElements) {
 				var element = gameContent.gameElements[i].s;
 	  			if(rank.isAlly(gameContent.myArmy, element)
 	  				&& element.f != gameData.FAMILIES.terrain
-	  				&& (gameContent.selectionRectangle[2] > 0 
-			  		&& element.p.x <= rectangleOrigin.x + rectangleSize.width
-			  		&& element.p.x >= rectangleOrigin.x
-			  		|| element.p.x >= rectangleOrigin.x + rectangleSize.width
-			  		&& element.p.x <= rectangleOrigin.x)
-			  		&& (gameContent.selectionRectangle[3] > 0 
-			  		&& element.p.y <= rectangleOrigin.y + rectangleSize.height
-			  		&& element.p.y >= rectangleOrigin.y
-			  		|| element.p.y >= rectangleOrigin.y + rectangleSize.height
-			  		&& element.p.y <= rectangleOrigin.y)) {
+	  				&& (gameContent.selectionRectangle[0] - gameContent.selectionRectangle[2] < 0 
+			  		&& element.p.x <= gameContent.selectionRectangle[2]
+			  		&& element.p.x >= gameContent.selectionRectangle[0]
+			  		|| element.p.x >= gameContent.selectionRectangle[2]
+			  		&& element.p.x <= gameContent.selectionRectangle[0])
+			  		&& (gameContent.selectionRectangle[1] - gameContent.selectionRectangle[3] < 0 
+			  		&& element.p.y <= gameContent.selectionRectangle[3]
+			  		&& element.p.y >= gameContent.selectionRectangle[1]
+			  		|| element.p.y >= gameContent.selectionRectangle[3]
+			  		&& element.p.y <= gameContent.selectionRectangle[1])) {
 				  		gameContent.selected.push(element.id);
 			  	  		gameSurface.selectElement(element.id);
 				  		if(element.f == gameData.FAMILIES.unit) {

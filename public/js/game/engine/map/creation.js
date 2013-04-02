@@ -162,6 +162,7 @@ mapLogic.addGameElement = function (element) {
 			}
 		}
 	}
+
 	gameLogic.addUniqueElementToArray(gameLogic.added, element);
 }
 

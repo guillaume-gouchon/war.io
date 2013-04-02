@@ -32,7 +32,7 @@ order.dispatchReceivedOrder = function (type, params) {
 
 order.buildThatHere = function (buildersIds, building, x, y) {
 	var builders = tools.getGameElementsFromIds(buildersIds);
-	var building = new gameData.Building(building, x, y, builders[0].o);
+	var building = new gameData.Building(building, x, y, builders[0].o, false);
 	production.startConstruction(building);
 	this.build(builders, building);
 }

@@ -2,18 +2,17 @@
 *	Single left click
 */
 input.onLeftClick = function (event) {
-	if(event.which == 1) {
+	if (event.which == 1) {
 		var x = event.x;
 		var y = event.y;
 		//the user clicked on a toolbar's button
-		if(GUI.toolbar.length > 0 && y > gameSurface.height - GUI.TOOLBAR_HEIGHT 
-			&& x / (GUI.BUTTONS_WIDTH + GUI.BUTTONS_SPACE) < GUI.toolbar.length 
-			&& x % (GUI.BUTTONS_WIDTH + GUI.BUTTONS_SPACE) > GUI.BUTTONS_SPACE) {
-				userInput.clickOnToolbar(GUI.toolbar[parseInt(x / (GUI.BUTTONS_WIDTH + GUI.BUTTONS_SPACE))]);
+		if (GUI.toolbar.length > 0 && x < GUI.BUTTONS_SIZE + 10 && x > 10
+			&& y < gameSurface.height - 10 && y > gameSurface.height - 10 - GUI.BUTTONS_SIZE * GUI.toolbar.length) {
+				userInput.clickOnToolbar(GUI.toolbar[parseInt(GUI.toolbar.length - (gameSurface.height - y - 10) / GUI.BUTTONS_SIZE)]);
 				return false;
 		}
 		//the user is building something
-		else if(gameContent.building != null) {
+		else if (gameContent.building != null) {
 			userInput.tryBuildHere();
 			return false;
 		} 

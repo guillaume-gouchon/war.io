@@ -57,7 +57,8 @@ app.on('close', db.close); // Close open DB connection when server exits
 
 
 //get the game engine
-eval(require('fs').readFileSync('./public/js/game/engine/engine.js', 'utf8'));
+eval(require('fs').readFileSync('./public/js/game/engine.js', 'utf8'));
+eval(require('fs').readFileSync('./public/js/game/data.js', 'utf8'));
 
 
 var games = [];
@@ -89,6 +90,7 @@ function startGame(game) {
   var gameInfo = {};
   gameInfo.map = game.map;
   gameInfo.players = game.players;
+  gameInfo.initElements = engineManager.getGameElements();
   
   for (var i in game.players) {
     gameInfo.myArmy = game.players[i].o;
@@ -98,14 +100,13 @@ function startGame(game) {
   }
 
   setInterval(function () {
-
-    gameLoop.update();
     var gameData = {};
     gameData.players = gameLogic.players;
     gameData.gameElements = gameLogic.gameElements;
+    var data = gameLoop.update();
     for (var i in game.players) {
       if(game.sockets[i] != null) {
-        game.sockets[i].emit('gameData', gameData);
+        game.sockets[i].emit('gameData', data);
       }
     }
 
@@ -132,6 +133,7 @@ function dispatchPlayer (socket, gameInitData) {
           gameInfo.map = games[i].map;
           gameInfo.players = games[i].players;
           gameInfo.myArmy = games[i].players[j].o;
+          gameInfo.initElements = engineManager.getGameElements();
           socket.emit('gameStart', gameInfo);
           socket.on('order', function (data) {
             order.dispatchReceivedOrder(data[0], data[1]);

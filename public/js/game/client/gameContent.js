@@ -76,5 +76,9 @@ gameContent.update = function (data) {
 			gameSurface.updateElement(element);
 		}
 	}
+
+	//update players
+	this.players = data.players;
+	gameContent.players = data.players;
 }
 

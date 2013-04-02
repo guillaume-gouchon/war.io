@@ -1,7 +1,25 @@
+@font-face {
+    font-family: 'godofwar';
+    /**src: url('linlibertine_r-webfont.eot');**/
+    src: local('godofwar'),
+         url('godofwar.ttf') format('truetype'),
+    font-weight: normal;
+    font-style: normal;
+
+}
+
 body {
 	margin: 0;
 	padding: 0;
 	height: 100%;
+    background-color: #000;
+    font-family: 'godofwar';
+}
+
+canvas {
+	background-color: #000;
+    margin: 0;
+    padding: 0;
 }
 
 .fullScreen {
@@ -10,14 +28,6 @@ body {
     left:0;
     width:100%;
     height:100%;
-    background: rgb(167,207,223); /* Old browsers */
-	background: -moz-linear-gradient(45deg,  rgba(167,207,223,1) 0%, rgba(35,83,138,1) 100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left bottom, right top, color-stop(0%,rgba(167,207,223,1)), color-stop(100%,rgba(35,83,138,1))); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(45deg,  rgba(167,207,223,1) 0%,rgba(35,83,138,1) 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(45deg,  rgba(167,207,223,1) 0%,rgba(35,83,138,1) 100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(45deg,  rgba(167,207,223,1) 0%,rgba(35,83,138,1) 100%); /* IE10+ */
-	background: linear-gradient(45deg,  rgba(167,207,223,1) 0%,rgba(35,83,138,1) 100%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a7cfdf', endColorstr='#23538a',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
 
 .fullScreen p{
@@ -28,4 +38,82 @@ body {
 
 #playButton {
 	cursor: pointer;
+}
+
+#resources {
+    background: url('../js/game/data/g/bgResources.png') center center no-repeat;
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 290px;
+    height: 60px;
+    text-align: center;
+}
+
+#resources div {
+    display: inline-block;
+    padding: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff
+}
+
+#resources div img {
+    padding: 5px;
+}
+
+#toolbar {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    display: inline-block;
+}
+
+#toolbar div {
+    background: url('../js/game/data/g/boxNormal.png') center center no-repeat;
+    padding: 10px;
+    font-size: 22px;
+    font-weight: bold;
+    color: #fff;
+    cursor: pointer;
+}
+
+.toolbarHover {
+    background: url('../js/game/data/g/boxHover.png') center center no-repeat;
+}
+
+
+.disabled {
+    opacity: 0.5;
+    cursor: default!important;
+}
+
+.selected {
+    background: #0a0;
+    opacity: 0.5;
+    cursor: default!important;
+}
+
+
+#population {
+    background: url('../js/game/data/g/bgPop.png') center center no-repeat;
+    position: absolute;
+    top: 2px;
+    left: 302px;
+    width: 120px;
+    height: 60px;
+    text-align: center;
+}
+
+#population div {
+    display: inline-block;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    padding: 5px;
+    vertical-align: middle;
+}
+
+#population img {
+    padding: 10px;
 }

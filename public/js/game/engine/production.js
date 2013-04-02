@@ -8,7 +8,7 @@ production.startConstruction = function (building) {
 	var buildingData = gameData.ELEMENTS[building.f][building.r][building.t];
 	if (this.canBuyIt(building.o, buildingData)) {
 		this.paysForElement(building.o, buildingData);
-		mapLogic.addGameElement(building);
+		gameLogic.newBuildings.push(building);
 	}
 }
 
@@ -22,6 +22,7 @@ production.updateConstruction = function (building) {
 	if(building.cp >= 100) {
 		this.finishConstruction(building);
 	}
+	gameLogic.addUniqueElementToArray(gameLogic.modified, building);
 }
 
 
@@ -108,7 +109,7 @@ production.buyElement = function (buildings, elementData) {
 			&& this.canBuyIt(building.o, elementData)) {
 				this.paysForElement(building.o, elementData);
 				building.q.push(elementData.t);
-				this.addUniqueElementToArray(this.modified, building);
+				gameLogic.addUniqueElementToArray(gameLogic.modified, building);
 		}
 	}
 
@@ -139,6 +140,7 @@ production.updateQueueProgress = function (building) {
 		}
 		
 	}
+	gameLogic.addUniqueElementToArray(gameLogic.modified, building);
 }
 
 

@@ -43,10 +43,20 @@ gameLogic.update = function () {
 		this.updateMoves(element);
 		this.updateBuildings(element);
 	}
-
+	this.addNewBuildings();
 	this.updateFogOfWar();
 	this.removeDeads();
 	this.checkGameOver();
+}
+
+
+gameLogic.newBuildings = [];
+
+gameLogic.addNewBuildings = function () {
+	for (var i in this.newBuildings) {
+		mapLogic.addGameElement(this.newBuildings[i]);
+	}
+	this.newBuildings = [];
 }
 
 
@@ -161,8 +171,8 @@ gameLogic.removeElement = function (n) {
 
 
 gameLogic.addUniqueElementToArray = function (array, element) {
-	var index = array.indexOf(element.id);
-	if (index == -1) {
+	var index = array.indexOf(element);
+	if (index == -1) {		
 		array.push(element);
 	}
 }

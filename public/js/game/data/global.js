@@ -15,14 +15,14 @@ gameData.RACES = {
 gameData.RESOURCES = {
 	wood : {
 		id: 0,
-		image : '#ccc'
+		image : 'wood.png'
 	},
 	gold : {
 		id: 1,
-		image : '#ccc'
+		image : 'gold.png'
 	},
 	stone : {
 		id: 2,
-		image : '#ccc'
+		image : 'stone.png'
 	}
 }

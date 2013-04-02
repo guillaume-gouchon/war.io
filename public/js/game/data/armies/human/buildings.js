@@ -12,7 +12,9 @@ gameData.ELEMENTS[gameData.FAMILIES.building].push(
 		l : 500,
 		defense : 3,
 		armorType : 1,
-		pop : 8
+		pop : 8,
+		g : 'castle.js',
+		image: 'townhall.png'
 	},
 	{
 		name : 'house',
@@ -26,7 +28,9 @@ gameData.ELEMENTS[gameData.FAMILIES.building].push(
 		l : 100,
 		defense : 1,
 		armorType : 1,
-		pop : 5
+		pop : 5,
+		g : 'castle.js',
+		image: 'house.png'
 	},
 	{
 		name : 'casern',
@@ -39,6 +43,8 @@ gameData.ELEMENTS[gameData.FAMILIES.building].push(
 		needs : [{t : gameData.RESOURCES.wood.id, value : 100}, {t : gameData.RESOURCES.stone.id, value : 50}],
 		l : 250,
 		defense : 2,
-		armorType : 1
+		armorType : 1,
+		g : 'castle.js',
+		image: 'casern.png'
 	}
 ]);
