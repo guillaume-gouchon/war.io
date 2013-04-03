@@ -20,7 +20,7 @@ fightLogic.attack = function (attacker, target) {
 	var attackFactor = this.weaponsEfficiency[gameData.ELEMENTS[attacker.f][attacker.r][attacker.t].weaponType][gameData.ELEMENTS[target.f][target.r][target.t].armorType]; 
 	var damage = parseInt(gameData.ELEMENTS[attacker.f][attacker.r][attacker.t].attack * attackFactor * (1 + 0.2 * Math.random())) - gameData.ELEMENTS[target.f][target.r][target.t].defense;
 	this.applyDamage(damage, target, attacker);
-	gameLogic.addElementToModified(target);
+	gameLogic.addUniqueElementToArray(gameLogic.modified, target);
 }
 
 
