@@ -1,5 +1,6 @@
 var gameData = {}
 
+
 /**
 *	Ids to categorize the different game elements.
 */
@@ -9,10 +10,15 @@ gameData.FAMILIES = {
 	terrain : 2
 }
 
-gameData.ELEMENTS = [[], [] ,[]];
 
 /**
-*	Statuses ids of units and buildings' owners.
+*	Big array containing all the elements data.
+*/
+gameData.ELEMENTS = [[], [] ,[]];
+
+
+/**
+*	List of player's ranks.
 */
 gameData.RANKS = {
 	me : 0,
@@ -23,13 +29,13 @@ gameData.RANKS = {
 
 
 /**
-* unitId : Global variable to get a unique id for each game element.
+* 	Global variable to get a unique id for any game element.
 */
 gameData.unitId = 0;
 
 
 /**
-*	Creates a unique id for every unit and building.
+*	Creates a unique id for every game element.
 */
 gameData.createUniqueId = function () {
 	this.unitId += 1;

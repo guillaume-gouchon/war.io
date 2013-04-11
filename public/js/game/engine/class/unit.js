@@ -8,14 +8,13 @@ gameData.Unit = function (unit, x, y, owner) {
 
 	//drawing-related data
 	this.p = {x : x, y : y};
-	this.c = unit.c;
 
 	//game-related data
-	this.mt = {x : null, y : null};
-	this.a = null;
-	this.fr = 0;
-	this.ga = null;
-	this.pa = null;
+	this.mt = {x : null, y : null};//move to
+	this.a = null;//action
+	this.fr = 0;//frags number
+	this.ga = null;//gathering amount
+	this.pa = null;//patrol action
 
 	//fight-related data
 	this.l = unit.l;

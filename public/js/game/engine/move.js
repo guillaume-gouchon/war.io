@@ -2,10 +2,18 @@ var move = {};
 
 
 /**
-*	Moves an element closer to its destination.
+* CONSTANTS
+*/
+move.ASTAR_MAX_STEPS_SEARCH = 4;
+
+
+/**
+*	Moves an element one step closer to its destination.
 */
 move.moveElement = function (element) {
 	var destination = gameLogic.grid[element.mt.x][element.mt.y];
+
+  //if destination forbids movement, search neighbors for a new one
 	var counter = 0;
 	while(destination.isWall && counter < 20) {
 		counter++;
@@ -19,16 +27,14 @@ move.moveElement = function (element) {
 	    }
 	}
 	
-	//uses A* algorithm to find the path
+	//use A* algorithm to find the path
 	var path = astar.search(gameLogic.grid, gameLogic.grid[element.p.x][element.p.y], 
 							destination, true);
+
 	if(path.length > 0) {
 
 		//take into account the speed of the element
-		var speed = gameData.ELEMENTS[element.f][element.r][element.t].speed;
-		while(speed > path.length) {
-			speed--;
-		}
+		var speed = Math.min(gameData.ELEMENTS[element.f][element.r][element.t].speed, path.length);
 
     if (path[speed - 1] == null) {
       return;
@@ -37,6 +43,7 @@ move.moveElement = function (element) {
 		var newPosition = {x : path[speed - 1].x, y : path[speed - 1].y};
 
 		if(!gameLogic.grid[newPosition.x][newPosition.y].isWall) {
+
 			//removes old position
       var shape = gameData.ELEMENTS[element.f][element.r][element.t].shape;
 			for (var i in shape) {
@@ -47,6 +54,7 @@ move.moveElement = function (element) {
 					}
 				}
 			}
+
 			//updates new position
 			element.p = newPosition;
 			for (var i in shape) {
@@ -57,9 +65,10 @@ move.moveElement = function (element) {
 					}
 				}
 			}
+
 		}
 
-		//if element has arrived to its destination
+		//if element has arrived to its destination, updates its order
 		if(element.mt.x == element.p.x && element.mt.y == element.p.y) {
 			element.mt = {x : null, y : null};
 		}
@@ -70,7 +79,7 @@ move.moveElement = function (element) {
 
 
 /**
-*	A* algorithm used in the game.
+*   A* algorithm.
 */
 var astar = {
   
@@ -108,7 +117,7 @@ var astar = {
       var currentNode = openHeap.pop();
 
       // End case -- result has been found, return the traced path.
-      if(currentNode === end || openHeap.size > 4) {
+      if(currentNode === end || openHeap.size > this.ASTAR_MAX_STEPS_SEARCH) {
           var curr = currentNode;
           var ret = [];
           while(curr.parent) {
@@ -339,4 +348,3 @@ BinaryHeap.prototype = {
     }
   }
 };
-

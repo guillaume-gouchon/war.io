@@ -2,7 +2,14 @@ var production = {};
 
 
 /**
-*	The user has chosen where to build the structure.
+*	CONSTANTS
+*/
+production.RESOURCE_AMOUNT_PER_GATHERING_ACTION = 5;
+production.BUILDINGS_QUEUE_MAX_SIZE = 5;
+
+
+/**
+*	The user has chosen where to build this structure.
 */
 production.startConstruction = function (building) {
 	var buildingData = gameData.ELEMENTS[building.f][building.r][building.t];
@@ -18,11 +25,10 @@ production.startConstruction = function (building) {
 */
 production.updateConstruction = function (building) {
 	building.cp += 100 / gameData.ELEMENTS[building.f][building.r][building.t].timeConstruction;
-	building.c = gameData.ELEMENTS[building.f][building.r][building.t].constructionColors[parseInt((gameData.ELEMENTS[building.f][building.r][building.t].constructionColors.length - 1) * building.cp / 100)];
 	if(building.cp >= 100) {
 		this.finishConstruction(building);
 	}
-	gameLogic.addUniqueElementToArray(gameLogic.modified, building);
+	tools.addUniqueElementToArray(gameLogic.modified, building);
 }
 
 
@@ -31,8 +37,8 @@ production.updateConstruction = function (building) {
 */
 production.cancelConstruction = function (building) {
 	if (building != null && building.cp < 100) {
-		building.l = 0;
 		this.sellsElement(building.o, gameData.ELEMENTS[building.f][building.r][building.t]);
+		building.l = 0;
 	}
 }
 
@@ -42,9 +48,12 @@ production.cancelConstruction = function (building) {
 */
 production.finishConstruction = function (building) {
 	building.cp = 100;
+
+	//udpates player's max population
 	if(gameData.ELEMENTS[building.f][building.r][building.t].pop > 0) {
 		gameLogic.players[building.o].pop.max += gameData.ELEMENTS[building.f][building.r][building.t].pop;
 	}
+
 }
 
 
@@ -67,21 +76,23 @@ production.gatherResources = function (builder, resource) {
 		builder.ga = {t : gameData.ELEMENTS[resource.f][resource.r][resource.t].resourceType, amount : 0};
 	}
 
-	var amount = Math.min(gameData.ELEMENTS[builder.f][builder.r][builder.t].maxGathering - builder.ga.amount, 5, resource.ra);
+	var amount = Math.min(gameData.ELEMENTS[builder.f][builder.r][builder.t].maxGathering - builder.ga.amount, this.RESOURCE_AMOUNT_PER_GATHERING_ACTION, resource.ra);
 	builder.ga.amount += amount;
 	resource.ra -= amount;
 
 	if (builder.ga.amount == gameData.ELEMENTS[builder.f][builder.r][builder.t].maxGathering) {
+		//the builder is full of resources, get back resources
 		var closestTownHall = mapLogic.getNearestBuilding(builder, gameData.ELEMENTS[gameData.FAMILIES.building][gameLogic.players[builder.o].r][0].t);
 		builder.a = closestTownHall;
 	} else if (resource.ra == 0) {
+		//the resource is now empty, searching a new resource of the same type
 		AI.searchForNewResources(builder, builder, gameData.ELEMENTS[builder.pa.f][builder.pa.r][builder.pa.t].resourceType);
 	}
 }
 
 
 /**
-*	A builder is coming back to a building with some resources
+*	A builder is coming back to a building with some resources.
 */
 production.getBackResources = function (builder) {
 	gameLogic.players[builder.o].re[builder.ga.t] += builder.ga.amount;
@@ -98,18 +109,18 @@ production.getBackResources = function (builder) {
 
 
 /**
-*	Starts a unit construction, or a research
+*	Starts a unit construction, or a research.
 */
 production.buyElement = function (buildings, elementData) {
 	for(var i in buildings) {
 		var building = buildings[i];
 		if(building.t == buildings[0].t
 			&& building.cp == 100
-			&& building.q.length < 5
+			&& building.q.length < this.BUILDINGS_QUEUE_MAX_SIZE
 			&& this.canBuyIt(building.o, elementData)) {
 				this.paysForElement(building.o, elementData);
 				building.q.push(elementData.t);
-				gameLogic.addUniqueElementToArray(gameLogic.modified, building);
+				tools.addUniqueElementToArray(gameLogic.modified, building);
 		}
 	}
 
@@ -123,24 +134,22 @@ production.updateQueueProgress = function (building) {
 	building.qp += 100 / (gameLoop.FREQUENCY * gameData.ELEMENTS[gameData.FAMILIES.unit][building.r][building.q[0]].timeConstruction);
 	if(building.qp >= 100) {
 		var canGoToNext = true;
-		if(gameData.ELEMENTS[gameData.FAMILIES.unit][building.r][building.q[0]].speed > 0) {
-			//unit
+		//if(building.q[0].f == gameData.FAMILIES.unit) {
+			//check if the unit can be released
 			canGoToNext = this.createNewUnit(building.q[0], building);	
-		}
-
+		//}
 
 		if (canGoToNext) {
-			//element is ready
+			//element is ready, go to next one
 			building.qp = 0;
-			
-			//update queue
 			building.q.splice(0, 1);
 		} else {
-			building.qp = 100;
+			//element cannot be released, wait until it can
+			building.qp = 99;
 		}
 		
 	}
-	gameLogic.addUniqueElementToArray(gameLogic.modified, building);
+	tools.addUniqueElementToArray(gameLogic.modified, building);
 }
 
 
@@ -158,7 +167,7 @@ production.createNewUnit = function (unitType, factory) {
 		//updates population
 		gameLogic.players[factory.o].pop.current += gameData.ELEMENTS[unit.f][unit.r][unit.t].pop;
 
-		mapLogic.addGameElement(unit);
+		gameCreation.addGameElement (unit);
 
 		//moves the unit to the rallying point
 		if(factory.rp != null) {
@@ -166,9 +175,9 @@ production.createNewUnit = function (unitType, factory) {
 		}
 
 		return true;
-	} else {
-		return false;	
 	}
+
+	return false;
 }
 
 

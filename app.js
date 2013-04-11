@@ -85,12 +85,12 @@ io.sockets.on('connection', function (socket) {
 });
 
 function startGame(game) {
-  engineManager.createNewGame(game.map, game.players);
+  gameCreation.createNewGame(game.map, game.players);
 
   var gameInfo = {};
   gameInfo.map = game.map;
   gameInfo.players = game.players;
-  gameInfo.initElements = engineManager.getGameElements();
+  gameInfo.initElements = gameLogic.getGameElements();
   
   for (var i in game.players) {
     gameInfo.myArmy = game.players[i].o;
@@ -133,7 +133,7 @@ function dispatchPlayer (socket, gameInitData) {
           gameInfo.map = games[i].map;
           gameInfo.players = games[i].players;
           gameInfo.myArmy = games[i].players[j].o;
-          gameInfo.initElements = engineManager.getGameElements();
+          gameInfo.initElements = gameLogic.getGameElements();
           socket.emit('gameStart', gameInfo);
           socket.on('order', function (data) {
             order.dispatchReceivedOrder(data[0], data[1]);
@@ -149,7 +149,7 @@ function dispatchPlayer (socket, gameInitData) {
     createNewGame(gameInitData);
   }
 
-  addPlayerToGame(socket, games[games.length - 1], gameInitData.playerId);
+  addPlayerToGame(socket, games[games.length - 1], gameInitData.playerId, gameInitData.army);
 }
 
 function createNewGame (gameInitData) {
@@ -167,8 +167,8 @@ function createNewGame (gameInitData) {
   games.push(game);
 }
 
-function addPlayerToGame(socket, game, playerId) {
-  var player = new gameData.Player(playerId, game.players.length, 0);
+function addPlayerToGame(socket, game, playerId, army) {
+  var player = new gameData.Player(playerId, game.players.length, army);
 
   game.players.push(player);
 

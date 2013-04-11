@@ -2,7 +2,7 @@ var gameContent = {};
 
 
 /**
-*
+*	Important data.
 */
 gameContent.map = null;
 gameContent.players = null;
@@ -34,9 +34,8 @@ gameContent.building = null;
 gameContent.selectionRectangle = [];
 
 
-
 /**
-*
+*	Initializes the game content by retrieving all the game elements from the engine.
 */
 gameContent.init = function (data) {
 	//add new elements
@@ -48,7 +47,7 @@ gameContent.init = function (data) {
 
 
 /**
-*	Updates the game content with the differences we have received from the engine.	
+*	Updates the game content with the changes the engine sent us.	
 */
 gameContent.update = function (data) {
 	//add new elements

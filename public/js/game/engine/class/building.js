@@ -8,13 +8,12 @@ gameData.Building = function (building, x, y, owner, isBuilt) {
 
 	//drawing-related data
 	this.p = {x : x, y : y};
-	this.c = (isBuilt ? building.constructionColors[building.constructionColors.length - 1] : building.constructionColors[0]);;
 	
 	//game-related data
-	this.cp = (isBuilt ? 100 : 0);
+	this.cp = (isBuilt ? 100 : 0);//construction progress
 	this.rp = null;//where unit will go when created
-	this.q = [];
-	this.qp = 0;
+	this.q = [];//queue
+	this.qp = 0;//queue progression
 
 	//fight-related data
 	this.l = building.l;

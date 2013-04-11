@@ -21,32 +21,15 @@
 
 	<body>
 
-	  <div id="introScreen" class="fullScreen" >
-	  	<div class="row">
-		  	<div class="span4">
-			  	<label>Size of the Map</label>
-		  		<select id="mapSize"></select>
-				</div>
-				<div class="span4">
-			  	<label>Vegetation Type</label>
-	  			<select id="vegetation"></select>
-				</div>
-				<div class="span4">
-			  	<label>Initial Resources</label>
-	  			<select id="initialResources"></select>
-				</div>
-		</div>
-	  		
-	  	<p><img id="playButton" src="img/play.png" title="Let's Play !" /></p>
-
+	  <div id="introScreen" class="fullScreen blackBackground" onmousedown="return false">
+	  	<div id="chooseArmy" class="fullScreenTitle easeTransition">Choose an army</div>
+	  	<div id="loading" class="fullScreenTitle easeTransition hide">
+	  		<span id="loadingLabel">Waiting for Opponents</span><span class="one">.</span><span class="two">.</span><span class="three">.</span>​
+	  	</div>
+	  	<div id="armies" class="easeTransition"></div>
 	  </div>
 
-	  <div id="connecting" class="fullScreen hide">
-	  	<p>Waiting for Opponents...</p>
-	  </div>
-
-
-	  <div onmousedown="return false" id="gui" class="fullScreen">
+	  <div id="gui" class="fullScreen hide" onmousedown="return false">
 	  	<div id="resources"></div>
 	  	<div id="toolbar"></div>
 	  	<div id="population"><img src="js/game/data/g/population.png"/><div></div></div>

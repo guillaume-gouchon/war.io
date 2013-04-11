@@ -1,19 +1,37 @@
 $(document).ready(function() {
 
-	initMapChooser();
+	initArmyChooser();
 
-	//$('#playButton').click(function () {
-		var gameInitData = {};
-		gameInitData.mapType = 'random';
-		gameInitData.mapSize = $('#mapSize').val();
-		gameInitData.vegetation = $('#vegetation').val();
-		gameInitData.initialResources = $('#initialResources').val();
-		gameManager.playGame(gameInitData);
-	//});
+	$('#chooseArmy').addClass('moveToLeft');
+	$('#armies').addClass('moveToTop');
+
+	var hasClicked = false;
+
+	$('.armyBox').click(function () {
+		if (!hasClicked) {
+			hasClicked = true;
+			$('#chooseArmy').addClass('hideToLeft');
+			$('#armies').removeClass('moveToTop');
+
+			$('#loading').removeClass('hide').addClass('moveToLeft');
+
+			var army = $(this).attr('data-army');
+
+			setTimeout(function () {
+				var gameInitData = {};
+				gameInitData.army = army;
+				gameInitData.mapType = 'random';
+				gameInitData.mapSize = 'medium';
+				gameInitData.vegetation = 'standard';
+				gameInitData.initialResources = 'standard';
+				gameManager.initGame(gameInitData);
+			}, 800);
+		}
+	});
 
 });
 
-function initMapChooser() {
+/*function initMapChooser() {
 
 	for (var i in gameData.MAP_SIZES) {
 		$('#mapSize').append('<option value="' + i + '">' + gameData.MAP_SIZES[i].name + '</option>');
@@ -27,4 +45,16 @@ function initMapChooser() {
 		$('#initialResources').append('<option value="' + i + '">' + gameData.INITIAL_RESOURCES[i].name + '</option>');
 	}
 
+}*/
+
+function initArmyChooser () {
+	for (var i in gameData.RACES) {
+		var army = gameData.RACES[i];
+		$('#armies').append(createArmyBox(army));
+	}
+}
+
+function createArmyBox (army) {
+	return '<div class="armyBox" data-army="' + army.id + '"><img src="' + gameSurface.IMG_PATH + army.image + '"/>' 
+												+ army.name + '</div>';
 }

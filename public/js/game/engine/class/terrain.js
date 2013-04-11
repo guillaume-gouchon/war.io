@@ -7,8 +7,7 @@ gameData.Terrain = function (terrain, x, y) {
 
 	//drawing-related data
 	this.p = {x : x, y : y};
-	this.c = terrain.c;
 
 	//game-related data
-	this.ra = terrain.ra;
+	this.ra = terrain.ra; //resource amount
 }

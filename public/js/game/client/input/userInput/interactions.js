@@ -14,11 +14,10 @@ userInput.CANNOT_BE_BUILT_HERE = 1;
 */
 userInput.clickOnToolbar = function (button) {
 	if (button.isEnabled) {
-
 		if (button.id == GUI.TOOLBAR_BUTTONS.build.id) {
 			//build something
 			GUI.showBuildings = true;
-		} else if (button.constructionColors != null && button.isEnabled) {
+		} else if (GUI.showBuildings && button.isEnabled) {
 			//building
 			this.enterConstructionMode(button);
 		} else if (button == GUI.TOOLBAR_BUTTONS.cancel) {
@@ -39,6 +38,7 @@ userInput.clickOnToolbar = function (button) {
 userInput.enterConstructionMode = function (building) {
 	gameContent.building = building;
 	GUI.selectButton(building);
+	gameSurface.buildBuildingGeometry();
 	this.updateConstructionMode(input.mousePosition.x, input.mousePosition.y);
 }
 

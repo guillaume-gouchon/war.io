@@ -10,7 +10,7 @@ tools.getPositionsDistance = function (position1, position2) {
 
 
 /**
-*	Returns the distance between two elements (includes shapes).
+*	Returns the distance between two elements (including shapes).
 */
 tools.getElementsDistance = function (element1, element2) {
 	var min = 10000;
@@ -34,7 +34,7 @@ tools.getElementsDistance = function (element1, element2) {
 
 
 /**
-*	Returns the closest part from the element 2 to element 1.
+*	Returns the closest part position from element 2 to element 1.
 */
 tools.getClosestPart = function (element1, element2) {
 	var min = 10000;
@@ -58,7 +58,7 @@ tools.getClosestPart = function (element1, element2) {
 
 
 /**
-*	Returns the position of an element's shape's part.
+*	Returns the position of an element's part.
 */
 tools.getPartPosition = function (element, i, j) {
 	var shape = null;
@@ -75,7 +75,7 @@ tools.getPartPosition = function (element, i, j) {
 
 
 /**
-*	Checks if an element is at this position (includes shape).
+*	Checks if this element is at this position (includes shape).
 */
 tools.isElementThere = function (element, position) {
 	var shape = gameData.ELEMENTS[element.f][element.r][element.t].shape;
@@ -150,3 +150,15 @@ tools.getGameElementsFromIds = function (ids) {
 	}
 	return elements;
 }
+
+
+/**
+*	Adds an element to a set of unique elements.
+*/
+tools.addUniqueElementToArray = function (array, element) {
+	var index = array.indexOf(element);
+	if (index == -1) {		
+		array.push(element);
+	}
+}
+

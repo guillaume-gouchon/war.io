@@ -7,6 +7,9 @@ var AI = {};
 AI.RESOURCE_DISTANCE_THRESHOLD = 10;
 
 
+/**
+* Search for new resources to gather.
+*/
 AI.searchForNewResources = function (builder, fromWhere, resourceType) {
 	var nearestResource = mapLogic.getNearestResource(fromWhere, resourceType);
 	if(tools.getElementsDistance(fromWhere, nearestResource) < this.RESOURCE_DISTANCE_THRESHOLD) {

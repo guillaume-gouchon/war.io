@@ -4,7 +4,8 @@
 gameData.RACES = {
 	human : {
 		id: 0,
-		image : '#ccc'
+		name : 'The Human',
+		image : 'human.png'
 	}
 }
 
@@ -20,9 +21,5 @@ gameData.RESOURCES = {
 	gold : {
 		id: 1,
 		image : 'gold.png'
-	},
-	stone : {
-		id: 2,
-		image : 'stone.png'
 	}
 }

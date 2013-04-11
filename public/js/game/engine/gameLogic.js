@@ -9,7 +9,7 @@ gameLogic.players = [];
 
 /**
 *	Main variable used during the game.
-*  	It contains all the maps' elements, units and buildings.
+*  	It contains all the terrain's elements, units and buildings.
 */
 gameLogic.gameElements = [];
 
@@ -29,6 +29,13 @@ gameLogic.removed = [];
 
 
 /**
+*	Buildings freshly created by the players.
+*	Used to synchronize user's build action with the game engine loop.
+*/
+gameLogic.newBuildings = [];
+
+
+/**
 *	Updates all the data related to the game logic itself : positions, life, ...
 * 	It also checks if the game is ending.
 */
@@ -44,17 +51,17 @@ gameLogic.update = function () {
 		this.updateBuildings(element);
 	}
 	this.addNewBuildings();
-	this.updateFogOfWar();
 	this.removeDeads();
 	this.checkGameOver();
 }
 
 
-gameLogic.newBuildings = [];
-
+/**
+* 	Synchronizes user's build actions with the game loop.
+*/
 gameLogic.addNewBuildings = function () {
 	for (var i in this.newBuildings) {
-		mapLogic.addGameElement(this.newBuildings[i]);
+		gameCreation.addGameElement (this.newBuildings[i]);
 	}
 	this.newBuildings = [];
 }
@@ -66,7 +73,7 @@ gameLogic.addNewBuildings = function () {
 gameLogic.updateMoves = function (element) {
 	if(element.mt != null && element.mt.x != null) {
 		move.moveElement(element);
-		this.addUniqueElementToArray(this.modified, element);
+		tools.addUniqueElementToArray(this.modified, element);
 	}
 }
 
@@ -78,12 +85,11 @@ gameLogic.updateMoves = function (element) {
 gameLogic.resolveActions = function (element) {
 	if (element.a != null) {
 		var distance = tools.getElementsDistance(element, element.a);
-		//dispatch orders
+		//is close enough ?
 		if (distance <= 1) {
 			//stop moving
 			element.mt = {x : null, y : null};
 			
-			//close enough
 			if (gameData.ELEMENTS[element.f][element.r][element.t].isBuilder && element.a.f == gameData.FAMILIES.building
 				&& rank.isAlly(element.o, element.a)) {
 				if(element.a.cp < 100) {
@@ -108,7 +114,7 @@ gameLogic.resolveActions = function (element) {
 			var closest = tools.getClosestPart(element, element.a);
 			element.mt = {x : closest.x, y : closest.y};
 		}
-		this.addUniqueElementToArray(this.modified, element);
+		tools.addUniqueElementToArray(this.modified, element);
 	}
 }
 
@@ -128,16 +134,9 @@ gameLogic.removeDeads= function () {
 				production.removeUnit(element);
 			}
 			this.removeElement(n);
-			mapLogic.removeGameElement(element);
+			gameCreation.removeGameElement(element);
 		}
 	}
-}
-
-
-/**
-*	Stops the game if the winning conditions are reached.
-*/
-gameLogic.checkGameOver = function () {
 }
 
 
@@ -148,17 +147,9 @@ gameLogic.updateBuildings = function (building) {
 	if (building.f == gameData.FAMILIES.building) {
 		if (building.q.length > 0) {
 			production.updateQueueProgress(building);
-			this.addUniqueElementToArray(this.modified, building);
+			tools.addUniqueElementToArray(this.modified, building);
 		}
 	}
-}
-
-
-/**
-*	Updates the fog of war grid.
-*/
-gameLogic.updateFogOfWar = function () {
-	
 }
 
 
@@ -170,10 +161,30 @@ gameLogic.removeElement = function (n) {
 }
 
 
-gameLogic.addUniqueElementToArray = function (array, element) {
-	var index = array.indexOf(element);
-	if (index == -1) {		
-		array.push(element);
+/**
+*	Only returns the updated game data.
+*/
+gameLogic.getGameData = function () {
+	var data = {
+		modified : this.modified,
+		added: this.added,
+		removed: this.removed,
+		players: this.players
 	}
+	return data;
 }
 
+
+/**
+*	Returns the full list of game elements.
+*/
+gameLogic.getGameElements = function () {
+	return this.gameElements;
+}
+
+
+/**
+*	Stops the game if the winning conditions are reached.
+*/
+gameLogic.checkGameOver = function () {
+}

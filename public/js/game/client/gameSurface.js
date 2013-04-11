@@ -4,8 +4,9 @@ gameSurface.IMG_PATH = 'js/game/data/g/';
 
 
 gameSurface.init = function () {
+	$('#loadingLabel').html('Loading');
 	var scene = new THREE.Scene();
-	camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+	camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 600);
 
 	renderer = new THREE.WebGLRenderer();
 	renderer.setSize(window.innerWidth - 5, window.innerHeight - 5);
@@ -16,7 +17,7 @@ gameSurface.init = function () {
 
 	camera.position.x = gameContent.map.size.x / 2 * this.PIXEL_BY_NODE;
 	camera.position.y = gameContent.map.size.y / 2 * this.PIXEL_BY_NODE;
-	camera.position.z = 250;
+	camera.position.z = 200;
 
 	this.camera = camera;
 	this.scene = scene;
@@ -29,12 +30,6 @@ gameSurface.init = function () {
 	this.initContent();
 
 	this.initObjects();
-
-
-	this.selectionRectangle = new THREE.Mesh(new THREE.CubeGeometry(1, 1, 1), gameSurface.rectangleSelectionMaterial);
-    this.selectionRectangle.dynamic = true;
-    //this.selectionRectangle.visible = false;
-    scene.add(this.selectionRectangle);
 
 	function render() {
 		requestAnimationFrame(render);
@@ -52,7 +47,6 @@ gameSurface.init = function () {
 }
 
 gameSurface.updateOrder = function () {
-
 	if (gameContent.selected.length > 0 && (gameContent.gameElements[gameContent.selected[0]].s.mt != null
 		&& gameContent.gameElements[gameContent.selected[0]].s.mt.x || gameContent.gameElements[gameContent.selected[0]].s.rp != null)){
 		var pos = (gameContent.gameElements[gameContent.selected[0]].s.rp != null ? gameContent.gameElements[gameContent.selected[0]].s.rp : gameContent.gameElements[gameContent.selected[0]].s.mt);
@@ -72,6 +66,7 @@ gameSurface.drawSelectionCircle = function(radius) {
             color: '#0f0'
         });
  	var cylinder = new THREE.Mesh(new THREE.CylinderGeometry(radius, radius, 1,  radius, true), material);
+ 	cylinder.position.z = -6;
  	cylinder.id = 'select';
 	return cylinder;
 }
@@ -94,13 +89,13 @@ gameSurface.initContent = function () {
 	var index = 0;
 	for(var i = 0; i <= 64; i++) {
 		for(var j = 0; j <= 64; j++) {
-			this.geometry.vertices[index].z = this.terrain[i][j];
+			//this.geometry.vertices[index].z = this.terrain[i][j];
 			index++;
 		}
 	}
 
 
-	var grass  = THREE.ImageUtils.loadTexture(this.IMG_PATH + 'grass.jpg');
+	var grass  = THREE.ImageUtils.loadTexture(this.IMG_PATH + 'grass.png');
 	grass.wrapT = grass.wrapS = THREE.RepeatWrapping;
 	var material = new THREE.MeshBasicMaterial({ map: grass });
 
@@ -110,21 +105,24 @@ gameSurface.initContent = function () {
     plane.overdraw = true;
     this.scene.add(plane);
 
-	gameSurface.rectangleSelectionMaterial = new THREE.LineBasicMaterial({
-	        color: 0xddddff,
-	});
-
 	gameSurface.selectionColor = new THREE.LineBasicMaterial({
 	        color: 0xff0000,
 	});
 
 	this.material = new THREE.MeshBasicMaterial({color: 0x00ff00});
 
+	var geometry = new THREE.CubeGeometry(this.PIXEL_BY_NODE, this.PIXEL_BY_NODE, 4 * this.PIXEL_BY_NODE);
+	this.selectionRectangle = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial( { color: 0xaaff00, opacity: 0.5, transparent: true } ));
+	this.scene.add(this.selectionRectangle);
+
+	this.canBuildHereMaterial = new THREE.LineBasicMaterial({color: 0x00ff00, opacity: 0.5, transparent: true });
+	this.cannotBuildHereMaterial = new THREE.LineBasicMaterial({color: 0xff0000, opacity: 0.5, transparent: true });
+	this.basicCubeGeometry = new THREE.CubeGeometry(this.PIXEL_BY_NODE, this.PIXEL_BY_NODE, this.PIXEL_BY_NODE);
 }
 
 
 gameSurface.updateZoom = function (dz) {
-	if (this.camera.position.z - dz * 10 <= 250 && this.camera.position.z - dz * 10 >= 50) {
+	if (this.camera.position.z - dz * 10 <= 200 && this.camera.position.z - dz * 10 >= 50) {
 		this.camera.position.z -= dz * 10;
 		if(dz < 0) {
 			this.camera.rotation.x -= 0.1;
@@ -160,13 +158,13 @@ gameSurface.stopMapScrolling = function () {
 
 
 gameSurface.updateGameWindow = function () {
-	if(this.camera.position.x + this.scroll.dx >= 0 && this.camera.position.x + this.scroll.dx <= gameContent.map.size.x * this.PIXEL_BY_NODE) {
+	if(this.camera.position.x + this.scroll.dx >= 0 && this.camera.position.x + this.scroll.dx <= gameContent.map.size.x * this.PIXEL_BY_NODE - this.width / 4) {
 		this.camera.position.x += this.scroll.dx;	
 	} else {
 		this.scroll.dx = 0;
 	}
 
-	if(this.camera.position.y + this.scroll.dy >= 0 && this.camera.position.y + this.scroll.dy <= gameContent.map.size.y * this.PIXEL_BY_NODE) {
+	if(this.camera.position.y + this.scroll.dy >= 0 && this.camera.position.y + this.scroll.dy <= gameContent.map.size.y * this.PIXEL_BY_NODE - this.height / 4) {
 		this.camera.position.y += this.scroll.dy;
 	} else {
 		this.scroll.dy = 0;
@@ -195,16 +193,15 @@ gameSurface.getWindowSize = function () {
 
 
 gameSurface.updateSelectionRectangle = function (x1, y1, x2, y2) {
-	this.scene.remove(this.selectionRectangle);
-	var geometry = new THREE.CubeGeometry(gameSurface.PIXEL_BY_NODE * Math.abs(x1 - x2), gameSurface.PIXEL_BY_NODE * Math.abs(y1 - y2), 3 * gameSurface.PIXEL_BY_NODE);
-	this.selectionRectangle = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial( { color: 0xaaff00, opacity: 0.5, transparent: true } ));
-
-	this.selectionRectangle.position.x = (Math.min(x1, x2) + Math.abs(x1 - x2) / 2 + 2) * this.PIXEL_BY_NODE;
-	this.selectionRectangle.position.y = (Math.min(y1, y2) + Math.abs(y1 - y2) / 2) * this.PIXEL_BY_NODE;
-	this.selectionRectangle.geometry = geometry;
-
-	this.selectionRectangle.__dirtyVertices = true;
-	this.scene.add(this.selectionRectangle);
+	if ( Math.abs(x1 - x2) > 0 &&  Math.abs(y1 - y2) > 0) {
+		this.selectionRectangle.position.x = (Math.min(x1, x2) + Math.abs(x1 - x2) / 2 + 1) * this.PIXEL_BY_NODE;
+		this.selectionRectangle.position.y = (Math.min(y1, y2) + Math.abs(y1 - y2) / 2) * this.PIXEL_BY_NODE;
+		this.selectionRectangle.scale.x = Math.abs(x1 - x2);
+		this.selectionRectangle.scale.y = Math.abs(y1 - y2);
+		this.selectionRectangle.visible = true;
+	} else {
+		this.selectionRectangle.visible = false;
+	}
 }
 
 
@@ -256,8 +253,13 @@ gameSurface.objectLoaded = function (key) {
 
 gameSurface.createObject = function (key, element) {
 	var object = new THREE.Mesh(this.geometries[key], this.materials[key]);
+
+	gameSurface.setElementPosition(object, element.p.x, element.p.y);
+
+
 	if (key == 'tree.js') {
-		object.rotation.x = this.de2ra(90);	
+		object.rotation.x = this.de2ra(90);
+		object.rotation.y = this.de2ra(Math.random() * 360);
 	} else if ( key == 'castle.js') {
 		object.rotation.x = this.de2ra(90);
 		object.scale.x = 2;
@@ -267,13 +269,19 @@ gameSurface.createObject = function (key, element) {
 		object.rotation.x = this.de2ra(90);
 		object.scale.x = 2;
 		object.scale.y = 2;
-	} else if (key == 'goldmine.js' || key == 'stonemine.js') {
+	} else if (key == 'stonemine.js') {
 		object.rotation.x = this.de2ra(90);
 		object.scale.x = 1.2;
 		object.scale.y = 1.2;
 		object.scale.z = 1.2;
+	} else if (key == 'goldmine.js') {
+		object.rotation.x = this.de2ra(90);
+		object.scale.x = 1.5;
+		object.scale.y = 1.5;
+		object.scale.z = 1.5;
+		object.position.z = 5;
+		object.rotation.y = this.de2ra(Math.random() * 360);
 	}
-	gameSurface.setElementPosition(object, element.p.x, element.p.y);
 
 	if (element.f == gameData.FAMILIES.building && element.cp < 100) {
 		object.position.z -= (100 - element.cp) / 20 * this.PIXEL_BY_NODE;
@@ -454,9 +462,11 @@ gameSurface.onWindowResize = function() {
 }
 
 
-gameSurface.updateBuilding = function () {
-	this.scene.remove(this.building);
-
+gameSurface.buildBuildingGeometry = function () {
+	if (gameContent.building != null) {
+		this.scene.remove(this.building);
+	}
+	
 	this.building = new THREE.Object3D();
 
 	var shape = gameContent.building.shape;
@@ -465,21 +475,40 @@ gameSurface.updateBuilding = function () {
 		for (var j in shape) {
 			var material;
 			if (shape[i][j] == userInput.CAN_BE_BUILT_HERE) {
-				material = new THREE.LineBasicMaterial({color: 0x00ff00, opacity: 0.5, transparent: true });
+				material = this.canBuildHereMaterial;
 			} else if (shape[i][j] == userInput.CANNOT_BE_BUILT_HERE) {
-				material = new THREE.LineBasicMaterial({color: 0xff0000, opacity: 0.5, transparent: true });
+				material = this.cannotBuildHereMaterial;
 			} else {
 				continue;
 			}
-			var cube = new THREE.Mesh(new THREE.CubeGeometry(this.PIXEL_BY_NODE, this.PIXEL_BY_NODE, this.PIXEL_BY_NODE), material);
+			var cube = new THREE.Mesh(this.basicCubeGeometry, material);
 			cube.position.x = i * this.PIXEL_BY_NODE;
 			cube.position.y = j * this.PIXEL_BY_NODE; 
 			this.building.add(cube);	
 		}
 	}
 
-	this.setElementPosition(this.building, gameContent.building.p.x - parseInt(shape.length / 2), gameContent.building.p.y - parseInt(shape.length / 2));
-
 	this.scene.add(this.building);
+}
 
+
+gameSurface.updateBuilding = function () {
+	var shape = gameContent.building.shape;
+	var n = 0;
+	for (var i in shape) {
+		for (var j in shape) {
+			var material;
+			if (shape[i][j] == userInput.CAN_BE_BUILT_HERE) {
+				material = this.canBuildHereMaterial;
+			} else if (shape[i][j] == userInput.CANNOT_BE_BUILT_HERE) {
+				material = this.cannotBuildHereMaterial;
+			} else {
+				continue;
+			}
+			this.building.children[n].material = material;
+			n++;
+		}
+	}
+
+	this.setElementPosition(this.building, gameContent.building.p.x - parseInt(shape.length / 2), gameContent.building.p.y - parseInt(shape.length / 2));
 }

@@ -2,7 +2,7 @@ var rank = {};
 
 
 /**
-*	Checks if element is an enemy to me.
+*	Checks if this element is an enemy to me.
 */
 rank.isEnemy = function (me, element) {
 	if(gameLogic.players[me].ra[element.o] == gameData.RANKS.ennemy) {
@@ -14,7 +14,7 @@ rank.isEnemy = function (me, element) {
 
 
 /**
-*	Checks if element is my ally or not.
+*	Checks if this element is my ally or not.
 */
 rank.isAlly = function (me, element) {
 	if(gameLogic.players[me].ra[element.o] == gameData.RANKS.me

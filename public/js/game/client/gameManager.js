@@ -1,19 +1,17 @@
 var gameManager = {};
 
 
-gameManager.isOfflineGame = false;
+/**
+*	Testing purpose variable.
+*/
+gameManager.isOfflineGame = true;
 
 
 /**
 *	The user wants to play the game.
 */
-gameManager.playGame = function (gameInitData) {
+gameManager.initGame = function (gameInitData) {
 	this.getPlayerId();
-
-	document.getElementById('connecting').className = 'fullScreen';
-	document.getElementById('introScreen').className += ' hide';
-
-	GUI.init();
 	
 	if(!this.isOfflineGame) {
 		this.connectToServer(gameInitData);
@@ -27,10 +25,10 @@ gameManager.playGame = function (gameInitData) {
 *	Starts the game.
 */
 gameManager.startGame = function () {
-	document.getElementById('connecting').className += ' hide';
-
+	$('#gui').removeClass('hide');
+	$('#introScreen').addClass('hide');
 	if (gameManager.isOfflineGame) {
-		this.waitingData = engineManager.getGameElements();
+		this.waitingData = gameLogic.getGameElements();
 	}
 
 	gameContent.init(this.waitingData);
@@ -39,20 +37,22 @@ gameManager.startGame = function () {
 		setInterval(function(){
 			gameContent.update(gameLoop.update());
 		}, 1000 / 8);
-	}
+	}	
+
 }
 
 
 gameManager.initOfflineGame = function (gameInitData) {
 	gameContent.myArmy = 0;
 	gameContent.players = [
-    new gameData.Player(0, 0, 0), new gameData.Player(0, 1, 0)];
+    new gameData.Player(0, 0, gameInitData.army), new gameData.Player(0, 1, 0)];
   	gameContent.map = new gameData.Map(gameData.MAP_TYPES[gameInitData.mapType],
                     gameData.MAP_SIZES[gameInitData.mapSize],
                     gameData.VEGETATION_TYPES[gameInitData.vegetation],
                     gameData.INITIAL_RESOURCES[gameInitData.initialResources]);
-	engineManager.createNewGame(gameContent.map, gameContent.players);
+	gameCreation.createNewGame(gameContent.map, gameContent.players);
 	gameSurface.init();
+	GUI.init();
 	input.initInputs();
 }
 
@@ -76,6 +76,7 @@ gameManager.connectToServer = function (gameInitData) {
 		gameContent.map = data.map;
 		gameManager.waitingData = data.initElements;
 		gameSurface.init();
+		GUI.init();
 		input.initInputs();
 	});
 
@@ -104,7 +105,6 @@ gameManager.getPlayerId = function () {
 
 
 gameManager.sendOrderToEngine = function (type, params) {
-	console.log(params)
 	if (this.isOfflineGame) {
 		order.dispatchReceivedOrder(type, params);
 	} else {

@@ -1,7 +1,8 @@
 var gameLoop = {};
 
+
 /**
-*	Number of updates by second.
+*	Number of time the game logic is being updated by second.
 */
 gameLoop.FREQUENCY = 8;
 
@@ -12,8 +13,11 @@ gameLoop.FREQUENCY = 8;
 gameLoop.iterate = 0;
 
 
+/**
+*	Updates the game logic and returns updated elements.
+*/
 gameLoop.update = function () {
 	this.iterate = (this.iterate > 100 ? 0 : this.iterate + 1);
 	gameLogic.update();
-	return engineManager.getGameData();
+	return gameLogic.getGameData();
 }

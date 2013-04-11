@@ -2,10 +2,16 @@ var action = {};
 
 
 /**
+*	CONSTANTS
+*/
+action.BUILD_ACTION_SPEED = 3;
+
+
+/**
 *	Basic build action.
 */
 action.doTheBuild = function (element, building) {
-	if(gameLoop.iterate % 3 == 0) {
+	if(gameLoop.iterate % this.BUILD_ACTION_SPEED == 0) {
 		if(building.cp < 100) {
 			production.updateConstruction(building);	
 		} else {
