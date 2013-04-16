@@ -27,9 +27,6 @@ gameManager.initGame = function (gameInitData) {
 gameManager.startGame = function () {
 	$('#gui').removeClass('hide');
 	$('#introScreen').addClass('hide');
-	if (gameManager.isOfflineGame) {
-		this.waitingData = gameLogic.getGameElements();
-	}
 
 	gameContent.init(this.waitingData);
 
@@ -51,6 +48,7 @@ gameManager.initOfflineGame = function (gameInitData) {
                     gameData.VEGETATION_TYPES[gameInitData.vegetation],
                     gameData.INITIAL_RESOURCES[gameInitData.initialResources]);
 	gameCreation.createNewGame(gameContent.map, gameContent.players);
+	this.waitingData = gameLogic.getGameElements();
 	gameSurface.init();
 	GUI.init();
 	input.initInputs();

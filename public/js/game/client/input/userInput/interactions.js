@@ -38,7 +38,6 @@ userInput.clickOnToolbar = function (button) {
 userInput.enterConstructionMode = function (building) {
 	gameContent.building = building;
 	GUI.selectButton(building);
-	gameSurface.buildBuildingGeometry();
 	this.updateConstructionMode(input.mousePosition.x, input.mousePosition.y);
 }
 
@@ -74,7 +73,7 @@ userInput.updateConstructionMode = function (x, y) {
 				}
 			}
 
-			gameSurface.updateBuilding();
+			gameSurface.updateBuildingGeometry();
 
 		} catch (e) {
 		}
@@ -87,7 +86,7 @@ userInput.updateConstructionMode = function (x, y) {
 */
 userInput.leaveConstructionMode = function () {
 	gameContent.building = null;
-	gameSurface.scene.remove(gameSurface.building);
+	gameSurface.removeBuildingGeometry();
 	GUI.unselectButtons();
 	GUI.showBuildings = false;
 }
@@ -115,11 +114,11 @@ userInput.pressToolbarShortcut = function (i) {
 *	Updates mouse icon.
 */
 userInput.updateMouseIcon = function (mouseX, mouseY) {
-	var position = gameSurface.getAbsolutePositionFromPixel(mouseX, mouseY);
+	var elementUnder = gameSurface.getFirstIntersectObject(mouseX, mouseY);
 	var x = gameSurface.scroll.dx;
 	var y = gameSurface.scroll.dy;
 	
-	if (tools.getElementUnder(position.x, position.y) != null) {
+	if (elementUnder != null && elementUnder.object.elementId != null) {
 		GUI.updateMouse(GUI.MOUSE_ICONS.select);
 	} else if (x > 0 && y > 0) {
 		GUI.updateMouse(GUI.MOUSE_ICONS.arrowTopRight);
@@ -152,7 +151,7 @@ userInput.SCROLL_THRESHOLD = 10;
 userInput.checkIfMapScrolling = function (x, y) {
 	if (x < this.SCROLL_THRESHOLD) {
 		gameSurface.updateHorizontalScrolling(-1);
-	} else if(x > gameSurface.width - this.SCROLL_THRESHOLD) {
+	} else if(x > window.innerWidth - this.SCROLL_THRESHOLD) {
 		gameSurface.updateHorizontalScrolling(1);
 	} else {
 		gameSurface.updateHorizontalScrolling(0);
@@ -160,7 +159,7 @@ userInput.checkIfMapScrolling = function (x, y) {
 
 	if (y < this.SCROLL_THRESHOLD) {
 		gameSurface.updateVerticalScrolling(1);
-	} else if (y > gameSurface.height - this.SCROLL_THRESHOLD) {
+	} else if (y > window.innerHeight - this.SCROLL_THRESHOLD) {
 		gameSurface.updateVerticalScrolling(-1);
 	} else {
 		gameSurface.updateVerticalScrolling(0);
@@ -190,13 +189,26 @@ userInput.tryBuildHere = function () {
 *	Dispatches the action according to the order
 */
 userInput.dispatchUnitAction = function (x, y) {
-	var destination = gameSurface.getAbsolutePositionFromPixel(x, y);
-	if (destination.x >= 0 && destination.y >= 0
-		&& destination.x < gameContent.map.size.x && destination.y < gameContent.map.size.y) {
-		gameManager.sendOrderToEngine(order.TYPES.action,
-							 [gameContent.selected,
-							  destination.x, 
-							  destination.y]);
+	var destination;
+	var elementUnder = gameSurface.getFirstIntersectObject(x, y);
+	if (elementUnder != null) {
+		if (elementUnder.object.elementId != null) {
+			destination = gameContent.gameElements[elementUnder.object.elementId].s.p;
+			gameSurface.animateSelectionCircle(elementUnder.object.elementId);
+		} else {
+			destination = {
+				x : parseInt(elementUnder.point.x / gameSurface.PIXEL_BY_NODE),
+				y : parseInt(elementUnder.point.y / gameSurface.PIXEL_BY_NODE)
+			}
+		}
+
+		if (destination.x >= 0 && destination.y >= 0
+			&& destination.x < gameContent.map.size.x && destination.y < gameContent.map.size.y) {
+			gameManager.sendOrderToEngine(order.TYPES.action,
+								 [gameContent.selected,
+								  destination.x, 
+								  destination.y]);
+		}
 	}
 }
 

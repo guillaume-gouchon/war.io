@@ -85,6 +85,7 @@ io.sockets.on('connection', function (socket) {
 });
 
 function startGame(game) {
+  console.log(game);
   gameCreation.createNewGame(game.map, game.players);
 
   var gameInfo = {};
@@ -124,6 +125,7 @@ function startGame(game) {
 }
 
 function dispatchPlayer (socket, gameInitData) {
+  console.log(gameInitData);
   for (var i in games) {
     for (var j in games[i].players) {
       if(games[i].players[j].pid == gameInitData.playerId) {
@@ -149,7 +151,7 @@ function dispatchPlayer (socket, gameInitData) {
     createNewGame(gameInitData);
   }
 
-  addPlayerToGame(socket, games[games.length - 1], gameInitData.playerId, gameInitData.army);
+  addPlayerToGame(socket, games[games.length - 1], gameInitData.playerId, parseInt(gameInitData.gameInitData.army));
 }
 
 function createNewGame (gameInitData) {

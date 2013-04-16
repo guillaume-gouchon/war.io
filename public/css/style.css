@@ -209,3 +209,40 @@ canvas {
      50% { opacity: 0; }
     100% { opacity: 1; }
 }
+
+#footer {
+    position: absolute;
+    bottom: 1px;
+    text-align: center;
+    width: 100%;
+    display: none;
+}
+#footer a {
+    color: #111;
+    margin-right: 15px;
+}
+
+.popup {
+    position: absolute;
+    background: #000;
+    padding: 30px;
+    -webkit-box-shadow:-10px -10px 40px 20px rgba(0, 0, 0, 0.7);
+    box-shadow:-10px -10px 40px 20px rgba(0, 0, 0, 0.7);
+    color : #ddd;
+    font-size: 1.4em;
+    opacity: 0.9;
+}
+
+.popup h1 {
+    text-align: center;
+    margin-bottom: 40px;
+    border-bottom: 1px solid #ddd;
+}
+
+#about p, #credits p {
+    text-align: center;
+}
+
+#about {
+    width: 700px;
+}

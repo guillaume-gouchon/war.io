@@ -4,7 +4,7 @@
 gameData.RACES = {
 	human : {
 		id: 0,
-		name : 'The Human',
+		name : 'The Human Alliance',
 		image : 'human.png'
 	}
 }

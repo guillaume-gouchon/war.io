@@ -7,8 +7,8 @@ input.onLeftClick = function (event) {
 		var y = event.y;
 		//the user clicked on a toolbar's button
 		if (GUI.toolbar.length > 0 && x < GUI.BUTTONS_SIZE + 10 && x > 10
-			&& y < gameSurface.height - 10 && y > gameSurface.height - 10 - GUI.BUTTONS_SIZE * GUI.toolbar.length) {
-				userInput.clickOnToolbar(GUI.toolbar[parseInt(GUI.toolbar.length - (gameSurface.height - y - 10) / GUI.BUTTONS_SIZE)]);
+			&& y < window.innerHeight - 10 && y > window.innerHeight- 10 - GUI.BUTTONS_SIZE * GUI.toolbar.length) {
+				userInput.clickOnToolbar(GUI.toolbar[parseInt(GUI.toolbar.length - (window.innerHeight - y - 10) / GUI.BUTTONS_SIZE)]);
 				return false;
 		}
 		//the user is building something
@@ -61,8 +61,6 @@ input.onRightClick = function (event) {
 input.onMouseMove = function (event) {
 	userInput.selectGroup(event.x, event.y);
 	userInput.updateConstructionMode(event.x, event.y);
-	userInput.checkIfMapScrolling(event.x, event.y);
-	userInput.updateMouseIcon(event.x, event.y);
 }
 
 

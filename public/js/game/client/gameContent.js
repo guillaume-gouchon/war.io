@@ -42,6 +42,11 @@ gameContent.init = function (data) {
 	for (var i in data) {
 		var element = data[i];
 		gameSurface.addElement(element);
+		//center camera
+		if (element.f == gameData.FAMILIES.building
+			&& element.o == this.myArmy) {
+			gameSurface.centerCameraOnElement(element);
+		}
 	}
 }
 

@@ -40,7 +40,7 @@ gameData.ELEMENTS[gameData.FAMILIES.unit].push(
 		pop : 1,
 		needs : [{t : gameData.RESOURCES.gold.id, value : 50}],
 		g : 'dwarf.js',
-		image: 'builder.png'
+		image: 'swordsman.png'
 	},
 	{
 		name : 'knight',
@@ -60,6 +60,6 @@ gameData.ELEMENTS[gameData.FAMILIES.unit].push(
 		pop : 2,
 		needs : [{t : gameData.RESOURCES.gold.id, value : 100}],
 		g : 'dwarf.js',
-		image: 'builder.png'
+		image: 'knight.png'
 	}
 ]);

@@ -15,18 +15,20 @@ userInput.clickToSelect = function (x, y) {
 	gameSurface.unselectAll();
 	gameContent.selected = [];
 
-	var position = gameSurface.getAbsolutePositionFromPixel(x, y);
-
 	//reset the selection rectangle
 	gameContent.selectionRectangle = [];
-	gameContent.selectionRectangle[0] = position.x;
-	gameContent.selectionRectangle[1] = position.y;
-	gameSurface.updateSelectionRectangle(-1, -1, -1, -1);
 
-	var elementUnder = tools.getElementUnder(position.x, position.y);
-	if (elementUnder != null) {
-  		gameContent.selected.push(elementUnder.id);
-  		gameSurface.selectElement(elementUnder.id);
+	var intersect = gameSurface.getFirstIntersectObject(x, y);
+	if (intersect != null) {
+
+		if (intersect.object.elementId != null) {
+			gameContent.selected.push(intersect.object.elementId);
+			gameSurface.selectElement(intersect.object.elementId);
+		}
+
+		gameContent.selectionRectangle[0] = parseInt(intersect.point.x / gameSurface.PIXEL_BY_NODE);
+		gameContent.selectionRectangle[1] = parseInt(intersect.point.y / gameSurface.PIXEL_BY_NODE);
+		gameSurface.updateSelectionRectangle(-1, -1, -1, -1);
 	}
 
 }

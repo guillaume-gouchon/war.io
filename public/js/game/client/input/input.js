@@ -33,6 +33,8 @@ input.initMouse = function () {
 	}
 
 	document.onmousemove = function (event) {
+		userInput.checkIfMapScrolling(event.x, event.y);
+		userInput.updateMouseIcon(event.x, event.y);
 		if (Math.abs(event.x - input.mousePosition.x) + Math.abs(event.y - input.mousePosition.y) > 3) {
 			input.mousePosition.x = event.x;
 			input.mousePosition.y = event.y;
