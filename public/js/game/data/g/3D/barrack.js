@@ -18,12 +18,12 @@
     "materials": [	{
 	"DbgColor" : 15658734,
 	"DbgIndex" : 0,
-	"DbgName" : "2_scheune2.jpg",
+	"DbgName" : "2_",
 	"colorAmbient" : [0.0, 0.0, 0.0],
 	"colorDiffuse" : [0.8, 0.8, 0.8],
 	"colorSpecular" : [0.0, 0.0, 0.0],
 	"illumination" : 2,
-	"mapDiffuse" : "scheune2.jpg",
+	"mapDiffuse" : "",
 	"opticalDensity" : 1.0,
 	"specularCoef" : 96.078431,
 	"transparency" : 1.0
@@ -32,12 +32,12 @@
 	{
 	"DbgColor" : 15597568,
 	"DbgIndex" : 1,
-	"DbgName" : "2b_scheune2.jpg",
+	"DbgName" : "2b_",
 	"colorAmbient" : [0.0, 0.0, 0.0],
 	"colorDiffuse" : [0.8, 0.8, 0.8],
 	"colorSpecular" : [0.0, 0.0, 0.0],
 	"illumination" : 2,
-	"mapDiffuse" : "scheune2.jpg",
+	"mapDiffuse" : "",
 	"opticalDensity" : 1.0,
 	"specularCoef" : 96.078431,
 	"transparency" : 1.0
@@ -46,12 +46,12 @@
 	{
 	"DbgColor" : 60928,
 	"DbgIndex" : 2,
-	"DbgName" : "balk_wood.jpg",
+	"DbgName" : "balk_",
 	"colorAmbient" : [0.0, 0.0, 0.0],
 	"colorDiffuse" : [0.8, 0.8, 0.8],
 	"colorSpecular" : [0.0, 0.0, 0.0],
 	"illumination" : 2,
-	"mapDiffuse" : "wood.jpg",
+	"mapDiffuse" : "",
 	"opticalDensity" : 1.0,
 	"specularCoef" : 96.078431,
 	"transparency" : 1.0
@@ -60,12 +60,12 @@
 	{
 	"DbgColor" : 238,
 	"DbgIndex" : 3,
-	"DbgName" : "balk2_wood.jpg",
+	"DbgName" : "balk2_",
 	"colorAmbient" : [0.0, 0.0, 0.0],
 	"colorDiffuse" : [0.8, 0.8, 0.8],
 	"colorSpecular" : [0.0, 0.0, 0.0],
 	"illumination" : 2,
-	"mapDiffuse" : "wood.jpg",
+	"mapDiffuse" : "",
 	"opticalDensity" : 1.0,
 	"specularCoef" : 96.078431,
 	"transparency" : 1.0
@@ -74,12 +74,12 @@
 	{
 	"DbgColor" : 15658496,
 	"DbgIndex" : 4,
-	"DbgName" : "balk3_wood.jpg",
+	"DbgName" : "balk3_",
 	"colorAmbient" : [0.0, 0.0, 0.0],
 	"colorDiffuse" : [0.8, 0.8, 0.8],
 	"colorSpecular" : [0.0, 0.0, 0.0],
 	"illumination" : 2,
-	"mapDiffuse" : "wood.jpg",
+	"mapDiffuse" : "",
 	"opticalDensity" : 1.0,
 	"specularCoef" : 96.078431,
 	"transparency" : 1.0
@@ -88,12 +88,12 @@
 	{
 	"DbgColor" : 61166,
 	"DbgIndex" : 5,
-	"DbgName" : "chimney_scheune2.jpg",
+	"DbgName" : "chimney_",
 	"colorAmbient" : [0.0, 0.0, 0.0],
 	"colorDiffuse" : [0.8, 0.8, 0.8],
 	"colorSpecular" : [0.0, 0.0, 0.0],
 	"illumination" : 2,
-	"mapDiffuse" : "scheune2.jpg",
+	"mapDiffuse" : "",
 	"opticalDensity" : 1.0,
 	"specularCoef" : 96.078431,
 	"transparency" : 1.0
@@ -102,12 +102,12 @@
 	{
 	"DbgColor" : 15597806,
 	"DbgIndex" : 6,
-	"DbgName" : "LWDefault_scheune2.jpg",
+	"DbgName" : "LWDefault_",
 	"colorAmbient" : [0.0, 0.0, 0.0],
 	"colorDiffuse" : [0.8, 0.8, 0.8],
 	"colorSpecular" : [0.0, 0.0, 0.0],
 	"illumination" : 2,
-	"mapDiffuse" : "scheune2.jpg",
+	"mapDiffuse" : "",
 	"opticalDensity" : 1.0,
 	"specularCoef" : 96.078431,
 	"transparency" : 1.0
@@ -116,12 +116,12 @@
 	{
 	"DbgColor" : 3668136,
 	"DbgIndex" : 7,
-	"DbgName" : "dach_stroh1.jpg",
+	"DbgName" : "dach_",
 	"colorAmbient" : [0.0, 0.0, 0.0],
 	"colorDiffuse" : [0.8, 0.8, 0.8],
 	"colorSpecular" : [0.0, 0.0, 0.0],
 	"illumination" : 2,
-	"mapDiffuse" : "stroh1.jpg",
+	"mapDiffuse" : "",
 	"opticalDensity" : 1.0,
 	"specularCoef" : 96.078431,
 	"transparency" : 1.0
@@ -130,12 +130,12 @@
 	{
 	"DbgColor" : 8478454,
 	"DbgIndex" : 8,
-	"DbgName" : "dach2_stroh1.jpg",
+	"DbgName" : "dach2_",
 	"colorAmbient" : [0.0, 0.0, 0.0],
 	"colorDiffuse" : [0.8, 0.8, 0.8],
 	"colorSpecular" : [0.0, 0.0, 0.0],
 	"illumination" : 2,
-	"mapDiffuse" : "stroh1.jpg",
+	"mapDiffuse" : "",
 	"opticalDensity" : 1.0,
 	"specularCoef" : 96.078431,
 	"transparency" : 1.0
@@ -157,12 +157,12 @@
 	{
 	"DbgColor" : 499914,
 	"DbgIndex" : 10,
-	"DbgName" : "rad_wood.jpg",
+	"DbgName" : "rad_",
 	"colorAmbient" : [0.0, 0.0, 0.0],
 	"colorDiffuse" : [0.8, 0.8, 0.8],
 	"colorSpecular" : [0.0, 0.0, 0.0],
 	"illumination" : 2,
-	"mapDiffuse" : "wood.jpg",
+	"mapDiffuse" : "",
 	"opticalDensity" : 1.0,
 	"specularCoef" : 96.078431,
 	"transparency" : 1.0
@@ -171,12 +171,12 @@
 	{
 	"DbgColor" : 14968288,
 	"DbgIndex" : 11,
-	"DbgName" : "tuer_scheune2.jpg",
+	"DbgName" : "tuer_",
 	"colorAmbient" : [0.0, 0.0, 0.0],
 	"colorDiffuse" : [0.8, 0.8, 0.8],
 	"colorSpecular" : [0.0, 0.0, 0.0],
 	"illumination" : 2,
-	"mapDiffuse" : "scheune2.jpg",
+	"mapDiffuse" : "",
 	"opticalDensity" : 1.0,
 	"specularCoef" : 96.078431,
 	"transparency" : 1.0
@@ -185,12 +185,12 @@
 	{
 	"DbgColor" : 1458591,
 	"DbgIndex" : 12,
-	"DbgName" : "tuer2_scheune2.jpg",
+	"DbgName" : "tuer2_",
 	"colorAmbient" : [0.0, 0.0, 0.0],
 	"colorDiffuse" : [0.8, 0.8, 0.8],
 	"colorSpecular" : [0.0, 0.0, 0.0],
 	"illumination" : 2,
-	"mapDiffuse" : "scheune2.jpg",
+	"mapDiffuse" : "",
 	"opticalDensity" : 1.0,
 	"specularCoef" : 96.078431,
 	"transparency" : 1.0

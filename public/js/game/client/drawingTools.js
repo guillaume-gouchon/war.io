@@ -30,7 +30,7 @@ gameSurface.convertGamePositionToScenePosition = function (gamePosition) {
 gameSurface.drawSelectionCircle = function(radius) {
 	var material = new THREE.MeshBasicMaterial({
             color: this.SELECTION_COLOR
-        });
+	});
 	var resolution = 100;
 	var size = 360 / resolution;
 	var geometry = new THREE.Geometry();
@@ -41,6 +41,30 @@ gameSurface.drawSelectionCircle = function(radius) {
  	var cylinder =  new THREE.Line( geometry, material );
  	cylinder.id = 'select';
 	return cylinder;
+}
+
+
+/**
+*	Draws a life bar on top of an element.
+*/
+gameSurface.drawLifeBar = function (element, elementData) {
+	var lifeBar = new THREE.Mesh(new THREE.CubeGeometry(this.BARS_DEPTH, this.BARS_HEIGHT, 1), new THREE.MeshBasicMaterial({color: 0xffffff}));
+	lifeBar.id = 'life';
+	lifeBar.position.x = 0;
+	lifeBar.position.y = elementData.height;
+	lifeBar.rotation.y = this.de2ra(90);
+	this.updateLifeBar(lifeBar, element, elementData);
+	return lifeBar;
+}
+
+
+/**
+*	Updates the life bar color and size.
+*/
+gameSurface.updateLifeBar = function (lifeBar, element, elementData) {
+	var lifeRatio = element.l / elementData.l;
+	lifeBar.scale.z = elementData.shape.length / 3 * this.PIXEL_BY_NODE * element.l / elementData.l;
+	lifeBar.material.color.setHex(this.getLifeBarColor(lifeRatio));
 }
 
 
@@ -101,7 +125,10 @@ gameSurface.de2ra = function(degree) {
 gameSurface.selectElement = function (elementId) {
 	var element = gameContent.gameElements[elementId].s;
 	var elementData = gameData.ELEMENTS[element.f][element.r][element.t];
-	gameContent.gameElements[elementId].d.add(this.drawSelectionCircle(elementData.shape.length / 2 * this.PIXEL_BY_NODE / 2));	
+	gameContent.gameElements[elementId].d.add(this.drawSelectionCircle(elementData.shape.length / 2 * this.PIXEL_BY_NODE / 2));
+	if (element.f != gameData.FAMILIES.terrain) {
+		gameContent.gameElements[elementId].d.add(this.drawLifeBar(element, elementData));
+	}
 }
 
 
@@ -111,9 +138,11 @@ gameSurface.selectElement = function (elementId) {
 gameSurface.unselectElement = function (elementId) {
 	try {
 		var d = gameContent.gameElements[elementId].d;
-		for (var i in d.children) {
-			if (d.children[i].id == 'select') {
-				d.remove(d.children[i]);
+		var index = d.children.length;
+		while (index --) {
+			var child = d.children[index];
+			if (child.id == 'select' || child.id == 'life') {
+				d.remove(child);
 			}
 		}
 	} catch (e) {
@@ -161,8 +190,9 @@ gameSurface.updateOrientation = function (d, element) {
 *	Updates the building geometry.
 */
 gameSurface.updateBuildingGeometry = function () {	
-	this.building = new THREE.Object3D();
-
+	for (var i in this.building.children) {
+		this.building.children[i].visible = false;
+	}
 	var shape = gameContent.building.shape;
 	for (var i in shape) {
 		for (var j in shape) {
@@ -174,10 +204,9 @@ gameSurface.updateBuildingGeometry = function () {
 			} else {
 				continue;
 			}
-			var cube = new THREE.Mesh(this.basicCubeGeometry, material);
-			cube.position.x = i * this.PIXEL_BY_NODE;
-			cube.position.y = j * this.PIXEL_BY_NODE; 
-			this.building.add(cube);	
+			var index = i * this.BUILDING_STRUCTURE_SIZE + parseInt(j);
+			this.building.children[index].material = material;
+			this.building.children[index].visible = true;
 		}
 	}
 	this.setElementPosition(this.building, gameContent.building.p.x - parseInt(shape.length / 2), gameContent.building.p.y - parseInt(shape.length / 2));
@@ -189,6 +218,9 @@ gameSurface.updateBuildingGeometry = function () {
 *	Hides the building geometry.
 */
 gameSurface.removeBuildingGeometry = function () {
+	for (var i in this.building.children) {
+		this.building.children[i].visible = false;
+	}
 	this.building.visible = false;
 }
 
@@ -220,4 +252,18 @@ gameSurface.animateSelectionCircle = function (elementId) {
 	});
 	tweenFadeIn.chain(tweenFadeOut);
 	tweenFadeOut.chain(tweenFadeOut2);
+}
+
+
+/**
+*	Returns the color of the life bar.
+*/
+gameSurface.getLifeBarColor = function (lifeRatio) {
+	if (lifeRatio < 0.3) {
+		return 0xff0000;
+	} else if (lifeRatio < 0.6) {
+		return 0x66ff00;
+	} else {
+		return 0x00ff00;
+	}
 }

@@ -27,6 +27,7 @@ gameCreation.createNewGame = function(map, players) {
 		gameLogic.players.push(player);
 	}
 	this.createNewMap(map, players);
+	stats.init();
 }
 
 

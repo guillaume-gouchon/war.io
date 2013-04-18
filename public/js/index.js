@@ -68,6 +68,9 @@ $(document).ready(function() {
 		$('.popup').css('left', window.innerWidth / 2);
 	}
 
+
+	preloadImages();
+
 });
 
 /*function initMapChooser() {
@@ -96,4 +99,21 @@ function initArmyChooser () {
 function createArmyBox (army) {
 	return '<div class="armyBox" data-army="' + army.id + '"><img src="' + gameSurface.IMG_PATH + army.image + '"/>' 
 												+ army.name + '</div>';
+}
+
+
+function preloadImages() {
+	var images = new Array()
+	function preload() {
+
+		for (i = 0; i < preload.arguments.length; i++) {
+			images[i] = new Image()
+			images[i].src = preload.arguments[i]
+			$('#imagesPreload').append(images[i]);
+		}
+	}
+	preload(
+		gameSurface.IMG_PATH + 'boxHover.png',
+		gameSurface.IMG_PATH + 'boxSelect.png'
+	)
 }

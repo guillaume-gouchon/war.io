@@ -5,6 +5,7 @@ gameData.Player = function (playerId, owner, race) {
 
 	this.re = [];//list of resources and quantities owned
 	this.ra = [];//list of players ranks (enemy, neutral, ...)
+	this.s = gameData.PLAYER_STATUSES.ig;//player's status
 	
 	this.tec = [];//researchs owned by the player, can be buildings
 

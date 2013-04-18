@@ -2,6 +2,12 @@ var gameLogic = {};
 
 
 /**
+*	Game's stats.
+*/
+gameLogic.stats = [];
+
+
+/**
 *	Game players.
 */
 gameLogic.players = [];
@@ -43,9 +49,16 @@ gameLogic.update = function () {
 	this.modified = [];
 	this.added = [];
 	this.removed = [];
-	
+
+	for (var n in this.players) {
+		this.players.s = gameData.PLAYER_STATUSES.defeat;
+	}
+
 	for(var n in this.gameElements) {
 		var element  = this.gameElements[n];
+		if (element.f == gameData.FAMILIES.building) {
+			this.players[element.o].s = gameData.PLAYER_STATUSES.ig;
+		}
 		this.resolveActions(element);
 		this.updateMoves(element);
 		this.updateBuildings(element);
@@ -53,6 +66,7 @@ gameLogic.update = function () {
 	this.addNewBuildings();
 	this.removeDeads();
 	this.checkGameOver();
+	stats.update();
 }
 
 
@@ -84,13 +98,14 @@ gameLogic.updateMoves = function (element) {
 */
 gameLogic.resolveActions = function (element) {
 	if (element.a != null) {
+		var elementData = gameData.ELEMENTS[element.f][element.r][element.t]
 		var distance = tools.getElementsDistance(element, element.a);
 		//is close enough ?
 		if (distance <= 1) {
 			//stop moving
 			element.mt = {x : null, y : null};
 			
-			if (gameData.ELEMENTS[element.f][element.r][element.t].isBuilder && element.a.f == gameData.FAMILIES.building
+			if (elementData.isBuilder && element.a.f == gameData.FAMILIES.building
 				&& rank.isAlly(element.o, element.a)) {
 				if(element.a.cp < 100) {
 					//build
@@ -102,10 +117,15 @@ gameLogic.resolveActions = function (element) {
 					}
 					//TODO : repair
 				}
-			} else if (gameData.ELEMENTS[element.f][element.r][element.t].isBuilder && element.a.f == gameData.FAMILIES.terrain) {
+			} else if (elementData.isBuilder && element.a.f == gameData.FAMILIES.terrain) {
 				//gathering resources
 				action.doTheGathering(element, element.a);
 			} else if (!rank.isAlly(element.o, element.a)) {
+				//attack
+				action.doTheAttack(element, element.a);
+			}
+		} else if (distance <= elementData.range) {
+			if (!rank.isAlly(element.o, element.a)) {
 				//attack
 				action.doTheAttack(element, element.a);
 			}
@@ -187,4 +207,17 @@ gameLogic.getGameElements = function () {
 *	Stops the game if the winning conditions are reached.
 */
 gameLogic.checkGameOver = function () {
+	var nbPlayersDefeated = 0;
+	var victory = -1;
+	for (var i in this.players) {
+		if (this.players[i].s == gameData.PLAYER_STATUSES.defeat) {
+			nbPlayersDefeated++;
+		} else {
+			victory = this.players[i].o;
+		}
+	}
+
+	if (nbPlayersDefeated == this.players.length - 1) {
+		this.players[victory].s = gameData.PLAYER_STATUSES.victory;
+	}
 }

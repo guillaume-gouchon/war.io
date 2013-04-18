@@ -1,16 +1,16 @@
 gameData.ELEMENTS[gameData.FAMILIES.unit].push(
 [
 	{
-		name : 'builder',
+		name : 'Builder',
 		r : 0,
 		t : 0,
 		shape : [[1]],
 		speed : 1,
 		isBuilder : true,
-		buttons : [{id : 0, image : 'build.png', isEnabled : true, name: 'build'}],
+		buttons : [{buttonId : 1000, image : 'build.png', isEnabled : true, name: 'Build'}],
 		timeConstruction : 5,
 		l : 20,
-		attackSpeed : 3,
+		attackSpeed : 1,
 		attack : 5, 
 		defense : 0,
 		weaponType : 0,
@@ -20,10 +20,13 @@ gameData.ELEMENTS[gameData.FAMILIES.unit].push(
 		pop : 1,
 		needs : [{t : gameData.RESOURCES.gold.id, value : 20}],
 		g : 'dwarf.js',
-		image: 'builder.png'
+		image: 'builder.png',
+		height: 5,
+		range: 1,
+		buttonId : 101
 	},
 	{
-		name : 'swordsman',
+		name : 'Footman',
 		r : 0,
 		t : 1,
 		shape : [[1]],
@@ -40,10 +43,13 @@ gameData.ELEMENTS[gameData.FAMILIES.unit].push(
 		pop : 1,
 		needs : [{t : gameData.RESOURCES.gold.id, value : 50}],
 		g : 'dwarf.js',
-		image: 'swordsman.png'
+		image: 'swordsman.png',
+		height: 5,
+		range: 1,
+		buttonId : 102
 	},
 	{
-		name : 'knight',
+		name : 'Knight',
 		r : 0,
 		t : 2,
 		shape : [[1, 1], [1, 1]],
@@ -52,7 +58,7 @@ gameData.ELEMENTS[gameData.FAMILIES.unit].push(
 		buttons : [],
 		timeConstruction : 20,
 		l : 120,
-		attackSpeed : 1,
+		attackSpeed : 3,
 		attack : 20, 
 		defense : 5,
 		weaponType : 0,
@@ -60,6 +66,32 @@ gameData.ELEMENTS[gameData.FAMILIES.unit].push(
 		pop : 2,
 		needs : [{t : gameData.RESOURCES.gold.id, value : 100}],
 		g : 'dwarf.js',
-		image: 'knight.png'
+		image: 'knight.png',
+		height: 5,
+		range: 1,
+		buttonId : 103
+	},
+	{
+		name : 'Bowman',
+		r : 0,
+		t : 3,
+		shape : [[1]],
+		speed : 1,
+		isBuilder : false,
+		buttons : [],
+		timeConstruction : 10,
+		l : 40,
+		attackSpeed : 1,
+		attack : 15, 
+		defense : 1,
+		weaponType : 0,
+		armorType : 0,
+		pop : 1,
+		needs : [{t : gameData.RESOURCES.gold.id, value : 60}],
+		g : 'dwarf.js',
+		image: 'bowman.png',
+		height: 5,
+		range: 10,
+		buttonId : 104
 	}
 ]);

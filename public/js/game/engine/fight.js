@@ -31,6 +31,13 @@ fightLogic.applyDamage = function (damage, target, fragOwner) {
 	if(fragOwner != null && target.l <= 0) {
 		fragOwner.frag = fragOwner.frag + 1;
 		fragOwner.a = null;
+		tools.addUniqueElementToArray(gameLogic.modified, fragOwner);
+		if (target.f == gameData.FAMILIES.building) {
+			stats.updateField(fragOwner.o, 'buildingsDestroyed', 1);
+		} else {
+			stats.updateField(fragOwner.o, 'killed', 1);
+			stats.updateField(target.o, 'lost', 1);
+		}
 	}
 
 }

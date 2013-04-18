@@ -13,8 +13,8 @@ GUI.toolbar = [];
 */
 GUI.BUTTONS_SIZE = 70;
 GUI.TOOLBAR_BUTTONS = {
-	build : {id : 0, image : 'build.png', isEnabled : true, name: 'build'},
-	cancel : {id : 1, image : 'cancel.png', isEnabled : true, name: 'cancel'}
+	build : {buttonId : 1000, image : 'build.png', isEnabled : true, name: 'Build'},
+	cancel : {buttonId : 1001, image : 'cancel.png', isEnabled : true, name: 'Cancel'}
 }
 GUI.MOUSE_ICONS = {
 	standard : 'default', 
@@ -41,6 +41,8 @@ GUI.showBuildings = false;
 */
 GUI.init = function () {
 	this.createResourcesBar();
+	this.initInfobar();
+	this.initMinimap();
 }
 
 
@@ -52,6 +54,8 @@ GUI.update = function () {
 	this.updatePopulation();
 	this.updateResources();
 	this.updateToolbar();
+	this.updateInfo();
+	this.updateMinimap();
 }
 
 
@@ -82,7 +86,7 @@ GUI.updateToolbar = function () {
 	}
 
 	//hide all the buttons
-	$('#toolbar div').addClass('hide');
+	$('#toolbar .toolbarButton').addClass('hide');
 
 	//show or create the required ones.
 	for (var i in this.toolbar) {
@@ -110,7 +114,7 @@ GUI.updateMouse = function (mouseIcon) {
 
 
 /**
-*	Creates the resources bar.
+*	Creates the resources box.
 */
 GUI.createResourcesBar = function () {
 	for (var i in gameData.RESOURCES) {
@@ -121,7 +125,7 @@ GUI.createResourcesBar = function () {
 
 
 /**
-*	Adds a resource icon + value to the resource bar.
+*	Adds a resource icon and the value to the resource box.
 */
 GUI.createResourceElement = function (resource) {
 	var div = '<div id="resource' + resource.id + '"><img src="' + gameSurface.IMG_PATH + resource.image + '"/><div>0</div></div>';
@@ -130,7 +134,7 @@ GUI.createResourceElement = function (resource) {
 
 
 /**
-*	Updates the resources bar with the new values.
+*	Updates the resources box with the new values.
 */
 GUI.updateResources = function () {
 	var player = gameContent.players[gameContent.myArmy];
@@ -145,22 +149,34 @@ GUI.updateResources = function () {
 *	Creates a toolbar button.
 */
 GUI.createToolbarButton = function (button) {
-	if ($('#toolbar' + button.name).html() != null) {
-		$('#toolbar' + button.name).removeClass('hide');
+	if ($('#toolbar' + button.buttonId).html() != null) {
+		$('#toolbar' + button.buttonId).removeClass('hide');
 	} else {
-		var div = '<div id="toolbar' + button.name + '" class="toolbarButton"><img src="' + gameSurface.IMG_PATH + button.image + '"/></div>';
+		var div = '<div id="toolbar' + button.buttonId + '" class="toolbarButton" title="' + button.name + '"><div><img src="' + gameSurface.IMG_PATH + button.image + '"/></div></div>';
 		$('#toolbar').append(div);
+
+		//add price
+		for (var i in button.needs) {
+			var need = button.needs[i];
+			for (var j in gameData.RESOURCES) {
+				if (gameData.RESOURCES[j].id == need.t) {
+					var bottom = (this.toolbar.length - 1) * 72 - $('#toolbar' + button.buttonId).position().top + i * 20;
+					$('#toolbar' + button.buttonId).append('<div class="price" style="bottom: ' + bottom + 'px"><img src="' + gameSurface.IMG_PATH + gameData.RESOURCES[j].image + '" />' + need.value + '</div>');
+					break;
+				}
+			}
+		}
 	}
 	if(!button.isEnabled) {
-		$('#toolbar' + button.name).addClass('disabled');
+		$('#toolbar' + button.buttonId).addClass('disabled');
 	} else {
-		$('#toolbar' + button.name).removeClass('disabled');
+		$('#toolbar' + button.buttonId).removeClass('disabled');
 	}
 }
 
 
 /**
-*	Updates the player's population bar.
+*	Updates the player's population box.
 */
 GUI.updatePopulation = function () {
 	var player = gameContent.players[gameContent.myArmy];
@@ -173,7 +189,7 @@ GUI.updatePopulation = function () {
 */
 GUI.selectButton = function (button) {
 	this.unselectButtons();
-	$('img', '#toolbar' + button.name).addClass('selected');
+	$('#toolbar' + button.buttonId).addClass('selected');
 }
 
 
@@ -181,6 +197,100 @@ GUI.selectButton = function (button) {
 *	Unselect al the toolbar buttons.
 */
 GUI.unselectButtons = function () {
-	$('img', '.toolbarButton').removeClass('selected');
+	$('.toolbarButton').removeClass('selected');
 }
 
+
+/**
+*	Initializes the info box.
+*/
+GUI.initInfobar = function () {
+	$('#info').css('left', (window.innerWidth - $('#info').width()) / 2);
+}
+
+
+/**
+*	Updates the information box.
+*/
+GUI.updateInfo = function () {
+	if (gameContent.selected.length > 0) {
+		var element = gameContent.gameElements[gameContent.selected[0]].s;
+		var elementData = gameData.ELEMENTS[element.f][element.r][element.t];
+		$('#name').html(elementData.name);
+		$('#portrait').attr('src', gameSurface.IMG_PATH + elementData.image);
+		$('#stats').html('');
+		if (element.f == gameData.FAMILIES.terrain) {
+			//terrain
+			$('#life').html('&infin; / &infin;');
+			for (var i in gameData.RESOURCES) {
+				if (gameData.RESOURCES[i].id == elementData.resourceType) {
+					this.addStatLine(gameData.RESOURCES[i].image, element.ra, "Amount of resources left");
+					break;
+				}
+			}
+		} else {
+			$('#life').html(element.l + '/' + elementData.l);
+			if (element.f == gameData.FAMILIES.building) {
+				//building
+				GUI.addStatLine("defense.png", elementData.defense, "Defense");
+				GUI.addStatLine("population.png", elementData.pop, "Add to max population");
+				for (var i in element.q) {
+					var e = element.q[i];
+					var inConstruction = gameData.ELEMENTS[gameData.FAMILIES.unit][element.r][e];
+					if (i == 0) {
+						GUI.addQueue(inConstruction.image, parseInt(element.qp) + '%', inConstruction.name);	
+					} else {
+						GUI.addQueue(inConstruction.image, '', inConstruction.name);	
+					}
+				}
+			} else {
+				//unit
+				GUI.addStatLine("attack.png", elementData.attack, "Attack");
+				GUI.addStatLine("defense.png", elementData.defense, "Defense");
+				GUI.addStatLine("attackSpeed.png", elementData.attackSpeed, "Attack Speed");
+				GUI.addStatLine("range.png", elementData.range, "Range");
+			}
+		}
+		$('#info').removeClass('hide');
+	} else if (!$('#info').hasClass('hide')){ 
+		$('#info').addClass('hide');
+	}
+}
+
+
+/**
+*	Adds on stat line in the info box.
+*/
+GUI.addStatLine = function(image, text, tooltip) {
+	$('#stats').append('<div class="stat" title="' + tooltip + '"><img src="' + gameSurface.IMG_PATH + image + '"/><div>' + text + '</div></div>');
+}
+
+
+/**
+*	Adds on stat line in the info box.
+*/
+GUI.addQueue = function(image, text, tooltip) {
+	$('#stats').append('<div class="queue" title="' + tooltip + '"><img src="' + gameSurface.IMG_PATH + image + '"/><div>' + text + '</div></div>');
+}
+
+
+/**
+*	Initializes the minimap.
+*/
+GUI.initMinimap = function () {
+	$('#minimap').click(function (e) {
+		var dx = e.offsetX / 80;
+		var dy = 1 - e.offsetY / 80;
+		camera.position.x = dx * gameContent.map.size.x * gameSurface.PIXEL_BY_NODE;
+		camera.position.y = dy * gameContent.map.size.y * gameSurface.PIXEL_BY_NODE; 
+	});
+}
+
+
+/**
+*	Updates minimap.
+*/
+GUI.updateMinimap = function () {
+	$('#minimapLocation').css('left', (80 - 16) * camera.position.x / (gameContent.map.size.x * gameSurface.PIXEL_BY_NODE));
+	$('#minimapLocation').css('top', (80 - 16) * (1 - camera.position.y / (gameContent.map.size.y * gameSurface.PIXEL_BY_NODE)));
+}

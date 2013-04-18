@@ -54,6 +54,7 @@ production.finishConstruction = function (building) {
 		gameLogic.players[building.o].pop.max += gameData.ELEMENTS[building.f][building.r][building.t].pop;
 	}
 
+	stats.updateField(building.o, 'buildingsCreated', 1);
 }
 
 
@@ -96,6 +97,7 @@ production.gatherResources = function (builder, resource) {
 */
 production.getBackResources = function (builder) {
 	gameLogic.players[builder.o].re[builder.ga.t] += builder.ga.amount;
+	stats.updateField(builder.o, 'resources', builder.ga.amount);
 	builder.ga = null;
 	if(builder.pa != null) {
 		if(builder.pa.ra == 0) {
@@ -167,7 +169,14 @@ production.createNewUnit = function (unitType, factory) {
 		//updates population
 		gameLogic.players[factory.o].pop.current += gameData.ELEMENTS[unit.f][unit.r][unit.t].pop;
 
-		gameCreation.addGameElement (unit);
+		gameCreation.addGameElement(unit);
+
+		if (unit.isBuilder) {
+			stats.updateField(factory.o, 'buildersCreated', 1);
+		} else {
+			stats.updateField(factory.o, 'unitsCreated', 1);
+		}
+
 
 		//moves the unit to the rallying point
 		if(factory.rp != null) {

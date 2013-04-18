@@ -8,9 +8,10 @@ var scene, camera;
 */
 gameSurface.NB_GEOMETRIES = 6;
 gameSurface.IMG_PATH = 'js/game/data/g/';
+gameSurface.MODELS_PATH = 'js/game/data/g/3D/';
 gameSurface.PIXEL_BY_NODE = 10;
 gameSurface.NEAR = 1;
-gameSurface.FAR = 600;
+gameSurface.FAR = 2000;
 gameSurface.ZOOM_MAX = 30;
 gameSurface.ZOOM_MIN = 100;
 gameSurface.ZOOM_STEP = 10;
@@ -20,7 +21,7 @@ gameSurface.FOG_DENSITY = 0.0005;
 gameSurface.SELECTION_COLOR = '#0f0';
 gameSurface.CAMERA_INIT_ANGLE = 0.7;
 gameSurface.ORDER_OPACITY = 0.7;
-gameSurface.SELECTION_RECTANGLE_HEIGHT = 4;
+gameSurface.SELECTION_RECTANGLE_HEIGHT = 4 * gameSurface.PIXEL_BY_NODE;
 gameSurface.SELECTION_RECTANGLE_OPACITY = 0.5;
 gameSurface.SELECTION_RECTANGLE_COLOR = 0x000000;
 gameSurface.CAN_BUILD_CUBE_COLOR = 0x00ff00;
@@ -29,13 +30,17 @@ gameSurface.BUILD_CUBE_OPACITY = 0.5;
 gameSurface.MAP_SCROLL_SPEED = 10;
 gameSurface.MAP_SCROLL_X_MIN = 0;
 gameSurface.MAP_SCROLL_Y_MIN = 0;
-gameSurface.CENTER_CAMERA_Y_OFFSET = 8;
-gameSurface.PROGRESS_BAR_LENGTH = 1;
+gameSurface.CENTER_CAMERA_Y_OFFSET = 8 * gameSurface.PIXEL_BY_NODE;
+gameSurface.BARS_HEIGHT = 0.5;
+gameSurface.BARS_DEPTH = 0.2;
+gameSurface.BUILDING_STRUCTURE_SIZE = 5;
+gameSurface.BUILDING_INIT_Z = - 2 * gameSurface.PIXEL_BY_NODE;
 
 
 /**
 *	VARIABLES
 */
+gameSurface.iteration = 0;
 gameSurface.geometries = null;
 gameSurface.materials = null;
 gameSurface.terrain = null;
@@ -73,7 +78,7 @@ gameSurface.init = function () {
 
 
 	//init fog
-	scene.fog = new THREE.Fog( 0xffffff, this.FOG_DENSITY, this.FAR);
+	scene.fog = new THREE.Fog( 0xffffff, this.FOG_DENSITY, 600);
 
 	//init renderer
 	renderer = new THREE.WebGLRenderer();
@@ -95,12 +100,17 @@ gameSurface.init = function () {
 
 
 	function render() {
+		gameSurface.iteration = (gameSurface.iteration > 1000 ? 0 : gameSurface.iteration + 1);
+
 		requestAnimationFrame(render);
 
 		gameSurface.updateGameWindow();
 		gameSurface.updateOrderPosition();
-		GUI.update();
 		TWEEN.update();
+
+		if (gameSurface.iteration % 5 == 0) {
+			GUI.update();
+		}
 		
 		renderer.render(scene, camera);
 	}
@@ -120,26 +130,24 @@ gameSurface.createScene = function () {
 	pointLight.position.z = 150;
 	scene.add(pointLight);
 
-	/*var materialArray = [];
-	materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( this.IMG_PATH + 'bleached_right.jpg' ) }));
-	materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( this.IMG_PATH + 'bleached_left.jpg' ) }));
-	materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( this.IMG_PATH + 'bleached_front.jpg' ) }));
-	materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( this.IMG_PATH + 'bleached_back.jpg' ) }));
-	materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( this.IMG_PATH + 'bleached_top.jpg' ) }));
-	materialArray.push(new THREE.MeshBasicMaterial( { map: THREE.ImageUtils.loadTexture( this.IMG_PATH + 'bleached_top.jpg' ) }));
-	for (var i = 0; i < 6; i++)
-	   materialArray[i].side = THREE.BackSide;
-	var skyboxMaterial = new THREE.MeshFaceMaterial( materialArray );
-	
-	var skyboxGeom = new THREE.CubeGeometry( 4000, 4000, 4000, 1, 1, 1 );
-	
-	var skybox = new THREE.Mesh( skyboxGeom, skyboxMaterial );
-	scene.add( skybox );	*/
+	//add skybox
+	var materialArray = [];
+	var skyboxMaterial = new THREE.MeshBasicMaterial({map: THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'skybox.jpg')});
+   	skyboxMaterial.side = THREE.BackSide;
+	for (var i = 0; i < 6; i++) {
+		materialArray.push(skyboxMaterial);
+	}
+	var skyboxMaterial = new THREE.MeshFaceMaterial(materialArray);
+	var skyboxGeom = new THREE.CubeGeometry(2000, 2000, 2000);
+	var skybox = new THREE.Mesh(skyboxGeom, skyboxMaterial);
+	skybox.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
+	skybox.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
+	scene.add(skybox);
 
 	//generate the terrain
 	var terrainGeneration = new TerrainGeneration(gameContent.map.size.x * this.PIXEL_BY_NODE, gameContent.map.size.y * this.PIXEL_BY_NODE, 64, 10);
 	this.terrain = terrainGeneration.diamondSquare();
-	var terrainGeometry = new THREE.PlaneGeometry(2000, 2000, 64, 64);
+	var terrainGeometry = new THREE.PlaneGeometry(2200, 2200, 64, 64);
 	var index = 0;
 	for(var i = 0; i <= 64; i++) {
 		for(var j = 0; j <= 64; j++) {
@@ -147,7 +155,7 @@ gameSurface.createScene = function () {
 			index++;
 		}
 	}
-	var grassTexture  = THREE.ImageUtils.loadTexture(this.IMG_PATH + 'grass.png');
+	var grassTexture  = THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'grass.png');
 	grassTexture.wrapT = grassTexture.wrapS = THREE.RepeatWrapping;
 	var grassMaterial = new THREE.MeshBasicMaterial({ map: grassTexture });
 	var planeSurface = new THREE.Mesh(terrainGeometry, grassMaterial);
@@ -162,20 +170,28 @@ gameSurface.createScene = function () {
 	scene.add(this.order);
 
 	//add selection rectangle
-	var geometry = new THREE.CubeGeometry(this.PIXEL_BY_NODE, this.PIXEL_BY_NODE, this.SELECTION_RECTANGLE_HEIGHT * this.PIXEL_BY_NODE);
+	var geometry = new THREE.CubeGeometry(this.PIXEL_BY_NODE, this.PIXEL_BY_NODE, this.SELECTION_RECTANGLE_HEIGHT);
 	this.selectionRectangle = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial( { color: this.SELECTION_RECTANGLE_COLOR, opacity: this.SELECTION_RECTANGLE_OPACITY, transparent: true } ));
 	scene.add(this.selectionRectangle);
-
-	//add building geometry
-	this.building = new THREE.Object3D();
-	this.building.visible = false;
-	scene.add(this.building);
 
 	//initialize basic materials and geometries
 	this.canBuildHereMaterial = new THREE.LineBasicMaterial({color: this.CAN_BUILD_CUBE_COLOR, opacity: this.BUILD_CUBE_OPACITY, transparent: true });
 	this.cannotBuildHereMaterial = new THREE.LineBasicMaterial({color: this.CANNOT_BUILD_CUBE_COLOR, opacity: this.BUILD_CUBE_OPACITY, transparent: true });
 	this.basicCubeGeometry = new THREE.CubeGeometry(this.PIXEL_BY_NODE, this.PIXEL_BY_NODE, this.PIXEL_BY_NODE);
 
+	//add building geometry
+	this.building = new THREE.Object3D();
+	for (var i = 0; i < this.BUILDING_STRUCTURE_SIZE; i++) {
+		for (var j = 0; j < this.BUILDING_STRUCTURE_SIZE; j++) {
+			var cube = new THREE.Mesh(this.basicCubeGeometry, this.canBuildHereMaterial);
+			cube.position.x = i * this.PIXEL_BY_NODE;
+			cube.position.y = j * this.PIXEL_BY_NODE;
+			cube.visible = false;
+			this.building.add(cube);
+		}
+	}
+	this.building.visible = false;
+	scene.add(this.building);	
 }
 
 
@@ -201,7 +217,7 @@ gameSurface.init3DModels = function () {
 *	Loads the geometry.
 */
 gameSurface.loadObject = function (key) {
-	this.loader.load(this.IMG_PATH + key, this.objectLoaded(key));
+	this.loader.load(this.MODELS_PATH + key, this.objectLoaded(key));
 }
 
 
@@ -211,7 +227,7 @@ gameSurface.loadObject = function (key) {
 gameSurface.objectLoaded = function (key) {
 	return function (geometry, materials) {
 		gameSurface.geometries[key] = geometry;
-		gameSurface.materials[key] = new THREE.MeshBasicMaterial({map: THREE.ImageUtils.loadTexture(gameSurface.IMG_PATH + key.replace('.js', '.png'))});
+		gameSurface.materials[key] = new THREE.MeshBasicMaterial({map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key.replace('.js', '.png'))});
 		//TODO : to change to a correct way
 		gameSurface.geometriesLoaded ++;
 		if(gameSurface.geometriesLoaded == gameSurface.NB_GEOMETRIES) {
@@ -302,8 +318,8 @@ gameSurface.createObject = function (key, element) {
 		object.scale.z = 3;
 	} else if ( key == 'dwarf.js') {
 		object.rotation.x = this.de2ra(90);
-		object.scale.x = 2;
-		object.scale.y = 2;
+		object.scale.x = 3;
+		object.scale.y = 3;
 	} else if (key == 'stonemine.js') {
 		object.rotation.x = this.de2ra(90);
 		object.scale.x = 1.2;
@@ -328,11 +344,18 @@ gameSurface.createObject = function (key, element) {
 	}
 
 	if (element.f == gameData.FAMILIES.building && element.cp < 100) {
-		object.position.z -= (100 - element.cp) / 20 * this.PIXEL_BY_NODE;
+		object.position.z += this.BUILDING_INIT_Z;
 	}
 
 	scene.add(object);
 	gameContent.gameElements[element.id] = {d: object, s : element};
+
+	/*if (element.f == gameData.FAMILIES.building && element.cp < 100) {
+		var inConstruction = this.drawSelectionCircle(gameData.ELEMENTS[element.f][element.r][element.t].shape[0].length / 2 * this.PIXEL_BY_NODE / 2);
+		inConstruction.id = 'inConstruction';
+		inConstruction.position.y = 0;
+		object.add(inConstruction);
+	}*/
 }
 
 
@@ -343,14 +366,26 @@ gameSurface.updateElement = function (element) {
 	var d = gameContent.gameElements[element.id].d;
 	if (element.f == gameData.FAMILIES.unit) {
 		this.updateOrientation(d, element);
-	
 	}
+
 	this.setElementPosition(d, element.p.x, element.p.y);
 	
+	var elementData = gameData.ELEMENTS[element.f][element.r][element.t];
+
 	if (element.f == gameData.FAMILIES.building) {
 		if (element.cp < 100) {
+			//update construction progress
 			d.position.z -= (100 - element.cp) / 20 * this.PIXEL_BY_NODE;
+			/*var index = d.children.length;
+			while (index --) {
+				var child = d.children[index];
+				if (child.id == 'inConstruction') {
+					child.position.y -= d.position.z;
+					break;
+				}
+			}*/
 		} else if (element.q.length > 0) {
+			//update progress bar
 			var progressBar = null;
 			for (var i in d.children) {
 				if (d.children[i].id == 'prog') {
@@ -358,24 +393,32 @@ gameSurface.updateElement = function (element) {
 					break;
 				}
 			}
-
 			if (progressBar == null) {
-				var progress = new THREE.Mesh(new THREE.CubeGeometry(1, 1, 1), new THREE.MeshBasicMaterial({color: 0xffffff}));
+				var progress = new THREE.Mesh(new THREE.CubeGeometry(this.BARS_DEPTH, this.BARS_HEIGHT, 1), new THREE.MeshBasicMaterial({color: 0xffffff}));
 				progress.id = 'prog';
-				progress.position.x = this.PROGRESS_BAR_LENGTH * this.PIXEL_BY_NODE / 2;
-				progress.position.y = 18;
+				progress.position.x = elementData.shape.length / 3 * this.PIXEL_BY_NODE / 2;
+				progress.position.y = elementData.height + 1;
 				progress.rotation.y = this.de2ra(90);
 				d.add(progress);
 			} else {
-				progressBar.scale.z = element.qp / 100 * this.PROGRESS_BAR_LENGTH * this.PIXEL_BY_NODE;
-				progressBar.position.x = this.PROGRESS_BAR_LENGTH * this.PIXEL_BY_NODE / 2 * (1 - element.qp / 100);
+				progressBar.scale.z = element.qp / 100 * elementData.shape.length / 3 * this.PIXEL_BY_NODE;
+				progressBar.position.x = elementData.shape.length / 3 * this.PIXEL_BY_NODE / 2 * (1 - element.qp / 100);
 			}
-
 		} else {
 			for (var i in d.children) {
 				if (d.children[i].id == 'prog') {
 					d.remove(d.children[i]);
 				}
+			}
+		}
+	}
+
+	if (element.f != gameData.FAMILIES.terrain) {
+		//update life bar
+		for (var i in d.children) {
+			if (d.children[i].id == 'life') {
+				this.updateLifeBar(d.children[i], element, elementData);
+				break;
 			}
 		}
 	}
@@ -502,5 +545,5 @@ TerrainGeneration = function(width, height, segments, smoothingFactor) {
 gameSurface.centerCameraOnElement = function (element) {
 	var position = this.convertGamePositionToScenePosition(element.p);
 	camera.position.x = position.x;
-	camera.position.y = position.y - this.CENTER_CAMERA_Y_OFFSET * this.PIXEL_BY_NODE;
+	camera.position.y = position.y - this.CENTER_CAMERA_Y_OFFSET;
 }

@@ -12,7 +12,7 @@
 	    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	    <title>Project Awesome</title>
+	    <title>WarNode | Free Online Multiplayer RTS Game</title>
 
 	    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
 	    <link href="css/bootstrap-responsive.min.css" rel="stylesheet">
@@ -41,13 +41,13 @@
 	  		<h1>Credits</h1>
 	  		<p>Game Development and Music by 
 	  			<a href="http://www.linkedin.com/profile/view?id=144913212" target="_blank">
-	  				Guillaume Gouchon.
-	  			</a>
+	  				Guillaume Gouchon</a>.
 	  		</p>
-	  		<p>Check my 
+	  		<p>Check out my 
 	  			<a href="http://giggsapps.blogspot.co.uk/" target="_blank">Blog</a>
 	  			 to see some other cool stuff !
 	  		</p>
+	  		<p>Contact me <a href="mailto:guillaume.gouchon@gmail.com">here</a>.</p>
 	  		<hr/>
 	  		<p>Game icons by game-icons.net</p>
 	  		<p>GUI backgrounds by StumpyStrust</p>
@@ -64,8 +64,8 @@
 	  	</div>
 
 	  	<div id="footer">
-	  		<a data-id="0" href="#">About</a>
 	  		<a data-id="1" href="#">Credits</a>
+	  		<a id="linkAbout" data-id="0" href="#" >About WarNode</a>
 	  		<a data-id="2" href="#">Share</a>
 	  	</div>
 	  </div>
@@ -74,7 +74,49 @@
 	  	<div id="resources"></div>
 	  	<div id="toolbar"></div>
 	  	<div id="population"><img src="js/game/data/g/population.png"/><div></div></div>
+	  	<div id="info" class="hide">
+	  		<div id="firstHalfInfo">
+  				<img id="portrait"/>
+	  			<div>
+	  				<div id="name"></div>
+	  				<div id="life"></div>
+	  			</div>	  			
+	  		</div>
+	  		<div id="stats"></div>
+	  	</div>
+	  	<div id="minimap">
+	  		<span id="minimapLocation"><img src="js/game/data/g/minimapLocation.png"/></span>
+	  	</div>
 	  </div>
+
+	  <div id="endGame" class="fullScreen blackBackground hide" onmousedown="return false">
+	  	<div id="endGameMessage" class="fullScreenTitle easeTransition"></div>
+	  	<div id="endGameStats">
+	  		<table class="table table-bordered">
+	  			<thead>
+	  				<tr>
+	  					<th class="black"></th>
+	  					<th colspan="4" class="red">Units</th>
+	  					<th colspan="3" class="blue">Economy</th>
+	  				</tr>
+		  			<tr>
+		  				<th class="black">Player</th>
+			  			<th class="red">Units killed</th>
+			  			<th class="red">Units lost</th>
+			  			<th class="red">Buildings destroyed</th>
+			  			<th class="red">Units created</th>
+			  			<th class="blue">Resources</th>
+			  			<th class="blue">Builders created</th>
+			  			<th class="blue">Buildings created</th>
+			  		</tr>
+		  		</thead>
+		  		<tbody id="tableBody" ></tbody>
+	  		</table>
+	  	</div>
+	  	<div id="returnHome"><a href="">Return Home</a></div>
+	  </div>
+
+	  <div id="imagesPreload" class="hide"></div>
 
 	</body>
 

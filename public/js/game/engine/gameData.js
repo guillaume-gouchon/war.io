@@ -29,6 +29,17 @@ gameData.RANKS = {
 
 
 /**
+*	List of player's statuses.
+*/
+gameData.PLAYER_STATUSES = {
+	ig : 0,
+	defeat : 1,
+	victory : 2,
+	watcher : 3
+}
+
+
+/**
 * 	Global variable to get a unique id for any game element.
 */
 gameData.unitId = 0;

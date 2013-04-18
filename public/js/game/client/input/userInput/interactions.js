@@ -14,13 +14,13 @@ userInput.CANNOT_BE_BUILT_HERE = 1;
 */
 userInput.clickOnToolbar = function (button) {
 	if (button.isEnabled) {
-		if (button.id == GUI.TOOLBAR_BUTTONS.build.id) {
+		if (button.buttonId == GUI.TOOLBAR_BUTTONS.build.buttonId) {
 			//build something
 			GUI.showBuildings = true;
 		} else if (GUI.showBuildings && button.isEnabled) {
 			//building
 			this.enterConstructionMode(button);
-		} else if (button == GUI.TOOLBAR_BUTTONS.cancel) {
+		} else if (button.buttonId == GUI.TOOLBAR_BUTTONS.cancel.buttonId) {
 			//cancel construction
 			gameManager.sendOrderToEngine(order.TYPES.cancelConstruction, [gameContent.gameElements[gameContent.selected[0]].s.id]);
 		} else if (gameContent.gameElements[gameContent.selected[0]].s.f == gameData.FAMILIES.building) {
@@ -32,7 +32,7 @@ userInput.clickOnToolbar = function (button) {
 
 
 /**
-*	The user wants to build a construction and chose which. 
+*	The user wants to build a construction and has chosen which one. 
 * 	@param building : the building selected by the user
 */
 userInput.enterConstructionMode = function (building) {
@@ -49,34 +49,18 @@ userInput.enterConstructionMode = function (building) {
 */
 userInput.updateConstructionMode = function (x, y) {
 	if(gameContent.building != null) {
-		try {
-			//updates building position
-			gameContent.building.p = gameSurface.getAbsolutePositionFromPixel(x, y);
-			
-			//check if building can be built here
-			gameContent.building.canBeBuiltHere = true;
-			for(var i in gameContent.building.shape) {
-				var row = gameContent.building.shape[i];
-				for(var j in row) {
-					var part = row[j];
-					if(part > 0) {
-						var position = tools.getPartPosition(gameContent.building, i, j);
-						if(!utils.getElementUnder(position.x, position.y)) {
-							//this part is OK
-							gameContent.building.shape[i][j] = this.CAN_BE_BUILT_HERE;
-						} else {
-							//this part cannot be built here
-							gameContent.building.shape[i][j] = this.CANNOT_BE_BUILT_HERE;
-							gameContent.building.canBeBuiltHere = false;
-						}
-					}
-				}
+		//updates building position
+		gameContent.building.p = gameSurface.getAbsolutePositionFromPixel(x, y);
+		
+		//check if building can be built here
+		gameContent.building.canBeBuiltHere = true;
+		for(var i in gameContent.building.shape) {
+			for(var j in gameContent.building.shape[i]) {
+				gameContent.building.shape[i][j] = this.CAN_BE_BUILT_HERE;
 			}
-
-			gameSurface.updateBuildingGeometry();
-
-		} catch (e) {
 		}
+		utils.canBeBuiltHere(gameContent.building);
+		gameSurface.updateBuildingGeometry();
 	}
 }
 

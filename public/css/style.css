@@ -26,7 +26,7 @@ canvas {
     background: url('../js/game/data/g/bgResources.png') center center no-repeat;
     position: absolute;
     top: 2px;
-    left: 2px;
+    left: 124px;
     width: 210px;
     height: 60px;
     text-align: center;
@@ -34,11 +34,12 @@ canvas {
 
 #resources div {
     display: inline-block;
-    padding: 5px;
+    width: 50%;
+    text-align: center;
     font-size: 16px;
     font-weight: bold;
     color: #fff;
-    line-height: 37px;
+    line-height: 60px;
 }
 
 #resources div img {
@@ -53,37 +54,45 @@ canvas {
     display: inline-block;
 }
 
-#toolbar div {
+#toolbar .toolbarButton {
+    height: 72px;
+    width: 72px;
     background: url('../js/game/data/g/boxNormal.png') center center no-repeat;
-    padding: 10px;
     font-size: 22px;
     font-weight: bold;
     color: #fff;
     cursor: pointer;
 }
 
-.toolbarHover {
-    background: url('../js/game/data/g/boxHover.png') center center no-repeat;
+#toolbar .toolbarButton div {
+    text-align: center;
 }
 
+#toolbar .toolbarButton img {
+    margin-top: 10px;
+    height: 50px;
+    width: 50px;
+}
+
+.toolbarButton:hover {
+    background-image: url('../js/game/data/g/boxHover.png')!important;
+}
+
+.selected {
+    background-image: url('../js/game/data/g/boxSelect.png')!important;
+    cursor: default!important;
+}
 
 .disabled {
     opacity: 0.5;
     cursor: default!important;
 }
 
-.selected {
-    background: #0a0;
-    opacity: 0.5;
-    cursor: default!important;
-}
-
-
 #population {
     background: url('../js/game/data/g/bgPop.png') center center no-repeat;
     position: absolute;
     top: 2px;
-    left: 220px;
+    left: 2px;
     width: 120px;
     height: 60px;
     text-align: center;
@@ -94,14 +103,14 @@ canvas {
     font-size: 16px;
     font-weight: bold;
     color: #fff;
-    padding: 5px;
-    line-height: 48px;
+    line-height: 60px;
     vertical-align: middle;
 }
 
 #population img {
     padding: 2px;
     width : 28px;
+    margin-right: 10px;
 }
 
 
@@ -217,6 +226,7 @@ canvas {
     width: 100%;
     display: none;
 }
+
 #footer a {
     color: #111;
     margin-right: 15px;
@@ -245,4 +255,178 @@ canvas {
 
 #about {
     width: 700px;
+}
+
+#linkAbout {
+    font-size: 1.5em;
+}
+
+#endGame {
+    opacity: 0.8;
+    text-align: center;
+}
+
+.victory {
+    color : #0d0;
+}
+
+.defeat {
+    color : #d00;
+}
+
+#returnHome {
+    position: absolute;
+    bottom: 30px;
+    width: 100%;
+    text-align: center;
+}
+
+#returnHome a {
+    color: #000;
+    font-size: 2.2em;
+}
+
+#endGameStats {
+    position: relative;
+    top: 200px;
+    left: 30px;
+}
+
+#endGameStats table tr th, #endGameStats table tr td {
+    text-align: center;
+}
+
+.red {
+    background: #a22;
+}
+
+.blue {
+    background: #22a;
+}
+
+.black {
+    background: #000;
+}
+
+
+
+
+
+
+#info {
+    background: url('../js/game/data/g/bgInfo.png') center center no-repeat;
+    position: absolute;
+    bottom: 6px;
+    height: 70px;
+    width: 350px;
+    text-align: center;
+}
+
+#firstHalfInfo {
+    display: inline-block;
+    width: 200px;
+}
+
+#firstHalfInfo div {
+    display: inline-block;
+    width: 130px;
+}
+
+#secondHalInfo {
+    display: inline-block;
+    width: 150px;
+}
+
+#portrait {
+    display: inline-block;
+    height: 40px;
+    width: 40px;
+    vertical-align: top;
+    margin-top: 15px;
+    margin-left: 20px;
+}
+
+#name {
+    margin-top: 15px;
+    font-size: 0.9em;
+}
+
+#life {
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+#stats {
+    display: inline-block;
+    width: 130px;
+    padding-right: 10px;
+}
+
+#stats div {
+    line-height: 20px;
+}
+
+#stats div img {
+    display: inline-block;
+    height: 20px;
+    width: 20px;
+    vertical-align: middle;
+}
+
+#stats div div {
+    display: inline-block;
+    font-size: 0.7em;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.stat {
+    display: inline-block;
+    width: 48%;
+}
+
+.queue {
+    display: inline-block;
+    width: 15%;
+}
+
+.queue div {
+    position: absolute;
+    top: 37px;
+    left: 188px;
+    color: rgb(224, 188, 25);
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+#toolbar .price {
+    position: absolute;
+    bottom: 0px;
+    left: 80px;
+    width: 50px;
+    line-height: 15px;
+    font-size: 0.5em;
+}
+
+#toolbar .price img {
+    display: inline-block;
+    height: 15px;
+    width: 15px;
+    margin-top: 0px;
+    margin-right: 3px;
+}
+
+#minimap {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    height: 80px;
+    width: 80px;
+    opacity: 0.7;
+    background: url('../js/game/data/g/bgMinimap.png') center center no-repeat;
+    border-radius: 10px;
+}
+
+#minimapLocation {
+    position: relative;
 }

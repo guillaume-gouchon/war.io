@@ -25,20 +25,6 @@ utils.createCookie = function (name, value) {
 
 
 /**
-*	Is this position free ?
-*/
-utils.getElementUnder = function (x, y) {
-	for(var i in gameContent.gameElements) {
-		var element = gameContent.gameElements[i].s;
-	  	if(tools.isElementThere(element, {x : x, y : y})) {
-	  		return true;
-	  	}
-	}
-	return false;
-}
-
-
-/**
 *	Clones an object.
 */
 utils.clone = function(obj) {
@@ -48,4 +34,37 @@ utils.clone = function(obj) {
         if (obj.hasOwnProperty(attr)) copy[attr] = obj[attr];
     }
     return copy;
+}
+
+
+/**
+*	Is there something under any part of this element ?
+*/
+utils.canBeBuiltHere = function (building) {
+	var b1 = tools.getPartPosition(building, 0, 0);
+	var b2 = {
+		x : b1.x + building.shape[0].length - 1,
+		y : b1.y + building.shape.length - 1
+	};
+	for (var n in gameContent.gameElements) {
+		var element = gameContent.gameElements[n].s;
+		var elementShape = gameData.ELEMENTS[element.f][element.r][element.t].shape;
+		var e1 = tools.getPartPosition(element, 0, 0);
+		var e2 = {
+			x : e1.x + elementShape[0].length - 1,
+			y : e1.y + elementShape.length - 1
+		};
+		//first filter
+		if (e1.x >= b1.x && e1.x <= b2.x && (e1.y >= b1.y && e1.y <= b2.y || e2.y >= b1.y && e2.y <= b2.y)
+			|| e2.x >= b1.x && e2.x <= b2.x && (e1.y >= b1.y && e1.y <= b2.y || e2.y >= b1.y && e2.y <= b2.y)) {
+			building.canBeBuiltHere = false;
+			for (var i = e1.x; i <= e2.x; i++) {
+				for (var j = e1.y; j <= e2.y; j++) {
+					if (i >= b1.x && i <= b2.x && j >= b1.y && j <= b2.y) {
+						building.shape[i - b1.x][j - b1.y] = userInput.CANNOT_BE_BUILT_HERE;		
+					}
+				}
+			}
+		} 
+	}
 }

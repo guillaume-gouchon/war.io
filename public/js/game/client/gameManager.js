@@ -5,6 +5,7 @@ var gameManager = {};
 *	Testing purpose variable.
 */
 gameManager.isOfflineGame = true;
+gameManager.offlineLoop = null;
 
 
 /**
@@ -31,7 +32,7 @@ gameManager.startGame = function () {
 	gameContent.init(this.waitingData);
 
 	if (this.isOfflineGame) {
-		setInterval(function(){
+		this.offlineLoop = setInterval(function(){
 			gameContent.update(gameLoop.update());
 		}, 1000 / 8);
 	}	
@@ -82,6 +83,11 @@ gameManager.connectToServer = function (gameInitData) {
 	this.socket.on('gameData', function (data) {
 		gameContent.update(data);
 	});
+
+	//show the game's stats when game is over
+	this.socket.on('gameStats', function (data) {
+		gameManager.showStats(data);
+	});
 }
 
 
@@ -108,5 +114,49 @@ gameManager.sendOrderToEngine = function (type, params) {
 	} else {
 		//send order to external server
 		gameManager.socket.emit('order', [type, params]);
+	}
+}
+
+
+gameManager.endGame = function (status) {
+	if (status == gameData.PLAYER_STATUSES.victory) {
+		$('#endGameMessage').addClass('victory');
+		$('#endGameMessage').html('Victory !');
+	} else {
+		$('#endGameMessage').addClass('defeat');
+		$('#endGameMessage').html('Defeat...');
+	}
+	$('#endGame').fadeIn();
+	$('#endGameMessage').addClass('moveToLeft');
+
+	if (this.isOfflineGame) {
+		clearInterval(this.offlineLoop);
+		this.showStats(gameLogic.stats);
+	}
+}
+
+
+/**
+*	Shows the game statistics.
+*/
+gameManager.showStats = function (stats) {
+	$('table', '#endGameStats').css('width', window.innerWidth - 60);
+	for (var i in stats) {
+		var statPlayer = stats[i];
+		var playerName;
+		if (i == gameContent.myArmy) {
+			playerName = 'You';
+		} else {
+			playerName = 'Player ' + i;
+		}
+		$('#tableBody').append('<tr class="black"><td>' +  
+			playerName + '</td><td>' +  
+			statPlayer.killed + '</td><td>' +  
+			statPlayer.lost + '</td><td>' +  
+			statPlayer.buildingsDestroyed + '</td><td>' +  
+			statPlayer.unitsCreated + '</td><td>' +  
+			statPlayer.resources + '</td><td>' +  
+			statPlayer.buildersCreated + '</td><td>' +  
+			statPlayer.buildingsCreated + '</td></tr>');
 	}
 }
