@@ -18,7 +18,7 @@ app.configure(function () {
   app.use(express.methodOverride());
   app.use(app.router);
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-  app.use(express.static(__dirname + '/public'));
+  app.use(express.static(__dirname + '/public', { maxAge: 31557600000 }));
 });
 
 
@@ -45,6 +45,7 @@ require('./services')(app);
 
 //setup index page
 app.get('/', function (req, res) {
+  if (!res.getHeader('Cache-Control')) res.setHeader('Cache-Control', 'public, max-age=' + (31557600));
   res.sendfile(__dirname + '/public/index.html');
 });
 
