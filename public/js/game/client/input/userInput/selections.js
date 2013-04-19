@@ -66,7 +66,7 @@ userInput.selectGroup = function (x, y) {
 
 			for(var i in gameContent.gameElements) {
 				var element = gameContent.gameElements[i].s;
-	  			if(rank.isAlly(gameContent.myArmy, element)
+	  			if(rank.isAlly(gameContent.players, gameContent.myArmy, element)
 	  				&& element.f != gameData.FAMILIES.terrain
 	  				&& (gameContent.selectionRectangle[0] - gameContent.selectionRectangle[2] < 0 
 			  		&& element.p.x <= gameContent.selectionRectangle[2]
@@ -115,11 +115,11 @@ userInput.removeSelectionRectangle = function () {
 *	Selects all similar ally units.
 */
 userInput.doubleClickToSelect = function (x, y) {
-	if(gameContent.selected.length > 0 && rank.isAlly(gameContent.myArmy, gameContent.gameElements[gameContent.selected[0]].s)) {
+	if(gameContent.selected.length > 0 && rank.isAlly(gameContent.players, gameContent.myArmy, gameContent.gameElements[gameContent.selected[0]].s)) {
 		var selected = gameContent.gameElements[gameContent.selected[0]].s;
 		for(var i in gameContent.gameElements) {
 			var element = gameContent.gameElements[i].s;
-		  	if(element.f == selected.f && rank.isAlly(gameContent.myArmy, element)
+		  	if(element.f == selected.f && rank.isAlly(gameContent.players, gameContent.myArmy, element)
 		  		&& element.t == selected.t) {
 		  		//select the clicked element
 		  		gameContent.selected.push(element.id);

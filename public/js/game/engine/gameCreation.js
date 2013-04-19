@@ -12,6 +12,7 @@ gameCreation.ZONE_SIZE = 8;
 * Sets up a new game.
 */
 gameCreation.createNewGame = function(map, players) {
+	var game = new gameData.Game();
 	for (var i in players) {
 		var player = players[i];
 		for(var n in map.ir.re) {
@@ -24,20 +25,21 @@ gameCreation.createNewGame = function(map, players) {
 				player.ra.push(gameData.RANKS.enemy);
 			}
 		}
-		gameLogic.players.push(player);
+		game.players.push(player);
 	}
-	this.createNewMap(map, players);
-	stats.init();
+	this.createNewMap(game, map, players);
+	stats.init(game);
+	return game;
 }
 
 
 /**
 *	Creates a random map, sets up the terrain and the players basecamps.
 */
-gameCreation.createNewMap = function (map, players) {
-	this.initGrid(map.size);
+gameCreation.createNewMap = function (game, map, players) {
+	game.grid = this.initGrid(map.size);
 	if(map.t.id == gameData.MAP_TYPES.random.id) {
-		this.createRandomMap(map, players);
+		this.createRandomMap(game, map, players);
 	}
 
 }
@@ -47,20 +49,21 @@ gameCreation.createNewMap = function (map, players) {
 *	Initializes the staticGrid.
 */
 gameCreation.initGrid = function (size) {
-	gameLogic.grid = [];
+	var grid = [];
 	for(var i = 0; i < size.x; i++) {
-		gameLogic.grid[i] = [];
+		grid[i] = [];
 		for(var j = 0; j < size.y; j++) {
-			gameLogic.grid[i][j] = {x : i, y : j, isWall : false};
+			grid[i][j] = {x : i, y : j, isWall : false};
 		}
 	}
+	return grid;
 }
 
 
 /**
 *	Creates a random map.
 */
-gameCreation.createRandomMap = function (map, players) {
+gameCreation.createRandomMap = function (game, map, players) {
 	//get zones size
 	var nX = parseInt(map.size.x / this.ZONE_SIZE);
 	var nY = parseInt(map.size.y / this.ZONE_SIZE); 
@@ -74,7 +77,7 @@ gameCreation.createRandomMap = function (map, players) {
 		}
 	}
 	//dispatch players on the map
-	this.dispatchPlayers(zones, players, nX, nY);
+	this.dispatchPlayers(game, zones, players, nX, nY);
 
 	//prepare the available zones according to the factors of the vegetation selected
 	var availableZones = [];
@@ -89,10 +92,10 @@ gameCreation.createRandomMap = function (map, players) {
 	for(var i = 0; i < nX; i++) {
 		for(var j = 0; j < nY; j++) {
 			if(zones[i][j] < 0) {
-				this.populateZone(map, {x : i * this.ZONE_SIZE + 1, y : j * this.ZONE_SIZE + 1}, {x : (i + 1) * this.ZONE_SIZE - 1, y : (j + 1) * this.ZONE_SIZE - 1}, 
+				this.populateZone(game, map, {x : i * this.ZONE_SIZE + 1, y : j * this.ZONE_SIZE + 1}, {x : (i + 1) * this.ZONE_SIZE - 1, y : (j + 1) * this.ZONE_SIZE - 1}, 
 							  availableZones[parseInt(Math.random() * availableZones.length)]);
 			} else {
-				this.populateZone(map, {x : i * this.ZONE_SIZE + 1, y : j * this.ZONE_SIZE + 1}, {x : (i + 1) * this.ZONE_SIZE - 1, y : (j + 1) * this.ZONE_SIZE - 1}, 
+				this.populateZone(game, map, {x : i * this.ZONE_SIZE + 1, y : j * this.ZONE_SIZE + 1}, {x : (i + 1) * this.ZONE_SIZE - 1, y : (j + 1) * this.ZONE_SIZE - 1}, 
 							  zones[i][j]);
 			}
 		}
@@ -104,16 +107,16 @@ gameCreation.createRandomMap = function (map, players) {
 /**
 *	Populates a zone with game elements.
 */
-gameCreation.populateZone = function (map, from, to, zoneType) {
+gameCreation.populateZone = function (game, map, from, to, zoneType) {
 	switch (zoneType) {
 		case gameData.ZONES.forest :
-			this.createForest(from, to);
+			this.createForest(game, from, to);
 			break;
 		case gameData.ZONES.stonemine:
-			this.createStoneMine(from, to);
+			this.createStoneMine(game, from, to);
 			break;
 		case gameData.ZONES.goldmine:
-			this.createGoldMine(map, from, to);
+			this.createGoldMine(game, map, from, to);
 			break;
 	}
 }
@@ -124,11 +127,11 @@ gameCreation.populateZone = function (map, from, to, zoneType) {
 *	@param from : top left-handed corner
 *	@param to : bottom right-handed corner
 */
-gameCreation.createForest = function (from, to) {
+gameCreation.createForest = function (game, from, to) {
 	for(var i = from.x; i < to.x; i++) {
 		for(var j = from.y; j < to.y; j++) {
 			if(Math.random() < this.PROBABILITY_TREE) {
-				this.addGameElement(new gameData.Terrain(gameData.ELEMENTS[gameData.FAMILIES.terrain][0][0], i, j));
+				this.addGameElement(game, new gameData.Terrain(gameData.ELEMENTS[gameData.FAMILIES.terrain][0][0], i, j));
 			}
 		}
 	}
@@ -140,11 +143,11 @@ gameCreation.createForest = function (from, to) {
 *	@param from : top left-handed corner
 *	@param to : bottom right-handed corner
 */
-gameCreation.createStoneMine = function (from, to) {
+gameCreation.createStoneMine = function (game, from, to) {
 	for(var i = from.x; i < to.x - 2; i++) {
 		for(var j = from.y; j < to.y - 2; j++) {
 			if(Math.random() < 0.1) {
-				this.addGameElement(new gameData.Terrain(gameData.ELEMENTS[gameData.FAMILIES.terrain][0][1], i, j));
+				this.addGameElement(game, new gameData.Terrain(gameData.ELEMENTS[gameData.FAMILIES.terrain][0][1], i, j));
 				return;
 			}
 		}
@@ -157,9 +160,9 @@ gameCreation.createStoneMine = function (from, to) {
 *	@param from : top left-handed corner
 *	@param to : bottom right-handed corner
 */
-gameCreation.createGoldMine = function (map, from, to) {
+gameCreation.createGoldMine = function (game, map, from, to) {
 	if (from.x < map.size.x - 5 && from.y < map.size.y - 5 && from.y > 5 && from.x > 5) {
-		this.addGameElement(new gameData.Terrain(gameData.ELEMENTS[gameData.FAMILIES.terrain][0][2], from.x, from.y));
+		this.addGameElement(game, new gameData.Terrain(gameData.ELEMENTS[gameData.FAMILIES.terrain][0][2], from.x, from.y));
 	}
 }
 
@@ -167,28 +170,28 @@ gameCreation.createGoldMine = function (map, from, to) {
 /**
 * Adds a game element on the map.
 */
-gameCreation.addGameElement = function (element) {
+gameCreation.addGameElement = function (game, element) {
 	var shape = gameData.ELEMENTS[element.f][element.r][element.t].shape;
-	gameLogic.gameElements.push(element);
+	game.gameElements.push(element);
 	for(var i in shape) {
 		var row = shape[i];
 		for(var j in row) {
 			var part = row[j];
 			if(part > 0) {
 				var position = tools.getPartPosition(element, i, j);
-				gameLogic.grid[position.x][position.y].isWall = true;
+				game.grid[position.x][position.y].isWall = true;
 			}
 		}
 	}
 
-	tools.addUniqueElementToArray(gameLogic.added, element);
+	tools.addUniqueElementToArray(game.added, element);
 }
 
 
 /**
 * Removes a game element on the map.
 */
-gameCreation.removeGameElement = function (element) {
+gameCreation.removeGameElement = function (game, element) {
 	var shape = gameData.ELEMENTS[element.f][element.r][element.t].shape;
 	for(var i in shape) {
 		var row = shape[i];
@@ -196,18 +199,18 @@ gameCreation.removeGameElement = function (element) {
 			var part = row[j];
 			if(part > 0) {
 				var position = tools.getPartPosition(element, i, j);
-				gameLogic.grid[position.x][position.y].isWall = false;
+				game.grid[position.x][position.y].isWall = false;
 			}
 		}
 	}
-	tools.addUniqueElementToArray(gameLogic.removed, element);
+	tools.addUniqueElementToArray(game.removed, element);
 }
 
 
 /**
 *	Dispatches the players' basecamps through the map.
 */
-gameCreation.dispatchPlayers = function (zones, players, dx, dy) {
+gameCreation.dispatchPlayers = function (game, zones, players, dx, dy) {
 	//get player's available initial zones
 	var availableInitialPositions = this.getAvailableInitialPositions(players.length);
 
@@ -229,7 +232,7 @@ gameCreation.dispatchPlayers = function (zones, players, dx, dy) {
 			x : playerZone.x * this.ZONE_SIZE + parseInt(this.ZONE_SIZE / 4) + parseInt(Math.random() * this.ZONE_SIZE / 2), 
 			y : playerZone.y * this.ZONE_SIZE + parseInt(this.ZONE_SIZE / 4) + parseInt(Math.random() * this.ZONE_SIZE / 2)
 		}
-		this.setupBasecamp(players[i], campPosition);
+		this.setupBasecamp(game, players[i], campPosition);
 
 		//add a gold mine and a forest around the basecamp
 		this.placeZoneRandomlyAround(gameData.ZONES.forest, zones, playerZone.x, playerZone.y);
@@ -256,17 +259,17 @@ gameCreation.placeZoneRandomlyAround = function (zoneToPlace, zones, aroundX, ar
 /**
 *	Sets up a base camp for a player.
 */
-gameCreation.setupBasecamp = function (player, position) {
+gameCreation.setupBasecamp = function (game, player, position) {
 	var basecamp = gameData.BASECAMPS[player.r];
 
 	//place town hall
 	var townHall = new gameData.Building(basecamp.buildings[0], position.x, position.y, player.o, true);
-	this.addGameElement(townHall);
+	this.addGameElement(game, townHall);
 	
 	//place units
-	var aroundTownHall = tools.getTilesAroundElements(townHall);
+	var aroundTownHall = tools.getTilesAroundElements(game, townHall);
 	for(var i in basecamp.units) {
-		this.addGameElement(new gameData.Unit(basecamp.units[i], aroundTownHall[i].x, aroundTownHall[i].y, player.o));
+		this.addGameElement(game, new gameData.Unit(basecamp.units[i], aroundTownHall[i].x, aroundTownHall[i].y, player.o));
 	}
 }
 

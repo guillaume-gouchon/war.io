@@ -46,7 +46,7 @@ input.onRightClick = function (event) {
 	if(gameContent.building != null) {
 		userInput.leaveConstructionMode();
 	} else if(gameContent.selected.length > 0 
-		&& rank.isAlly(gameContent.myArmy, gameContent.gameElements[gameContent.selected[0]].s)
+		&& rank.isAlly(gameContent.players, gameContent.myArmy, gameContent.gameElements[gameContent.selected[0]].s)
 		&& (gameContent.gameElements[gameContent.selected[0]].s.f == gameData.FAMILIES.unit
 			|| gameContent.gameElements[gameContent.selected[0]].s.f == gameData.FAMILIES.building)) {
 			userInput.dispatchUnitAction(event.x, event.y); 

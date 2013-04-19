@@ -30,15 +30,15 @@ fightLogic.WEAPONS_EFFICIENCY = [
 /**
 *	Applies a basic attack.
 */
-fightLogic.attack = function (attacker, target) {
+fightLogic.attack = function (game, attacker, target) {
 	var attackFactor = this.WEAPONS_EFFICIENCY[gameData.ELEMENTS[attacker.f][attacker.r][attacker.t].weaponType][gameData.ELEMENTS[target.f][target.r][target.t].armorType]; 
 	var damage = Math.max(0, parseInt(gameData.ELEMENTS[attacker.f][attacker.r][attacker.t].attack * attackFactor * (1 + 0.2 * Math.random())) - gameData.ELEMENTS[target.f][target.r][target.t].defense);
-	this.applyDamage(damage, target, attacker);
-	tools.addUniqueElementToArray(gameLogic.modified, target);
+	this.applyDamage(game, damage, target, attacker);
+	tools.addUniqueElementToArray(game.modified, target);
 
 	//target's survival instinct
 	if (target.f == gameData.FAMILIES.unit && target.a == null && (target.mt == null || target.mt.x == null)) {
-		AI.targetReaction(target, attacker);
+		AI.targetReaction(game, target, attacker);
 	}
 }
 
@@ -47,17 +47,17 @@ fightLogic.attack = function (attacker, target) {
 *	Applies damage of any attack to the target.
 *	Increments frag if any attacker.
 */
-fightLogic.applyDamage = function (damage, target, fragOwner) {
+fightLogic.applyDamage = function (game, damage, target, fragOwner) {
 	target.l = target.l - damage;
 	//check if dead
 	if(fragOwner != null && target.l <= 0) {
 		fragOwner.frag = fragOwner.frag + 1;
 		fragOwner.a = null;
-		tools.addUniqueElementToArray(gameLogic.modified, fragOwner);
+		tools.addUniqueElementToArray(game.modified, fragOwner);
 		target.murderer = fragOwner.o;
 
 		//attack a new enemy
-		AI.searchForNewEnemy(fragOwner);
+		AI.searchForNewEnemy(game, fragOwner);
 	}
 }
 

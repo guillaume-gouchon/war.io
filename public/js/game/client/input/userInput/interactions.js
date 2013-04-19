@@ -104,7 +104,7 @@ userInput.updateMouseIcon = function (mouseX, mouseY) {
 	
 	if (elementUnder != null && elementUnder.object.elementId != null) {
 		var e = gameContent.gameElements[elementUnder.object.elementId].s;
-		if (e != null && e.f != gameData.FAMILIES.terrain && rank.isEnemy(gameContent.myArmy, e)) {
+		if (e != null && e.f != gameData.FAMILIES.terrain && rank.isEnemy(gameContent.players, gameContent.myArmy, e)) {
 			GUI.updateMouse(GUI.MOUSE_ICONS.attack);
 		} else {
 			GUI.updateMouse(GUI.MOUSE_ICONS.select);

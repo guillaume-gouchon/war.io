@@ -10,14 +10,14 @@ move.ASTAR_MAX_STEPS_SEARCH = 4;
 /**
 *	Moves an element one step closer to its destination.
 */
-move.moveElement = function (element) {
-	var destination = gameLogic.grid[element.mt.x][element.mt.y];
+move.moveElement = function (game, element) {
+	var destination = game.grid[element.mt.x][element.mt.y];
 
   //if destination forbids movement, search neighbors for a new one
 	var counter = 0;
 	while(destination.isWall && counter < 20) {
 		counter++;
-	    var endNeighbors = astar.neighbors(gameLogic.grid, destination, true);
+	    var endNeighbors = astar.neighbors(game.grid, destination, true);
 	    for(var i in endNeighbors){
 	      if(!endNeighbors[i].isWall) {
 	        destination = endNeighbors[i];
@@ -28,7 +28,7 @@ move.moveElement = function (element) {
 	}
 	
 	//use A* algorithm to find the path
-	var path = astar.search(gameLogic.grid, gameLogic.grid[element.p.x][element.p.y], 
+	var path = astar.search(game.grid, game.grid[element.p.x][element.p.y], 
 							destination, true);
 
 	if(path.length > 0) {
@@ -42,7 +42,7 @@ move.moveElement = function (element) {
 
 		var newPosition = {x : path[speed - 1].x, y : path[speed - 1].y};
 
-		if(!gameLogic.grid[newPosition.x][newPosition.y].isWall) {
+		if(!game.grid[newPosition.x][newPosition.y].isWall) {
 
 			//removes old position
       var shape = gameData.ELEMENTS[element.f][element.r][element.t].shape;
@@ -50,7 +50,7 @@ move.moveElement = function (element) {
 				for (var j in shape[i]) {
 					if (shape[i][j] > 0) {
 						var partPosition = tools.getPartPosition(element, i, j);
-						gameLogic.grid[partPosition.x][partPosition.y].isWall = false;
+						game.grid[partPosition.x][partPosition.y].isWall = false;
 					}
 				}
 			}
@@ -61,7 +61,7 @@ move.moveElement = function (element) {
 				for (var j in shape[i]) {
 					if (shape[i][j] > 0) {
 						var partPosition = tools.getPartPosition(element, i, j);
-						gameLogic.grid[partPosition.x][partPosition.y].isWall = true;
+						game.grid[partPosition.x][partPosition.y].isWall = true;
 					}
 				}
 			}

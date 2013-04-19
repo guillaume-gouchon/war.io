@@ -33,7 +33,7 @@ gameManager.startGame = function () {
 
 	if (this.isOfflineGame) {
 		this.offlineLoop = setInterval(function(){
-			gameContent.update(gameLoop.update());
+			gameContent.update(gameContent.game.update());
 		}, 1000 / 8);
 	}	
 
@@ -48,8 +48,8 @@ gameManager.initOfflineGame = function (gameInitData) {
                     gameData.MAP_SIZES[gameInitData.mapSize],
                     gameData.VEGETATION_TYPES[gameInitData.vegetation],
                     gameData.INITIAL_RESOURCES[gameInitData.initialResources]);
-	gameCreation.createNewGame(gameContent.map, gameContent.players);
-	this.waitingData = gameLogic.getGameElements();
+	gameContent.game = gameCreation.createNewGame(gameContent.map, gameContent.players);
+	this.waitingData = gameContent.game.gameElements;
 	gameSurface.init();
 	GUI.init();
 	input.initInputs();
@@ -70,7 +70,6 @@ gameManager.connectToServer = function (gameInitData) {
 	//the server launched the game !
 	this.socket.on('gameStart', function (data) {
 		gameContent.players = data.players;
-		gameLogic.players = data.players;
 		gameContent.myArmy = data.myArmy;
 		gameContent.map = data.map;
 		gameManager.waitingData = data.initElements;
@@ -110,7 +109,7 @@ gameManager.getPlayerId = function () {
 
 gameManager.sendOrderToEngine = function (type, params) {
 	if (this.isOfflineGame) {
-		order.dispatchReceivedOrder(type, params);
+		order.dispatchReceivedOrder(gameContent.game, type, params);
 	} else {
 		//send order to external server
 		gameManager.socket.emit('order', [type, params]);
@@ -131,7 +130,7 @@ gameManager.endGame = function (status) {
 
 	if (this.isOfflineGame) {
 		clearInterval(this.offlineLoop);
-		this.showStats(gameLogic.stats);
+		this.showStats(gameContent.game.stats);
 	}
 }
 

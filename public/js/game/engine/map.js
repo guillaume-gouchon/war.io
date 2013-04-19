@@ -4,11 +4,11 @@ var mapLogic = {};
 /**
 *	Returns the nearest resource element.
 */
-mapLogic.getNearestResource = function (element, resourceType) {
+mapLogic.getNearestResource = function (game, element, resourceType) {
 	var min = -1;
 	var closestTerrain = null;
-	for (var i in gameLogic.gameElements) {
-		var terrain = gameLogic.gameElements[i];
+	for (var i in game.gameElements) {
+		var terrain = game.gameElements[i];
 		if (terrain.f == gameData.FAMILIES.terrain 
 			&& gameData.ELEMENTS[terrain.f][terrain.r][terrain.t].resourceType == resourceType) {
 			var distance = tools.getElementsDistance(element, terrain);
@@ -28,13 +28,13 @@ mapLogic.getNearestResource = function (element, resourceType) {
 /**
 *	Returns the nearest friend building.
 */
-mapLogic.getNearestBuilding = function (element, buildingType) {
+mapLogic.getNearestBuilding = function (game, element, buildingType) {
 	var min = -1;
 	var closestBuilding = null;
-	for (var i in gameLogic.gameElements) {
-		var building = gameLogic.gameElements[i];
+	for (var i in game.gameElements) {
+		var building = game.gameElements[i];
 		if (building.f == gameData.FAMILIES.building
-		&& rank.isAlly(element.o, building) && building.t == buildingType) {
+		&& rank.isAlly(game.players, element.o, building) && building.t == buildingType) {
 			var distance = tools.getElementsDistance(element, building);
 			if(distance < 2) {
 				return building;
@@ -51,13 +51,13 @@ mapLogic.getNearestBuilding = function (element, buildingType) {
 /**
 *	Returns the nearest enemy unit/building.
 */
-mapLogic.getNearestEnemy = function (unit) {
+mapLogic.getNearestEnemy = function (game, unit) {
 	var min = -1;
 	var closestEnemy = null;
-	for (var i in gameLogic.gameElements) {
-		var enemy = gameLogic.gameElements[i];
+	for (var i in game.gameElements) {
+		var enemy = game.gameElements[i];
 		if (enemy.f != gameData.FAMILIES.terrain 
-			&& rank.isEnemy(unit.o, enemy)) {
+			&& rank.isEnemy(game.players, unit.o, enemy)) {
 			var distance = tools.getElementsDistance(unit, enemy);
 			if(distance < 5) {
 				return enemy;

@@ -79,12 +79,10 @@ canvas {
 
 .selected {
     background-image: url('../js/game/data/g/boxSelect.png')!important;
-    cursor: default!important;
 }
 
 .disabled {
     opacity: 0.5;
-    cursor: default!important;
 }
 
 #population {

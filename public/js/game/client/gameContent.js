@@ -7,6 +7,7 @@ var gameContent = {};
 gameContent.map = null;
 gameContent.players = null;
 gameContent.myArmy = null;
+gameContent.game = null;
 
 
 /**

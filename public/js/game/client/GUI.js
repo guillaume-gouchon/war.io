@@ -64,7 +64,7 @@ GUI.update = function () {
 *	Updates the toolbar depending on the elements selected.
 */
 GUI.updateToolbar = function () {
-	if (gameContent.selected.length > 0 && rank.isAlly(gameContent.myArmy, gameContent.gameElements[gameContent.selected[0]].s)) {
+	if (gameContent.selected.length > 0 && rank.isAlly(gameContent.players, gameContent.myArmy, gameContent.gameElements[gameContent.selected[0]].s)) {
 		var selected = gameContent.gameElements[gameContent.selected[0]].s;
 		if (selected.f == gameData.FAMILIES.building) {
 			//building(s) are selected
@@ -72,7 +72,7 @@ GUI.updateToolbar = function () {
 				//building is not finished yet, show cancel button
 				this.toolbar = [GUI.TOOLBAR_BUTTONS.cancel];
 			} else {
-				this.toolbar = production.getWhatCanBeBought(selected.o, gameData.ELEMENTS[gameData.FAMILIES.building][selected.r][selected.t].buttons);
+				this.toolbar = production.getWhatCanBeBought(gameContent.players, selected.o, gameData.ELEMENTS[gameData.FAMILIES.building][selected.r][selected.t].buttons);
 			}
 		} else if (selected.f == gameData.FAMILIES.unit) {
 			//unit(s) are selected
@@ -102,7 +102,7 @@ GUI.updateToolbar = function () {
 *	Returns the list of the buildings which can be built by the builder(s) selected.
 */
 GUI.getBuildingButtons = function (builder) {
-	return production.getWhatCanBeBought(builder.o, gameData.ELEMENTS[gameData.FAMILIES.building][builder.r]);
+	return production.getWhatCanBeBought(gameContent.players, builder.o, gameData.ELEMENTS[gameData.FAMILIES.building][builder.r]);
 }
 
 

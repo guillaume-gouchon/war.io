@@ -96,14 +96,14 @@ tools.isElementThere = function (element, position) {
 /**
 *	Returns closest tiles around the element.
 */
-tools.getTilesAroundElements = function (element) {
+tools.getTilesAroundElements = function (game, element) {
 	var array = [];
 	var shape = gameData.ELEMENTS[element.f][element.r][element.t].shape;
 	for(var i in shape) {
 		for(var j in shape[i]) {
 			if(shape[i][j] > 0) {
 				var partPosition = this.getPartPosition(element, i, j);
-				var neighbors = astar.neighbors(gameLogic.grid, gameLogic.grid[partPosition.x][partPosition.y], true);
+				var neighbors = astar.neighbors(game.grid, game.grid[partPosition.x][partPosition.y], true);
 				for(var n in neighbors) {
 					var neighbor = neighbors[n];
 					if(!neighbor.isWall) {
@@ -120,9 +120,9 @@ tools.getTilesAroundElements = function (element) {
 /**
 *	Returns the game element under the mouse.
 */
-tools.getElementUnder = function (x, y) {
-	for(var i in gameLogic.gameElements) {
-		var element = gameLogic.gameElements[i];
+tools.getElementUnder = function (game, x, y) {
+	for(var i in game.gameElements) {
+		var element = game.gameElements[i];
 	  	if(tools.isElementThere(element, {x : x, y : y})) {
 	  		return element;
 	  	}
@@ -134,10 +134,10 @@ tools.getElementUnder = function (x, y) {
 /**
 *	Returns the game elements from their ids.
 */
-tools.getGameElementsFromIds = function (ids) {
+tools.getGameElementsFromIds = function (game, ids) {
 	var elements = [];
-	for (var i in gameLogic.gameElements) {
-		var gameElement = gameLogic.gameElements[i];
+	for (var i in game.gameElements) {
+		var gameElement = game.gameElements[i];
 		for (var j in ids) {
 			if(gameElement.id == ids[j]) {
 				elements.push(gameElement);

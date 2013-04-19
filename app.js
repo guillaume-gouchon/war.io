@@ -65,6 +65,7 @@ eval(require('fs').readFileSync('./public/js/game/data.js', 'utf8'));
 var games = [];
 var loops = [];
 
+//init socket.io
 io.sockets.on('connection', function (socket) {
 
   socket.emit('askUserData', null);
@@ -81,7 +82,6 @@ io.sockets.on('connection', function (socket) {
           break;
         }
       }
-
   });
 
 });

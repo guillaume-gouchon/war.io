@@ -126,9 +126,9 @@ gameSurface.selectElement = function (elementId) {
 	var element = gameContent.gameElements[elementId].s;
 	var elementData = gameData.ELEMENTS[element.f][element.r][element.t];
 	var color;
-	if (rank.isEnemy(gameContent.myArmy, element)) {
+	if (rank.isEnemy(gameContent.players, gameContent.myArmy, element)) {
 		color = this.SELECTION_ENEMY_COLOR;
-	} else if (rank.isAlly(gameContent.myArmy, element)) {
+	} else if (rank.isAlly(gameContent.players, gameContent.myArmy, element)) {
 		color = this.SELECTION_ALLY_COLOR;
 	} else {
 		color = this.SELECTION_NEUTRAL_COLOR;
