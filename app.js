@@ -62,6 +62,7 @@ eval(require('fs').readFileSync('./public/js/game/data.js', 'utf8'));
 
 
 var games = [];
+var loops = [];
 
 io.sockets.on('connection', function (socket) {
 
@@ -100,9 +101,22 @@ function startGame(game) {
     }
   }
 
-  setInterval(function () {
+  var loop = setInterval(function () {
     var gameData = {};
     gameData.players = gameLogic.players;
+
+    //check end of game
+    for (var i in gameData.players) {
+      if (gameData.players.s == gameData.PLAYER_STATUSES.victory) {
+        clearInterval(loops[0]);
+        for (var i in game.players) {
+          if(game.sockets[i] != null) {
+            game.sockets[i].emit('gameStats', gameLogic.stats);
+          }
+        }
+      }
+    }
+    
     gameData.gameElements = gameLogic.gameElements;
     var data = gameLoop.update();
     for (var i in game.players) {
@@ -112,6 +126,8 @@ function startGame(game) {
     }
 
   }, 1000 / gameLoop.FREQUENCY);
+
+  loops.push(loop);
 
   for (var i in game.players) {
     if(game.sockets[i] != null) {

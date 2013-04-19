@@ -65,6 +65,10 @@ production.removeBuilding = function (building) {
 	if(gameData.ELEMENTS[building.f][building.r][building.t].pop > 0 && building.cp == 100) {
 		gameLogic.players[building.o].pop.max -= gameData.ELEMENTS[building.f][building.r][building.t].pop;
 	}
+
+	if (building.murderer != null) {
+		stats.updateField(building.murderer, 'buildingsDestroyed', 1);
+	}
 }
 
 
@@ -196,6 +200,11 @@ production.createNewUnit = function (unitType, factory) {
 production.removeUnit = function (unit) {
 	if(gameData.ELEMENTS[unit.f][unit.r][unit.t].pop > 0) {
 		gameLogic.players[unit.o].pop.current -= gameData.ELEMENTS[unit.f][unit.r][unit.t].pop;
+	}
+
+	if (unit.murderer != null) {
+		stats.updateField(unit.murderer, 'killed', 1);
+		stats.updateField(unit.murderer, 'lost', 1);
 	}
 }
 

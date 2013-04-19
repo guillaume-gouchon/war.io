@@ -27,9 +27,9 @@ gameSurface.convertGamePositionToScenePosition = function (gamePosition) {
 /**
 *	Draws a selection circle.
 */
-gameSurface.drawSelectionCircle = function(radius) {
+gameSurface.drawSelectionCircle = function(radius, color) {
 	var material = new THREE.MeshBasicMaterial({
-            color: this.SELECTION_COLOR
+            color: color
 	});
 	var resolution = 100;
 	var size = 360 / resolution;
@@ -125,7 +125,15 @@ gameSurface.de2ra = function(degree) {
 gameSurface.selectElement = function (elementId) {
 	var element = gameContent.gameElements[elementId].s;
 	var elementData = gameData.ELEMENTS[element.f][element.r][element.t];
-	gameContent.gameElements[elementId].d.add(this.drawSelectionCircle(elementData.shape.length / 2 * this.PIXEL_BY_NODE / 2));
+	var color;
+	if (rank.isEnemy(gameContent.myArmy, element)) {
+		color = this.SELECTION_ENEMY_COLOR;
+	} else if (rank.isAlly(gameContent.myArmy, element)) {
+		color = this.SELECTION_ALLY_COLOR;
+	} else {
+		color = this.SELECTION_NEUTRAL_COLOR;
+	}
+	gameContent.gameElements[elementId].d.add(this.drawSelectionCircle(elementData.shape.length / 2 * this.PIXEL_BY_NODE / 2, color));
 	if (element.f != gameData.FAMILIES.terrain) {
 		gameContent.gameElements[elementId].d.add(this.drawLifeBar(element, elementData));
 	}

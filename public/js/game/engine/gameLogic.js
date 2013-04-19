@@ -51,7 +51,7 @@ gameLogic.update = function () {
 	this.removed = [];
 
 	for (var n in this.players) {
-		this.players.s = gameData.PLAYER_STATUSES.defeat;
+		this.players[n].s = gameData.PLAYER_STATUSES.defeat;
 	}
 
 	for(var n in this.gameElements) {

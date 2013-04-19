@@ -84,17 +84,10 @@ gameContent.update = function (data) {
 	//update players
 	this.players = data.players;
 
-	this.nnn++;
-	if (this.nnn == 20) {
-		this.players[this.myArmy].s = gameData.PLAYER_STATUSES.victory;
-	}
-
 	//check for victory / defeat
 	if (this.players[this.myArmy].s == gameData.PLAYER_STATUSES.victory
 		|| this.players[this.myArmy].s == gameData.PLAYER_STATUSES.defeat) {
 		gameManager.endGame(this.players[this.myArmy].s);
 	}
 }
-
-gameContent.nnn = 0;
 

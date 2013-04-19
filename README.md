@@ -1,7 +1,5 @@
 WarNode | Free Online Multiplayer RTS Game
-===============
 
-Awesome HTML5 RTS Game Engine
 
 <p>WarNode is a free Multiplayer Real-Time Strategy Game.</p>
 <p>In this game, you will confront real players and you surely need to use all your

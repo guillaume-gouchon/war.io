@@ -47,3 +47,25 @@ mapLogic.getNearestBuilding = function (element, buildingType) {
 	return closestBuilding;
 }
 
+
+/**
+*	Returns the nearest enemy unit/building.
+*/
+mapLogic.getNearestEnemy = function (unit) {
+	var min = -1;
+	var closestEnemy = null;
+	for (var i in gameLogic.gameElements) {
+		var enemy = gameLogic.gameElements[i];
+		if (enemy.f != gameData.FAMILIES.terrain 
+			&& rank.isEnemy(unit.o, enemy)) {
+			var distance = tools.getElementsDistance(unit, enemy);
+			if(distance < 5) {
+				return enemy;
+			} else if (distance < min || min == -1) {
+				min = distance;
+				closestEnemy = enemy;
+			}
+		}
+	}
+	return closestEnemy;
+}

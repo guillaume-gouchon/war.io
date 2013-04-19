@@ -114,6 +114,9 @@ function preloadImages() {
 	}
 	preload(
 		gameSurface.IMG_PATH + 'boxHover.png',
-		gameSurface.IMG_PATH + 'boxSelect.png'
+		gameSurface.IMG_PATH + 'boxSelect.png',
+		gameSurface.IMG_PATH + 'cursor.png',
+		gameSurface.IMG_PATH + 'cursor_hover.png',
+		gameSurface.IMG_PATH + 'cursor_attack.png'
 	)
 }

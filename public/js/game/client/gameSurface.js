@@ -18,7 +18,9 @@ gameSurface.ZOOM_STEP = 10;
 gameSurface.ZOOM_ROTATION_STEP = 0.1;
 gameSurface.ORDER_ROTATION_SPEED = 1/20;
 gameSurface.FOG_DENSITY = 0.0005;
-gameSurface.SELECTION_COLOR = '#0f0';
+gameSurface.SELECTION_ENEMY_COLOR = '#f00';
+gameSurface.SELECTION_ALLY_COLOR = '#0f0';
+gameSurface.SELECTION_NEUTRAL_COLOR = '#e3e314';
 gameSurface.CAMERA_INIT_ANGLE = 0.7;
 gameSurface.ORDER_OPACITY = 0.7;
 gameSurface.SELECTION_RECTANGLE_HEIGHT = 4 * gameSurface.PIXEL_BY_NODE;
@@ -70,7 +72,7 @@ gameSurface.init = function () {
 	scene = new THREE.Scene();
 
 	//init camera
-	camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, this.NEAR, this.FAR);
+	camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, this.NEAR, this.FAR);
 	camera.position.x = 0;
 	camera.position.y = 0;
 	camera.position.z = this.ZOOM_MIN;

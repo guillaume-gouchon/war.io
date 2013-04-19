@@ -103,7 +103,12 @@ userInput.updateMouseIcon = function (mouseX, mouseY) {
 	var y = gameSurface.scroll.dy;
 	
 	if (elementUnder != null && elementUnder.object.elementId != null) {
-		GUI.updateMouse(GUI.MOUSE_ICONS.select);
+		var e = gameContent.gameElements[elementUnder.object.elementId].s;
+		if (e != null && e.f != gameData.FAMILIES.terrain && rank.isEnemy(gameContent.myArmy, e)) {
+			GUI.updateMouse(GUI.MOUSE_ICONS.attack);
+		} else {
+			GUI.updateMouse(GUI.MOUSE_ICONS.select);
+		}
 	} else if (x > 0 && y > 0) {
 		GUI.updateMouse(GUI.MOUSE_ICONS.arrowTopRight);
 	} else if (x > 0 && y == 0) {

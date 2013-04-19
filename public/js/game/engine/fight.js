@@ -4,9 +4,26 @@ var fightLogic = {};
 /**
 *	CONSTANTS
 */
+fightLogic.WEAPON_TYPES = {
+	normal : 0,
+	piercing : 1,
+	siege : 2,
+	magic : 3
+}
+
+fightLogic.ARMOR_TYPES = {
+	unarmored : 0,
+	light : 1,
+	medium : 2,
+	heavy : 3,
+	building : 4
+}
+
 fightLogic.WEAPONS_EFFICIENCY = [
-	[1, 1],
-	[1, 1]
+	[1, 1, 1.5, 1, 0.5],
+	[1.5, 1.5, 0.5, 0.5, 0.3],
+	[1.5, 1, 0.5, 0.5, 2],
+	[1.5, 1.5, 1.5, 1.5, 0.3]
 ]
 
 
@@ -15,9 +32,14 @@ fightLogic.WEAPONS_EFFICIENCY = [
 */
 fightLogic.attack = function (attacker, target) {
 	var attackFactor = this.WEAPONS_EFFICIENCY[gameData.ELEMENTS[attacker.f][attacker.r][attacker.t].weaponType][gameData.ELEMENTS[target.f][target.r][target.t].armorType]; 
-	var damage = parseInt(gameData.ELEMENTS[attacker.f][attacker.r][attacker.t].attack * attackFactor * (1 + 0.2 * Math.random())) - gameData.ELEMENTS[target.f][target.r][target.t].defense;
+	var damage = Math.max(0, parseInt(gameData.ELEMENTS[attacker.f][attacker.r][attacker.t].attack * attackFactor * (1 + 0.2 * Math.random())) - gameData.ELEMENTS[target.f][target.r][target.t].defense);
 	this.applyDamage(damage, target, attacker);
 	tools.addUniqueElementToArray(gameLogic.modified, target);
+
+	//target's survival instinct
+	if (target.f == gameData.FAMILIES.unit && target.a == null && (target.mt == null || target.mt.x == null)) {
+		AI.targetReaction(target, attacker);
+	}
 }
 
 
@@ -32,13 +54,10 @@ fightLogic.applyDamage = function (damage, target, fragOwner) {
 		fragOwner.frag = fragOwner.frag + 1;
 		fragOwner.a = null;
 		tools.addUniqueElementToArray(gameLogic.modified, fragOwner);
-		if (target.f == gameData.FAMILIES.building) {
-			stats.updateField(fragOwner.o, 'buildingsDestroyed', 1);
-		} else {
-			stats.updateField(fragOwner.o, 'killed', 1);
-			stats.updateField(target.o, 'lost', 1);
-		}
-	}
+		target.murderer = fragOwner.o;
 
+		//attack a new enemy
+		AI.searchForNewEnemy(fragOwner);
+	}
 }
 

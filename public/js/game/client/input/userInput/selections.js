@@ -9,6 +9,11 @@ userInput.SELECTION_RECTANGLE_THRESHOLD = 8; //in pixels
 * 	@param (x, y) : coordinates of the click
 */
 userInput.clickToSelect = function (x, y) {
+	//click on minimap
+	if (x > window.innerWidth - 85 && y > window.innerHeight - 85) {
+		return;
+	}
+
 	this.leaveConstructionMode();
 
 	//reset selected array
@@ -42,7 +47,6 @@ userInput.selectGroup = function (x, y) {
 	if(gameContent.selectionRectangle.length > 0 
 		&& Math.abs(x - gameContent.selectionRectangle[0]) > this.SELECTION_RECTANGLE_THRESHOLD
 		&& Math.abs(y - gameContent.selectionRectangle[1]) > this.SELECTION_RECTANGLE_THRESHOLD) {
-			GUI.updateMouse(GUI.MOUSE_ICONS.select);
 
 			//unselect the previous selected elements
 			gameSurface.unselectAll();

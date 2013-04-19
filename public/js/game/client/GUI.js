@@ -17,7 +17,9 @@ GUI.TOOLBAR_BUTTONS = {
 	cancel : {buttonId : 1001, image : 'cancel.png', isEnabled : true, name: 'Cancel'}
 }
 GUI.MOUSE_ICONS = {
-	standard : 'default', 
+	standard : 'url("js/game/data/g/cursor.png"), auto', 
+	select : 'url("js/game/data/g/cursor_hover.png"), auto',
+	attack : 'url("js/game/data/g/cursor_attack.png"), auto',
 	arrowTop : 'n-resize',
 	arrowTopRight : 'ne-resize',
 	arrowTopLeft : 'nw-resize',
@@ -25,8 +27,7 @@ GUI.MOUSE_ICONS = {
 	arrowBottomRight : 'se-resize',
 	arrowBottomLeft : 'sw-resize',
 	arrowRight : 'e-resize',
-	arrowLeft : 'w-resize',
-	select : 'crosshair'
+	arrowLeft : 'w-resize'
 }
 
 
@@ -279,10 +280,12 @@ GUI.addQueue = function(image, text, tooltip) {
 */
 GUI.initMinimap = function () {
 	$('#minimap').click(function (e) {
-		var dx = e.offsetX / 80;
-		var dy = 1 - e.offsetY / 80;
-		camera.position.x = dx * gameContent.map.size.x * gameSurface.PIXEL_BY_NODE;
-		camera.position.y = dy * gameContent.map.size.y * gameSurface.PIXEL_BY_NODE; 
+		if (e.target.nodeName != 'IMG') {
+			var dx = e.offsetX / 80;
+			var dy = 1 - e.offsetY / 80;
+			camera.position.x = dx * gameContent.map.size.x * gameSurface.PIXEL_BY_NODE;
+			camera.position.y = dy * gameContent.map.size.y * gameSurface.PIXEL_BY_NODE;
+		}
 	});
 }
 
