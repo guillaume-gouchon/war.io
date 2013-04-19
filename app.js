@@ -4,7 +4,7 @@ var application_root = __dirname,
 
 var app = module.exports = express();
 var server = app.listen(6969);
-
+console.log("WarNode Server is running !");
 
 //initializes Socket IO
 var io = require('socket.io').listen(server);
