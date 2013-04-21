@@ -3,7 +3,7 @@ var application_root = __dirname,
     path = require("path")
 
 var app = module.exports = express();
-var server = app.listen(80);
+var server = app.listen(6969);
 console.log("WarNode Server is running !");
 
 //initializes Socket IO
@@ -35,6 +35,7 @@ colors.setTheme({
 
 //database
 var db = require('./db')(app);
+app.on('close', db.close); // Close open DB connection when server exits
 
 
 //load packages
@@ -49,7 +50,6 @@ app.get('/', function (req, res) {
   res.sendfile(__dirname + '/public/index.html');
 });
 
-app.on('close', db.close); // Close open DB connection when server exits
 
 
 
@@ -61,7 +61,7 @@ app.on('close', db.close); // Close open DB connection when server exits
 eval(require('fs').readFileSync('./public/js/game/engine.js', 'utf8'));
 eval(require('fs').readFileSync('./public/js/game/data.js', 'utf8'));
 
-
+//variables
 var games = [];
 var loops = [];
 
@@ -86,65 +86,7 @@ io.sockets.on('connection', function (socket) {
 
 });
 
-function startGame(newGame) {
-  
-  var game = gameCreation.createNewGame(newGame.map, newGame.players);
-  game.id = newGame.id;
-  game.sockets = newGame.sockets;
-
-  var gameInfo = {};
-  gameInfo.map = game.map;
-  gameInfo.players = game.players;
-  gameInfo.initElements = gameLogic.getGameElements();
-  
-  for (var i in game.players) {
-    gameInfo.myArmy = game.players[i].o;
-    if(game.sockets[i] != null) {
-      game.sockets[i].emit('gameStart', gameInfo);  
-    }
-  }
-
-  var loop = setInterval(function () {
-    var gameData = {};
-    gameData.players = gameLogic.players;
-
-    //check end of game
-    for (var i in gameData.players) {
-      if (gameData.players.s == gameData.PLAYER_STATUSES.victory) {
-        clearInterval(loops[0]);
-        for (var i in game.players) {
-          if(game.sockets[i] != null) {
-            game.sockets[i].emit('gameStats', gameLogic.stats);
-          }
-        }
-      }
-    }
-    
-    gameData.gameElements = gameLogic.gameElements;
-    var data = gameLoop.update();
-    for (var i in game.players) {
-      if(game.sockets[i] != null) {
-        game.sockets[i].emit('gameData', data);
-      }
-    }
-
-  }, 1000 / gameLoop.FREQUENCY);
-
-  loops.push(loop);
-
-  for (var i in game.players) {
-    if(game.sockets[i] != null) {
-      game.sockets[i].on('order', function (data) {
-        order.dispatchReceivedOrder(data[0], data[1]);
-      });
-    }
-  }
-
-  game.hasStarted = true;
-}
-
 function dispatchPlayer (socket, gameInitData) {
-  console.log(gameInitData);
   for (var i in games) {
     for (var j in games[i].players) {
       if(games[i].players[j].pid == gameInitData.playerId) {
@@ -154,7 +96,7 @@ function dispatchPlayer (socket, gameInitData) {
           gameInfo.map = games[i].map;
           gameInfo.players = games[i].players;
           gameInfo.myArmy = games[i].players[j].o;
-          gameInfo.initElements = gameLogic.getGameElements();
+          gameInfo.initElements = games[i].gameElements;
           socket.emit('gameStart', gameInfo);
           socket.on('order', function (data) {
             order.dispatchReceivedOrder(data[0], data[1]);
@@ -176,7 +118,7 @@ function dispatchPlayer (socket, gameInitData) {
 function createNewGame (gameInitData) {
   var game = new gameData.Game();
   game.id = Math.random();
-  game.nbPlayers = 2;
+  game.nbPlayers = 1;
   game.sockets = [];
   var map = new gameData.Map(gameData.MAP_TYPES[gameInitData.gameInitData.mapType],
                     gameData.MAP_SIZES[gameInitData.gameInitData.mapSize],
@@ -196,4 +138,63 @@ function addPlayerToGame(socket, game, playerId, army) {
   if (game.players.length == game.nbPlayers) {
     startGame(game);
   }
+}
+
+function startGame(newGame) {
+  var game = gameCreation.createNewGame(newGame.map, newGame.players);
+  game.id = newGame.id;
+  game.sockets = newGame.sockets;
+  game.map = newGame.map;
+  game.players = newGame.players;
+
+  var gameInfo = {};
+  gameInfo.map = game.map;
+  gameInfo.players = game.players;
+  gameInfo.initElements = game.gameElements;
+  
+  for (var i in game.players) {
+    gameInfo.myArmy = game.players[i].o;
+    if(game.sockets[i] != null) {
+      game.sockets[i].emit('gameStart', gameInfo);  
+    }
+  }
+
+  var loop = setInterval(function () {
+    var gameData = {};
+    gameData.players = gameLogic.players;
+
+    //check end of game
+    for (var i in gameData.players) {
+      if (gameData.players[i].s == gameData.PLAYER_STATUSES.victory) {
+        clearInterval(loops[0]);
+        for (var i in game.players) {
+          if(game.sockets[i] != null) {
+            game.sockets[i].emit('gameStats', gameLogic.stats);
+          }
+        }
+        return;
+      }
+    }
+    
+    gameData.gameElements = gameLogic.gameElements;
+    var data = game.update();
+    for (var i in game.players) {
+      if(game.sockets[i] != null) {
+        game.sockets[i].emit('gameData', data);
+      }
+    }
+
+  }, 1000 / gameLogic.FREQUENCY);
+
+  loops.push(loop);
+
+  for (var i in game.players) {
+    if(game.sockets[i] != null) {
+      game.sockets[i].on('order', function (data) {
+        order.dispatchReceivedOrder(data[0], data[1]);
+      });
+    }
+  }
+
+  game.hasStarted = true;
 }

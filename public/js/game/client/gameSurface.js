@@ -104,7 +104,6 @@ gameSurface.init = function () {
 			}
 		}
 	}
-	gameSurface.stuffToBeLoaded -= 6;
 
 	//init scene
 	this.createScene();
@@ -334,27 +333,38 @@ gameSurface.createObject = function (key, element) {
 		object.scale.x = 3;
 		object.scale.y = 3;
 		object.scale.z = 3;
-	} else if ( key == 'dwarf.js') {
-		object.rotation.x = this.de2ra(90);
-		object.scale.x = 3;
-		object.scale.y = 3;
-	} else if (key == 'stonemine.js') {
-		object.rotation.x = this.de2ra(90);
-		object.scale.x = 1.2;
-		object.scale.y = 1.2;
-		object.scale.z = 1.2;
 	} else if (key == 'goldmine.js') {
 		object.rotation.x = this.de2ra(90);
 		object.scale.x = 1.5;
 		object.scale.y = 1.5;
 		object.scale.z = 1.5;
 		object.rotation.y = this.de2ra(Math.random() * 360);
-	} else if (key == 'habitation.js') {
+	} else if (key == 'house.js') {
 		object.rotation.x = this.de2ra(90);
 		object.scale.x = 3;
 		object.scale.y = 3;
 		object.scale.z = 3;
-	} else if (key == 'barrack.js') {
+	} else if (key == 'casern.js') {
+		object.rotation.x = this.de2ra(90);
+		object.scale.x = 2;
+		object.scale.y = 2;
+		object.scale.z = 2;
+	} else if ( key == 'peon.js') {
+		object.rotation.x = this.de2ra(90);
+		object.scale.x = 2;
+		object.scale.y = 2;
+		object.scale.z = 2;
+	} else if (key == 'swordsman.js') {
+		object.rotation.x = this.de2ra(90);
+		object.scale.x = 2;
+		object.scale.y = 2;
+		object.scale.z = 2;
+	} else if (key == 'bowman.js') {
+		object.rotation.x = this.de2ra(90);
+		object.scale.x = 2;
+		object.scale.y = 2;
+		object.scale.z = 2;
+	} else if (key == 'knight.js') {
 		object.rotation.x = this.de2ra(90);
 		object.scale.x = 2;
 		object.scale.y = 2;
@@ -381,7 +391,6 @@ gameSurface.createObject = function (key, element) {
 *	Updates an existing game element.
 */
 gameSurface.updateElement = function (element) {
-	console.log(element.p);
 	var d = gameContent.gameElements[element.id].d;
 	if (element.f == gameData.FAMILIES.unit) {
 		this.updateOrientation(d, element);

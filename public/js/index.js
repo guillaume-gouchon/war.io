@@ -113,6 +113,12 @@ function preloadImages() {
 		}
 	}
 	preload(
+		gameSurface.IMG_PATH + 'wood.png',
+		gameSurface.IMG_PATH + 'cancel.png',
+		gameSurface.IMG_PATH + 'gold.png',
+		gameSurface.IMG_PATH + 'gold-mine.png',
+		gameSurface.IMG_PATH + 'forest.png',
+		gameSurface.IMG_PATH + 'boxNormal.png',
 		gameSurface.IMG_PATH + 'boxHover.png',
 		gameSurface.IMG_PATH + 'boxSelect.png',
 		gameSurface.IMG_PATH + 'cursor.png',

@@ -13,8 +13,8 @@ gameData.ELEMENTS[gameData.FAMILIES.building].push(
 		armorType : fightLogic.ARMOR_TYPES.building,
 		pop : 8,
 		g : 'castle.js',
-		image: 'townhall.png',
-		height: 22,
+		image: 'castle.png',
+		height: 21,
 		buttonId : 10
 	},
 	{
@@ -29,7 +29,7 @@ gameData.ELEMENTS[gameData.FAMILIES.building].push(
 		defense : 0,
 		armorType : fightLogic.ARMOR_TYPES.building,
 		pop : 5,
-		g : 'habitation.js',
+		g : 'house.js',
 		image: 'house.png',
 		height: 12,
 		buttonId : 11
@@ -46,9 +46,9 @@ gameData.ELEMENTS[gameData.FAMILIES.building].push(
 		defense : 0,
 		armorType : fightLogic.ARMOR_TYPES.building,
 		pop : 0,
-		g : 'barrack.js',
+		g : 'casern.js',
 		image: 'casern.png',
-		height: 14,
+		height: 18,
 		buttonId : 12
 	}
 ]);
