@@ -104,6 +104,8 @@ gameSurface.init = function () {
 			}
 		}
 	}
+	//stone mine
+	gameSurface.stuffToBeLoaded -= 2;
 
 	//init scene
 	this.createScene();

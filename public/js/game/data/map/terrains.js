@@ -17,8 +17,8 @@ gameData.ELEMENTS[gameData.FAMILIES.terrain].push(
 		canMoveIn : false,
 		//resourceType : gameData.RESOURCES.stone.id,
 		ra : 500,
-		g : 'stonemine.js',
-		image : 'stone.png'
+		g : 'goldmine.js',
+		image : 'gold-mine.png'
 	},
 	{	
 		name : 'Gold Mine',
