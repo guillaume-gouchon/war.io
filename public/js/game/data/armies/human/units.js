@@ -52,7 +52,7 @@ gameData.ELEMENTS[gameData.FAMILIES.unit].push(
 		name : 'Knight',
 		r : 0,
 		t : 2,
-		shape : [[1, 1], [1, 1]],
+		shape : [[1]],
 		speed : 1,
 		isBuilder : false,
 		buttons : [],

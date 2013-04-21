@@ -162,7 +162,7 @@ canvas {
     background: #eee;
     line-height: 120px;
     color: #111;
-    opacity:0.7;
+    opacity:0.8;
 }
 
 .easeTransition {
@@ -199,7 +199,7 @@ canvas {
     cursor: pointer;
     line-height: 110px;
     padding: 30px;
-    opacity:0.7;
+    opacity:0.8;
 }
 
 .armyBox:hover {
