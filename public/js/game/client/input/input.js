@@ -36,14 +36,11 @@ input.initMouse = function () {
 		userInput.checkIfMapScrolling(event.x, event.y);
 		userInput.updateMouseIcon(event.x, event.y);
 		if (Math.abs(event.x - input.mousePosition.x) + Math.abs(event.y - input.mousePosition.y) > 3) {
-			input.mousePosition.x = event.x;
-			input.mousePosition.y = event.y;
-			return input.onMouseMove(event); 
-		} else {
-			input.mousePosition.x = event.x;
-			input.mousePosition.y = event.y;
-			return false;
+			input.onMouseMove(event); 
 		}
+		input.mousePosition.x = event.x;
+		input.mousePosition.y = event.y;
+		return false;
 	}
 
 	document.onmouseup = function (event) {
@@ -77,7 +74,7 @@ input.initKeyboard = function () {
 	}
 
 	document.onkeyup = function (event) {
-	  	return input.onKeyUp(event);
+  		return input.onKeyUp(event);
 	}
 
 }

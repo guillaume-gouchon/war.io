@@ -86,9 +86,11 @@ io.sockets.on('connection', function (socket) {
 
 });
 
-function startGame(game) {
-  console.log(game);
-  gameCreation.createNewGame(game.map, game.players);
+function startGame(newGame) {
+  
+  var game = gameCreation.createNewGame(newGame.map, newGame.players);
+  game.id = newGame.id;
+  game.sockets = newGame.sockets;
 
   var gameInfo = {};
   gameInfo.map = game.map;
@@ -172,12 +174,10 @@ function dispatchPlayer (socket, gameInitData) {
 }
 
 function createNewGame (gameInitData) {
-  var game = {};
+  var game = new gameData.Game();
   game.id = Math.random();
   game.nbPlayers = 2;
-  game.players = [];
   game.sockets = [];
-
   var map = new gameData.Map(gameData.MAP_TYPES[gameInitData.gameInitData.mapType],
                     gameData.MAP_SIZES[gameInitData.gameInitData.mapSize],
                     gameData.VEGETATION_TYPES[gameInitData.gameInitData.vegetation],

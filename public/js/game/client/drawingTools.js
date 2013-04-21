@@ -11,7 +11,7 @@ gameSurface.setElementPosition = function (element, x, y) {
 
 
 /**
-*	Returns the scene position.
+*	Converts a game position to a scene position.
 *	@param : gamePosition = {x: xPosition, y : yPosition}
 *	@return : scenePosition = {x : ... , y : ..., z : ...}
 */
@@ -20,6 +20,19 @@ gameSurface.convertGamePositionToScenePosition = function (gamePosition) {
 		x : gamePosition.x * this.PIXEL_BY_NODE,
 		y : gamePosition.y * this.PIXEL_BY_NODE,
 		z : 0
+	}
+}
+
+
+/**
+*	Converts a scene position to a game position.
+*	@param : scenePosition = {x: xPosition, y : yPosition}
+*	@return : gamePosition = {x : ... , y : ...}
+*/
+gameSurface.convertScenePositionToGamePosition = function (scenePosition) {
+	return {
+		x : Math.min(gameContent.map.size.x - 2, Math.max(0, parseInt(scenePosition.x / this.PIXEL_BY_NODE))),
+		y : Math.min(gameContent.map.size.y - 2, Math.max(0, parseInt(scenePosition.y / this.PIXEL_BY_NODE))),
 	}
 }
 
@@ -273,5 +286,39 @@ gameSurface.getLifeBarColor = function (lifeRatio) {
 		return 0x66ff00;
 	} else {
 		return 0x00ff00;
+	}
+}
+
+
+/**
+*	List of messages that can be displayed during the game.
+*/
+gameSurface.MESSAGES = {
+	popLimitReached : {
+		id : 0, text : 'You need more houses'
+	}
+};
+
+
+/**
+*	Shows a message then disappear.
+*/
+gameSurface.showMessage = function (message) {
+	if ($('#message' + message.id).length == 0) {
+		$('#messages').append('<div id="message' + message.id + '" class="fadeOut easeTransition">' + message.text + '</div>');
+		var tweenFadeIn = new TWEEN.Tween({alpha:0}).to({alpha:1}, 100)
+		.onComplete(function () {
+			$('#message' + message.id).removeClass('fadeOut');
+		}).start();
+		var tweenFadeOut = new TWEEN.Tween({alpha:0}).to({alpha:1}, 8000)
+		.onComplete(function () {
+			$('#message' + message.id).addClass('fadeOut');
+		});
+		var tweenHide = new TWEEN.Tween({alpha:0}).to({alpha:1}, 500)
+		.onComplete(function () {
+			$('#message' + message.id).remove();
+		});
+		tweenFadeIn.chain(tweenFadeOut);
+		tweenFadeOut.chain(tweenHide);
 	}
 }

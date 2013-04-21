@@ -295,5 +295,5 @@ GUI.initMinimap = function () {
 */
 GUI.updateMinimap = function () {
 	$('#minimapLocation').css('left', (80 - 16) * camera.position.x / (gameContent.map.size.x * gameSurface.PIXEL_BY_NODE));
-	$('#minimapLocation').css('top', (80 - 16) * (1 - camera.position.y / (gameContent.map.size.y * gameSurface.PIXEL_BY_NODE)));
+	$('#minimapLocation').css('top', (80 - 20) * (1 - camera.position.y / (gameContent.map.size.y * gameSurface.PIXEL_BY_NODE)));
 }

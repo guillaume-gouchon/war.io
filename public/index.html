@@ -10,7 +10,16 @@
 	<head>
 	    <meta charset="utf-8">
 	    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <meta name="author" content="Guillaume Gouchon">
+		<meta name="description" content="Free Online Multiplayer Realtime Strategy Game">
+        <meta name="keywords" content="RTS, realtime, strategy, game, warcraft, starcraft, node.js, three.js, webGL" />
+        
+        <meta property="og:title" content="WarNode | Free Online Multiplayer RTS Game"/>
+        <meta property="og:type" content="game"/>
+
+        <link rel="shortcut icon" href="img/favicon.png">
+        <link rel="apple-touch-icon" href="img/logo.png">
 
 	    <title>WarNode | Free Online Multiplayer RTS Game</title>
 
@@ -22,6 +31,21 @@
 	<body>
 
 	  <div id="introScreen" class="fullScreen blackBackground" onmousedown="return false">
+
+	  	<ul class="cb-slideshow">
+			<li><span>Image 01</span><div><h3></h3></div></li>
+			<li><span>Image 02</span><div><h3></h3></div></li>
+			<li><span>Image 03</span><div><h3></h3></div></li>
+			<li><span>Image 04</span><div><h3></h3></div></li>
+			<li><span>Image 05</span><div><h3></h3></div></li>
+			<li><span>Image 06</span><div><h3></h3></div></li>
+			<li><span>Image 07</span><div><h3></h3></div></li>
+			<li><span>Image 08</span><div><h3></h3></div></li>
+			<li><span>Image 09</span><div><h3></h3></div></li>
+			<li><span>Image 10</span><div><h3></h3></div></li>
+			<li><span>Image 11</span><div><h3></h3></div></li>
+		</ul>
+
 	  	<div id="chooseArmy" class="fullScreenTitle easeTransition">Choose your army</div>
 	  	<div id="loading" class="fullScreenTitle easeTransition hide">
 	  		<span id="loadingLabel">Waiting for Opponents</span><span class="one">.</span><span class="two">.</span><span class="three">.</span>​
@@ -84,6 +108,7 @@
 	  		</div>
 	  		<div id="stats"></div>
 	  	</div>
+	  	<div id="messages"></div>
 	  	<div id="minimap">
 	  		<span id="minimapLocation"><img src="js/game/data/g/minimapLocation.png"/></span>
 	  	</div>

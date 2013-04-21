@@ -51,7 +51,7 @@ userInput.updateConstructionMode = function (x, y) {
 	if(gameContent.building != null) {
 		//updates building position
 		gameContent.building.p = gameSurface.getAbsolutePositionFromPixel(x, y);
-		
+
 		//check if building can be built here
 		gameContent.building.canBeBuiltHere = true;
 		for(var i in gameContent.building.shape) {
@@ -99,8 +99,8 @@ userInput.pressToolbarShortcut = function (i) {
 */
 userInput.updateMouseIcon = function (mouseX, mouseY) {
 	var elementUnder = gameSurface.getFirstIntersectObject(mouseX, mouseY);
-	var x = gameSurface.scroll.dx;
-	var y = gameSurface.scroll.dy;
+	var x = gameSurface.scroll[0];
+	var y = gameSurface.scroll[1];
 	
 	if (elementUnder != null && elementUnder.object.elementId != null) {
 		var e = gameContent.gameElements[elementUnder.object.elementId].s;
@@ -109,24 +109,26 @@ userInput.updateMouseIcon = function (mouseX, mouseY) {
 		} else {
 			GUI.updateMouse(GUI.MOUSE_ICONS.select);
 		}
-	} else if (x > 0 && y > 0) {
-		GUI.updateMouse(GUI.MOUSE_ICONS.arrowTopRight);
-	} else if (x > 0 && y == 0) {
-		GUI.updateMouse(GUI.MOUSE_ICONS.arrowRight);
-	} else if (x > 0 && y < 0) {
-		GUI.updateMouse(GUI.MOUSE_ICONS.arrowBottomRight);
-	} else if (x < 0 && y > 0) {
-		GUI.updateMouse(GUI.MOUSE_ICONS.arrowTopLeft);
-	} else if (x < 0 && y == 0) {
-		GUI.updateMouse(GUI.MOUSE_ICONS.arrowLeft);
-	} else if (x < 0 && y < 0) {
-		GUI.updateMouse(GUI.MOUSE_ICONS.arrowBottomLeft);
-	} else if (x == 0 && y > 0) {
-		GUI.updateMouse(GUI.MOUSE_ICONS.arrowTop);
-	} else if (x == 0 && y < 0) {
-		GUI.updateMouse(GUI.MOUSE_ICONS.arrowBottom);
-	} else {
-		GUI.updateMouse(GUI.MOUSE_ICONS.standard);
+	} else if (!gameSurface.isKeyboardScrolling) {
+		if (x > 0 && y > 0) {
+			GUI.updateMouse(GUI.MOUSE_ICONS.arrowTopRight);
+		} else if (x > 0 && y == 0) {
+			GUI.updateMouse(GUI.MOUSE_ICONS.arrowRight);
+		} else if (x > 0 && y < 0) {
+			GUI.updateMouse(GUI.MOUSE_ICONS.arrowBottomRight);
+		} else if (x < 0 && y > 0) {
+			GUI.updateMouse(GUI.MOUSE_ICONS.arrowTopLeft);
+		} else if (x < 0 && y == 0) {
+			GUI.updateMouse(GUI.MOUSE_ICONS.arrowLeft);
+		} else if (x < 0 && y < 0) {
+			GUI.updateMouse(GUI.MOUSE_ICONS.arrowBottomLeft);
+		} else if (x == 0 && y > 0) {
+			GUI.updateMouse(GUI.MOUSE_ICONS.arrowTop);
+		} else if (x == 0 && y < 0) {
+			GUI.updateMouse(GUI.MOUSE_ICONS.arrowBottom);
+		} else {
+			GUI.updateMouse(GUI.MOUSE_ICONS.standard);
+		}
 	}
 }
 
@@ -135,23 +137,23 @@ userInput.SCROLL_THRESHOLD = 10;
 
 
 /**
-*	Scrolls the map by moving the mouse on the edge
+*	Scrolls the map by moving the mouse on an edge.
 */
 userInput.checkIfMapScrolling = function (x, y) {
 	if (x < this.SCROLL_THRESHOLD) {
-		gameSurface.updateHorizontalScrolling(-1);
+		gameSurface.updateScrolling(0, -1, false);
 	} else if(x > window.innerWidth - this.SCROLL_THRESHOLD) {
-		gameSurface.updateHorizontalScrolling(1);
-	} else {
-		gameSurface.updateHorizontalScrolling(0);
+		gameSurface.updateScrolling(0, 1, false);
+	} else if (!gameSurface.isKeyboardScrolling && gameSurface.scroll[0] != 0) {
+		gameSurface.updateScrolling(0, 0, false);
 	}
 
 	if (y < this.SCROLL_THRESHOLD) {
-		gameSurface.updateVerticalScrolling(1);
+		gameSurface.updateScrolling(1, 1, false);
 	} else if (y > window.innerHeight - this.SCROLL_THRESHOLD) {
-		gameSurface.updateVerticalScrolling(-1);
-	} else {
-		gameSurface.updateVerticalScrolling(0);
+		gameSurface.updateScrolling(1, -1, false);
+	} else if (!gameSurface.isKeyboardScrolling && gameSurface.scroll[1] != 0) {
+		gameSurface.updateScrolling(1, 0, false);
 	}
 
 }

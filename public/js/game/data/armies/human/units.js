@@ -18,7 +18,7 @@ gameData.ELEMENTS[gameData.FAMILIES.unit].push(
 		gatheringSpeed : 1,
 		maxGathering : 20,
 		pop : 1,
-		needs : [{t : gameData.RESOURCES.gold.id, value : 20}],
+		needs : [{t : gameData.RESOURCES.gold.id, value : 40}],
 		g : 'dwarf.js',
 		image: 'builder.png',
 		height: 5,

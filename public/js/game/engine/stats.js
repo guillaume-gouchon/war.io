@@ -11,18 +11,19 @@ stats.UPDATE_FREQUENCY = 100;
 *	Initializes the stats object.
 */
 stats.init = function (game) {
-	var initStatObject = {
-		pop: [],
-		killed: 0,
-		lost: 0,
-		buildingsDestroyed: 0,
-		unitsCreated : 0,
-		resources : 0,
-		buildersCreated : 0,
-		buildingsCreated : 0
-	}
 	for (var i in game.players) {
-		game.stats.push(initStatObject);
+		game.stats.push(
+			{
+				pop: [],
+				killed: 0,
+				lost: 0,
+				buildingsDestroyed: 0,
+				unitsCreated : 0,
+				resources : 0,
+				buildersCreated : 0,
+				buildingsCreated : 0
+			}
+		);
 	}
 }
 
@@ -43,5 +44,5 @@ stats.update = function (game) {
 *	Updates one stats' field.
 */
 stats.updateField = function (game, owner, field, value) {
-	game.stats[owner][field] += value;
+	game.stats[owner][field] += value;	
 }

@@ -6,14 +6,13 @@ var scene, camera;
 /**
 *	CONSTANTS
 */
-gameSurface.NB_GEOMETRIES = 6;
 gameSurface.IMG_PATH = 'js/game/data/g/';
 gameSurface.MODELS_PATH = 'js/game/data/g/3D/';
 gameSurface.PIXEL_BY_NODE = 10;
 gameSurface.NEAR = 1;
 gameSurface.FAR = 2000;
 gameSurface.ZOOM_MAX = 30;
-gameSurface.ZOOM_MIN = 100;
+gameSurface.ZOOM_MIN = 110;
 gameSurface.ZOOM_STEP = 10;
 gameSurface.ZOOM_ROTATION_STEP = 0.1;
 gameSurface.ORDER_ROTATION_SPEED = 1/20;
@@ -46,8 +45,9 @@ gameSurface.iteration = 0;
 gameSurface.geometries = null;
 gameSurface.materials = null;
 gameSurface.terrain = null;
-gameSurface.scroll = {dx : 0, dy : 0};
-gameSurface.geometriesLoaded = 0;
+gameSurface.scroll = [0, 0];
+gameSurface.isKeyboardScrolling = false;
+gameSurface.stuffToBeLoaded = 0;
 
 
 /**
@@ -93,6 +93,19 @@ gameSurface.init = function () {
 	this.materials = {};
 	this.loader = new THREE.JSONLoader();
 
+	
+
+	//count the number of stuff to be loaded
+	gameSurface.stuffToBeLoaded += 2;
+	for (var i in gameData.ELEMENTS) {
+		for (var j in gameData.ELEMENTS[i]) { 
+			for (var k in gameData.ELEMENTS[i][j]) {
+				gameSurface.stuffToBeLoaded += 2;
+			}
+		}
+	}
+	gameSurface.stuffToBeLoaded -= 6;
+
 	//init scene
 	this.createScene();
 	this.init3DModels();
@@ -134,7 +147,7 @@ gameSurface.createScene = function () {
 
 	//add skybox
 	var materialArray = [];
-	var skyboxMaterial = new THREE.MeshBasicMaterial({map: THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'skybox.jpg')});
+	var skyboxMaterial = new THREE.MeshBasicMaterial({map: THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'skybox.jpg', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
    	skyboxMaterial.side = THREE.BackSide;
 	for (var i = 0; i < 6; i++) {
 		materialArray.push(skyboxMaterial);
@@ -157,7 +170,7 @@ gameSurface.createScene = function () {
 			index++;
 		}
 	}
-	var grassTexture  = THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'grass.png');
+	var grassTexture  = THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'grass.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
 	grassTexture.wrapT = grassTexture.wrapS = THREE.RepeatWrapping;
 	var grassMaterial = new THREE.MeshBasicMaterial({ map: grassTexture });
 	var planeSurface = new THREE.Mesh(terrainGeometry, grassMaterial);
@@ -207,7 +220,7 @@ gameSurface.init3DModels = function () {
 				var elementData = gameData.ELEMENTS[i][j][k];
 				if (this.geometries[elementData.g] == null) {
 					this.geometries[elementData.g] = {};
-					this.loadObject(elementData.g);
+					this.loadObject(elementData.g);	
 				}
 			}
 		}
@@ -219,23 +232,30 @@ gameSurface.init3DModels = function () {
 *	Loads the geometry.
 */
 gameSurface.loadObject = function (key) {
-	this.loader.load(this.MODELS_PATH + key, this.objectLoaded(key));
+	this.loader.load(this.MODELS_PATH + key, this.geometryLoaded(key));
+	gameSurface.materials[key] = new THREE.MeshBasicMaterial({map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key.replace('.js', '.png'), new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
 }
 
 
 /**
 *	Callback when a geometry is loaded.
 */
-gameSurface.objectLoaded = function (key) {
+gameSurface.geometryLoaded = function (key) {
 	return function (geometry, materials) {
 		gameSurface.geometries[key] = geometry;
-		gameSurface.materials[key] = new THREE.MeshBasicMaterial({map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key.replace('.js', '.png'))});
-		//TODO : to change to a correct way
-		gameSurface.geometriesLoaded ++;
-		if(gameSurface.geometriesLoaded == gameSurface.NB_GEOMETRIES) {
-			gameManager.startGame();
-		}
+		gameSurface.updateLoadingCounter();
 	};
+}
+
+
+/**
+*	Updates the loading counter and starts the game if everything is loaded.
+*/
+gameSurface.updateLoadingCounter = function () {
+	gameSurface.stuffToBeLoaded --;
+	if(gameSurface.stuffToBeLoaded == 0) {
+		gameManager.startGame();
+	}
 }
 
 
@@ -243,15 +263,15 @@ gameSurface.objectLoaded = function (key) {
 *	Updates the game window position.
 */
 gameSurface.updateGameWindow = function () {
-	if(camera.position.x + this.scroll.dx >= this.MAP_SCROLL_X_MIN && camera.position.x + this.scroll.dx <= gameContent.map.size.x * this.PIXEL_BY_NODE) {
-		camera.position.x += this.scroll.dx;	
+	if(camera.position.x + this.scroll[0] >= this.MAP_SCROLL_X_MIN && camera.position.x + this.scroll[0] <= gameContent.map.size.x * this.PIXEL_BY_NODE) {
+		camera.position.x += this.scroll[0];	
 	} else {
-		this.scroll.dx = 0;
+		this.scroll[0] = 0;
 	}
-	if(camera.position.y + this.scroll.dy >= this.MAP_SCROLL_Y_MIN && camera.position.y + this.scroll.dy <= gameContent.map.size.y * this.PIXEL_BY_NODE) {
-		camera.position.y += this.scroll.dy;
+	if(camera.position.y + this.scroll[1] >= this.MAP_SCROLL_Y_MIN && camera.position.y + this.scroll[1] <= gameContent.map.size.y * this.PIXEL_BY_NODE) {
+		camera.position.y += this.scroll[1];
 	} else {
-		this.scroll.dy = 0;
+		this.scroll[1] = 0;
 	}
 }
 
@@ -259,15 +279,11 @@ gameSurface.updateGameWindow = function () {
 /**
 *	Handles the map scrolling.
 */
-gameSurface.updateHorizontalScrolling = function (x) {
-	this.scroll.dx = x * this.MAP_SCROLL_SPEED;
-}
-gameSurface.updateVerticalScrolling = function (y) {
-	this.scroll.dy = y * this.MAP_SCROLL_SPEED;
-}
-gameSurface.stopMapScrolling = function () {
-	this.updateHorizontalScrolling(0);
-	this.updateVerticalScrolling(0);
+gameSurface.updateScrolling = function (direction, value, isKeyboard) {
+	this.scroll[direction] = value * this.MAP_SCROLL_SPEED;
+	if (isKeyboard) {
+		this.isKeyboardScrolling = (value == 0 ? false : true);
+	}
 }
 
 
@@ -365,6 +381,7 @@ gameSurface.createObject = function (key, element) {
 *	Updates an existing game element.
 */
 gameSurface.updateElement = function (element) {
+	console.log(element.p);
 	var d = gameContent.gameElements[element.id].d;
 	if (element.f == gameData.FAMILIES.unit) {
 		this.updateOrientation(d, element);
@@ -405,6 +422,11 @@ gameSurface.updateElement = function (element) {
 			} else {
 				progressBar.scale.z = element.qp / 100 * elementData.shape.length / 3 * this.PIXEL_BY_NODE;
 				progressBar.position.x = elementData.shape.length / 3 * this.PIXEL_BY_NODE / 2 * (1 - element.qp / 100);
+				
+				//population limit reached message
+				if (element.qp >= 99 && gameContent.players[gameContent.myArmy].pop.current == gameContent.players[gameContent.myArmy].pop.max) {
+					this.showMessage(this.MESSAGES.popLimitReached);
+				}
 			}
 		} else {
 			for (var i in d.children) {
@@ -448,9 +470,9 @@ gameSurface.removeElement = function (element) {
 gameSurface.getAbsolutePositionFromPixel = function (x, y) {
 	var intersect = this.getFirstIntersectObject(x, y);
 	if (intersect != null) {
-		return {x : parseInt(intersect.point.x / this.PIXEL_BY_NODE), y : parseInt(intersect.point.y / this.PIXEL_BY_NODE)};
+		return this.convertScenePositionToGamePosition(intersect.point);
 	} else {
-		return {x : -1, y : -1};
+		return {x : 0, y : 0};
 	}
 }
 

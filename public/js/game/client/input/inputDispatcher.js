@@ -91,22 +91,19 @@ input.onKeyDown = function (event) {
 	var keyCode = (window.event) ? event.which : event.keyCode;
 	switch(keyCode) {
 		case 38 :
-			gameSurface.updateVerticalScrolling(1);
-			event.preventDefault();
+			gameSurface.updateScrolling(1, 1, true);
 			return true;
 			break;
 		case 40 :
-			gameSurface.updateVerticalScrolling(-1);
-			event.preventDefault();
+			gameSurface.updateScrolling(1, -1, true);
 			return true;
 			break;
 		case 39 :
-			gameSurface.updateHorizontalScrolling(1);
+			gameSurface.updateScrolling(0, 1, true);
 			return true;
 			break;
 		case 37 :
-			gameSurface.updateHorizontalScrolling(-1);
-			event.preventDefault();
+			gameSurface.updateScrolling(0, -1, true);
 			return true;
 			break;
 	}
@@ -132,19 +129,19 @@ input.onKeyUp = function (event) {
 	var keyCode = (window.event) ? event.which : event.keyCode;
 	switch(keyCode) {
 		case 38 :
-			gameSurface.updateVerticalScrolling(0);
+			gameSurface.updateScrolling(1, 0, true);
 			return false;
 			break;
 		case 40 :
-			gameSurface.updateVerticalScrolling(0);
+			gameSurface.updateScrolling(1, 0, true);
 			return false;
 			break;
 		case 39 :
-			gameSurface.updateHorizontalScrolling(0);
+			gameSurface.updateScrolling(0, 0, true);
 			return false;
 			break;
 		case 37 :
-			gameSurface.updateHorizontalScrolling(0);
+			gameSurface.updateScrolling(0, 0, true);
 			return false;
 			break;
 	}
