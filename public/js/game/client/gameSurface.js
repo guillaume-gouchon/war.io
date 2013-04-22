@@ -36,7 +36,7 @@ gameSurface.BARS_HEIGHT = 0.5;
 gameSurface.BARS_DEPTH = 0.2;
 gameSurface.BUILDING_STRUCTURE_SIZE = 5;
 gameSurface.BUILDING_INIT_Z = - 2 * gameSurface.PIXEL_BY_NODE;
-
+gameSurface.ARMIES_COLORS = ['_red', '_blu', '_gre', '_yel'];
 
 /**
 *	VARIABLES
@@ -93,18 +93,21 @@ gameSurface.init = function () {
 	this.materials = {};
 	this.loader = new THREE.JSONLoader();
 
-	
-
 	//count the number of stuff to be loaded
 	gameSurface.stuffToBeLoaded += 2;
 	for (var i in gameData.ELEMENTS) {
 		for (var j in gameData.ELEMENTS[i]) { 
 			for (var k in gameData.ELEMENTS[i][j]) {
+				//geometry + 1 texture
 				gameSurface.stuffToBeLoaded += 2;
+				//additional textures for players colors
+				if (i != gameData.FAMILIES.terrain) {
+					gameSurface.stuffToBeLoaded += gameContent.players.length - 1;
+				}
 			}
 		}
 	}
-	//stone mine
+	//TODO : stone mine
 	gameSurface.stuffToBeLoaded -= 2;
 
 	//init scene
@@ -221,7 +224,7 @@ gameSurface.init3DModels = function () {
 				var elementData = gameData.ELEMENTS[i][j][k];
 				if (this.geometries[elementData.g] == null) {
 					this.geometries[elementData.g] = {};
-					this.loadObject(elementData.g);	
+					this.loadObject(elementData.g, i);	
 				}
 			}
 		}
@@ -232,9 +235,16 @@ gameSurface.init3DModels = function () {
 /**
 *	Loads the geometry.
 */
-gameSurface.loadObject = function (key) {
+gameSurface.loadObject = function (key, elementFamily) {
 	this.loader.load(this.MODELS_PATH + key, this.geometryLoaded(key));
-	gameSurface.materials[key] = new THREE.MeshBasicMaterial({map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key.replace('.js', '.png'), new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
+	if (elementFamily != gameData.FAMILIES.terrain) {
+		for (var n = 0; n < gameContent.players.length; n++) {
+			var color = this.ARMIES_COLORS[n];
+			gameSurface.materials[key + color] = new THREE.MeshBasicMaterial({map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key.replace('.js', '') + color + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
+		}
+	} else {
+		gameSurface.materials[key] = new THREE.MeshBasicMaterial({map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key.replace('.js', '.png'), new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
+	}
 }
 
 
@@ -253,8 +263,8 @@ gameSurface.geometryLoaded = function (key) {
 *	Updates the loading counter and starts the game if everything is loaded.
 */
 gameSurface.updateLoadingCounter = function () {
-	gameSurface.stuffToBeLoaded --;
-	if(gameSurface.stuffToBeLoaded == 0) {
+	this.stuffToBeLoaded --;
+	if(this.stuffToBeLoaded == 0) {
 		gameManager.startGame();
 	}
 }
@@ -323,7 +333,13 @@ gameSurface.addElement = function (element) {
 *	Creates the game element's 3D model and adds it to the scene.
 */
 gameSurface.createObject = function (key, element) {
-	var object = new THREE.Mesh(this.geometries[key], this.materials[key]);
+	var material;
+	if (element.f == gameData.FAMILIES.terrain) {
+		material = this.materials[key];
+	} else  {
+		material = this.materials[key + this.ARMIES_COLORS[element.o]];
+	}
+	var object = new THREE.Mesh(this.geometries[key], material);
 	object.elementId = element.id;
 	this.setElementPosition(object, element.p.x, element.p.y);
 
