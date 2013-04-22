@@ -1,7 +1,17 @@
+var inputDispatcher = {};
+
+
+/**
+*	Stores the list of shortcuts keys.
+*/
+inputDispatcher.TOOLBAR_KEYBOARD_SHORTCUTS = [81, 87, 69, 82, 65, 83, 68, 70];
+
+
+
 /**
 *	Single left click
 */
-input.onLeftClick = function (event) {
+inputDispatcher.onLeftClick = function (event) {
 	if (event.which == 1) {
 		var x = event.x;
 		var y = event.y;
@@ -28,7 +38,7 @@ input.onLeftClick = function (event) {
 /**
 *	Left double click
 */
-input.onDoubleClick = function (event) {
+inputDispatcher.onDoubleClick = function (event) {
 	if(event.which == 1) {
 		var x = event.x;
 		var y = event.y;
@@ -41,7 +51,7 @@ input.onDoubleClick = function (event) {
 /**
 *	Single right click
 */
-input.onRightClick = function (event) {
+inputDispatcher.onRightClick = function (event) {
 	//leave the construction mode if activated
 	if(gameContent.building != null) {
 		userInput.leaveConstructionMode();
@@ -58,7 +68,7 @@ input.onRightClick = function (event) {
 /**
 *	The mouse is moving
 */
-input.onMouseMove = function (event) {
+inputDispatcher.onMouseMove = function (event) {
 	userInput.selectGroup(event.x, event.y);
 	userInput.updateConstructionMode(event.x, event.y);
 }
@@ -67,7 +77,7 @@ input.onMouseMove = function (event) {
 /**
 *	The mouse click has been released
 */
-input.onMouseUp = function () {
+inputDispatcher.onMouseUp = function () {
 	userInput.removeSelectionRectangle();
 }
 
@@ -75,7 +85,7 @@ input.onMouseUp = function () {
 /**
 *	The mouse wheel is scrolling
 */
-input.onMouseWheel = function (event) {
+inputDispatcher.onMouseWheel = function (event) {
 	if(Math.abs(event.wheelDelta) > 0) {
 		userInput.changeZoom(event.wheelDelta / Math.abs(event.wheelDelta));
 	}
@@ -86,7 +96,7 @@ input.onMouseWheel = function (event) {
 /**
 *	A keyboard's key is being pressed
 */
-input.onKeyDown = function (event) {
+inputDispatcher.onKeyDown = function (event) {
 	//map navigation
 	var keyCode = (window.event) ? event.which : event.keyCode;
 	switch(keyCode) {
@@ -109,8 +119,8 @@ input.onKeyDown = function (event) {
 	}
 
 	//toolbar's keyboard shortcuts
-	for(var i in input.TOOLBAR_KEYBOARD_SHORTCUTS) {
-		var shortcut = input.TOOLBAR_KEYBOARD_SHORTCUTS[i];
+	for(var i in inputDispatcher.TOOLBAR_KEYBOARD_SHORTCUTS) {
+		var shortcut = inputDispatcher.TOOLBAR_KEYBOARD_SHORTCUTS[i];
 		if(shortcut == keyCode) {
 			userInput.pressToolbarShortcut(i);
 			return false;
@@ -124,7 +134,7 @@ input.onKeyDown = function (event) {
 /**
 *	A keyboard's key has ben released
 */
-input.onKeyUp = function (event) {
+inputDispatcher.onKeyUp = function (event) {
 	//map navigation
 	var keyCode = (window.event) ? event.which : event.keyCode;
 	switch(keyCode) {

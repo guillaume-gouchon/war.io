@@ -97,8 +97,7 @@ function initArmyChooser () {
 }
 
 function createArmyBox (army) {
-	return '<div class="armyBox" data-army="' + army.id + '"><img src="' + gameSurface.IMG_PATH + army.image + '"/>' 
-												+ army.name + '</div>';
+	return '<div class="armyBox" data-army="' + army.id + '"><div class="spriteBefore sprite-' + army.image.replace('.png', '') + '">' + army.name + '</div></div>';
 }
 
 
@@ -113,14 +112,7 @@ function preloadImages() {
 		}
 	}
 	preload(
-		gameSurface.IMG_PATH + 'wood.png',
-		gameSurface.IMG_PATH + 'cancel.png',
-		gameSurface.IMG_PATH + 'gold.png',
-		gameSurface.IMG_PATH + 'gold-mine.png',
-		gameSurface.IMG_PATH + 'forest.png',
-		gameSurface.IMG_PATH + 'boxNormal.png',
-		gameSurface.IMG_PATH + 'boxHover.png',
-		gameSurface.IMG_PATH + 'boxSelect.png',
+		gameSurface.IMG_PATH + 'sprite.png',
 		gameSurface.IMG_PATH + 'cursor.png',
 		gameSurface.IMG_PATH + 'cursor_hover.png',
 		gameSurface.IMG_PATH + 'cursor_attack.png'

@@ -204,7 +204,7 @@ production.removeUnit = function (game, unit) {
 
 	if (unit.murderer != null) {
 		stats.updateField(game, unit.murderer, 'killed', 1);
-		stats.updateField(game, unit.murderer, 'lost', 1);
+		stats.updateField(game, unit.o, 'lost', 1);
 	}
 }
 

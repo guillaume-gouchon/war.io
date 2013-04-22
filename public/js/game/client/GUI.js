@@ -11,7 +11,7 @@ GUI.toolbar = [];
 /**
 *	CONSTANTS
 */
-GUI.BUTTONS_SIZE = 70;
+GUI.BUTTONS_SIZE = 80;
 GUI.TOOLBAR_BUTTONS = {
 	build : {buttonId : 1000, image : 'build.png', isEnabled : true, name: 'Build'},
 	cancel : {buttonId : 1001, image : 'cancel.png', isEnabled : true, name: 'Cancel'}
@@ -129,7 +129,7 @@ GUI.createResourcesBar = function () {
 *	Adds a resource icon and the value to the resource box.
 */
 GUI.createResourceElement = function (resource) {
-	var div = '<div id="resource' + resource.id + '"><img src="' + gameSurface.IMG_PATH + resource.image + '"/><div>0</div></div>';
+	var div = '<div id="resource' + resource.id + '"><div class="spriteBefore sprite-' + resource.name + '">0</div></div>';
 	$('#resources').append(div);
 }
 
@@ -153,7 +153,7 @@ GUI.createToolbarButton = function (button) {
 	if ($('#toolbar' + button.buttonId).html() != null) {
 		$('#toolbar' + button.buttonId).removeClass('hide');
 	} else {
-		var div = '<div id="toolbar' + button.buttonId + '" class="toolbarButton" title="' + button.name + '"><div><img src="' + gameSurface.IMG_PATH + button.image + '"/></div></div>';
+		var div = '<div id="toolbar' + button.buttonId + '" class="toolbarButton sprite sprite-boxNormal" title="' + button.name + '"><div class="sprite sprite-' + button.image.replace('.png', '') + '"></div></div>';
 		$('#toolbar').append(div);
 
 		//add price
@@ -161,8 +161,8 @@ GUI.createToolbarButton = function (button) {
 			var need = button.needs[i];
 			for (var j in gameData.RESOURCES) {
 				if (gameData.RESOURCES[j].id == need.t) {
-					var bottom = (this.toolbar.length - 1) * 72 - $('#toolbar' + button.buttonId).position().top + i * 20;
-					$('#toolbar' + button.buttonId).append('<div class="price" style="bottom: ' + bottom + 'px"><img src="' + gameSurface.IMG_PATH + gameData.RESOURCES[j].image + '" />' + need.value + '</div>');
+					var bottom = (this.toolbar.length - 1) * GUI.BUTTONS_SIZE - $('#toolbar' + button.buttonId).position().top + i * 20 + 10;
+					$('#toolbar' + button.buttonId).append('<div class="price" style="bottom: ' + bottom + 'px"><div class="spriteBefore sprite-' + gameData.RESOURCES[j].image.replace('.png', '') + '15" />' + need.value + '</div></div>');
 					break;
 				}
 			}
@@ -190,7 +190,7 @@ GUI.updatePopulation = function () {
 */
 GUI.selectButton = function (button) {
 	this.unselectButtons();
-	$('#toolbar' + button.buttonId).addClass('selected');
+	$('#toolbar' + button.buttonId).addClass('sprite-boxSelect');
 }
 
 
@@ -198,7 +198,7 @@ GUI.selectButton = function (button) {
 *	Unselect al the toolbar buttons.
 */
 GUI.unselectButtons = function () {
-	$('.toolbarButton').removeClass('selected');
+	$('.toolbarButton').removeClass('sprite-boxSelect');
 }
 
 
@@ -218,7 +218,7 @@ GUI.updateInfo = function () {
 		var element = gameContent.gameElements[gameContent.selected[0]].s;
 		var elementData = gameData.ELEMENTS[element.f][element.r][element.t];
 		$('#name').html(elementData.name);
-		$('#portrait').attr('src', gameSurface.IMG_PATH + elementData.image);
+		$('#portrait').attr('class', 'sprite sprite-' + elementData.image.replace('.png', ''));
 		$('#stats').html('');
 		if (element.f == gameData.FAMILIES.terrain) {
 			//terrain
@@ -233,8 +233,8 @@ GUI.updateInfo = function () {
 			$('#life').html(element.l + '/' + elementData.l);
 			if (element.f == gameData.FAMILIES.building) {
 				//building
-				GUI.addStatLine("defense.png", elementData.defense, "Defense");
-				GUI.addStatLine("population.png", elementData.pop, "Add to max population");
+				GUI.addStatLine("defense", elementData.defense, "Defense");
+				GUI.addStatLine("pop20", elementData.pop, "Max Population Bonus");
 				for (var i in element.q) {
 					var e = element.q[i];
 					var inConstruction = gameData.ELEMENTS[gameData.FAMILIES.unit][element.r][e];
@@ -246,10 +246,10 @@ GUI.updateInfo = function () {
 				}
 			} else {
 				//unit
-				GUI.addStatLine("attack.png", elementData.attack, "Attack");
-				GUI.addStatLine("defense.png", elementData.defense, "Defense");
-				GUI.addStatLine("attackSpeed.png", elementData.attackSpeed, "Attack Speed");
-				GUI.addStatLine("range.png", elementData.range, "Range");
+				GUI.addStatLine("attack", elementData.attack, "Attack");
+				GUI.addStatLine("defense", elementData.defense, "Defense");
+				GUI.addStatLine("attackSpeed", elementData.attackSpeed, "Attack Speed");
+				GUI.addStatLine("range", elementData.range, "Range");
 			}
 		}
 		$('#info').removeClass('hide');
@@ -263,7 +263,7 @@ GUI.updateInfo = function () {
 *	Adds on stat line in the info box.
 */
 GUI.addStatLine = function(image, text, tooltip) {
-	$('#stats').append('<div class="stat" title="' + tooltip + '"><img src="' + gameSurface.IMG_PATH + image + '"/><div>' + text + '</div></div>');
+	$('#stats').append('<div class="stat" title="' + tooltip + '"><div class="spriteBefore sprite-' + image + '">' + text + '</div></div>');
 }
 
 
@@ -271,7 +271,7 @@ GUI.addStatLine = function(image, text, tooltip) {
 *	Adds on stat line in the info box.
 */
 GUI.addQueue = function(image, text, tooltip) {
-	$('#stats').append('<div class="queue" title="' + tooltip + '"><img src="' + gameSurface.IMG_PATH + image + '"/><div>' + text + '</div></div>');
+	$('#stats').append('<div class="queue" title="' + tooltip + '"><div id="queueProgress">' + text + '</div><div class="sprite sprite-' + image.replace('.png', '') + '15"></div></div>');
 }
 
 

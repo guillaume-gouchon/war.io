@@ -32,7 +32,7 @@ gameSurface.convertGamePositionToScenePosition = function (gamePosition) {
 gameSurface.convertScenePositionToGamePosition = function (scenePosition) {
 	return {
 		x : Math.min(gameContent.map.size.x - 2, Math.max(0, parseInt(scenePosition.x / this.PIXEL_BY_NODE))),
-		y : Math.min(gameContent.map.size.y - 2, Math.max(0, parseInt(scenePosition.y / this.PIXEL_BY_NODE))),
+		y : Math.min(gameContent.map.size.y - 2, Math.max(0, parseInt(scenePosition.y / this.PIXEL_BY_NODE)))
 	}
 }
 

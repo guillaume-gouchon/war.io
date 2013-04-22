@@ -16,10 +16,12 @@ gameData.RACES = {
 gameData.RESOURCES = {
 	wood : {
 		id: 0,
+		name : 'wood',
 		image : 'wood.png'
 	},
 	gold : {
 		id: 1,
+		name : 'gold',
 		image : 'gold.png'
 	}
 }

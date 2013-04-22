@@ -25,18 +25,18 @@ input.mousePosition = {
 input.initMouse = function () {
 
 	document.onmousedown = function (event) {
-	  return input.onLeftClick(event);
+	  return inputDispatcher.onLeftClick(event);
 	}
 
 	document.oncontextmenu = function (event) {
-	  return input.onRightClick(event);
+	  return inputDispatcher.onRightClick(event);
 	}
 
 	document.onmousemove = function (event) {
 		userInput.checkIfMapScrolling(event.x, event.y);
 		userInput.updateMouseIcon(event.x, event.y);
 		if (Math.abs(event.x - input.mousePosition.x) + Math.abs(event.y - input.mousePosition.y) > 3) {
-			input.onMouseMove(event); 
+			inputDispatcher.onMouseMove(event); 
 		}
 		input.mousePosition.x = event.x;
 		input.mousePosition.y = event.y;
@@ -44,24 +44,20 @@ input.initMouse = function () {
 	}
 
 	document.onmouseup = function (event) {
-	  return input.onMouseUp(event);
+	  return inputDispatcher.onMouseUp(event);
 	}
 
 	document.onmousewheel = function (event) {
-	  return input.onMouseWheel(event);
+	  return inputDispatcher.onMouseWheel(event);
 	}
 
 	document.ondblclick = function (event) {
-		return input.onDoubleClick(event);
+		return inputDispatcher.onDoubleClick(event);
 	}
 
 }
 
 
-/**
-*	Stores the list of shortcuts keys.
-*/
-input.TOOLBAR_KEYBOARD_SHORTCUTS = [81, 87, 69, 82, 65, 83, 68, 70];
 
 
 /**
@@ -70,11 +66,11 @@ input.TOOLBAR_KEYBOARD_SHORTCUTS = [81, 87, 69, 82, 65, 83, 68, 70];
 input.initKeyboard = function () {
 	
 	document.onkeydown = function (event) {
-  		return input.onKeyDown(event);
+  		return inputDispatcher.onKeyDown(event);
 	}
 
 	document.onkeyup = function (event) {
-  		return input.onKeyUp(event);
+  		return inputDispatcher.onKeyUp(event);
 	}
 
 }
