@@ -148,7 +148,7 @@ gameManager.showStats = function (stats) {
 		} else {
 			playerName = 'Player ' + i;
 		}
-		$('#tableBody').append('<tr class="black"><td>' +  
+		$('#tableBody').append('<tr class="' + gameSurface.PLAYERS_COLORS[i] + '"><td>' +  
 			playerName + '</td><td>' +  
 			statPlayer.killed + '</td><td>' +  
 			statPlayer.lost + '</td><td>' +  

@@ -307,8 +307,20 @@ canvas {
     background: #22a;
 }
 
+.green {
+    background: #2a2;
+}
+
+.yellow {
+    background: #EDC71C;
+}
+
 .black {
     background: #000;
+}
+
+.white {
+    background: #fff;
 }
 
 

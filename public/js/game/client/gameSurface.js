@@ -37,6 +37,8 @@ gameSurface.BARS_DEPTH = 0.2;
 gameSurface.BUILDING_STRUCTURE_SIZE = 5;
 gameSurface.BUILDING_INIT_Z = - 2 * gameSurface.PIXEL_BY_NODE;
 gameSurface.ARMIES_COLORS = ['_red', '_blu', '_gre', '_yel'];
+gameSurface.PLAYERS_COLORS = ['red', 'blue', 'green', 'yellow'];
+
 
 /**
 *	VARIABLES
