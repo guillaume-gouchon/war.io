@@ -113,7 +113,7 @@ gameCreation.populateZone = function (game, map, from, to, zoneType) {
 			this.createForest(game, from, to);
 			break;
 		case gameData.ZONES.stonemine:
-			this.createStoneMine(game, from, to);
+			//this.createStoneMine(game, from, to);
 			break;
 		case gameData.ZONES.goldmine:
 			this.createGoldMine(game, map, from, to);
@@ -139,36 +139,30 @@ gameCreation.createForest = function (game, from, to) {
 
 
 /**
-*	Creates a stone mine zone.
-*	@param from : top left-handed corner
-*	@param to : bottom right-handed corner
-*/
-gameCreation.createStoneMine = function (game, from, to) {
-	for(var i = from.x; i < to.x - 2; i++) {
-		for(var j = from.y; j < to.y - 2; j++) {
-			if(Math.random() < 0.1) {
-				this.addGameElement(game, new gameData.Terrain(gameData.ELEMENTS[gameData.FAMILIES.terrain][0][1], i, j));
-				return;
-			}
-		}
-	}
-}
-
-
-/**
 *	Create a gold mine zone.
 *	@param from : top left-handed corner
 *	@param to : bottom right-handed corner
 */
 gameCreation.createGoldMine = function (game, map, from, to) {
-	if (from.x < map.size.x - 5 && from.y < map.size.y - 5 && from.y > 5 && from.x > 5) {
-		this.addGameElement(game, new gameData.Terrain(gameData.ELEMENTS[gameData.FAMILIES.terrain][0][2], from.x, from.y));
-	}
+	var element = gameData.ELEMENTS[gameData.FAMILIES.terrain][0][2];
+	var position = this.getRandomPositionInZoneForElement(element, from, to);
+	this.addGameElement(game, new gameData.Terrain(gameData.ELEMENTS[gameData.FAMILIES.terrain][0][2], position.x, position.y));
 }
 
 
 /**
-* Adds a game element on the map.
+*	Returns a random position in a zone for an element.
+*/
+gameCreation.getRandomPositionInZoneForElement = function (element, from, to) {
+	return {
+		x: parseInt(from.x + element.shape[0].length / 2 + Math.random() * (to.x - from.x - element.shape[0].length)),
+		y: parseInt(from.y + element.shape.length / 2 + Math.random() * (to.y - from.y - element.shape.length))
+	};
+}
+
+
+/**
+* 	Adds a game element on the map.
 */
 gameCreation.addGameElement = function (game, element) {
 	var shape = gameData.ELEMENTS[element.f][element.r][element.t].shape;
