@@ -59,7 +59,7 @@ gameManager.initOfflineGame = function (gameInitData) {
 
 
 gameManager.connectToServer = function (gameInitData) {
-	gameManager.socket = io.connect('http://localhost:80');
+	gameManager.socket = io.connect('http://warnode.com');
 	
 	//the server asked for some player's info
 	this.socket.on('askUserData', function (data) {
