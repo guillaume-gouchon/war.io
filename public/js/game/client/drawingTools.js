@@ -303,9 +303,14 @@ gameSurface.MESSAGES = {
 /**
 *	Shows a message then disappear.
 */
-gameSurface.showMessage = function (message) {
+gameSurface.showMessage = function (message, color) {
 	if ($('#message' + message.id).length == 0) {
-		$('#messages').append('<div id="message' + message.id + '" class="fadeOut easeTransition">' + message.text + '</div>');
+		$('#messages').append('<div><div id="message' + message.id + '" class="fadeOut easeTransition">' + message.text + '</div></div>');
+		if (color == null) {
+			$('#message' + message.id).css('background', 'white');
+		} else {
+			$('#message' + message.id).css('background', color);
+		}
 		var tweenFadeIn = new TWEEN.Tween({alpha:0}).to({alpha:1}, 100)
 		.onComplete(function () {
 			$('#message' + message.id).removeClass('fadeOut');
@@ -316,7 +321,7 @@ gameSurface.showMessage = function (message) {
 		});
 		var tweenHide = new TWEEN.Tween({alpha:0}).to({alpha:1}, 500)
 		.onComplete(function () {
-			$('#message' + message.id).remove();
+			$('#message' + message.id).parent('div').remove();
 		});
 		tweenFadeIn.chain(tweenFadeOut);
 		tweenFadeOut.chain(tweenHide);

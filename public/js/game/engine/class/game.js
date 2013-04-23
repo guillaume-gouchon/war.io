@@ -24,6 +24,11 @@ gameData.Game = function () {
 
 
 	/**
+	*	New chat messages to spread.
+	*/
+	this.chat = [];
+
+	/**
 	*	Tells which tile is occupied and which tile is free.
 	*/
 	this.grid = [];

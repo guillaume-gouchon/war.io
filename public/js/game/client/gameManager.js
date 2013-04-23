@@ -4,7 +4,7 @@ var gameManager = {};
 /**
 *	Testing purpose variable.
 */
-gameManager.isOfflineGame = true;
+gameManager.isOfflineGame = false;
 gameManager.offlineLoop = null;
 
 
@@ -13,11 +13,13 @@ gameManager.offlineLoop = null;
 */
 gameManager.initGame = function (gameInitData) {
 	this.getPlayerId();
-	
-	if(!this.isOfflineGame) {
-		this.connectToServer(gameInitData);
-	} else {
+	if(this.isOfflineGame) {
 		this.initOfflineGame(gameInitData);	
+	} else {
+		try {
+			this.connectToServer(gameInitData);
+		} catch (e) {
+		}
 	}
 }
 
@@ -87,6 +89,10 @@ gameManager.connectToServer = function (gameInitData) {
 	this.socket.on('gameStats', function (data) {
 		gameManager.showStats(data);
 	});
+}
+
+gameManager.disconnect = function () {
+	this.socket.emit('disconnect', null);
 }
 
 

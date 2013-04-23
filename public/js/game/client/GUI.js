@@ -279,12 +279,22 @@ GUI.addQueue = function(image, text, tooltip) {
 *	Initializes the minimap.
 */
 GUI.initMinimap = function () {
-	$('#minimap').click(function (e) {
-		if (e.target.nodeName != 'IMG') {
-			var dx = e.offsetX / 80;
-			var dy = 1 - e.offsetY / 80;
-			camera.position.x = dx * gameContent.map.size.x * gameSurface.PIXEL_BY_NODE;
-			camera.position.y = dy * gameContent.map.size.y * gameSurface.PIXEL_BY_NODE;
+	$('#minimap').mousedown(function (e) {
+		console.log()
+		if (e.target.nodeName != 'IMG' && e.target.nodeName != 'SPAN') {
+			var x = e.offsetX / 80 * gameContent.map.size.x * gameSurface.PIXEL_BY_NODE;
+			var y = (1 - e.offsetY / 80) * gameContent.map.size.y * gameSurface.PIXEL_BY_NODE;
+			if (e.which == 1) {
+				camera.position.x = x;
+				camera.position.y = y;
+			} else if (e.which == 3 && gameContent.selected.length > 0
+				&& rank.isAlly(gameContent.players, gameContent.myArmy, gameContent.gameElements[gameContent.selected[0]].s)
+				&& (gameContent.gameElements[gameContent.selected[0]].s.f == gameData.FAMILIES.unit
+			|| gameContent.gameElements[gameContent.selected[0]].s.f == gameData.FAMILIES.building)) {
+				x = parseInt(x / gameSurface.PIXEL_BY_NODE);
+				y = parseInt(y / gameSurface.PIXEL_BY_NODE);
+				userInput.sendOrder(x, y);
+			}
 		}
 	});
 }
@@ -296,4 +306,22 @@ GUI.initMinimap = function () {
 GUI.updateMinimap = function () {
 	$('#minimapLocation').css('left', (80 - 16) * camera.position.x / (gameContent.map.size.x * gameSurface.PIXEL_BY_NODE));
 	$('#minimapLocation').css('top', (80 - 20) * (1 - camera.position.y / (gameContent.map.size.y * gameSurface.PIXEL_BY_NODE)));
+}
+
+
+/**
+*	Adds an element on the minimap.
+*/
+GUI.addElementOnMinimap = function (element) {
+	$('#minimap').append('<span id="minimap' + element.id + '" class="minimapPoint ' + gameSurface.PLAYERS_COLORS[element.o] + '">&nbsp;</span>');
+	$('#minimap' + element.id).css('left', 5 + (80 - 5) * element.p.x / gameContent.map.size.x);
+	$('#minimap' + element.id).css('top', (80 - 5) * (1 - element.p.y / gameContent.map.size.y));
+}
+
+
+/**
+*	Removes an element from the minimap.
+*/
+GUI.removeElementFromMinimap = function (element) {
+	$('#minimap' + element.id).remove();
 }

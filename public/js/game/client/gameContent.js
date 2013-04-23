@@ -90,5 +90,10 @@ gameContent.update = function (data) {
 		|| this.players[this.myArmy].s == gameData.PLAYER_STATUSES.defeat) {
 		gameManager.endGame(this.players[this.myArmy].s);
 	}
+
+	//handles chat messages
+	for (var i in data.chat) {
+		gameSurface.showMessage({id: parseInt(Math.random() * 1000), text: data.chat[i].text}, gameSurface.PLAYERS_COLORS[data.chat[i].o]);
+	}
 }
 

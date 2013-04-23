@@ -391,8 +391,13 @@ gameSurface.createObject = function (key, element) {
 		object.scale.z = 2;
 	}
 
-	if (element.f == gameData.FAMILIES.building && element.cp < 100) {
-		object.position.z += this.BUILDING_INIT_Z;
+	if (element.f == gameData.FAMILIES.building) {
+		if (element.cp < 100) {
+			object.position.z += this.BUILDING_INIT_Z;	
+		}
+
+		//update minimap
+		GUI.addElementOnMinimap(element);
 	}
 
 	scene.add(object);
@@ -485,10 +490,15 @@ gameSurface.updateElement = function (element) {
 */
 gameSurface.removeElement = function (element) {
 	scene.remove(gameContent.gameElements[element.id].d);
+
 	//removes from the selected elements if it was
 	if (gameContent.selected.indexOf(element.id) >= 0) {
 		gameContent.selected.splice(gameContent.selected.indexOf(element.id), 1);
 	}
+
+	//update minimap
+	GUI.removeElementFromMinimap(element);
+	
 	delete gameContent.gameElements[element.id];
 }
 

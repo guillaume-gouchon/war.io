@@ -8,7 +8,8 @@ order.TYPES = {
 	action : 0,
 	buildThatHere : 1, 
 	buy : 2,
-	cancelConstruction : 3
+	cancelConstruction : 3,
+	chat : 4
 }
 
 
@@ -25,6 +26,9 @@ order.dispatchReceivedOrder = function (game, type, params) {
 			break;
 		case 3 :
 			this.cancelConstruction(game, params[0]);
+			break;
+		case 4 :
+			this.receiveChatMessage(game, params[0], params[1]);
 			break;
 	}
 }
@@ -101,6 +105,11 @@ order.gather = function (game, units, terrain) {
 		element.pa = terrain;
 		tools.addUniqueElementToArray(game.modified, element);
 	}
+}
+
+
+order.receiveChatMessage = function (game, player, message) {
+	game.chat.push({ o: player, text: message });
 }
 
 

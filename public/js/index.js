@@ -9,8 +9,17 @@ $(document).ready(function() {
 
 	var hasClicked = false;
 
+	var gameInitData = {};
+
 	$('.armyBox').click(function () {
 		if (!hasClicked) {
+			var army = $(this).attr('data-army');
+			gameInitData.army = army;
+			gameInitData.mapType = 'random';
+			gameInitData.mapSize = 'medium';
+			gameInitData.vegetation = 'standard';
+			gameInitData.initialResources = 'standard';
+
 			closePopups();
 			hasClicked = true;
 			$('#chooseArmy').addClass('hideToLeft');
@@ -19,17 +28,30 @@ $(document).ready(function() {
 
 			$('#loading').removeClass('hide').addClass('moveToLeft');
 
-			var army = $(this).attr('data-army');
+			//check if webGL is supported
+			if (!window.WebGLRenderingContext) {
+				// Browser has no idea what WebGL is. Suggest they
+				// get a new browser by presenting the user with link to
+				// http://get.webgl.org
+				$('#errorWebGL').fadeIn();
+				return;   
+			} else {
+				$('#playOffline').fadeIn();
+			}
 
 			setTimeout(function () {
-				var gameInitData = {};
-				gameInitData.army = army;
-				gameInitData.mapType = 'random';
-				gameInitData.mapSize = 'medium';
-				gameInitData.vegetation = 'standard';
-				gameInitData.initialResources = 'standard';
 				gameManager.initGame(gameInitData);
 			}, 800);
+		}
+	});
+
+	$('a', '#playOffline').click(function () {
+		$('#playOffline').fadeOut();
+		gameManager.isOfflineGame = true;
+		gameManager.initGame(gameInitData);
+		try {
+			gameManager.disconnect();
+		} catch (e) {
 		}
 	});
 

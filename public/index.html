@@ -50,6 +50,17 @@
 	  	<div id="loading" class="fullScreenTitle easeTransition hide">
 	  		<span id="loadingLabel">Waiting for Opponents</span><span class="one">.</span><span class="two">.</span><span class="three">.</span>​
 	  	</div>
+
+	  	<div id="errorWebGL" class="hide">
+  			<p>Your browser does not support WebGL.</p> 
+  			<p>Try <a href="http://google.com/chrome" target="_blank">Google Chrome</a> or <a href="http://get.webgl.org" target="_blank">follow this link</a> to know more !</p>
+  		</div>
+
+	  	<div id="playOffline" class="hide">
+  			<p><a href="#">Play Solo in Offline Mode </a></p>
+  			<p>(no AI yet... so it may be quite boring !)</p>
+  		</div>
+
 	  	<div id="armies" class="easeTransition"></div>
 
 	  	<div id="about" class="popup easeTransition hide">
@@ -112,6 +123,9 @@
 	  	<div id="messages"></div>
 	  	<div id="minimap" class="sprite sprite-bgMinimap">
 	  		<div id="minimapLocation" class="sprite sprite-minimapLocation"></div>
+	  	</div>
+	  	<div id="chat" class="hide">
+	  		<input class="input-xxlarge" type="text" placeholder="chat..."/>
 	  	</div>
 	  </div>
 

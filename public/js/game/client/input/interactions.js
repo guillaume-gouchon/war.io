@@ -9,6 +9,12 @@ userInput.CANNOT_BE_BUILT_HERE = 1;
 
 
 /**
+*	VARIABLES
+*/
+userInput.isChatWindowOpen = false;
+
+
+/**
 *	The user clicked on a button in the toolbar.
 * 	@param button : the button that was clicked
 */
@@ -177,7 +183,7 @@ userInput.tryBuildHere = function () {
 
 
 /**
-*	Dispatches the action according to the order
+*	Dispatches the action according to the order.
 */
 userInput.dispatchUnitAction = function (x, y) {
 	var destination;
@@ -192,14 +198,36 @@ userInput.dispatchUnitAction = function (x, y) {
 				y : parseInt(elementUnder.point.y / gameSurface.PIXEL_BY_NODE)
 			}
 		}
-
-		if (destination.x >= 0 && destination.y >= 0
-			&& destination.x < gameContent.map.size.x && destination.y < gameContent.map.size.y) {
-			gameManager.sendOrderToEngine(order.TYPES.action,
-								 [gameContent.selected,
-								  destination.x, 
-								  destination.y]);
-		}
+		this.sendOrder(destination.x, destination.y);
 	}
 }
 
+
+/**
+*	Send order to the engine.
+*/
+userInput.sendOrder = function (x, y) {
+	if (x >= 0 && y >= 0
+		&& x < gameContent.map.size.x && y < gameContent.map.size.y) {
+		gameManager.sendOrderToEngine(order.TYPES.action, [gameContent.selected, x, y]);
+	}
+}
+
+
+/**
+*	Manages chat entries.
+*/
+userInput.onEnterKey = function () {
+	if (this.isChatWindowOpen) {
+		$('#chat').addClass('hide');
+		if ($('input', '#chat').val() != '') {
+			gameManager.sendOrderToEngine(order.TYPES.chat, [gameContent.myArmy, $('input', '#chat').val()]);
+		}
+		$('input', '#chat').val('');
+	} else {
+		$('#chat').css('top', (window.innerHeight - $('#chat').height()) / 2);
+		$('#chat').css('left', (window.innerWidth - $('#chat').width()) / 2);
+		$('#chat').removeClass('hide');
+	}
+	this.isChatWindowOpen = !this.isChatWindowOpen;
+}

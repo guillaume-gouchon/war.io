@@ -35,11 +35,19 @@ gameLogic.update = function (game) {
 	this.checkGameOver(game);
 	stats.update(game);
 
+	//handles chat messages
+	var chatMessages = [];
+	for (var i in game.chat) {
+		chatMessages.push(game.chat[i]);
+	}
+	game.chat = [];
+
 	return {
 		modified : game.modified,
 		added: game.added,
 		removed: game.removed,
-		players: game.players
+		players: game.players,
+		chat: chatMessages
 	};
 }
 

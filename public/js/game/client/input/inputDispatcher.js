@@ -7,7 +7,6 @@ var inputDispatcher = {};
 inputDispatcher.TOOLBAR_KEYBOARD_SHORTCUTS = [81, 87, 69, 82, 65, 83, 68, 70];
 
 
-
 /**
 *	Single left click
 */
@@ -29,7 +28,7 @@ inputDispatcher.onLeftClick = function (event) {
 		//the user wants to select one or more elements
 		else {
 			userInput.clickToSelect(x, y);
-		  return true;
+		  	return true;
 		}
 	}
 }
@@ -52,6 +51,10 @@ inputDispatcher.onDoubleClick = function (event) {
 *	Single right click
 */
 inputDispatcher.onRightClick = function (event) {
+	if (event.x > window.innerWidth - 80 && event.y > window.innerHeight - 80) {
+		return false;
+	}
+
 	//leave the construction mode if activated
 	if(gameContent.building != null) {
 		userInput.leaveConstructionMode();
@@ -97,9 +100,11 @@ inputDispatcher.onMouseWheel = function (event) {
 *	A keyboard's key is being pressed
 */
 inputDispatcher.onKeyDown = function (event) {
-	//map navigation
 	var keyCode = (window.event) ? event.which : event.keyCode;
 	switch(keyCode) {
+		case 13 :
+			userInput.onEnterKey();
+			return true;
 		case 38 :
 			gameSurface.updateScrolling(1, 1, true);
 			return true;
@@ -118,12 +123,22 @@ inputDispatcher.onKeyDown = function (event) {
 			break;
 	}
 
-	//toolbar's keyboard shortcuts
-	for(var i in inputDispatcher.TOOLBAR_KEYBOARD_SHORTCUTS) {
-		var shortcut = inputDispatcher.TOOLBAR_KEYBOARD_SHORTCUTS[i];
-		if(shortcut == keyCode) {
-			userInput.pressToolbarShortcut(i);
-			return false;
+	if (!userInput.isChatWindowOpen) {
+		//toolbar's keyboard shortcuts
+		for(var i in inputDispatcher.TOOLBAR_KEYBOARD_SHORTCUTS) {
+			var shortcut = inputDispatcher.TOOLBAR_KEYBOARD_SHORTCUTS[i];
+			if(shortcut == keyCode) {
+				userInput.pressToolbarShortcut(i);
+				return false;
+			}
+		}
+	} else {
+		var str = $('input', '#chat').val();
+		if (keyCode == 8) {
+			//back key
+			$('input', '#chat').val(str.substring(0, str.length - 1));
+		} else {
+			$('input', '#chat').val(str + String.fromCharCode(keyCode).toLowerCase());
 		}
 	}
 
