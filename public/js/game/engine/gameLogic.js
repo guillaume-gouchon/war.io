@@ -17,6 +17,12 @@ gameLogic.update = function (game) {
 	game.added = [];
 	game.removed = [];
 
+	//resolve players orders
+	for (var i in game.orders) {
+		order.dispatchReceivedOrder(game, game.orders[i][0], game.orders[i][1]);
+	}
+	game.orders = [];
+
 	for (var n in game.players) {
 		game.players[n].s = gameData.PLAYER_STATUSES.defeat;
 	}
@@ -41,7 +47,6 @@ gameLogic.update = function (game) {
 		chatMessages.push(game.chat[i]);
 	}
 	game.chat = [];
-
 	return {
 		modified : game.modified,
 		added: game.added,

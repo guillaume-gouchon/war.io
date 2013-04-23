@@ -51,150 +51,18 @@ app.get('/', function (req, res) {
 });
 
 
-
-
-
-
-
-
-//get the game engine
-eval(require('fs').readFileSync('./public/js/game/engine.js', 'utf8'));
-eval(require('fs').readFileSync('./public/js/game/data.js', 'utf8'));
-
-//variables
-var games = [];
-var loops = [];
-
-//init socket.io
+//initialize socket.io
 io.sockets.on('connection', function (socket) {
 
   socket.emit('askUserData', null);
 
   socket.on('userData', function (data) {
-    dispatchPlayer(socket, data);
+    app.gamesManager.dispatchPlayer(socket, data);
   });
 
   socket.on('disconnect', function() {
-      for (var i in games) {
-        var n = games[i].sockets.indexOf(socket);
-        if(n >= 0) {
-          games[i].sockets[n] = null;
-          break;
-        }
-      }
+    app.gamesManager.playerDisconnected(socket);
   });
 
 });
 
-function dispatchPlayer (socket, gameInitData) {
-  for (var i in games) {
-    for (var j in games[i].players) {
-      if(games[i].players[j].pid == gameInitData.playerId) {
-        games[i].sockets[j] = socket;
-        if(games[i].hasStarted) {
-          var gameInfo = {};
-          gameInfo.map = games[i].map;
-          gameInfo.players = games[i].players;
-          gameInfo.myArmy = games[i].players[j].o;
-          gameInfo.initElements = games[i].gameElements;
-          socket.emit('gameStart', gameInfo);
-          socket.on('order', function (data) {
-            order.dispatchReceivedOrder(data[0], data[1]);
-          });
-        }
-        return;
-      }
-    }
-  }
-
-  //no room available, create a new one
-  if (games.length == 0 || games[games.length - 1].players.length == games[games.length - 1].nbPlayers) {
-    createNewGame(gameInitData);
-  }
-
-  addPlayerToGame(socket, games[games.length - 1], gameInitData.playerId, parseInt(gameInitData.gameInitData.army));
-}
-
-function createNewGame (gameInitData) {
-  var game = new gameData.Game();
-  game.id = Math.random();
-  game.nbPlayers = 1;
-  game.sockets = [];
-  var map = new gameData.Map(gameData.MAP_TYPES[gameInitData.gameInitData.mapType],
-                    gameData.MAP_SIZES[gameInitData.gameInitData.mapSize],
-                    gameData.VEGETATION_TYPES[gameInitData.gameInitData.vegetation],
-                    gameData.INITIAL_RESOURCES[gameInitData.gameInitData.initialResources]);
-  game.map = map;
-  games.push(game);
-}
-
-function addPlayerToGame(socket, game, playerId, army) {
-  var player = new gameData.Player(playerId, game.players.length, army);
-
-  game.players.push(player);
-
-  game.sockets.push(socket);
-
-  if (game.players.length == game.nbPlayers) {
-    startGame(game);
-  }
-}
-
-function startGame(newGame) {
-  var game = gameCreation.createNewGame(newGame.map, newGame.players);
-  game.id = newGame.id;
-  game.sockets = newGame.sockets;
-  game.map = newGame.map;
-  game.players = newGame.players;
-
-  var gameInfo = {};
-  gameInfo.map = game.map;
-  gameInfo.players = game.players;
-  gameInfo.initElements = game.gameElements;
-  
-  for (var i in game.players) {
-    gameInfo.myArmy = game.players[i].o;
-    if(game.sockets[i] != null) {
-      game.sockets[i].emit('gameStart', gameInfo);  
-    }
-  }
-
-  var loop = setInterval(function () {
-    var gameData = {};
-    gameData.players = gameLogic.players;
-
-    //check end of game
-    for (var i in gameData.players) {
-      if (gameData.players[i].s == gameData.PLAYER_STATUSES.victory) {
-        clearInterval(loops[0]);
-        for (var i in game.players) {
-          if(game.sockets[i] != null) {
-            game.sockets[i].emit('gameStats', gameLogic.stats);
-          }
-        }
-        return;
-      }
-    }
-    
-    gameData.gameElements = gameLogic.gameElements;
-    var data = game.update();
-    for (var i in game.players) {
-      if(game.sockets[i] != null) {
-        game.sockets[i].emit('gameData', data);
-      }
-    }
-
-  }, 1000 / gameLogic.FREQUENCY);
-
-  loops.push(loop);
-
-  for (var i in game.players) {
-    if(game.sockets[i] != null) {
-      game.sockets[i].on('order', function (data) {
-        order.dispatchReceivedOrder(data[0], data[1]);
-      });
-    }
-  }
-
-  game.hasStarted = true;
-}

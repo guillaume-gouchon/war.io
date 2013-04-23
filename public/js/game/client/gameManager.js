@@ -59,13 +59,17 @@ gameManager.initOfflineGame = function (gameInitData) {
 
 
 gameManager.connectToServer = function (gameInitData) {
-	gameManager.socket = io.connect('http://localhost:6969');
+	gameManager.socket = io.connect('http://localhost:80');
 	
 	//the server asked for some player's info
 	this.socket.on('askUserData', function (data) {
-		var userData = {};
-		userData.playerId = gameManager.playerId;
-		userData.gameInitData = gameInitData;
+		var userData = {
+			player: {
+				playerId: gameManager.playerId,
+				army: gameInitData.army
+			},
+			game: gameInitData
+		};
 		gameManager.socket.emit('userData', userData);
 	});
 

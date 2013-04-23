@@ -14,6 +14,7 @@ order.TYPES = {
 
 
 order.dispatchReceivedOrder = function (game, type, params) {
+	console.log(type + ' '  + params)
 	switch (type) {
 		case 0 :
 			this.convertDestinationToOrder(game, params[0], params[1], params[2]);
