@@ -25,7 +25,7 @@ action.doTheBuild = function (game, element, building) {
 *	Basic attack action.
 */
 action.doTheAttack = function (game, element, target) {
-	if(game.iterate % gameData.ELEMENTS[element.f][element.r][element.t].attackSpeed == 0) {
+	if(game.iterate % (3 - gameData.ELEMENTS[element.f][element.r][element.t].attackSpeed) == 0) {
 		fightLogic.attack(game, element, target);
 	}
 }

@@ -11,68 +11,63 @@ move.ASTAR_MAX_STEPS_SEARCH = 4;
 *	Moves an element one step closer to its destination.
 */
 move.moveElement = function (game, element) {
-	var destination = game.grid[element.mt.x][element.mt.y];
+  if (game.iterate % gameData.ELEMENTS[element.f][element.r][element.t].speed == 0) {
+  	var destination = game.grid[element.mt.x][element.mt.y];
 
-  //if destination forbids movement, search neighbors for a new one
-	var counter = 0;
-	while(destination.isWall && counter < 20) {
-		counter++;
-	    var endNeighbors = astar.neighbors(game.grid, destination, true);
-	    for(var i in endNeighbors){
-	      if(!endNeighbors[i].isWall) {
-	        destination = endNeighbors[i];
-	        element.mt = {x : destination.x, y : destination.y};
-	        break;
-	      }
-	    }
-	}
-	
-	//use A* algorithm to find the path
-	var path = astar.search(game.grid, game.grid[element.p.x][element.p.y], 
-							destination, true);
+    //if destination forbids movement, search neighbors for a new one
+  	var counter = 0;
+  	while(destination.isWall && counter < 20) {
+  		counter++;
+  	    var endNeighbors = astar.neighbors(game.grid, destination, true);
+  	    for(var i in endNeighbors){
+  	      if(!endNeighbors[i].isWall) {
+  	        destination = endNeighbors[i];
+  	        element.mt = {x : destination.x, y : destination.y};
+  	        break;
+  	      }
+  	    }
+  	}
+  	
+  	//use A* algorithm to find the path
+  	var path = astar.search(game.grid, game.grid[element.p.x][element.p.y], 
+  							destination, true);
 
-	if(path.length > 0) {
+  	if(path.length > 0) {
 
-		//take into account the speed of the element
-		var speed = Math.min(gameData.ELEMENTS[element.f][element.r][element.t].speed, path.length);
+  		var newPosition = {x : path[0].x, y : path[0].y};
 
-    if (path[speed - 1] == null) {
-      return;
-    }
+  		if(!game.grid[newPosition.x][newPosition.y].isWall) {
 
-		var newPosition = {x : path[speed - 1].x, y : path[speed - 1].y};
+  			//removes old position
+        var shape = gameData.ELEMENTS[element.f][element.r][element.t].shape;
+  			for (var i in shape) {
+  				for (var j in shape[i]) {
+  					if (shape[i][j] > 0) {
+  						var partPosition = tools.getPartPosition(element, i, j);
+  						game.grid[partPosition.x][partPosition.y].isWall = false;
+  					}
+  				}
+  			}
 
-		if(!game.grid[newPosition.x][newPosition.y].isWall) {
+  			//updates new position
+  			element.p = newPosition;
+  			for (var i in shape) {
+  				for (var j in shape[i]) {
+  					if (shape[i][j] > 0) {
+  						var partPosition = tools.getPartPosition(element, i, j);
+  						game.grid[partPosition.x][partPosition.y].isWall = true;
+  					}
+  				}
+  			}
 
-			//removes old position
-      var shape = gameData.ELEMENTS[element.f][element.r][element.t].shape;
-			for (var i in shape) {
-				for (var j in shape[i]) {
-					if (shape[i][j] > 0) {
-						var partPosition = tools.getPartPosition(element, i, j);
-						game.grid[partPosition.x][partPosition.y].isWall = false;
-					}
-				}
-			}
+  		}
 
-			//updates new position
-			element.p = newPosition;
-			for (var i in shape) {
-				for (var j in shape[i]) {
-					if (shape[i][j] > 0) {
-						var partPosition = tools.getPartPosition(element, i, j);
-						game.grid[partPosition.x][partPosition.y].isWall = true;
-					}
-				}
-			}
-
-		}
-
-		//if element has arrived to its destination, updates its order
-		if(element.mt.x == element.p.x && element.mt.y == element.p.y) {
-			element.mt = {x : null, y : null};
-		}
-	}
+  		//if element has arrived to its destination, updates its order
+  		if(element.mt.x == element.p.x && element.mt.y == element.p.y) {
+  			element.mt = {x : null, y : null};
+  		}
+  	}
+  }
 
 }
 

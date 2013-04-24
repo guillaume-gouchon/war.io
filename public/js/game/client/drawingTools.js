@@ -195,7 +195,7 @@ gameSurface.updateOrientation = function (d, dx, dy) {
 		d.rotation.y = this.de2ra(135);
 	} else if (dx == 0 && dy > 0) {
 		d.rotation.y = this.de2ra(180);
-	} else if (dx < 0 && dy < 0) {
+	} else if (dx < 0 && dy > 0) {
 		d.rotation.y = this.de2ra(225);
 	} else if (dx < 0 && dy == 0) {
 		d.rotation.y = this.de2ra(270);
@@ -331,8 +331,9 @@ gameSurface.showMessage = function (message, color) {
 *	
 */
 gameSurface.extrapol = function (d, dx, dy) {
-	d.ex = dx * 5;
-	d.ey = dy * 5;
+	d.ex = dx;
+	d.ey = dy;
+	d.et = 3;
 	this.ex.push(d);
 }
 
@@ -343,19 +344,19 @@ gameSurface.extrapol = function (d, dx, dy) {
 gameSurface.updateMoveExtrapolation = function () {
 	var index = this.ex.length;
 	while (index --) {
-		console.log(this.ex)
-		var d = this.ex[i];
-		d.position.x += d.ex / Math.abs(d.ex) * this.PIXEL_BY_NODE / 5;
-		d.position.y += d.ey / Math.abs(d.ey) * this.PIXEL_BY_NODE / 5;
-		if (d.ex != 0) {
-			d.ex -= d.ex / Math.abs(d.ex);	
-		}
-		if (d.ey != 0) {
-			d.ey -= d.ey / Math.abs(d.ey);	
-		}
+		var d = this.ex[index];
+		d.position.x += d.ex * this.PIXEL_BY_NODE / 3;
+		d.position.y += d.ey * this.PIXEL_BY_NODE / 3;
+			
+		d.et -= 1;
 
-		if (d.ex == 0 && d.ey == 0) {
-			this.ex.splice(i, 1);
+		if (d.et <= 0) {
+			var element = gameContent.gameElements[d.elementId].s;
+			this.setElementPosition(d, element.p.x, element.p.y);
+			d.et = 0;
+			d.ex = 0;
+			d.ey = 0;
+			this.ex.splice(index, 1);
 		}
 	}
 }

@@ -35,6 +35,9 @@ gameLogic.update = function (game) {
 		this.resolveActions(game, element);
 		this.updateMoves(game, element);
 		this.updateBuildings(game, element);
+		if (element.f == gameData.FAMILIES.unit) {
+			this.protectAround(game, element);	
+		}
 	}
 	this.addNewBuildings(game);
 	this.removeDeads(game);
@@ -184,5 +187,16 @@ gameLogic.checkGameOver = function (game) {
 
 	if (nbPlayersDefeated == game.players.length - 1) {
 		game.players[victory].s = gameData.PLAYER_STATUSES.victory;
+	}
+}
+
+
+/**
+*	Aggressive AI.
+*/
+gameLogic.protectAround = function (game, element) {
+	if ((element.mt == null || element.mt.x == null) && element.a == null && element.pa == null
+		&& !gameData.ELEMENTS[element.f][element.r][element.t].isBuilder) {
+		AI.searchForNewEnemy(game, element);
 	}
 }

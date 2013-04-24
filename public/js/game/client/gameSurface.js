@@ -351,6 +351,7 @@ gameSurface.createObject = function (key, element) {
 	if (key == 'tree.js') {
 		object.rotation.x = this.de2ra(90);
 		object.rotation.y = this.de2ra(Math.random() * 360);
+		object.scale.y = 1.3;
 	} else if ( key == 'castle.js') {
 		object.rotation.x = this.de2ra(90);
 		object.scale.x = 3;
@@ -423,9 +424,12 @@ gameSurface.updateElement = function (element) {
 			this.updateOrientation(d, dx, dy);
 			this.extrapol(d, dx, dy);	
 		}
+	
 	}
 
-	this.setElementPosition(d, element.p.x, element.p.y);
+	if (gameManager.isOfflineGame || element.f == gameData.FAMILIES.building) {
+		this.setElementPosition(d, element.p.x, element.p.y);	
+	}
 	
 	var elementData = gameData.ELEMENTS[element.f][element.r][element.t];
 

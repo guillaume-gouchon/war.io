@@ -5,7 +5,7 @@
 */
 userInput.clickToSelect = function (x, y) {
 	//click on minimap
-	if (x > window.innerWidth - 85 && y > window.innerHeight - 85) {
+	if (x > window.innerWidth - GUI.MINIMAP_SIZE && y > window.innerHeight - GUI.MINIMAP_SIZE) {
 		return;
 	}
 

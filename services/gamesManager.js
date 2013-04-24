@@ -49,6 +49,11 @@ module.exports = function(app){
 			        if(game.iterate >= 0) {
 			        	//game has started, send the player the game info
 						app.gamesManager.sendGameInfo(socket, game, j);
+
+						//reinit the order socket
+						game.sockets[j].on('order', function (data) {
+							game.orders.push([data[0], data[1]]);
+						});
 		        	}
 		        	return true;
 		    	}
@@ -125,7 +130,6 @@ module.exports = function(app){
 				//init the order socket
 				game.sockets[i].on('order', function (data) {
 					game.orders.push([data[0], data[1]]);
-					console.log(game.orders);
 				});
 			}
 		}
