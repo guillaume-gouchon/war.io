@@ -37,6 +37,7 @@ $(document).ready(function() {
 				return;   
 			} else {
 				$('#playOffline').fadeIn();
+				hasClicked = false;
 			}
 
 			setTimeout(function () {
@@ -46,12 +47,15 @@ $(document).ready(function() {
 	});
 
 	$('a', '#playOffline').click(function () {
-		$('#playOffline').fadeOut();
-		gameManager.isOfflineGame = true;
-		gameManager.initGame(gameInitData);
-		try {
-			gameManager.disconnect();
-		} catch (e) {
+		if (!hasClicked) {
+			hasClicked = true;
+			$('#playOffline').fadeOut();
+			gameManager.isOfflineGame = true;
+			gameManager.initGame(gameInitData);
+			try {
+				gameManager.disconnect();
+			} catch (e) {
+			}
 		}
 	});
 

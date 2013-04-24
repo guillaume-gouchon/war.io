@@ -11,6 +11,7 @@ GUI.toolbar = [];
 /**
 *	CONSTANTS
 */
+GUI.MINIMAP_SIZE = 140;
 GUI.BUTTONS_SIZE = 80;
 GUI.TOOLBAR_BUTTONS = {
 	build : {buttonId : 1000, image : 'build.png', isEnabled : true, name: 'Build'},
@@ -225,7 +226,7 @@ GUI.updateInfo = function () {
 			$('#life').html('&infin; / &infin;');
 			for (var i in gameData.RESOURCES) {
 				if (gameData.RESOURCES[i].id == elementData.resourceType) {
-					this.addStatLine(gameData.RESOURCES[i].image, element.ra, "Amount of resources left");
+					this.addStatLine(gameData.RESOURCES[i].image.replace('.png', '') + '15', element.ra, "Amount of resources left");
 					break;
 				}
 			}
@@ -280,21 +281,18 @@ GUI.addQueue = function(image, text, tooltip) {
 */
 GUI.initMinimap = function () {
 	$('#minimap').mousedown(function (e) {
-		console.log()
-		if (e.target.nodeName != 'IMG' && e.target.nodeName != 'SPAN') {
-			var x = e.offsetX / 80 * gameContent.map.size.x * gameSurface.PIXEL_BY_NODE;
-			var y = (1 - e.offsetY / 80) * gameContent.map.size.y * gameSurface.PIXEL_BY_NODE;
-			if (e.which == 1) {
-				camera.position.x = x;
-				camera.position.y = y;
-			} else if (e.which == 3 && gameContent.selected.length > 0
-				&& rank.isAlly(gameContent.players, gameContent.myArmy, gameContent.gameElements[gameContent.selected[0]].s)
-				&& (gameContent.gameElements[gameContent.selected[0]].s.f == gameData.FAMILIES.unit
-			|| gameContent.gameElements[gameContent.selected[0]].s.f == gameData.FAMILIES.building)) {
-				x = parseInt(x / gameSurface.PIXEL_BY_NODE);
-				y = parseInt(y / gameSurface.PIXEL_BY_NODE);
-				userInput.sendOrder(x, y);
-			}
+		var x = (GUI.MINIMAP_SIZE - window.innerWidth + e.clientX) / GUI.MINIMAP_SIZE * gameContent.map.size.x * gameSurface.PIXEL_BY_NODE;
+		var y = (window.innerHeight - e.clientY) / GUI.MINIMAP_SIZE * gameContent.map.size.y * gameSurface.PIXEL_BY_NODE;
+		if (e.which == 1) {
+			camera.position.x = x;
+			camera.position.y = y;
+		} else if (e.which == 3 && gameContent.selected.length > 0
+			&& rank.isAlly(gameContent.players, gameContent.myArmy, gameContent.gameElements[gameContent.selected[0]].s)
+			&& (gameContent.gameElements[gameContent.selected[0]].s.f == gameData.FAMILIES.unit
+		|| gameContent.gameElements[gameContent.selected[0]].s.f == gameData.FAMILIES.building)) {
+			x = parseInt(x / gameSurface.PIXEL_BY_NODE);
+			y = parseInt(y / gameSurface.PIXEL_BY_NODE);
+			userInput.sendOrder(x, y);
 		}
 	});
 }
@@ -304,8 +302,8 @@ GUI.initMinimap = function () {
 *	Updates minimap.
 */
 GUI.updateMinimap = function () {
-	$('#minimapLocation').css('left', (80 - 16) * camera.position.x / (gameContent.map.size.x * gameSurface.PIXEL_BY_NODE));
-	$('#minimapLocation').css('top', (80 - 20) * (1 - camera.position.y / (gameContent.map.size.y * gameSurface.PIXEL_BY_NODE)));
+	$('#minimapLocation').css('left', -8 + (this.MINIMAP_SIZE) * camera.position.x / (gameContent.map.size.x * gameSurface.PIXEL_BY_NODE));
+	$('#minimapLocation').css('top', -8 + (this.MINIMAP_SIZE) * (1 - camera.position.y / (gameContent.map.size.y * gameSurface.PIXEL_BY_NODE)));
 }
 
 
@@ -314,8 +312,8 @@ GUI.updateMinimap = function () {
 */
 GUI.addElementOnMinimap = function (element) {
 	$('#minimap').append('<span id="minimap' + element.id + '" class="minimapPoint ' + gameSurface.PLAYERS_COLORS[element.o] + '">&nbsp;</span>');
-	$('#minimap' + element.id).css('left', 5 + (80 - 5) * element.p.x / gameContent.map.size.x);
-	$('#minimap' + element.id).css('top', (80 - 5) * (1 - element.p.y / gameContent.map.size.y));
+	$('#minimap' + element.id).css('left', (this.MINIMAP_SIZE) * element.p.x / gameContent.map.size.x);
+	$('#minimap' + element.id).css('top', (this.MINIMAP_SIZE) * (1 - element.p.y / gameContent.map.size.y));
 }
 
 

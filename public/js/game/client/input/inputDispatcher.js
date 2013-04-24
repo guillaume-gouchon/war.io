@@ -51,7 +51,7 @@ inputDispatcher.onDoubleClick = function (event) {
 *	Single right click
 */
 inputDispatcher.onRightClick = function (event) {
-	if (event.x > window.innerWidth - 80 && event.y > window.innerHeight - 80) {
+	if (event.x > window.innerWidth - GUI.MINIMAP_SIZE && event.y > window.innerHeight - GUI.MINIMAP_SIZE) {
 		return false;
 	}
 
