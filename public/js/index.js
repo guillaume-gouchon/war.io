@@ -10,6 +10,7 @@ $(document).ready(function() {
 	var hasClicked = false;
 
 	var gameInitData = {};
+	var timeout = null;
 
 	$('.armyBox').click(function () {
 		if (!hasClicked) {
@@ -37,18 +38,20 @@ $(document).ready(function() {
 				return;   
 			} else {
 				$('#playOffline').fadeIn();
-				hasClicked = false;
 			}
 
-			setTimeout(function () {
+			timeout = setTimeout(function () {
 				gameManager.initGame(gameInitData);
 			}, 800);
 		}
 	});
 
+	var launchGame = false;
+
 	$('a', '#playOffline').click(function () {
-		if (!hasClicked) {
-			hasClicked = true;
+		clearInterval(timeout);
+		if (!launchGame) {
+			launchGame = true;
 			$('#playOffline').fadeOut();
 			gameManager.isOfflineGame = true;
 			gameManager.initGame(gameInitData);

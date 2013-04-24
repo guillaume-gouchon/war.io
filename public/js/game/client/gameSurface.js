@@ -50,6 +50,7 @@ gameSurface.terrain = null;
 gameSurface.scroll = [0, 0];
 gameSurface.isKeyboardScrolling = false;
 gameSurface.stuffToBeLoaded = 0;
+gameSurface.ex = [];
 
 
 /**
@@ -125,6 +126,7 @@ gameSurface.init = function () {
 
 		requestAnimationFrame(render);
 
+		gameSurface.updateMoveExtrapolation();
 		gameSurface.updateGameWindow();
 		gameSurface.updateOrderPosition();
 		TWEEN.update();
@@ -134,6 +136,7 @@ gameSurface.init = function () {
 		}
 		
 		renderer.render(scene, camera);
+
 	}
 
 	render();
@@ -191,7 +194,7 @@ gameSurface.createScene = function () {
 	scene.add(this.order);
 
 	//add selection rectangle
-	var geometry = new THREE.CubeGeometry(this.PIXEL_BY_NODE, this.PIXEL_BY_NODE, this.SELECTION_RECTANGLE_HEIGHT);
+	var geometry = new THREE.CubeGeometry(1, 1, this.SELECTION_RECTANGLE_HEIGHT);
 	this.selectionRectangle = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial( { color: this.SELECTION_RECTANGLE_COLOR, opacity: this.SELECTION_RECTANGLE_OPACITY, transparent: true } ));
 	scene.add(this.selectionRectangle);
 
@@ -403,12 +406,6 @@ gameSurface.createObject = function (key, element) {
 	scene.add(object);
 	gameContent.gameElements[element.id] = {d: object, s : element};
 
-	/*if (element.f == gameData.FAMILIES.building && element.cp < 100) {
-		var inConstruction = this.drawSelectionCircle(gameData.ELEMENTS[element.f][element.r][element.t].shape[0].length / 2 * this.PIXEL_BY_NODE / 2);
-		inConstruction.id = 'inConstruction';
-		inConstruction.position.y = 0;
-		object.add(inConstruction);
-	}*/
 }
 
 
@@ -418,7 +415,14 @@ gameSurface.createObject = function (key, element) {
 gameSurface.updateElement = function (element) {
 	var d = gameContent.gameElements[element.id].d;
 	if (element.f == gameData.FAMILIES.unit) {
-		this.updateOrientation(d, element);
+		var s = gameContent.gameElements[element.id].s;
+		var dx = element.p.x - s.p.x;
+		var dy = element.p.y - s.p.y;
+
+		if (dx != 0 || dy != 0) {
+			this.updateOrientation(d, dx, dy);
+			this.extrapol(d, dx, dy);	
+		}
 	}
 
 	this.setElementPosition(d, element.p.x, element.p.y);
@@ -429,14 +433,6 @@ gameSurface.updateElement = function (element) {
 		if (element.cp < 100) {
 			//update construction progress
 			d.position.z -= (100 - element.cp) / 20 * this.PIXEL_BY_NODE;
-			/*var index = d.children.length;
-			while (index --) {
-				var child = d.children[index];
-				if (child.id == 'inConstruction') {
-					child.position.y -= d.position.z;
-					break;
-				}
-			}*/
 		} else if (element.q.length > 0) {
 			//update progress bar
 			var progressBar = null;

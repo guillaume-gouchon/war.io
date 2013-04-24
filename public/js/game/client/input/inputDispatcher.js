@@ -72,7 +72,6 @@ inputDispatcher.onRightClick = function (event) {
 *	The mouse is moving
 */
 inputDispatcher.onMouseMove = function (event) {
-	userInput.selectGroup(event.x, event.y);
 	userInput.updateConstructionMode(event.x, event.y);
 }
 

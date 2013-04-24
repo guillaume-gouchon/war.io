@@ -112,9 +112,10 @@ gameSurface.updateSelectionRectangle = function (x1, y1, x2, y2) {
 	if (dx > 0 &&  dy > 0) {
 		var position = {
 			x : Math.min(x1, x2) + dx / 2 + 1,
-			y : Math.min(y1, y2) + dy / 2
+			y : Math.min(y1, y2) + dy / 2,
+			z : 0
 		};
-		this.selectionRectangle.position = this.convertGamePositionToScenePosition(position);
+		this.selectionRectangle.position = position;
 		this.selectionRectangle.scale.x = dx;
 		this.selectionRectangle.scale.y = dy;
 		this.selectionRectangle.visible = true;
@@ -184,25 +185,22 @@ gameSurface.unselectAll = function () {
 /**
 *	Updates unit orientation depending on movement.
 */
-gameSurface.updateOrientation = function (d, element) {
-	var s = gameContent.gameElements[element.id].s;
-	var dx = element.p.x - s.p.x;
-	var dy = element.p.y - s.p.y;
+gameSurface.updateOrientation = function (d, dx, dy) {
 	if (dx == 0 && dy < 0) {
 	} else if (dx > 0 && dy < 0) {
-		d.rotation.y = this.de2ra(-45);
+		d.rotation.y = this.de2ra(45);
 	} else if (dx > 0 && dy == 0) {
-		d.rotation.y = this.de2ra(-90);
+		d.rotation.y = this.de2ra(90);
 	} else if (dx > 0 && dy > 0) {
-		d.rotation.y = this.de2ra(-135);
+		d.rotation.y = this.de2ra(135);
 	} else if (dx == 0 && dy > 0) {
-		d.rotation.y = this.de2ra(-180);
+		d.rotation.y = this.de2ra(180);
 	} else if (dx < 0 && dy < 0) {
-		d.rotation.y = this.de2ra(-225);
+		d.rotation.y = this.de2ra(225);
 	} else if (dx < 0 && dy == 0) {
-		d.rotation.y = this.de2ra(-270);
+		d.rotation.y = this.de2ra(270);
 	} else if (dx < 0 && dy < 0) {
-		d.rotation.y = this.de2ra(-315);
+		d.rotation.y = this.de2ra(315);
 	}
 }
 
@@ -325,5 +323,39 @@ gameSurface.showMessage = function (message, color) {
 		});
 		tweenFadeIn.chain(tweenFadeOut);
 		tweenFadeOut.chain(tweenHide);
+	}
+}
+
+
+/**
+*	
+*/
+gameSurface.extrapol = function (d, dx, dy) {
+	d.ex = dx * 5;
+	d.ey = dy * 5;
+	this.ex.push(d);
+}
+
+
+/**
+*	Extrapolates units' movement.
+*/
+gameSurface.updateMoveExtrapolation = function () {
+	var index = this.ex.length;
+	while (index --) {
+		console.log(this.ex)
+		var d = this.ex[i];
+		d.position.x += d.ex / Math.abs(d.ex) * this.PIXEL_BY_NODE / 5;
+		d.position.y += d.ey / Math.abs(d.ey) * this.PIXEL_BY_NODE / 5;
+		if (d.ex != 0) {
+			d.ex -= d.ex / Math.abs(d.ex);	
+		}
+		if (d.ey != 0) {
+			d.ey -= d.ey / Math.abs(d.ey);	
+		}
+
+		if (d.ex == 0 && d.ey == 0) {
+			this.ex.splice(i, 1);
+		}
 	}
 }

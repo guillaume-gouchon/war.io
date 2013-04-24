@@ -1,8 +1,3 @@
-/**
-*		CONSTANTS
-*/
-userInput.SELECTION_RECTANGLE_THRESHOLD = 8; //in pixels
-
 
 /**
 *	The user is clicking on the screen to select / unselect some elements.
@@ -31,8 +26,8 @@ userInput.clickToSelect = function (x, y) {
 			gameSurface.selectElement(intersect.object.elementId);
 		}
 
-		gameContent.selectionRectangle[0] = parseInt(intersect.point.x / gameSurface.PIXEL_BY_NODE);
-		gameContent.selectionRectangle[1] = parseInt(intersect.point.y / gameSurface.PIXEL_BY_NODE);
+		gameContent.selectionRectangle[0] = intersect.point.x;
+		gameContent.selectionRectangle[1] = intersect.point.y;
 		gameSurface.updateSelectionRectangle(-1, -1, -1, -1);
 	}
 
@@ -44,9 +39,7 @@ userInput.clickToSelect = function (x, y) {
 * 	@param (x, y) : current coordinates of the mouse
 */
 userInput.selectGroup = function (x, y) {
-	if(gameContent.selectionRectangle.length > 0 
-		&& Math.abs(x - gameContent.selectionRectangle[0]) > this.SELECTION_RECTANGLE_THRESHOLD
-		&& Math.abs(y - gameContent.selectionRectangle[1]) > this.SELECTION_RECTANGLE_THRESHOLD) {
+	if(gameContent.selectionRectangle.length > 0) {
 
 			//unselect the previous selected elements
 			gameSurface.unselectAll();
@@ -54,7 +47,7 @@ userInput.selectGroup = function (x, y) {
 
 			var unitSelected = false;
 
-			var position = gameSurface.getAbsolutePositionFromPixel(x, y);
+			var position = gameSurface.getFirstIntersectObject(x, y).point;
 			if (position.x < 0 || position.y < 0) {
 				return;
 			}
@@ -64,20 +57,26 @@ userInput.selectGroup = function (x, y) {
 			gameContent.selectionRectangle[3] = position.y;
 			gameSurface.updateSelectionRectangle(gameContent.selectionRectangle[0], gameContent.selectionRectangle[1], gameContent.selectionRectangle[2], gameContent.selectionRectangle[3]);
 
+			var gamePosition1 = gameSurface.convertScenePositionToGamePosition({x: gameContent.selectionRectangle[0], y: gameContent.selectionRectangle[1]});
+			var gamePosition2 = gameSurface.convertScenePositionToGamePosition(position);
+			var selectionRectangleGamePosition = [
+				gamePosition1.x, gamePosition1.y, gamePosition2.x, gamePosition2.y
+			];
+
 			for(var i in gameContent.gameElements) {
 				var element = gameContent.gameElements[i].s;
 	  			if(rank.isAlly(gameContent.players, gameContent.myArmy, element)
 	  				&& element.f != gameData.FAMILIES.terrain
-	  				&& (gameContent.selectionRectangle[0] - gameContent.selectionRectangle[2] < 0 
-			  		&& element.p.x <= gameContent.selectionRectangle[2]
-			  		&& element.p.x >= gameContent.selectionRectangle[0]
-			  		|| element.p.x >= gameContent.selectionRectangle[2]
-			  		&& element.p.x <= gameContent.selectionRectangle[0])
-			  		&& (gameContent.selectionRectangle[1] - gameContent.selectionRectangle[3] < 0 
-			  		&& element.p.y <= gameContent.selectionRectangle[3]
-			  		&& element.p.y >= gameContent.selectionRectangle[1]
-			  		|| element.p.y >= gameContent.selectionRectangle[3]
-			  		&& element.p.y <= gameContent.selectionRectangle[1])) {
+	  				&& (selectionRectangleGamePosition[0] - selectionRectangleGamePosition[2] < 0 
+			  		&& element.p.x <= selectionRectangleGamePosition[2]
+			  		&& element.p.x >= selectionRectangleGamePosition[0]
+			  		|| element.p.x >= selectionRectangleGamePosition[2]
+			  		&& element.p.x <= selectionRectangleGamePosition[0])
+			  		&& (selectionRectangleGamePosition[1] - selectionRectangleGamePosition[3] < 0 
+			  		&& element.p.y <= selectionRectangleGamePosition[3]
+			  		&& element.p.y >= selectionRectangleGamePosition[1]
+			  		|| element.p.y >= selectionRectangleGamePosition[3]
+			  		&& element.p.y <= selectionRectangleGamePosition[1])) {
 				  		gameContent.selected.push(element.id);
 			  	  		gameSurface.selectElement(element.id);
 				  		if(element.f == gameData.FAMILIES.unit) {
