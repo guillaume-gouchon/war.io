@@ -28,6 +28,7 @@ gameManager.initGame = function (gameInitData) {
 *	Starts the game.
 */
 gameManager.startGame = function () {
+	$('#playOffline').fadeOut();
 	$('#gui').removeClass('hide');
 	$('#introScreen').addClass('hide');
 
@@ -44,7 +45,7 @@ gameManager.startGame = function () {
 
 gameManager.initOfflineGame = function (gameInitData) {
 	try {
-		this.socket.disconnect();
+		this.disconnect();
 	} catch (e) {
 	}
 	gameContent.myArmy = 0;
@@ -101,6 +102,7 @@ gameManager.connectToServer = function (gameInitData) {
 
 gameManager.disconnect = function () {
 	this.socket.emit('disconnect', null);
+	this.socket = null;
 }
 
 
