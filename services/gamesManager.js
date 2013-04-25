@@ -70,7 +70,7 @@ module.exports = function(app){
 		var game = new gameData.Game();
 		game.id = gameData.createUniqueId();
 		game.sockets = [];
-		game.nbPlayers = 2;
+		game.nbPlayers = 3;
  		game.map = new gameData.Map(gameData.MAP_TYPES[gameInitialData.mapType],
 	                    gameData.MAP_SIZES[gameInitialData.mapSize],
 	                    gameData.VEGETATION_TYPES[gameInitialData.vegetation],
