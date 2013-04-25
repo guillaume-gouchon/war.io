@@ -219,6 +219,7 @@ module.exports = function(app){
 	*	One player has just been disconnected.
 	*/
 	app.gamesManager.playerDisconnected = function (socket) {
+		console.log('One player has been disconnected'.debug);
 		for (var i in app.gamesManager.games) {
       		var n = app.gamesManager.games[i].sockets.indexOf(socket);
 	      	if (n >= 0) {
