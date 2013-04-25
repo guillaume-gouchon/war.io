@@ -43,6 +43,10 @@ gameManager.startGame = function () {
 
 
 gameManager.initOfflineGame = function (gameInitData) {
+	try {
+		this.socket.disconnect();
+	} catch (e) {
+	}
 	gameContent.myArmy = 0;
 	gameContent.players = [
     new gameData.Player(0, 0, gameInitData.army), new gameData.Player(0, 1, 0)];
