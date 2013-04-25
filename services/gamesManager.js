@@ -67,6 +67,7 @@ module.exports = function(app){
 	*	Creates a new game.
 	*/
 	app.gamesManager.createNewGame = function (gameInitialData) {
+		console.log('Creating new game'.info);
 		var game = new gameData.Game();
 		game.id = gameData.createUniqueId();
 		game.sockets = [];
@@ -83,6 +84,7 @@ module.exports = function(app){
 	*	Adds a player to an existing game.
 	*/
 	app.gamesManager.addPlayerToGame = function (socket, game, playerInitialData) {
+		console.log('Add player to game '.info + game.id);
 		var player = new gameData.Player(playerInitialData.playerId, game.players.length, playerInitialData.army);
 		game.players.push(player);
 		game.sockets.push(socket);
@@ -112,6 +114,7 @@ module.exports = function(app){
 	*	Starts a game.
 	*/
 	app.gamesManager.startGame = function (game) {
+		console.log('Starts the game !'.success);
 
 		//update game
 		var someMoreGameData = gameCreation.createNewGame(game.map, game.players);

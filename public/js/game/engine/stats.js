@@ -33,7 +33,6 @@ stats.init = function (game) {
 */
 stats.update = function (game) {
 	if(game.iterate % this.UPDATE_FREQUENCY == 0) {
-		console.log(game.stats);
 		for (var i in game.players) {
 			game.stats[i].pop.push(game.players[i].pop.current);
 		}
