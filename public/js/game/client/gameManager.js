@@ -104,7 +104,6 @@ gameManager.connectToServer = function (gameInitData) {
 gameManager.disconnect = function () {
 	console.log('Sending disconnect command...');
 	this.socket.emit('disconnect', null);
-	this.socket = null;
 }
 
 
