@@ -147,9 +147,14 @@ gameSurface.selectElement = function (elementId) {
 	} else {
 		color = this.SELECTION_NEUTRAL_COLOR;
 	}
-	gameContent.gameElements[elementId].d.add(this.drawSelectionCircle(elementData.shape.length / 2 * this.PIXEL_BY_NODE / 2, color));
+
+	var d = gameContent.gameElements[elementId].d;
+	d.add(this.drawSelectionCircle(elementData.shape.length / 2 * this.PIXEL_BY_NODE / 2, color));
+	
 	if (element.f != gameData.FAMILIES.terrain) {
-		gameContent.gameElements[elementId].d.add(this.drawLifeBar(element, elementData));
+		var lifeBar = this.drawLifeBar(element, elementData);
+		lifeBar.rotation.y = - d.rotation.y + this.de2ra(90);
+		d.add(lifeBar);
 	}
 }
 
@@ -281,7 +286,7 @@ gameSurface.getLifeBarColor = function (lifeRatio) {
 	if (lifeRatio < 0.3) {
 		return 0xff0000;
 	} else if (lifeRatio < 0.6) {
-		return 0x66ff00;
+		return 0xe3e314;
 	} else {
 		return 0x00ff00;
 	}

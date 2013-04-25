@@ -422,7 +422,7 @@ gameSurface.updateElement = function (element) {
 
 		if (dx != 0 || dy != 0) {
 			this.updateOrientation(d, dx, dy);
-			this.extrapol(d, dx, dy);	
+			this.extrapol(d, dx, dy);
 		}
 	
 	}
@@ -476,6 +476,7 @@ gameSurface.updateElement = function (element) {
 		for (var i in d.children) {
 			if (d.children[i].id == 'life') {
 				this.updateLifeBar(d.children[i], element, elementData);
+				d.children[i].rotation.y = - d.rotation.y + this.de2ra(90);
 				break;
 			}
 		}
