@@ -186,7 +186,8 @@ canvas {
 #armies {
     position: absolute;
     top : 100%;
-    left : 10%;
+    width: 100%;
+    text-align: center;
 }
 
 .armyBox {
@@ -200,6 +201,7 @@ canvas {
     opacity:0.8;
     -webkit-box-shadow:0px 0px 20px 10px rgba(0, 0, 0, 0.6);
     box-shadow:0px 0px 20px 10px rgba(0, 0, 0, 0.6);
+    margin-right: 40px;
 }
 
 .armyBox:hover {
