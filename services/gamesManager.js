@@ -114,7 +114,7 @@ module.exports = function(app){
 	*	Starts a game.
 	*/
 	app.gamesManager.startGame = function (game) {
-		console.log('Starts the game !'.success);
+		console.log('Starts a game !'.success);
 
 		//update game
 		var someMoreGameData = gameCreation.createNewGame(game.map, game.players);
@@ -124,6 +124,7 @@ module.exports = function(app){
 		game.gameElements = someMoreGameData.gameElements;
 		game.added = someMoreGameData.added;
 		game.orders = [];
+		game.hasStarted = true;
 
 		//send game info to the players
 		for (var i in game.players) {
@@ -151,7 +152,7 @@ module.exports = function(app){
 		app.gamesManager.loop = setInterval(function () {
 			var i = app.gamesManager.games.length;
 			while (i --) {
-				if (app.gamesManager.processGame(app.gamesManager.games[i])) {
+				if (app.gamesManager.games[i].hasStarted && app.gamesManager.processGame(app.gamesManager.games[i])) {
 					//game is over
 					app.gamesManager.stopGame(i);
 				}
