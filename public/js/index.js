@@ -55,10 +55,6 @@ $(document).ready(function() {
 			$('#playOffline').fadeOut();
 			gameManager.isOfflineGame = true;
 			gameManager.initGame(gameInitData);
-			try {
-				gameManager.disconnect();
-			} catch (e) {
-			}
 		}
 	});
 
