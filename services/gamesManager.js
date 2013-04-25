@@ -224,7 +224,7 @@ module.exports = function(app){
 	      	if (n >= 0) {
 		        app.gamesManager.games[i].sockets[n] = null;
 		        if (app.gamesManager.isUselessGame(app.gamesManager.games[i])) {
-		        	//game is useless
+		        	console.log('Game '.info + app.gamesManager.games[i].id + ' has been removed'.info);
 		        	//TODO : save it
 		        	app.gamesManager.stopGame(i);
 		        }

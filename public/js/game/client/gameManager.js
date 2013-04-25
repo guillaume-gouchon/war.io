@@ -47,6 +47,7 @@ gameManager.initOfflineGame = function (gameInitData) {
 	try {
 		this.disconnect();
 	} catch (e) {
+		console.log(e);
 	}
 	gameContent.myArmy = 0;
 	gameContent.players = [
