@@ -194,12 +194,14 @@ gameManager.showGameData = function (gameId) {
 	$('#nbPlayers').attr('data-gameId', gameId);
 
 	$('div', '#nbPlayers').click(function () {
-
+		console.log('click')
 		try {
 			var data = {};
 			data.gameId = $('#nbPlayers').attr('data-gameId');
 			data.nbPlayers = $(this).attr('data-value');
-			this.socket.emit('changeGameData', data);	
+			console.log(data)
+			this.socket.emit('changeGameData', data);
+			console.log('done');
 		} catch (e) {
 		}
 		
