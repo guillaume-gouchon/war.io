@@ -158,6 +158,8 @@ gameManager.endGame = function (status) {
 	if (this.isOfflineGame) {
 		clearInterval(this.offlineLoop);
 		this.showStats(gameContent.game.stats);
+	} else {
+		this.disconnect();
 	}
 }
 
@@ -173,7 +175,8 @@ gameManager.showStats = function (stats) {
 		if (i == gameContent.myArmy) {
 			playerName = 'You';
 		} else {
-			playerName = 'Player ' + i;
+			var playerNumber = i + 1;
+			playerName = 'Player ' + playerNumber;
 		}
 		$('#tableBody').append('<tr class="' + gameSurface.PLAYERS_COLORS[i] + '"><td>' +  
 			playerName + '</td><td>' +  

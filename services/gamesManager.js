@@ -196,6 +196,8 @@ module.exports = function(app){
 					}				
 
 					return true;
+				} else if (data.players[i].s == gameData.PLAYER_STATUSES.defeat) {
+					game.sockets[i].emit('gameStats', game.stats);
 				}
 			}
 		} catch(e) {
