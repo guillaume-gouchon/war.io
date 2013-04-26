@@ -190,7 +190,7 @@ canvas {
     text-align: center;
 }
 
-.armyBox {
+.bigButton {
     display: inline-block;
     font-size: 25px;
     background-color: #55a;
@@ -204,12 +204,12 @@ canvas {
     margin-right: 40px;
 }
 
-.armyBox:hover {
+.bigButton:hover {
     background-color: #eee;
     color : #bbb;
 }
 
-.armyBox img {
+.bigButton img {
     margin-right: 20px;
 }
 
@@ -862,7 +862,7 @@ canvas {
 #resources .spriteBefore:before {
   margin-top: 14px; margin-right: 7px;
 }
-.armyBox .spriteBefore:before {
+.bigButton .spriteBefore:before {
   margin-top: 19px; margin-right: 27px;
 }
 .toolbarButton .sprite {
@@ -917,3 +917,14 @@ canvas {
 .sprite-wood:before{ background-position: -258px -150px; width: 28px; height: 28px; } 
 .sprite-wood15:before{ background-position: -296px -150px; width: 15px; height: 15px; } 
 
+
+
+#nbPlayers {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+}
+
+.customRadio.checked {
+  background-color: #a22;
+}

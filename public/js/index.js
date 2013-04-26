@@ -12,7 +12,7 @@ $(document).ready(function() {
 	var gameInitData = {};
 	var timeout = null;
 
-	$('.armyBox').click(function () {
+	$('.bigButton', '#armies').click(function () {
 		if (!hasClicked) {
 			var army = $(this).attr('data-army');
 			gameInitData.army = army;
@@ -20,7 +20,6 @@ $(document).ready(function() {
 			gameInitData.mapSize = 'medium';
 			gameInitData.vegetation = 'standard';
 			gameInitData.initialResources = 'standard';
-
 			closePopups();
 			hasClicked = true;
 			$('#chooseArmy').addClass('hideToLeft');
@@ -96,6 +95,13 @@ $(document).ready(function() {
 
 	preloadImages();
 
+
+	//custom radio buttons
+	$('.customRadio').click(function () {
+		$('.customRadio[data-name="' + $(this).attr('data-name') + '"]').removeClass('checked');
+		$(this).addClass('checked');
+	});
+
 });
 
 /*function initMapChooser() {
@@ -122,7 +128,7 @@ function initArmyChooser () {
 }
 
 function createArmyBox (army) {
-	return '<div class="armyBox" data-army="' + army.id + '"><div class="spriteBefore sprite-' + army.image.replace('.png', '') + '">' + army.name + '</div></div>';
+	return '<div class="bigButton" data-army="' + army.id + '"><div class="spriteBefore sprite-' + army.image.replace('.png', '') + '">' + army.name + '</div></div>';
 }
 
 

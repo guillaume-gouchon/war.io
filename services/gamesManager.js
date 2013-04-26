@@ -28,6 +28,7 @@ module.exports = function(app){
 			if (app.gamesManager.games.length == 0 || lastGame.players.length == lastGame.nbPlayers) {
 				//no room available, create a new game
 				app.gamesManager.createNewGame(playerData.game);
+				socket.emit('gameCreator', app.gamesManager.games[app.gamesManager.games.length - 1].id);
 			}
 
 			//add player to the last game
@@ -245,6 +246,23 @@ module.exports = function(app){
 			}
 		}
 		return true;
+	}
+
+
+	/**
+	*	Changes the game data before it starts.
+	*/
+	app.gamesManager.changeGameData = function (gameData) {
+		for (var i in app.gamesManager.games) {
+      		var game = app.gamesManager.games[i];
+      		if (game.id == gameData.gameId) {
+      			//change number of players
+      			if (game.players.length <= gameData.nbPlayers) {
+	      			game.nbPlayers = gameData.nbPlayers;
+      			}
+      			break;	
+      		}
+      	}
 	}
 
 }

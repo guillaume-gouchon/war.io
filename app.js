@@ -60,6 +60,10 @@ io.sockets.on('connection', function (socket) {
     app.gamesManager.dispatchPlayer(socket, data);
   });
 
+  socket.on('changeGameData', function(data) {
+    app.gamesManager.changeGameData(data);
+  });
+
   socket.on('goOffline', function() {
     app.gamesManager.playerDisconnected(socket);
   });

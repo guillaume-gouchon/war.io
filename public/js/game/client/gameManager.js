@@ -2,10 +2,11 @@ var gameManager = {};
 
 
 /**
-*	Testing purpose variable.
+*	Offline purpose variables.
 */
 gameManager.isOfflineGame = false;
 gameManager.offlineLoop = null;
+gameManager.offlineNbPlayers = 2;
 
 
 /**
@@ -14,7 +15,7 @@ gameManager.offlineLoop = null;
 gameManager.initGame = function (gameInitData) {
 	this.getPlayerId();
 	if(this.isOfflineGame) {
-		this.initOfflineGame(gameInitData);	
+		this.initOfflineGame(gameInitData);
 	} else {
 		try {
 			this.connectToServer(gameInitData);
@@ -47,11 +48,13 @@ gameManager.initOfflineGame = function (gameInitData) {
 	try {
 		this.disconnect();
 	} catch (e) {
-		console.log(e);
 	}
 	gameContent.myArmy = 0;
-	gameContent.players = [
-    new gameData.Player(0, 0, gameInitData.army), new gameData.Player(0, 1, 0)];
+	gameContent.players = [];
+	gameContent.players.push(new gameData.Player(0, 0, gameInitData.army));
+	for (var i = 1; i < this.offlineNbPlayers; i++) {
+		gameContent.players.push(new gameData.Player(0, i, 0));
+	}
   	gameContent.map = new gameData.Map(gameData.MAP_TYPES[gameInitData.mapType],
                     gameData.MAP_SIZES[gameInitData.mapSize],
                     gameData.VEGETATION_TYPES[gameInitData.vegetation],
@@ -77,6 +80,11 @@ gameManager.connectToServer = function (gameInitData) {
 			game: gameInitData
 		};
 		gameManager.socket.emit('userData', userData);
+	});
+
+	//this player is the game creator, he can change the game data
+	this.socket.on('gameCreator', function (gameId) {
+		gameManager.showGameData(gameId);
 	});
 
 	//the server launched the game !
@@ -152,7 +160,7 @@ gameManager.endGame = function (status) {
 
 
 /**
-*	Shows the game statistics.
+*	Shows the end game statistics.
 */
 gameManager.showStats = function (stats) {
 	$('table', '#endGameStats').css('width', window.innerWidth - 60);
@@ -175,3 +183,26 @@ gameManager.showStats = function (stats) {
 			statPlayer.buildingsCreated + '</td></tr>');
 	}
 }
+
+
+/**
+*	Shows the different input and selectors to change the game data.
+*/
+gameManager.showGameData = function (gameId) {
+	$('#nbPlayers').css('top', (window.innerHeight - $('#nbPlayers').height()) / 2);
+	$('#nbPlayers').removeClass('hide');
+	$('#nbPlayers').attr('data-gameId', gameId);
+
+	$('div', '#nbPlayers').click(function () {
+
+		try {
+			var data = {};
+			data.gameId = $('#nbPlayers').attr('data-gameId');
+			data.nbPlayers = $(this).attr('data-value');
+			this.socket.emit('changeGameData', data);	
+		} catch (e) {
+		}
+		
+	});
+}
+
