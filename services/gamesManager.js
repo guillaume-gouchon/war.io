@@ -187,15 +187,7 @@ module.exports = function(app){
 			//check end of game
 			for (var i in data.players) {
 				if (data.players[i].s == gameData.PLAYER_STATUSES.victory) {
-					
-					//send stats data to each player
-					for (var i in game.players) {
-						if(game.sockets[i] != null) {
-							game.sockets[i].emit('gameStats', game.stats);
-						}
-					}				
-
-					return true;
+					game.sockets[i].emit('gameStats', game.stats);
 				} else if (data.players[i].s == gameData.PLAYER_STATUSES.defeat) {
 					game.sockets[i].emit('gameStats', game.stats);
 				}
