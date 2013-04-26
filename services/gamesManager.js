@@ -186,10 +186,14 @@ module.exports = function(app){
 
 			//check end of game
 			for (var i in data.players) {
-				if (data.players[i].s == gameData.PLAYER_STATUSES.victory) {
-					game.sockets[i].emit('gameStats', game.stats);
-				} else if (data.players[i].s == gameData.PLAYER_STATUSES.defeat) {
-					game.sockets[i].emit('gameStats', game.stats);
+				if (game.sockets[i] != null) {
+					if (data.players[i].s == gameData.PLAYER_STATUSES.victory) {
+						game.sockets[i].emit('gameStats', game.stats);
+						game.sockets[i] = null;
+					} else if (data.players[i].s == gameData.PLAYER_STATUSES.defeat) {
+						game.sockets[i].emit('gameStats', game.stats);
+						game.sockets[i] = null;
+					}
 				}
 			}
 		} catch(e) {
