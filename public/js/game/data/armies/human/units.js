@@ -16,7 +16,7 @@ gameData.ELEMENTS[gameData.FAMILIES.unit].push(
 		weaponType : fightLogic.WEAPON_TYPES.normal,
 		armorType : fightLogic.ARMOR_TYPES.unarmored,
 		gatheringSpeed : 1,
-		maxGathering : 20,
+		maxGathering : 10,
 		pop : 1,
 		needs : [{t : gameData.RESOURCES.gold.id, value : 40}],
 		g : 'peon.js',

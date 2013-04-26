@@ -5,7 +5,6 @@
          url('godofwar.ttf') format('truetype');
     font-weight: normal;
     font-style: normal;
-
 }
 
 body {
@@ -237,6 +236,16 @@ canvas {
     100% { opacity: 1; }
 }
 
+#nbPlayers {
+  position: absolute;
+  width: 100%;
+  text-align: center;
+}
+
+.customRadio.checked {
+  background-color: #a22;
+}
+
 #footer {
     position: absolute;
     bottom: 1px;
@@ -340,15 +349,15 @@ canvas {
 }
 
 .red {
-    background: #a22;
+    background: #C41616;
 }
 
 .blue {
-    background: #22a;
+    background: #7F7FDB;
 }
 
 .green {
-    background: #2a2;
+    background: #70CC83;
 }
 
 .yellow {
@@ -919,12 +928,3 @@ canvas {
 
 
 
-#nbPlayers {
-  position: absolute;
-  width: 100%;
-  text-align: center;
-}
-
-.customRadio.checked {
-  background-color: #a22;
-}

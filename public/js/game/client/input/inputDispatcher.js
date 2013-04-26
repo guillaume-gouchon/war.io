@@ -101,6 +101,12 @@ inputDispatcher.onMouseWheel = function (event) {
 inputDispatcher.onKeyDown = function (event) {
 	var keyCode = (window.event) ? event.which : event.keyCode;
 	switch(keyCode) {
+		case 8 :
+			//back key
+			if (userInput.isChatWindowOpen) {
+				$('input', '#chat').val(str.substring(0, str.length - 1));
+			}
+			return false;
 		case 13 :
 			userInput.onEnterKey();
 			return true;
@@ -133,12 +139,7 @@ inputDispatcher.onKeyDown = function (event) {
 		}
 	} else {
 		var str = $('input', '#chat').val();
-		if (keyCode == 8) {
-			//back key
-			$('input', '#chat').val(str.substring(0, str.length - 1));
-		} else {
-			$('input', '#chat').val(str + String.fromCharCode(keyCode).toLowerCase());
-		}
+		$('input', '#chat').val(str + String.fromCharCode(keyCode).toLowerCase());	
 	}
 
 	return true;
