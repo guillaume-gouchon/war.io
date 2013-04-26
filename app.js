@@ -61,6 +61,7 @@ io.sockets.on('connection', function (socket) {
   });
 
   socket.on('changeGameData', function(data) {
+    console.log(data);
     app.gamesManager.changeGameData(data);
   });
 
