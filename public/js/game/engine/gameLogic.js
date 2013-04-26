@@ -4,7 +4,7 @@ var gameLogic = {};
 /**
 *	Number of time the game is being updated by second.
 */
-gameLogic.FREQUENCY = 8;
+gameLogic.FREQUENCY = 5;
 
 
 /**
@@ -100,12 +100,12 @@ gameLogic.resolveActions = function (game, element) {
 				if(element.a.cp < 100) {
 					//build
 					action.doTheBuild(game, element, element.a);	
+				} else if(element.ga != null) {
+					//come back with some resources
+					production.getBackResources(game, element);
 				} else {
-					if(element.ga != null) {
-						//come back with some resources
-						production.getBackResources(game, element);
-					}
-					//TODO : repair
+					//repair
+					action.doTheBuild(game, element, element.a);
 				}
 			} else if (elementData.isBuilder && element.a.f == gameData.FAMILIES.terrain) {
 				//gathering resources

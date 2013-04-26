@@ -6,6 +6,7 @@ var production = {};
 */
 production.RESOURCE_AMOUNT_PER_GATHERING_ACTION = 5;
 production.BUILDINGS_QUEUE_MAX_SIZE = 5;
+production.REPAIRING_SPEED = 5;
 
 
 /**
@@ -55,6 +56,21 @@ production.finishConstruction = function (game, building) {
 	}
 
 	stats.updateField(game, building.o, 'buildingsCreated', 1);
+}
+
+
+/**
+*	A builder is repairing the building.
+*/
+production.repairBuilding = function (game, building) {
+	var playerResources = game.players[building.o].re;
+	if (playerResources[gameData.RESOURCES.wood.id] > 0
+		&& playerResources[gameData.RESOURCES.gold.id] > 0) {
+		playerResources[gameData.RESOURCES.gold.id]--;
+		playerResources[gameData.RESOURCES.wood.id]--;
+		building.l += this.REPAIRING_SPEED;
+		tools.addUniqueElementToArray(game.modified, building);
+	}
 }
 
 
@@ -167,6 +183,13 @@ production.createNewUnit = function (game, unitType, factory) {
 	var possiblePositions = tools.getTilesAroundElements(game, factory);
 	var playerPopulation = game.players[factory.o].pop;
 	if(possiblePositions.length > 0 && playerPopulation.current + unit.pop <= playerPopulation.max) {
+		
+		if (unit.isBuilder) {
+			stats.updateField(game, factory.o, 'buildersCreated', 1);
+		} else {
+			stats.updateField(game, factory.o, 'unitsCreated', 1);
+		}
+
 		var position = possiblePositions[possiblePositions.length - 1];
 		unit = new gameData.Unit(unit, position.x, position.y, factory.o);
 
@@ -174,13 +197,6 @@ production.createNewUnit = function (game, unitType, factory) {
 		game.players[factory.o].pop.current += gameData.ELEMENTS[unit.f][unit.r][unit.t].pop;
 
 		gameCreation.addGameElement(game, unit);
-
-		if (unit.isBuilder) {
-			stats.updateField(game, factory.o, 'buildersCreated', 1);
-		} else {
-			stats.updateField(game, factory.o, 'unitsCreated', 1);
-		}
-
 
 		//moves the unit to the rallying point
 		if(factory.rp != null) {

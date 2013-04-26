@@ -14,6 +14,8 @@ action.doTheBuild = function (game, element, building) {
 	if(game.iterate % this.BUILD_ACTION_SPEED == 0) {
 		if(building.cp < 100) {
 			production.updateConstruction(game, building);	
+		} else if (building.l < gameData.ELEMENTS[building.f][building.r][building.t].l) {
+			production.repairBuilding(game, building);
 		} else {
 			element.a = null;
 		}
