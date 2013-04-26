@@ -184,20 +184,24 @@ module.exports = function(app){
 				}
 			}
 
-			//check end of game
+			//check end of game - BEWARE - dirty code
 			for (var i in data.players) {
 				if (game.sockets[i] != null) {
-					if (data.players[i].s == gameData.PLAYER_STATUSES.victory) {
-						game.sockets[i].emit('gameStats', game.stats);
-						game.sockets[i] = null;
-					} else if (data.players[i].s == gameData.PLAYER_STATUSES.defeat) {
+					if (data.players[i].s == gameData.PLAYER_STATUSES.defeat) {
 						game.sockets[i].emit('gameStats', game.stats);
 						game.sockets[i] = null;
 					}
 				}
 			}
-
-		return app.gamesManager.isUselessGame(game);
+			for (var i in data.players) {
+				if (game.sockets[i] != null) {
+					if (data.players[i].s == gameData.PLAYER_STATUSES.victory) {
+						game.sockets[i].emit('gameStats', game.stats);
+						game.sockets[i] = null;
+						return true;
+					}
+				}
+			}
 
 		} catch(e) {
 			console.log(e);

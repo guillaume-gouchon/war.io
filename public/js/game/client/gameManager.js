@@ -175,7 +175,7 @@ gameManager.showStats = function (stats) {
 		if (i == gameContent.myArmy) {
 			playerName = 'You';
 		} else {
-			var playerNumber = parseInt(i) + 1;
+			var playerNumber = 1 + parseInt(i);
 			playerName = 'Player ' + playerNumber;
 		}
 		$('#tableBody').append('<tr class="' + gameSurface.PLAYERS_COLORS[i] + '"><td>' +  
