@@ -89,6 +89,7 @@ gameManager.connectToServer = function (gameInitData) {
 
 	//the server launched the game !
 	this.socket.on('gameStart', function (data) {
+		$('#nbPlayers').addClass('hide');
 		gameContent.players = data.players;
 		gameContent.myArmy = data.myArmy;
 		gameContent.map = data.map;
