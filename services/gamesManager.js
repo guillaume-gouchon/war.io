@@ -197,7 +197,7 @@ module.exports = function(app){
 				}
 			}
 
-		return app.gamesManager.isUselessGame();
+		return app.gamesManager.isUselessGame(game);
 
 		} catch(e) {
 			console.log(e);
