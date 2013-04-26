@@ -196,7 +196,7 @@ module.exports = function(app){
 			}
 
 			return app.gamesManager.isUselessGame(game);
-			
+
 		} catch(e) {
 			console.log(e);
 		}
@@ -210,7 +210,7 @@ module.exports = function(app){
 	*/
 	app.gamesManager.stopGame = function (index) {
 		app.gamesManager.games.splice(index, 1);
-    	console.log('One Game has been stopped'.debug);
+    	console.log('One game has been stopped'.debug);
 		//stop the loop if there are no more games
 		if (app.gamesManager.games.length == 0) {
 			app.gamesManager.stopLoop();
