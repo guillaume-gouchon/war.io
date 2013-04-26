@@ -1,4 +1,4 @@
-$(window).load(function() {
+//$(window).load(function() {
 
 	initArmyChooser();
 
@@ -103,7 +103,7 @@ $(window).load(function() {
 		$(this).addClass('checked');
 	});
 
-});
+//});
 
 /*function initMapChooser() {
 
