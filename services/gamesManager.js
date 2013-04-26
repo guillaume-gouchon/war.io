@@ -196,6 +196,9 @@ module.exports = function(app){
 					}
 				}
 			}
+
+		return app.gamesManager.isUselessGame();
+
 		} catch(e) {
 			console.log(e);
 		}
