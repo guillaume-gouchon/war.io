@@ -259,7 +259,7 @@ module.exports = function(app){
       			//change number of players
       			if (game.players.length <= gameData.nbPlayers) {
 	      			game.nbPlayers = gameData.nbPlayers;
-	      			if (game.players.length == gamData.nbPlayers) {
+	      			if (game.players.length == gameData.nbPlayers) {
 						app.gamesManager.startGame(game);
 	      			}
       			}
