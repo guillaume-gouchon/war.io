@@ -175,28 +175,31 @@ module.exports = function(app){
 	*	Processes one game loop.
 	*/
 	app.gamesManager.processGame = function (game) {
-
-		//send game data to each player
-		var data = game.update();
-		for (var i in game.players) {
-			if(game.sockets[i] != null) {
-				game.sockets[i].emit('gameData', data);
+		try {
+			//send game data to each player
+			var data = game.update();
+			for (var i in game.players) {
+				if(game.sockets[i] != null) {
+					game.sockets[i].emit('gameData', data);
+				}
 			}
-		}
 
-		//check end of game
-		for (var i in data.players) {
-			if (data.players[i].s == gameData.PLAYER_STATUSES.victory) {
-				
-				//send stats data to each player
-				for (var i in game.players) {
-					if(game.sockets[i] != null) {
-						game.sockets[i].emit('gameStats', game.stats);
-					}
-				}				
+			//check end of game
+			for (var i in data.players) {
+				if (data.players[i].s == gameData.PLAYER_STATUSES.victory) {
+					
+					//send stats data to each player
+					for (var i in game.players) {
+						if(game.sockets[i] != null) {
+							game.sockets[i].emit('gameStats', game.stats);
+						}
+					}				
 
-				return true;
+					return true;
+				}
 			}
+		} catch(e) {
+			console.log(e);
 		}
 
 		return false;
