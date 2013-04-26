@@ -45,10 +45,13 @@ gameManager.startGame = function () {
 
 
 gameManager.initOfflineGame = function (gameInitData) {
+	$('#nbPlayers').addClass('hide');
+	
 	try {
 		this.disconnect();
 	} catch (e) {
 	}
+
 	gameContent.myArmy = 0;
 	gameContent.players = [];
 	gameContent.players.push(new gameData.Player(0, 0, gameInitData.army));
