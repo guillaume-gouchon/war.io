@@ -48,6 +48,7 @@ $(document).ready(function() {
 	var launchGame = false;
 
 	$('a', '#playOffline').click(function () {
+		$('#nbPlayers').addClass('hide');
 		clearInterval(timeout);
 		if (!launchGame) {
 			launchGame = true;

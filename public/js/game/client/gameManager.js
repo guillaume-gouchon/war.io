@@ -45,7 +45,6 @@ gameManager.startGame = function () {
 
 
 gameManager.initOfflineGame = function (gameInitData) {
-	$('#nbPlayers').addClass('hide');
 	
 	try {
 		this.disconnect();
