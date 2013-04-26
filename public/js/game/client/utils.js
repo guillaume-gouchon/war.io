@@ -42,7 +42,7 @@ utils.canBeBuiltHere = function (building) {
 			y : e1.y + elementShape.length - 1
 		};
 		//first filter
-		if (b1.x < 0 || b1.y < 0 || e1.x >= b1.x && e1.x <= b2.x && (e1.y >= b1.y && e1.y <= b2.y || e2.y >= b1.y && e2.y <= b2.y)
+		if (b1.x <= 0 || b1.y <= 0 || e1.x >= b1.x && e1.x <= b2.x && (e1.y >= b1.y && e1.y <= b2.y || e2.y >= b1.y && e2.y <= b2.y)
 			|| e2.x >= b1.x && e2.x <= b2.x && (e1.y >= b1.y && e1.y <= b2.y || e2.y >= b1.y && e2.y <= b2.y)) {
 			building.canBeBuiltHere = false;
 			for (var i = e1.x; i <= e2.x; i++) {
