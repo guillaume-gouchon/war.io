@@ -92,13 +92,13 @@ input.initKeyboard = function () {
 */
 input.initTouch = function () {
 
-	document.ontouchstart = function (event) {
-	  return inputDispatcher.onLeftClick(event);
-	}
+	$(document).bind('tapone', function (event) {
+	  	inputDispatcher.onLeftClick(event);
+	});
 
-	document.oncontextmenu = function (event) {
-	  return inputDispatcher.onRightClick(event);
-	}
+	$(document).bind('taptwo', function (event) {
+	  	inputDispatcher.onRightClick(event);
+	});
 
 	/*document.ontouchmove = function (event) {
 		userInput.checkIfMapScrolling(event.x, event.y);
@@ -111,28 +111,23 @@ input.initTouch = function () {
 		input.mousePosition.y = event.y;
 		return false;
 	}*/
-	$(document).swipe( {
-		swipeStatus:function(event, phase, direction, distance, duration, fingerCount)
-		{
-			alert("You swiped " + direction + " for " + distance + "px" );  
-		},
-		fingers:2
+
+	$(document).bind('swipetwo', function(event){
+		alert(event)
 	});
 
-	$(document).swipe({
-		swipe:function(event, direction, distance, duration, fingerCount){
-			alert("You swiped " + direction + " for " + distance + "px" );
-		},
-		threshold:5
+	$(document).bind('swipeone', function(event){
+		alert(event)
 	});
 
 	document.ontouchcancel = function (event) {
 	  return inputDispatcher.onMouseUp(event);
 	}
 
-	document.onmousewheel = function (event) {
-	  return inputDispatcher.onMouseWheel(event);
-	}
+	$(document).bind('pinch', function (event) {
+		alert(event);
+		//return inputDispatcher.onMouseWheel(event);
+	});
 
 	document.ondblclick = function (event) {
 		return inputDispatcher.onDoubleClick(event);
