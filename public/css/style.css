@@ -266,7 +266,7 @@ canvas {
 .popup {
     position: absolute;
     background: #000;
-    padding: 30px;
+    padding: 25px;
     -webkit-box-shadow:-10px -10px 40px 20px rgba(0, 0, 0, 0.7);
     box-shadow:-10px -10px 40px 20px rgba(0, 0, 0, 0.7);
     color : #ddd;

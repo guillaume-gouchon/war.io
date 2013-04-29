@@ -111,7 +111,7 @@ input.initTouch = function () {
 		input.mousePosition.y = event.y;
 		return false;
 	}*/
-	$("#status").swipe( {
+	$(document).swipe( {
 		swipeStatus:function(event, phase, direction, distance, duration, fingerCount)
 		{
 			alert("You swiped " + direction + " for " + distance + "px" );  
