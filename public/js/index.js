@@ -4,7 +4,6 @@ if ('ontouchstart' in window || window.DocumentTouch && document instanceof Docu
 } else {
 	inputEvents = 'click';
 }
-alert(inputEvents)
 
 initArmyChooser();
 

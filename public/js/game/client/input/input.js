@@ -92,7 +92,7 @@ input.initKeyboard = function () {
 */
 input.initTouch = function () {
 
-	document.onmousedown = function (event) {
+	document.ontouchstart = function (event) {
 	  return inputDispatcher.onLeftClick(event);
 	}
 
@@ -100,7 +100,7 @@ input.initTouch = function () {
 	  return inputDispatcher.onRightClick(event);
 	}
 
-	document.onmousemove = function (event) {
+	document.ontouchmove = function (event) {
 		userInput.checkIfMapScrolling(event.x, event.y);
 		userInput.updateMouseIcon(event.x, event.y);
 		userInput.selectGroup(event.x, event.y);
@@ -112,7 +112,7 @@ input.initTouch = function () {
 		return false;
 	}
 
-	document.onmouseup = function (event) {
+	document.ontouchcancel = function (event) {
 	  return inputDispatcher.onMouseUp(event);
 	}
 
