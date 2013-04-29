@@ -333,12 +333,12 @@ gameSurface.showMessage = function (message, color) {
 
 
 /**
-*	
+*	Initializes movement extrapolation for one unit.
 */
 gameSurface.extrapol = function (d, dx, dy) {
 	d.ex = dx;
 	d.ey = dy;
-	d.et = 3;
+	d.et = this.MOVEMENT_EXTRAPOLATION_ITERATION;
 	this.ex.push(d);
 }
 
@@ -350,8 +350,8 @@ gameSurface.updateMoveExtrapolation = function () {
 	var index = this.ex.length;
 	while (index --) {
 		var d = this.ex[index];
-		d.position.x += d.ex * this.PIXEL_BY_NODE / 3;
-		d.position.y += d.ey * this.PIXEL_BY_NODE / 3;
+		d.position.x += d.ex * this.PIXEL_BY_NODE / this.MOVEMENT_EXTRAPOLATION_ITERATION;
+		d.position.y += d.ey * this.PIXEL_BY_NODE / this.MOVEMENT_EXTRAPOLATION_ITERATION;
 			
 		d.et -= 1;
 

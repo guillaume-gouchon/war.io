@@ -167,7 +167,6 @@ tools.addUniqueElementToArray = function (array, element) {
 *	Copies an object and avoids circular structure.
 */
 tools.clone = function (obj) {
-	console.log(obj);
     var copy = {};
     for (var attr in obj) {
         if (obj.hasOwnProperty(attr) && attr != 'a') copy[attr] = obj[attr];
