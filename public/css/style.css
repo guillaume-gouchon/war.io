@@ -297,6 +297,10 @@ canvas {
     text-align: center;
 }
 
+#credits {
+  width: 740px;
+}
+
 .victory {
     color : #0d0;
 }
