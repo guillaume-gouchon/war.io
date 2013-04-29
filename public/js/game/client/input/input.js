@@ -100,7 +100,7 @@ input.initTouch = function () {
 	  return inputDispatcher.onRightClick(event);
 	}
 
-	document.ontouchmove = function (event) {
+	/*document.ontouchmove = function (event) {
 		userInput.checkIfMapScrolling(event.x, event.y);
 		userInput.updateMouseIcon(event.x, event.y);
 		userInput.selectGroup(event.x, event.y);
@@ -110,7 +110,21 @@ input.initTouch = function () {
 		input.mousePosition.x = event.x;
 		input.mousePosition.y = event.y;
 		return false;
-	}
+	}*/
+	$("#status").swipe( {
+		swipeStatus:function(event, phase, direction, distance, duration, fingerCount)
+		{
+			alert("You swiped " + direction + " for " + distance + "px" );  
+		},
+		fingers:2
+	});
+
+	$(document).swipe({
+		swipe:function(event, direction, distance, duration, fingerCount){
+			alert("You swiped " + direction + " for " + distance + "px" );
+		},
+		threshold:5
+	});
 
 	document.ontouchcancel = function (event) {
 	  return inputDispatcher.onMouseUp(event);
