@@ -23,8 +23,8 @@ gameData.Unit = function (unit, x, y, owner) {
 		var action = null;
 		if (this.a != null) {
 			action = tools.clone(this.a);
+			console.log(action);
 		}
-		console.log(this);
 		return {
 			id: this.id,
 			f: this.f,
