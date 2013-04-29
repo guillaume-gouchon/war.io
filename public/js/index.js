@@ -1,9 +1,9 @@
 var inputEvents;
-if ("ontouchstart" in window || window.DocumentTouch && document instanceof DocumentTouch) {
+//if ("ontouchstart" in window || window.DocumentTouch && document instanceof DocumentTouch) {
 	inputEvents = 'touchstart';
-} else {
+/*} else {
 	inputEvents = 'click';
-}
+}*/
 
 initArmyChooser();
 
