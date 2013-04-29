@@ -1,9 +1,10 @@
 var inputEvents;
-//if ("ontouchstart" in window || window.DocumentTouch && document instanceof DocumentTouch) {
+if ('ontouchstart' in window || window.DocumentTouch && document instanceof DocumentTouch) {
 	inputEvents = 'touchstart';
-/*} else {
+} else {
 	inputEvents = 'click';
-}*/
+}
+alert(inputEvents)
 
 initArmyChooser();
 
@@ -84,8 +85,8 @@ $('a', '#footer').bind(inputEvents, function () {
 			$('#share').removeClass('hide');
 			break;
 	}
-	//return false;
-}, false);
+	return false;
+});
 
 $('#introScreen').bind(inputEvents, function () {
 	closePopups();
