@@ -6,8 +6,7 @@ gameData.Unit = function (unit, x, y, owner) {
 	this.r = unit.r;
 	this.o = owner;
 
-	//drawing-related data
-	this.p = {x : x, y : y};
+	this.p = {x : x, y : y};//position
 
 	//game-related data
 	this.mt = {x : null, y : null};//move to
@@ -18,5 +17,27 @@ gameData.Unit = function (unit, x, y, owner) {
 
 	//fight-related data
 	this.l = unit.l;
+
+	//fixes the circular structure issue with JSON.stringify
+	this.toJSON = function () {
+		var action = null;
+		if (this.a != null) {
+			action = tools.clone(this.a);
+		}
+		return {
+			id: this.id,
+			f: this.f,
+			t: this.t,
+			r: this.r,
+			o: this.o,
+			p: this.p,
+			mt: this.mt,
+			fr: this.fr,
+			ga: this.ga,
+			pa: this.pa,
+			l: this.l,
+			a: action
+		}
+	}
 }
 
