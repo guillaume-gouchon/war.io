@@ -68,7 +68,7 @@ module.exports = function(app){
 	*	Creates a new game.
 	*/
 	app.gamesManager.createNewGame = function (gameInitialData) {
-		console.log('Creating new game'.info);
+		console.log(new Date() + ' | Creating new game'.info);
 		var game = new gameData.Game();
 		game.id = gameData.createUniqueId();
 		game.sockets = [];
@@ -85,7 +85,7 @@ module.exports = function(app){
 	*	Adds a player to an existing game.
 	*/
 	app.gamesManager.addPlayerToGame = function (socket, game, playerInitialData) {
-		console.log('Add player to game '.info + game.id);
+		console.log(new Date() + ' | Add player to game '.info + game.id);
 		var player = new gameData.Player(playerInitialData.playerId, game.players.length, playerInitialData.army);
 		game.players.push(player);
 		game.sockets.push(socket);
@@ -115,7 +115,7 @@ module.exports = function(app){
 	*	Starts a game.
 	*/
 	app.gamesManager.startGame = function (game) {
-		console.log('Starts a game !'.success);
+		console.log(new Date() + ' | Starts a game !'.success);
 
 		//update game
 		var someMoreGameData = gameCreation.createNewGame(game.map, game.players);
@@ -198,7 +198,7 @@ module.exports = function(app){
 			return app.gamesManager.isUselessGame(game);
 
 		} catch(e) {
-			console.log(e);
+			console.log(new Date() + e);
 		}
 
 		return false;
@@ -210,7 +210,7 @@ module.exports = function(app){
 	*/
 	app.gamesManager.stopGame = function (index) {
 		app.gamesManager.games.splice(index, 1);
-    	console.log('One game has been stopped'.debug);
+    	console.log(new Date() + ' | One game has been stopped'.debug);
 		//stop the loop if there are no more games
 		if (app.gamesManager.games.length == 0) {
 			app.gamesManager.stopLoop();
@@ -222,13 +222,13 @@ module.exports = function(app){
 	*	One player has just been disconnected.
 	*/
 	app.gamesManager.playerDisconnected = function (socket) {
-		console.log('One player has been disconnected'.debug);
+		console.log(new Date() + ' | One player has been disconnected'.debug);
 		for (var i in app.gamesManager.games) {
       		var n = app.gamesManager.games[i].sockets.indexOf(socket);
 	      	if (n >= 0) {
 		        app.gamesManager.games[i].sockets[n] = null;
 		        if (app.gamesManager.isUselessGame(app.gamesManager.games[i])) {
-		        	console.log('Game '.info + app.gamesManager.games[i].id + ' has been removed'.info);
+		        	console.log(new Date() + ' | Game '.info + app.gamesManager.games[i].id + ' has been removed'.info);
 		        	//TODO : save it
 		        	app.gamesManager.stopGame(i);
 		        }
