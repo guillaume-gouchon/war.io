@@ -92,11 +92,11 @@ input.initKeyboard = function () {
 */
 input.initTouch = function () {
 
-	$(document).bind('tapone', function (event) {
+	$(window).bind('tapone', function (event) {
 	  	inputDispatcher.onLeftClick(event);
 	});
 
-	$(document).bind('taptwo', function (event) {
+	$(window).bind('taptwo', function (event) {
 	  	inputDispatcher.onRightClick(event);
 	});
 
@@ -112,11 +112,11 @@ input.initTouch = function () {
 		return false;
 	}*/
 
-	$(document).bind('swipetwo', function(event){
+	$(window).bind('swipetwo', function(event){
 		alert(event)
 	});
 
-	$(document).bind('swipeone', function(event){
+	$(window).bind('swipeone', function(event){
 		alert(event)
 	});
 
@@ -124,7 +124,7 @@ input.initTouch = function () {
 	  return inputDispatcher.onMouseUp(event);
 	}
 
-	$(document).bind('pinch', function (event) {
+	$(window).bind('pinch', function (event) {
 		alert(event);
 		//return inputDispatcher.onMouseWheel(event);
 	});
