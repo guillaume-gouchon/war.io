@@ -21,6 +21,10 @@ canvas {
 	background-color: #000;
 }
 
+@media (max-device-width:768px) and (orientation:landscape) {
+   html {-webkit-text-size-adjust:50%}
+}
+
 #resources {
     position: absolute;
     top: 2px;
