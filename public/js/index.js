@@ -58,7 +58,7 @@
 		}
 	});
 
-	$('a', '#footer').click(function () {
+	$('a', '#footer').addEventListener('touchstart', function () {
 		closePopups();
 		switch (parseInt($(this).attr('data-id'))) {
 			case 0:
@@ -80,8 +80,8 @@
 				$('#share').removeClass('hide');
 				break;
 		}
-		return false;
-	});
+		//return false;
+	}, false);
 
 	$('#introScreen').click(function () {
 		closePopups();
