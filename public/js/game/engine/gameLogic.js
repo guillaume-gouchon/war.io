@@ -4,7 +4,7 @@ var gameLogic = {};
 /**
 *	Number of time the game is being updated by second.
 */
-gameLogic.FREQUENCY = 4;
+gameLogic.FREQUENCY = 5;
 
 
 /**
