@@ -97,7 +97,7 @@ input.initTouch = function () {
         tap_always: false
     };
 
-    var lastTapEvent = null;
+    var lastTapEvent = [];
 
 	$(document).hammer(hammerOptions).on('tap', function (event) {
 		var e = {
@@ -105,7 +105,10 @@ input.initTouch = function () {
 			y: event.gesture.center.pageY,
 			which: 1
 		};
-	  	lastTapEvent = e;
+		if (lastTapEvent.length == 2) {
+			lastTapEvent.splice(0, 1);
+		}
+	  	lastTapEvent.push(e);
 	  	inputDispatcher.onLeftClick(e);
 	});
 
@@ -114,13 +117,12 @@ input.initTouch = function () {
 			x: event.gesture.center.pageX,
 			y: event.gesture.center.pageY
 		};
-	  	inputDispatcher.onLeftClick(lastTapEvent);
+		var lastEvent = (lastTapEvent[0].x + lastTapEvent[0].y - e.x - e.y > lastTapEvent[1].x + lastTapEvent[1].y - e.x - e.y ? lastTapEvent[0] : lastTapEvent[1]);
+	  	inputDispatcher.onLeftClick(lastEvent);
 	  	inputDispatcher.onRightClick(e);
 	});
 
 	/*document.ontouchmove = function (event) {
-		userInput.checkIfMapScrolling(event.x, event.y);
-		userInput.updateMouseIcon(event.x, event.y);
 		userInput.selectGroup(event.x, event.y);
 		if (Math.abs(event.x - input.mousePosition.x) + Math.abs(event.y - input.mousePosition.y) > 3) {
 			inputDispatcher.onMouseMove(event); 
@@ -137,8 +139,8 @@ input.initTouch = function () {
 	$(document).hammer(hammerOptions).on('drag', function (event){
 		event.gesture.preventDefault();
 		var e = {
-			dx: -event.gesture.deltaX / 30,
-			dy: event.gesture.deltaY / 30
+			dx: -event.gesture.deltaX / 35,
+			dy: event.gesture.deltaY / 35
 		}
 		inputDispatcher.onTouchDrag(e);
 	});
