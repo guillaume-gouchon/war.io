@@ -41,7 +41,7 @@ $('.bigButton', '#armies').bind(inputEvents, function () {
 		$('#loading').removeClass('hide').addClass('moveToLeft');
 
 		//check if webGL is supported
-		if (!window.WebGLRenderingContext || !THREE.Detector.webgl) {
+		if (!isWebGLEnabled()) {
 			// Browser has no idea what WebGL is. Suggest they
 			// get a new browser by presenting the user with link to
 			// http://get.webgl.org
@@ -146,4 +146,12 @@ function preloadImages() {
 		gameSurface.IMG_PATH + 'cursor_hover.png',
 		gameSurface.IMG_PATH + 'cursor_attack.png'
 	)
+}
+
+function isWebGLEnabled() {
+	try { 
+		return !! window.WebGLRenderingContext && !! document.createElement( 'canvas' ).getContext( 'experimental-webgl' );
+	} catch(e) { 
+		return false; 
+	}
 }
