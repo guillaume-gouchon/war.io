@@ -88,7 +88,7 @@ $('a', '#footer').bind(inputEvents, function () {
 			element = $('#credits');
 			break;
 		case 2:
-			document.getElementByTagName('head')[0].appendChild('<script type="text/javascript">var switchTo5x=true;</script>
+			document.getElementsByTagName('head')[0].appendChild('<script type="text/javascript">var switchTo5x=true;</script>
 	<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
 	<script type="text/javascript">stLight.options({publisher: "b3216d24-f80a-4431-8cc7-1c7edb8f8a77", doNotHash: false, doNotCopy: false, hashAddressBar: false});</script>');
 			element = $('#share');
