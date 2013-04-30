@@ -117,6 +117,7 @@ input.initTouch = function () {
 		if (doubleTapTimeout != null) {
 			//double tap
 			clearInterval(doubleTapTimeout);
+	  		doubleTapTimeout = null;
 	  		inputDispatcher.onRightClick(e);
 		} else {
 			//single tap
