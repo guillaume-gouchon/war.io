@@ -108,8 +108,8 @@ input.initTouch = function () {
 
 		var now = new Date().getTime();
 		var timesince = now - mylatesttap;
-
-		if(timesince < 500 && timesince > 0){
+		console.log(timesince);
+		if(timesince < 200){
 			//double tap
 	  		inputDispatcher.onRightClick(e);
 	  	} else {
