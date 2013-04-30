@@ -76,27 +76,31 @@ $('a', '#playOffline').bind(inputEvents, function () {
 
 //footer links
 $('a', '#footer').bind(inputEvents, function () {
+	
 	closePopups();
+
+	var element;
 	switch (parseInt($(this).attr('data-id'))) {
 		case 0:
-			$('#about').fadeIn();
-			$('#about').css('top', window.innerHeight / 2 - $('#about').height() / 2);
-			$('#about').css('left', window.innerWidth / 2 - $('#about').width() / 2);				
-			$('#about').removeClass('hide');
+			element = $('#about');
 			break;
 		case 1:
-			$('#credits').fadeIn();
-			$('#credits').css('top', window.innerHeight / 2 - $('#credits').height() / 2);
-			$('#credits').css('left', window.innerWidth / 2 - $('#credits').width() / 2);				
-			$('#credits').removeClass('hide');
+			element = $('#credits');
 			break;
 		case 2:
-			$('#share').fadeIn();
-			$('#share').css('top', window.innerHeight / 2 - $('#share').height() / 2);
-			$('#share').css('left', window.innerWidth / 2 - $('#share').width() / 2);				
-			$('#share').removeClass('hide');
+			document.getElementByTagName('head')[0].appendChild('<script type="text/javascript">var switchTo5x=true;</script>
+	<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>
+	<script type="text/javascript">stLight.options({publisher: "b3216d24-f80a-4431-8cc7-1c7edb8f8a77", doNotHash: false, doNotCopy: false, hashAddressBar: false});</script>');
+			element = $('#share');
 			break;
 	}
+
+	//animation
+	element.fadeIn();
+	element.css('top', window.innerHeight / 2 - $('#about').height() / 2);
+	element.css('left', window.innerWidth / 2 - $('#about').width() / 2);
+	element.removeClass('hide');
+
 	return false;
 });
 
