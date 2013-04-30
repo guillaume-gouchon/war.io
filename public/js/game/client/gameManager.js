@@ -7,19 +7,22 @@ var gameManager = {};
 gameManager.isOfflineGame = false;
 gameManager.offlineLoop = null;
 gameManager.offlineNbPlayers = 2;
+gameManager.playerId = null;
 
 
 /**
 *	The user wants to play the game.
 */
 gameManager.initGame = function (gameInitData) {
-	this.getPlayerId();
-	if(this.isOfflineGame) {
-		this.initOfflineGame(gameInitData);
-	} else {
-		try {
-			this.connectToServer(gameInitData);
-		} catch (e) {
+	if (this.playerId == null) {//avoids to run the game twice
+		this.playerId = this.getPlayerId();
+		if(this.isOfflineGame) {
+			this.initOfflineGame(gameInitData);
+		} else {
+			try {
+				this.connectToServer(gameInitData);
+			} catch (e) {
+			}
 		}
 	}
 }
@@ -130,7 +133,7 @@ gameManager.getPlayerId = function () {
 		playerId = this.createPlayerId();
 	}
 
-	this.playerId = playerId;
+	return playerId;
 }
 
 

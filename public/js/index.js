@@ -1,3 +1,4 @@
+//switch between touch and mouse events
 var inputEvents;
 if ('ontouchstart' in window || window.DocumentTouch && document instanceof DocumentTouch) {
 	inputEvents = 'touchstart';
@@ -5,35 +6,42 @@ if ('ontouchstart' in window || window.DocumentTouch && document instanceof Docu
 	inputEvents = 'click';
 }
 
+//adds armies buttons
 initArmyChooser();
 
+//buttons entrance animation
 $('#chooseArmy').addClass('moveToLeft');
 $('#armies').addClass('moveToTop');
 $('#footer').fadeIn();
 closePopups();
+
 
 var hasClicked = false;
 var gameInitData = {};
 var timeout = null;
 
 $('.bigButton', '#armies').bind(inputEvents, function () {
+
 	if (!hasClicked) {
+		hasClicked = true;
+
+		//prepare game data
 		var army = $(this).attr('data-army');
 		gameInitData.army = army;
 		gameInitData.mapType = 'random';
 		gameInitData.mapSize = 'medium';
 		gameInitData.vegetation = 'standard';
 		gameInitData.initialResources = 'standard';
+
+		//animations
 		closePopups();
-		hasClicked = true;
 		$('#chooseArmy').addClass('hideToLeft');
 		$('#armies').removeClass('moveToTop');
 		$('#footer').fadeOut();
-
 		$('#loading').removeClass('hide').addClass('moveToLeft');
 
 		//check if webGL is supported
-		if (!window.WebGLRenderingContext) {
+		if (!window.WebGLRenderingContext || !Detector.webgl) {
 			// Browser has no idea what WebGL is. Suggest they
 			// get a new browser by presenting the user with link to
 			// http://get.webgl.org
@@ -43,25 +51,28 @@ $('.bigButton', '#armies').bind(inputEvents, function () {
 			$('#playOffline').fadeIn();
 		}
 
+		//wait for the end of the animations
 		timeout = setTimeout(function () {
 			gameManager.initGame(gameInitData);
-		}, 800);
+		}, 600);
 	}
 });
 
 var launchGame = false;
 
+//play in offline mode
 $('a', '#playOffline').bind(inputEvents, function () {
-	$('#nbPlayers').addClass('hide');
 	clearInterval(timeout);
 	if (!launchGame) {
 		launchGame = true;
 		$('#playOffline').fadeOut();
+		$('#nbPlayers').addClass('hide');
 		gameManager.isOfflineGame = true;
 		gameManager.initGame(gameInitData);
 	}
 });
 
+//footer links
 $('a', '#footer').bind(inputEvents, function () {
 	closePopups();
 	switch (parseInt($(this).attr('data-id'))) {
@@ -87,6 +98,7 @@ $('a', '#footer').bind(inputEvents, function () {
 	return false;
 });
 
+//hide popups
 $('#introScreen').bind(inputEvents, function () {
 	closePopups();
 });
@@ -97,23 +109,8 @@ $('.customRadio').bind(inputEvents, function () {
 	$(this).addClass('checked');
 });
 
+
 preloadImages();
-
-/*function initMapChooser() {
-
-	for (var i in gameData.MAP_SIZES) {
-		$('#mapSize').append('<option value="' + i + '">' + gameData.MAP_SIZES[i].name + '</option>');
-	}
-
-	for (var i in gameData.VEGETATION_TYPES) {
-		$('#vegetation').append('<option value="' + i + '">' + gameData.VEGETATION_TYPES[i].name + '</option>');
-	}
-
-	for (var i in gameData.INITIAL_RESOURCES) {
-		$('#initialResources').append('<option value="' + i + '">' + gameData.INITIAL_RESOURCES[i].name + '</option>');
-	}
-
-}*/
 
 
 function closePopups() {
