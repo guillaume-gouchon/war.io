@@ -110,11 +110,11 @@ input.initTouch = function () {
 		var timesince = now - mylatesttap;
 
 		if(timesince < 500 && timesince > 0){
-			//single tap
-	  		inputDispatcher.onLeftClick(e);
-	  	} else {
-	  		//double tap
+			//double tap
 	  		inputDispatcher.onRightClick(e);
+	  	} else {
+	  		//single tap
+	  		inputDispatcher.onLeftClick(e);
 	  	}
 
 		mylatesttap = new Date().getTime();
