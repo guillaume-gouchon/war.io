@@ -345,6 +345,10 @@ a:hover {
   font-size: 1.6em;
 }
 
+.smallText {
+  font-size: 1.0em;
+}
+
 #errorWebGL {
   position: absolute;
   bottom: 50px;

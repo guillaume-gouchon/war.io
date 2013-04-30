@@ -14,7 +14,7 @@ gameManager.playerId = null;
 *	The user wants to play the game.
 */
 gameManager.initGame = function (gameInitData) {
-	if (this.playerId == null) {//avoids to run the game twice
+	if (gameContent.game == null) {//avoids to run the game twice
 		this.playerId = this.getPlayerId();
 		if(this.isOfflineGame) {
 			this.initOfflineGame(gameInitData);
