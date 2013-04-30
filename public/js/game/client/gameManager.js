@@ -198,19 +198,20 @@ gameManager.showStats = function (stats) {
 *	Shows the different input and selectors to change the game data.
 */
 gameManager.showGameData = function (gameId) {
-	$('#nbPlayers').css('top', (window.innerHeight - $('#nbPlayers').height()) / 2);
-	$('#nbPlayers').removeClass('hide');
-	$('#nbPlayers').attr('data-gameId', gameId);
+	if (gameContent.game == null) {
+		$('#nbPlayers').css('top', (window.innerHeight - $('#nbPlayers').height()) / 2);
+		$('#nbPlayers').removeClass('hide');
+		$('#nbPlayers').attr('data-gameId', gameId);
 
-	$('div', '#nbPlayers').click(function () {
-		try {
-			var data = {};
-			data.gameId = $('#nbPlayers').attr('data-gameId');
-			data.nbPlayers = $(this).attr('data-value');
-			gameManager.socket.emit('changeGameData', data);
-		} catch (e) {
-		}
-		
-	});
+		$('div', '#nbPlayers').click(function () {
+			try {
+				var data = {};
+				data.gameId = $('#nbPlayers').attr('data-gameId');
+				data.nbPlayers = $(this).attr('data-value');
+				gameManager.socket.emit('changeGameData', data);
+			} catch (e) {
+			}
+		});
+	}
 }
 
