@@ -89,6 +89,13 @@ input.initKeyboard = function () {
 
 
 /**
+*	TOUCH CONSTANTS
+*/
+input.DOUBLE_TAP_INTERVAL = 150;
+input.DRAG_FACTOR = 1 / 35;
+
+
+/**
 *	Binds the different needed touch inputs.
 */
 input.initTouch = function () {
@@ -98,7 +105,6 @@ input.initTouch = function () {
         doubletap_interval: 10
     };
 
-    var mylatesttap = 0;
     var doubleTapTimeout = null;
 
 	$(document).hammer(hammerOptions).on('tap', function (event) {
@@ -109,14 +115,16 @@ input.initTouch = function () {
 		};
 
 		if (doubleTapTimeout != null) {
+			//double tap
 			clearInterval(doubleTapTimeout);
 	  		inputDispatcher.onRightClick(e);
+		} else {
+			//single tap
+			doubleTapTimeout = setTimeout(function () {
+		  		doubleTapTimeout = null;
+		  		inputDispatcher.onLeftClick(e);
+			}, this.DOUBLE_TAP_INTERVAL);
 		}
-
-		doubleTapTimeout = setTimeout(function () {
-	  		doubleTapTimeout = null;
-	  		inputDispatcher.onLeftClick(e);
-		}, 400);
 
 	});
 
@@ -137,8 +145,8 @@ input.initTouch = function () {
 	$(document).hammer(hammerOptions).on('drag', function (event){
 		event.gesture.preventDefault();
 		var e = {
-			dx: -event.gesture.deltaX / 35,
-			dy: event.gesture.deltaY / 35
+			dx: -event.gesture.deltaX * input.DRAG_FACTOR,
+			dy: event.gesture.deltaY * input.DRAG_FACTOR
 		}
 		inputDispatcher.onTouchDrag(e);
 	});
