@@ -260,8 +260,16 @@ canvas {
 }
 
 #footer a {
-    color: #ddd;
     margin-right: 15px;
+}
+
+a {
+  color: #ddd;
+}
+
+a:hover {
+  text-decoration: none;
+  color: #111;
 }
 
 .popup {
@@ -318,7 +326,6 @@ canvas {
 }
 
 #returnHome a {
-    color: #ddd;
     font-size: 2.2em;
 }
 
@@ -328,10 +335,6 @@ canvas {
   width: 100%;
   text-align: center;
   font-size: 1.6em;
-}
-
-#playOffline a {
-  color: #88d;
 }
 
 #errorWebGL {
