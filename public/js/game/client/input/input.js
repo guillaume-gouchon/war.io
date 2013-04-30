@@ -18,7 +18,6 @@ input.initInputs = function () {
  *	Checks if user's device is touch-enabled.
  */
 input.isTouchDevice = function () {
-	return true;
     return "ontouchstart" in window || window.DocumentTouch && document instanceof DocumentTouch;
 }
 
