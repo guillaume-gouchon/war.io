@@ -37,11 +37,11 @@ input.mousePosition = {
 input.initMouse = function () {
 
 	document.onmousedown = function (event) {
-	  return inputDispatcher.onLeftClick(event);
+		return inputDispatcher.onLeftClick(event);
 	}
 
 	document.oncontextmenu = function (event) {
-	  return inputDispatcher.onRightClick(event);
+		return inputDispatcher.onRightClick(event);
 	}
 
 	document.onmousemove = function (event) {
@@ -57,7 +57,7 @@ input.initMouse = function () {
 	}
 
 	document.onmousewheel = function (event) {
-	  return inputDispatcher.onMouseWheel(event);
+		return inputDispatcher.onMouseWheel(event);
 	}
 
 	document.ondblclick = function (event) {
@@ -65,7 +65,7 @@ input.initMouse = function () {
 	}
 
 	document.onmouseup = function (event) {
-	  return inputDispatcher.onMouseUp(event);
+		return inputDispatcher.onMouseUp(event);
 	}
 
 }
@@ -92,11 +92,12 @@ input.initKeyboard = function () {
 */
 input.initTouch = function () {
 
-	$$(document).tap(function (event) {
+	$(document).hammer().on('tap', function (event) {
+		alert(event);
 	  	inputDispatcher.onLeftClick(event);
 	});
 
-	$$(document).doubleTap(function (event) {
+	$(document).hammer().on('doubletap', function (event) {
 		alert(event);
 	  	inputDispatcher.onRightClick(event);
 	});
@@ -117,20 +118,22 @@ input.initTouch = function () {
 		alert(event)
 	});*/
 
-	$$(document).swipe(function(event){
+	$(document).hammer().on('drag', function(event){
 		alert(event);
 	});
 
-	$$(document).pinch(function (event) {
+	$(document).hammer().on('pinch', function (event) {
 		alert(event);
 		//return inputDispatcher.onMouseWheel(event);
 	});
 
-	$$(document).hold(function (event) {
-		return inputDispatcher.onDoubleClick(event);
+	$(document).hammer().on('hold', function (event) {
+		alert(event);
+		//return inputDispatcher.onDoubleClick(event);
 	});
 
-	document.ontouchcancel = function (event) {
-	  return inputDispatcher.onMouseUp(event);
-	}
+	$(document).hammer().on('release', function (event) {
+  		inputDispatcher.onMouseUp(event);
+	});
+
 }
