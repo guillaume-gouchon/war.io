@@ -99,6 +99,7 @@ input.initTouch = function () {
     };
 
     var mylatesttap = 0;
+    var doubleTapTimeout = null;
 
 	$(document).hammer(hammerOptions).on('tap', function (event) {
 		var e = {
@@ -107,18 +108,16 @@ input.initTouch = function () {
 			which: 1
 		};
 
-		var now = new Date().getTime();
-		var timesince = now - mylatesttap;
-		console.log(timesince);
-		if(timesince < 200){
-			//double tap
+		if (doubleTapTimeout != null) {
+			clearInterval(doubleTapTimeout);
 	  		inputDispatcher.onRightClick(e);
-	  	} else {
-	  		//single tap
-	  		inputDispatcher.onLeftClick(e);
-	  	}
+		}
 
-		mylatesttap = new Date().getTime();
+		doubleTapTimeout = setTimeout(function () {
+	  		doubleTapTimeout = null;
+	  		inputDispatcher.onLeftClick(e);
+		}, 400);
+
 	});
 
 	/*document.ontouchmove = function (event) {
