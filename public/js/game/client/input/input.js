@@ -93,12 +93,12 @@ input.initKeyboard = function () {
 input.initTouch = function () {
 
 	$(document).hammer().on('tap', function (event) {
-		alert(event);
+		console.log(event);
 	  	inputDispatcher.onLeftClick(event);
 	});
 
 	$(document).hammer().on('doubletap', function (event) {
-		alert(event);
+		console.log(event);
 	  	inputDispatcher.onRightClick(event);
 	});
 
@@ -115,20 +115,20 @@ input.initTouch = function () {
 	}*/
 
 	/*$$(window).bind('swipetwo', function(event){
-		alert(event)
+		console.log(event)
 	});*/
 
 	$(document).hammer().on('drag', function(event){
-		alert(event);
+		console.log(event);
 	});
 
 	$(document).hammer().on('pinch', function (event) {
-		alert(event);
+		console.log(event);
 		//return inputDispatcher.onMouseWheel(event);
 	});
 
 	$(document).hammer().on('hold', function (event) {
-		alert(event);
+		console.log(event);
 		//return inputDispatcher.onDoubleClick(event);
 	});
 
