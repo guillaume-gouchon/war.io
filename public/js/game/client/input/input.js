@@ -98,13 +98,15 @@ input.initTouch = function () {
     };
 
 	$(document).hammer(hammerOptions).on('tap', function (event) {
-		var e = {
-			x: event.gesture.center.pageX,
-			y: event.gesture.center.pageY,
-			which: 1
-		};
-		console.log(event.gesture);
-	  	inputDispatcher.onLeftClick(e);
+		if (event.gesture.deltaTime > 90) {
+			var e = {
+				x: event.gesture.center.pageX,
+				y: event.gesture.center.pageY,
+				which: 1
+			};
+			console.log(event.gesture);
+		  	inputDispatcher.onLeftClick(e);
+		}
 	});
 
 	$(document).hammer(hammerOptions).on('doubletap', function (event) {
