@@ -297,6 +297,18 @@ a:hover {
     width: 700px;
 }
 
+#credits {
+  width: 510px;
+}
+
+#credits a {
+  color: #08c;
+}
+
+#credits a:hover {
+  color: #111;
+}
+
 #linkAbout {
     font-size: 1.5em;
 }
@@ -304,14 +316,6 @@ a:hover {
 #endGame {
     opacity: 0.8;
     text-align: center;
-}
-
-#credits {
-  width: 510px;
-}
-
-#credits a {
-  color: #08c;
 }
 
 .victory {

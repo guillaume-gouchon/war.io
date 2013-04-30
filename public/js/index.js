@@ -53,6 +53,7 @@ $('.bigButton', '#armies').bind(inputEvents, function () {
 
 		//wait for the end of the animations
 		timeout = setTimeout(function () {
+			$('#armies').addClass('hide');
 			gameManager.initGame(gameInitData);
 		}, 600);
 	}
@@ -65,6 +66,7 @@ $('a', '#playOffline').bind(inputEvents, function () {
 	clearInterval(timeout);
 	if (!launchGame) {
 		launchGame = true;
+		$('#armies').addClass('hide');
 		$('#playOffline').fadeOut();
 		$('#nbPlayers').addClass('hide');
 		gameManager.isOfflineGame = true;
