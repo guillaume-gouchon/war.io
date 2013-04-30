@@ -129,8 +129,8 @@ input.initTouch = function () {
 
 	$(document).hammer().on('drag', function (event){
 		var e = {
-			dx: -event.gesture.deltaX,
-			dy: event.gesture.deltaY
+			dx: -event.gesture.deltaX / 10,
+			dy: event.gesture.deltaY / 10
 		}
 		inputDispatcher.onTouchDrag(e);
 	});
