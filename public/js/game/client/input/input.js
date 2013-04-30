@@ -129,27 +129,25 @@ input.initTouch = function () {
 
 	});
 
-	/*document.ontouchmove = function (event) {
-		userInput.selectGroup(event.x, event.y);
-		if (Math.abs(event.x - input.mousePosition.x) + Math.abs(event.y - input.mousePosition.y) > 3) {
-			inputDispatcher.onMouseMove(event); 
-		}
-		input.mousePosition.x = event.x;
-		input.mousePosition.y = event.y;
-		return false;
-	}*/
-
-	/*$$(window).bind('swipetwo', function(event){
-		console.log(event)
-	});*/
-
 	$(document).hammer(hammerOptions).on('drag', function (event){
 		event.gesture.preventDefault();
-		var e = {
-			dx: -event.gesture.deltaX * input.DRAG_FACTOR,
-			dy: event.gesture.deltaY * input.DRAG_FACTOR
+
+		if (event.gesture.touches.length == 1) {
+			//drag with only one finger
+			var e = {
+				dx: -event.gesture.deltaX * input.DRAG_FACTOR,
+				dy: event.gesture.deltaY * input.DRAG_FACTOR
+			}
+			inputDispatcher.onTouchDrag(e);
+		} else {
+			//more than one finger
+			var e = {
+				x: event.gesture.center.pageX,
+				y: event.gesture.center.pageY
+			};
+			userInput.selectGroup(e.x, e.y);
+			inputDispatcher.onMouseMove(e);
 		}
-		inputDispatcher.onTouchDrag(e);
 	});
 
 	$(document).hammer(hammerOptions).on('pinch', function (event) {
