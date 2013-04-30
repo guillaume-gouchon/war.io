@@ -46,7 +46,7 @@ require('./services')(app);
 
 //setup index page
 app.get('/', function (req, res) {
-  if (!res.getHeader('Cache-Control')) res.setHeader('Cache-Control', 'public, max-age=' + (31557600));
+ // if (!res.getHeader('Cache-Control')) res.setHeader('Cache-Control', 'public, max-age=' + (31557600));
   res.sendfile(__dirname + '/public/index.html');
 });
 
