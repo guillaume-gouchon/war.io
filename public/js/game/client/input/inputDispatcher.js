@@ -171,3 +171,12 @@ inputDispatcher.onKeyUp = function (event) {
 			break;
 	}
 }
+
+
+/**
+*	Drags the map.
+*/
+inputDispatcher.onTouchDrag = function (event) {
+	camera.position.x += event.dx;
+	camera.position.y += event.dy; 
+}

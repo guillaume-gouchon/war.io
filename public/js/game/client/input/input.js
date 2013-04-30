@@ -94,13 +94,21 @@ input.initKeyboard = function () {
 input.initTouch = function () {
 
 	$(document).hammer().on('tap', function (event) {
-		console.log(event);
-	  	inputDispatcher.onLeftClick(event);
+		if (event.gesture.deltaTime > 100) {
+			var e = {
+				x: event.gesture.center.pageX,
+				y: event.gesture.center.pageY
+			};
+		  	inputDispatcher.onLeftClick(e);
+		}
 	});
 
 	$(document).hammer().on('doubletap', function (event) {
-		console.log(event);
-	  	inputDispatcher.onRightClick(event);
+		var e = {
+			x: event.gesture.center.pageX,
+			y: event.gesture.center.pageY
+		};
+	  	inputDispatcher.onRightClick(e);
 	});
 
 	/*document.ontouchmove = function (event) {
@@ -120,17 +128,27 @@ input.initTouch = function () {
 	});*/
 
 	$(document).hammer().on('drag', function (event){
-		console.log(event);
+		var e = {
+			dx: -event.gesture.deltaX,
+			dy: event.gesture.deltaY
+		}
+		inputDispatcher.onTouchDrag(e);
 	});
 
 	$(document).hammer().on('pinch', function (event) {
-		console.log(event);
-		//return inputDispatcher.onMouseWheel(event);
+		var e = {
+			wheelDelta: event.gesture.scale - 1
+		}
+		inputDispatcher.onMouseWheel(e);
 	});
 
 	$(document).hammer().on('hold', function (event) {
-		console.log(event);
-		//return inputDispatcher.onDoubleClick(event);
+		var e = {
+			x: event.gesture.center.pageX,
+			y: event.gesture.center.pageY,
+			which: 1
+		};
+		inputDispatcher.onDoubleClick(e);
 	});
 
 	$(document).hammer().on('release', function (event) {
