@@ -94,13 +94,14 @@ input.initKeyboard = function () {
 input.initTouch = function () {
 
 	$(document).hammer().on('tap', function (event) {
-		if (event.gesture.deltaTime > 100) {
+		//if (event.gesture.deltaTime > 100) {
 			var e = {
 				x: event.gesture.center.pageX,
 				y: event.gesture.center.pageY
 			};
+			console.log(e);
 		  	inputDispatcher.onLeftClick(e);
-		}
+		//}
 	});
 
 	$(document).hammer().on('doubletap', function (event) {
