@@ -93,9 +93,11 @@ input.initKeyboard = function () {
 */
 input.initTouch = function () {
 
-	var hammer = Hammer({
+	var hammer = new Hammer({
         tap_always: false
     });
+
+    console.log(hammer);
 
 	$(document).hammer.on('tap', function (event) {
 		var e = {
@@ -132,6 +134,7 @@ input.initTouch = function () {
 	});*/
 
 	$(document).hammer.on('drag', function (event){
+		event.gesture.preventDefault();
 		var e = {
 			dx: -event.gesture.deltaX / 50,
 			dy: event.gesture.deltaY / 50
