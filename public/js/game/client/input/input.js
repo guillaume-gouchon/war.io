@@ -94,7 +94,8 @@ input.initKeyboard = function () {
 input.initTouch = function () {
 
 	var hammerOptions = {
-        tap_always: false
+        tap_always: false,
+        doubletap_interval: 10
     };
 
     var mylatesttap = 0;
