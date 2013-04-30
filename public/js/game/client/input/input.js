@@ -112,6 +112,7 @@ input.initTouch = function () {
 			x: event.gesture.center.pageX,
 			y: event.gesture.center.pageY
 		};
+		console.log(e);
 	  	inputDispatcher.onRightClick(e);
 	});
 
@@ -134,10 +135,9 @@ input.initTouch = function () {
 	$(document).hammer(hammerOptions).on('drag', function (event){
 		event.gesture.preventDefault();
 		var e = {
-			dx: -event.gesture.deltaX / 50,
-			dy: event.gesture.deltaY / 50
+			dx: -event.gesture.deltaX / 30,
+			dy: event.gesture.deltaY / 30
 		}
-		console.log(e);
 		inputDispatcher.onTouchDrag(e);
 	});
 
@@ -154,6 +154,7 @@ input.initTouch = function () {
 			y: event.gesture.center.pageY,
 			which: 1
 		};
+		inputDispatcher.onLeftClick(e);
 		inputDispatcher.onDoubleClick(e);
 	});
 
