@@ -41,7 +41,7 @@ $('.bigButton', '#armies').bind(inputEvents, function () {
 		$('#loading').removeClass('hide').addClass('moveToLeft');
 
 		//check if webGL is supported
-		if (!window.WebGLRenderingContext || !Detector.webgl) {
+		if (!window.WebGLRenderingContext || !new THREE.Detector.webgl) {
 			// Browser has no idea what WebGL is. Suggest they
 			// get a new browser by presenting the user with link to
 			// http://get.webgl.org
