@@ -97,16 +97,16 @@ input.initTouch = function () {
         tap_always: false
     };
 
+    var lastTapEvent = null;
+
 	$(document).hammer(hammerOptions).on('tap', function (event) {
-		if (event.gesture.deltaTime > 90) {
-			var e = {
-				x: event.gesture.center.pageX,
-				y: event.gesture.center.pageY,
-				which: 1
-			};
-			console.log(event.gesture);
-		  	inputDispatcher.onLeftClick(e);
-		}
+		var e = {
+			x: event.gesture.center.pageX,
+			y: event.gesture.center.pageY,
+			which: 1
+		};
+	  	lastTapEvent = e;
+	  	inputDispatcher.onLeftClick(e);
 	});
 
 	$(document).hammer(hammerOptions).on('doubletap', function (event) {
@@ -114,7 +114,7 @@ input.initTouch = function () {
 			x: event.gesture.center.pageX,
 			y: event.gesture.center.pageY
 		};
-		console.log(e);
+	  	inputDispatcher.onLeftClick(lastTapEvent);
 	  	inputDispatcher.onRightClick(e);
 	});
 
