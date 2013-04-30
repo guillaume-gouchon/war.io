@@ -104,6 +104,7 @@ inputDispatcher.onKeyDown = function (event) {
 		case 8 :
 			//back key
 			if (userInput.isChatWindowOpen) {
+				var str = $('input', '#chat').val();
 				$('input', '#chat').val(str.substring(0, str.length - 1));
 			}
 			return false;

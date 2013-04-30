@@ -94,8 +94,8 @@ $('a', '#footer').bind(inputEvents, function () {
 
 	//animation
 	element.fadeIn();
-	element.css('top', window.innerHeight / 2 - $('#about').height() / 2);
-	element.css('left', window.innerWidth / 2 - $('#about').width() / 2);
+	element.css('top', window.innerHeight / 2 - element.height() / 2);
+	element.css('left', window.innerWidth / 2 - element.width() / 2);
 	element.removeClass('hide');
 
 	return false;
