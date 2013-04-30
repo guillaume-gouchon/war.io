@@ -93,7 +93,11 @@ input.initKeyboard = function () {
 */
 input.initTouch = function () {
 
-	$(document).hammer().on('tap', function (event) {
+	var hammer = Hammer({
+        tap_always: false
+    });
+
+	$(document).hammer.on('tap', function (event) {
 		var e = {
 			x: event.gesture.center.pageX,
 			y: event.gesture.center.pageY,
@@ -103,7 +107,7 @@ input.initTouch = function () {
 	  	inputDispatcher.onLeftClick(e);
 	});
 
-	$(document).hammer().on('doubletap', function (event) {
+	$(document).hammer.on('doubletap', function (event) {
 		var e = {
 			x: event.gesture.center.pageX,
 			y: event.gesture.center.pageY
@@ -127,22 +131,23 @@ input.initTouch = function () {
 		console.log(event)
 	});*/
 
-	$(document).hammer().on('drag', function (event){
+	$(document).hammer.on('drag', function (event){
 		var e = {
-			dx: -event.gesture.deltaX / 10,
-			dy: event.gesture.deltaY / 10
+			dx: -event.gesture.deltaX / 50,
+			dy: event.gesture.deltaY / 50
 		}
+		console.log(e);
 		inputDispatcher.onTouchDrag(e);
 	});
 
-	$(document).hammer().on('pinch', function (event) {
+	$(document).hammer.on('pinch', function (event) {
 		var e = {
 			wheelDelta: event.gesture.scale - 1
 		}
 		inputDispatcher.onMouseWheel(e);
 	});
 
-	$(document).hammer().on('hold', function (event) {
+	$(document).hammer.on('hold', function (event) {
 		var e = {
 			x: event.gesture.center.pageX,
 			y: event.gesture.center.pageY,
@@ -151,7 +156,7 @@ input.initTouch = function () {
 		inputDispatcher.onDoubleClick(e);
 	});
 
-	$(document).hammer().on('release', function (event) {
+	$(document).hammer.on('release', function (event) {
   		inputDispatcher.onMouseUp(event);
 	});
 
