@@ -362,6 +362,10 @@ a:hover {
   color: #f22;
 }
 
+#errorWebGL a:hover {
+  color: #111;
+}
+
 #endGameStats {
     position: relative;
     top: 200px;
