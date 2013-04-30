@@ -94,31 +94,24 @@ input.initKeyboard = function () {
 input.initTouch = function () {
 
 	var hammerOptions = {
-        tap_always: false
+        tap_always: true
     };
 
-    var lastTapEvent = [];
-
-	$(document).hammer(hammerOptions).on('tap', function (event) {
+	/*$(document).hammer(hammerOptions).on('tap', function (event) {
 		var e = {
 			x: event.gesture.center.pageX,
 			y: event.gesture.center.pageY,
 			which: 1
 		};
-		if (lastTapEvent.length == 2) {
-			lastTapEvent.splice(0, 1);
-		}
-	  	lastTapEvent.push(e);
 	  	inputDispatcher.onLeftClick(e);
-	});
+	});*/
 
 	$(document).hammer(hammerOptions).on('doubletap', function (event) {
 		var e = {
 			x: event.gesture.center.pageX,
 			y: event.gesture.center.pageY
 		};
-		var lastEvent = (lastTapEvent[0].x + lastTapEvent[0].y - e.x - e.y > lastTapEvent[1].x + lastTapEvent[1].y - e.x - e.y ? lastTapEvent[0] : lastTapEvent[1]);
-	  	inputDispatcher.onLeftClick(lastEvent);
+		console.log(e);
 	  	inputDispatcher.onRightClick(e);
 	});
 
