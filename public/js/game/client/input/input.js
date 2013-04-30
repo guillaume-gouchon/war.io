@@ -92,11 +92,12 @@ input.initKeyboard = function () {
 */
 input.initTouch = function () {
 
-	$$(window).tap(function (event) {
+	$$(document).tap(function (event) {
 	  	inputDispatcher.onLeftClick(event);
 	});
 
-	$$(window).doubleTap(function (event) {
+	$$(document).doubleTap(function (event) {
+		alert(event);
 	  	inputDispatcher.onRightClick(event);
 	});
 
@@ -116,16 +117,16 @@ input.initTouch = function () {
 		alert(event)
 	});*/
 
-	$$(window).swipe(function(event){
-		alert(event)
+	$$(document).swipe(function(event){
+		alert(event);
 	});
 
-	$$(window).pinch(function (event) {
+	$$(document).pinch(function (event) {
 		alert(event);
 		//return inputDispatcher.onMouseWheel(event);
 	});
 
-	$$(window).hold(function (event) {
+	$$(document).hold(function (event) {
 		return inputDispatcher.onDoubleClick(event);
 	});
 
