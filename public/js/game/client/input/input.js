@@ -123,7 +123,7 @@ input.initTouch = function () {
 			doubleTapTimeout = setTimeout(function () {
 		  		doubleTapTimeout = null;
 		  		inputDispatcher.onLeftClick(e);
-			}, this.DOUBLE_TAP_INTERVAL);
+			}, input.DOUBLE_TAP_INTERVAL);
 		}
 
 	});
