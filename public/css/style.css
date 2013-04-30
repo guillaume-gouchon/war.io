@@ -310,6 +310,10 @@ a:hover {
   width: 510px;
 }
 
+#credits a {
+  color: #08c;
+}
+
 .victory {
     color : #0d0;
 }
