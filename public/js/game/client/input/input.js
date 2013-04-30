@@ -103,7 +103,7 @@ input.initTouch = function () {
 			y: event.gesture.center.pageY,
 			which: 1
 		};
-		console.log(e);
+		console.log(event.gesture);
 	  	inputDispatcher.onLeftClick(e);
 	});
 
