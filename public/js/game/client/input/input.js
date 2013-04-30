@@ -56,16 +56,16 @@ input.initMouse = function () {
 		return false;
 	}
 
-	document.onmouseup = function (event) {
-	  return inputDispatcher.onMouseUp(event);
-	}
-
 	document.onmousewheel = function (event) {
 	  return inputDispatcher.onMouseWheel(event);
 	}
 
 	document.ondblclick = function (event) {
 		return inputDispatcher.onDoubleClick(event);
+	}
+
+	document.onmouseup = function (event) {
+	  return inputDispatcher.onMouseUp(event);
 	}
 
 }
@@ -92,11 +92,11 @@ input.initKeyboard = function () {
 */
 input.initTouch = function () {
 
-	$(window).bind('tapone', function (event) {
+	$$(window).tap(function (event) {
 	  	inputDispatcher.onLeftClick(event);
 	});
 
-	$(window).bind('taptwo', function (event) {
+	$$(window).doubleTap(function (event) {
 	  	inputDispatcher.onRightClick(event);
 	});
 
@@ -112,25 +112,24 @@ input.initTouch = function () {
 		return false;
 	}*/
 
-	$(window).bind('swipetwo', function(event){
+	/*$$(window).bind('swipetwo', function(event){
+		alert(event)
+	});*/
+
+	$$(window).swipe(function(event){
 		alert(event)
 	});
 
-	$(window).bind('swipeone', function(event){
-		alert(event)
+	$$(window).pinch(function (event) {
+		alert(event);
+		//return inputDispatcher.onMouseWheel(event);
+	});
+
+	$$(window).hold(function (event) {
+		return inputDispatcher.onDoubleClick(event);
 	});
 
 	document.ontouchcancel = function (event) {
 	  return inputDispatcher.onMouseUp(event);
 	}
-
-	$(window).bind('pinch', function (event) {
-		alert(event);
-		//return inputDispatcher.onMouseWheel(event);
-	});
-
-	document.ondblclick = function (event) {
-		return inputDispatcher.onDoubleClick(event);
-	}
-
 }
