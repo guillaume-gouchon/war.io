@@ -177,7 +177,7 @@ gameSurface.createScene = function () {
 	var index = 0;
 	for(var i = 0; i <= 64; i++) {
 		for(var j = 0; j <= 64; j++) {
-			terrainGeometry.vertices[index].z = this.terrain[i][j];
+			//terrainGeometry.vertices[index].z = this.terrain[i][j];
 			index++;
 		}
 	}
@@ -444,7 +444,7 @@ gameSurface.updateElement = function (element) {
 		} else if (element.q.length > 0) {
 			//update progress bar
 			var progressBar = null;
-			for (var i in d.children) {updateElementOnMinimap
+			for (var i in d.children) {
 				if (d.children[i].id == 'prog') {
 					progressBar = d.children[i];
 					break;
