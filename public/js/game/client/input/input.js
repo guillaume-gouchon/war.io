@@ -100,11 +100,12 @@ input.DRAG_FACTOR = 1 / 35;
 input.initTouch = function () {
 
 	var hammerOptions = {
-        tap_always: false,
-        doubletap_interval: 10
+        tap_always: false
     };
 
-    var doubleTapTimeout = null;
+    //fixes the mouse position in the center of the screen (used only for building construction)
+    input.mousePosition.x = window.innerWidth / 2;
+	input.mousePosition.y = window.innerHeight / 2;
 
 	$(document).hammer(hammerOptions).on('tap', function (event) {
 		var e = {
@@ -112,20 +113,16 @@ input.initTouch = function () {
 			y: event.gesture.center.pageY,
 			which: 1
 		};
+  		inputDispatcher.onLeftClick(e);	
+	});
 
-		if (doubleTapTimeout != null) {
-			//double tap
-			clearInterval(doubleTapTimeout);
-	  		doubleTapTimeout = null;
-	  		inputDispatcher.onRightClick(e);
-		} else {
-			//single tap
-			doubleTapTimeout = setTimeout(function () {
-		  		doubleTapTimeout = null;
-		  		inputDispatcher.onLeftClick(e);
-			}, input.DOUBLE_TAP_INTERVAL);
-		}
-
+	$(document).hammer(hammerOptions).on('hold', function (event) {
+		var e = {
+			x: event.gesture.center.pageX,
+			y: event.gesture.center.pageY,
+			which: 1
+		};
+		inputDispatcher.onRightClick(e);
 	});
 
 	$(document).hammer(hammerOptions).on('drag', function (event){
@@ -151,18 +148,19 @@ input.initTouch = function () {
 
 	$(document).hammer(hammerOptions).on('pinch', function (event) {
 		var e = {
-			wheelDelta: event.gesture.scale - 1
+			wheelDelta: (event.gesture.scale - 1) * 5
 		}
 		inputDispatcher.onMouseWheel(e);
 	});
 
-	$(document).hammer(hammerOptions).on('hold', function (event) {
+	
+
+	$(document).hammer(hammerOptions).on('doubletap', function (event) {
 		var e = {
 			x: event.gesture.center.pageX,
 			y: event.gesture.center.pageY,
 			which: 1
 		};
-		inputDispatcher.onLeftClick(e);
 		inputDispatcher.onDoubleClick(e);
 	});
 

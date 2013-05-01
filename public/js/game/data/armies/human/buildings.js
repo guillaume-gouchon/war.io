@@ -15,7 +15,8 @@ gameData.ELEMENTS[gameData.FAMILIES.building].push(
 		g : 'castle.js',
 		image: 'castle.png',
 		height: 21,
-		buttonId : 10
+		buttonId : 10,
+		vision : 8
 	},
 	{
 		name : 'House',
@@ -28,11 +29,12 @@ gameData.ELEMENTS[gameData.FAMILIES.building].push(
 		l : 100,
 		defense : 0,
 		armorType : fightLogic.ARMOR_TYPES.building,
-		pop : 5,
+		pop : 6,
 		g : 'house.js',
 		image: 'house.png',
 		height: 12,
-		buttonId : 11
+		buttonId : 11,
+		vision : 8
 	},
 	{
 		name : 'Casern',
@@ -49,6 +51,7 @@ gameData.ELEMENTS[gameData.FAMILIES.building].push(
 		g : 'casern.js',
 		image: 'casern.png',
 		height: 18,
-		buttonId : 12
+		buttonId : 12,
+		vision : 8
 	}
 ]);

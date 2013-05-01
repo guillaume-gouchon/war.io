@@ -12,8 +12,8 @@ gameSurface.PIXEL_BY_NODE = 10;
 gameSurface.NEAR = 1;
 gameSurface.FAR = 2000;
 gameSurface.ZOOM_MAX = 30;
-gameSurface.ZOOM_MIN = 110;
-gameSurface.ZOOM_STEP = 10;
+gameSurface.ZOOM_MIN = 150;
+gameSurface.ZOOM_STEP = 15;
 gameSurface.ZOOM_ROTATION_STEP = 0.1;
 gameSurface.ORDER_ROTATION_SPEED = 1/20;
 gameSurface.FOG_DENSITY = 0.0005;
@@ -22,7 +22,7 @@ gameSurface.SELECTION_ALLY_COLOR = '#0f0';
 gameSurface.SELECTION_NEUTRAL_COLOR = '#e3e314';
 gameSurface.CAMERA_INIT_ANGLE = 0.7;
 gameSurface.ORDER_OPACITY = 0.7;
-gameSurface.SELECTION_RECTANGLE_HEIGHT = 4 * gameSurface.PIXEL_BY_NODE;
+gameSurface.SELECTION_RECTANGLE_HEIGHT = 0.5 * gameSurface.PIXEL_BY_NODE;
 gameSurface.SELECTION_RECTANGLE_OPACITY = 0.5;
 gameSurface.SELECTION_RECTANGLE_COLOR = 0x000000;
 gameSurface.CAN_BUILD_CUBE_COLOR = 0x00ff00;
@@ -31,7 +31,7 @@ gameSurface.BUILD_CUBE_OPACITY = 0.5;
 gameSurface.MAP_SCROLL_SPEED = 10;
 gameSurface.MAP_SCROLL_X_MIN = 0;
 gameSurface.MAP_SCROLL_Y_MIN = 0;
-gameSurface.CENTER_CAMERA_Y_OFFSET = 8 * gameSurface.PIXEL_BY_NODE;
+gameSurface.CENTER_CAMERA_Y_OFFSET = 10 * gameSurface.PIXEL_BY_NODE;
 gameSurface.BARS_HEIGHT = 0.5;
 gameSurface.BARS_DEPTH = 0.2;
 gameSurface.BUILDING_STRUCTURE_SIZE = 5;
@@ -39,6 +39,7 @@ gameSurface.BUILDING_INIT_Z = - 2 * gameSurface.PIXEL_BY_NODE;
 gameSurface.ARMIES_COLORS = ['_red', '_blu', '_gre', '_yel'];
 gameSurface.PLAYERS_COLORS = ['red', 'blue', 'green', 'yellow'];
 gameSurface.MOVEMENT_EXTRAPOLATION_ITERATION = 6;
+gameSurface.TERRAIN_HEIGHT_SMOOTH_FACTOR = 5;
 
 
 /**
@@ -170,13 +171,13 @@ gameSurface.createScene = function () {
 	scene.add(skybox);
 
 	//generate the terrain
-	var terrainGeneration = new TerrainGeneration(gameContent.map.size.x * this.PIXEL_BY_NODE, gameContent.map.size.y * this.PIXEL_BY_NODE, 64, 10);
+	var terrainGeneration = new TerrainGeneration(gameContent.map.size.x * this.PIXEL_BY_NODE, gameContent.map.size.y * this.PIXEL_BY_NODE, 64, this.TERRAIN_HEIGHT_SMOOTH_FACTOR);
 	this.terrain = terrainGeneration.diamondSquare();
 	var terrainGeometry = new THREE.PlaneGeometry(2200, 2200, 64, 64);
 	var index = 0;
 	for(var i = 0; i <= 64; i++) {
 		for(var j = 0; j <= 64; j++) {
-			//terrainGeometry.vertices[index].z = this.terrain[i][j];
+			terrainGeometry.vertices[index].z = this.terrain[i][j];
 			index++;
 		}
 	}
@@ -400,7 +401,9 @@ gameSurface.createObject = function (key, element) {
 		if (element.cp < 100) {
 			object.position.z += this.BUILDING_INIT_Z;	
 		}
+	}
 
+	if (element.f != gameData.FAMILIES.terrain) {
 		//update minimap
 		GUI.addElementOnMinimap(element);
 	}
@@ -441,7 +444,7 @@ gameSurface.updateElement = function (element) {
 		} else if (element.q.length > 0) {
 			//update progress bar
 			var progressBar = null;
-			for (var i in d.children) {
+			for (var i in d.children) {updateElementOnMinimap
 				if (d.children[i].id == 'prog') {
 					progressBar = d.children[i];
 					break;
@@ -481,6 +484,9 @@ gameSurface.updateElement = function (element) {
 				break;
 			}
 		}
+
+		//update minimap
+		GUI.updateElementOnMinimap(element);
 	}
 
 	gameContent.gameElements[element.id] = {d: d, s : element};
@@ -498,9 +504,11 @@ gameSurface.removeElement = function (element) {
 		gameContent.selected.splice(gameContent.selected.indexOf(element.id), 1);
 	}
 
-	//update minimap
-	GUI.removeElementFromMinimap(element);
-	
+	if (element.f != gameData.FAMILIES.terrain) {
+		//update minimap
+		GUI.removeElementFromMinimap(element);
+	}
+
 	delete gameContent.gameElements[element.id];
 }
 

@@ -23,7 +23,8 @@ gameData.ELEMENTS[gameData.FAMILIES.unit].push(
 		image: 'peon.png',
 		height: 6,
 		range: 1,
-		buttonId : 101
+		buttonId : 101,
+		vision : 8
 	},
 	{
 		name : 'Footman',
@@ -37,7 +38,7 @@ gameData.ELEMENTS[gameData.FAMILIES.unit].push(
 		l : 80,
 		attackSpeed : 1,
 		attack : 10, 
-		defense : 2,
+		defense : 1,
 		weaponType : fightLogic.WEAPON_TYPES.normal,
 		armorType : fightLogic.ARMOR_TYPES.medium,
 		pop : 1,
@@ -46,7 +47,8 @@ gameData.ELEMENTS[gameData.FAMILIES.unit].push(
 		image: 'swordsman.png',
 		height: 6,
 		range: 1,
-		buttonId : 102
+		buttonId : 102,
+		vision : 8
 	},
 	{
 		name : 'Knight',
@@ -60,7 +62,7 @@ gameData.ELEMENTS[gameData.FAMILIES.unit].push(
 		l : 120,
 		attackSpeed : 1,
 		attack : 20, 
-		defense : 5,
+		defense : 3,
 		weaponType : fightLogic.WEAPON_TYPES.normal,
 		armorType : fightLogic.ARMOR_TYPES.heavy,
 		pop : 2,
@@ -69,7 +71,8 @@ gameData.ELEMENTS[gameData.FAMILIES.unit].push(
 		image: 'knight.png',
 		height: 6,
 		range: 1,
-		buttonId : 103
+		buttonId : 103,
+		vision : 8
 	},
 	{
 		name : 'Bowman',
@@ -82,7 +85,7 @@ gameData.ELEMENTS[gameData.FAMILIES.unit].push(
 		timeConstruction : 15,
 		l : 50,
 		attackSpeed : 1,
-		attack : 10, 
+		attack : 12, 
 		defense : 1,
 		weaponType : fightLogic.WEAPON_TYPES.piercing,
 		armorType : fightLogic.ARMOR_TYPES.light,
@@ -92,6 +95,7 @@ gameData.ELEMENTS[gameData.FAMILIES.unit].push(
 		image: 'bowman.png',
 		height: 6,
 		range: 10,
-		buttonId : 104
+		buttonId : 104,
+		vision : 12
 	}
 ]);

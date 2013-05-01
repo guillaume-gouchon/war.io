@@ -220,6 +220,11 @@ GUI.updateInfo = function () {
 		var elementData = gameData.ELEMENTS[element.f][element.r][element.t];
 		$('#name').html(elementData.name);
 		$('#portrait').attr('class', 'sprite sprite-' + elementData.image.replace('.png', ''));
+		if (elementData.attack != null) {
+			$('#frags').html('FRAGS : ' + element.fr);
+		} else {
+			$('#frags').html('');
+		}
 		$('#stats').html('');
 		if (element.f == gameData.FAMILIES.terrain) {
 			//terrain
@@ -311,7 +316,22 @@ GUI.updateMinimap = function () {
 *	Adds an element on the minimap.
 */
 GUI.addElementOnMinimap = function (element) {
-	$('#minimap').append('<span id="minimap' + element.id + '" class="minimapPoint ' + gameSurface.PLAYERS_COLORS[element.o] + '">&nbsp;</span>');
+	var className;
+	if (element.f == gameData.FAMILIES.building) {
+		className = 'minimapPointBuilding';
+	} else {
+		className = 'minimapPointUnit';
+	}
+	$('#minimap').append('<span id="minimap' + element.id + '" class="' + className + ' ' + gameSurface.PLAYERS_COLORS[element.o] + '">&nbsp;</span>');
+	$('#minimap' + element.id).css('left', (this.MINIMAP_SIZE) * element.p.x / gameContent.map.size.x);
+	$('#minimap' + element.id).css('top', (this.MINIMAP_SIZE) * (1 - element.p.y / gameContent.map.size.y));
+}
+
+
+/**
+*	Updates an element on the minimap.
+*/
+GUI.updateElementOnMinimap = function (element) {
 	$('#minimap' + element.id).css('left', (this.MINIMAP_SIZE) * element.p.x / gameContent.map.size.x);
 	$('#minimap' + element.id).css('top', (this.MINIMAP_SIZE) * (1 - element.p.y / gameContent.map.size.y));
 }

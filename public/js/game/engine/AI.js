@@ -5,7 +5,7 @@ var AI = {};
 *	CONSTANTS
 */
 AI.RESOURCE_DISTANCE_THRESHOLD = 10;
-AI.ENEMY_DISTANCE_THRESHOLD = 20;
+AI.ENEMY_DISTANCE_THRESHOLD = 15;
 
 
 /**
@@ -13,7 +13,7 @@ AI.ENEMY_DISTANCE_THRESHOLD = 20;
 */
 AI.searchForNewResources = function (game, builder, fromWhere, resourceType) {
 	var nearestResource = mapLogic.getNearestResource(game, fromWhere, resourceType);
-	if(tools.getElementsDistance(fromWhere, nearestResource) < this.RESOURCE_DISTANCE_THRESHOLD) {
+	if(tools.getElementsDistance(fromWhere, nearestResource) <= gameData.ELEMENTS[builder.f][builder.r][builder.t].vision) {
 		builder.a = nearestResource;
 		builder.pa = nearestResource;
 	} else {
@@ -28,7 +28,7 @@ AI.searchForNewResources = function (game, builder, fromWhere, resourceType) {
 */
 AI.searchForNewEnemy = function (game, unit) {
 	var nearestEnemy = mapLogic.getNearestEnemy(game, unit);
-	if(nearestEnemy != null && tools.getElementsDistance(unit, nearestEnemy) < this.ENEMY_DISTANCE_THRESHOLD) {
+	if(nearestEnemy != null && tools.getElementsDistance(unit, nearestEnemy) <= gameData.ELEMENTS[unit.f][unit.r][unit.t].vision) {
 		unit.a = nearestEnemy;
 	}
 }
@@ -42,7 +42,7 @@ AI.targetReaction = function (game, target, attacker) {
 		//flee if it is a builder
 		var around = tools.getTilesAroundElements(game, target);
 		if (around.length > 0) {
-			target.mt = around[Math.random() * (around.length - 1)];	
+			target.mt = around[parseInt(Math.random() * (around.length - 1))];	
 		}
 	} else {
 		//attack back if it is a fighter

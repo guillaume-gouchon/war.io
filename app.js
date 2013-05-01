@@ -34,13 +34,13 @@ colors.setTheme({
 
 
 //database
-var db = require('./db')(app);
-app.on('close', db.close); // Close open DB connection when server exits
+/*var db = require('./db')(app);
+app.on('close', db.close); // Close open DB connection when server exits*/
 
 
 //load packages
-require('./daos')(app);
-require('./front')(app);
+/*require('./daos')(app);
+require('./front')(app);*/
 require('./services')(app);
 
 

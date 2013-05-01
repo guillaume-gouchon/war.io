@@ -59,7 +59,7 @@ mapLogic.getNearestEnemy = function (game, unit) {
 		if (enemy.f != gameData.FAMILIES.terrain 
 			&& rank.isEnemy(game.players, unit.o, enemy)) {
 			var distance = tools.getElementsDistance(unit, enemy);
-			if(distance < 5) {
+			if(distance <= gameData.ELEMENTS[unit.f][unit.r][unit.t].vision && enemy.f == gameData.FAMILIES.unit) {
 				return enemy;
 			} else if (distance < min || min == -1) {
 				min = distance;

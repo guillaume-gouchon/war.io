@@ -6,7 +6,7 @@ gameSurface.setElementPosition = function (element, x, y) {
 	element.position.x = position.x;
 	element.position.y = position.y;
 	var z = this.terrain[parseInt(x * 65 / gameContent.map.size.x)][parseInt(y * 65 / gameContent.map.size.y)];
-	element.position.z = Math.abs(z);
+	element.position.z = z;
 }
 
 
@@ -310,9 +310,9 @@ gameSurface.showMessage = function (message, color) {
 	if ($('#message' + message.id).length == 0) {
 		$('#messages').append('<div><div id="message' + message.id + '" class="fadeOut easeTransition">' + message.text + '</div></div>');
 		if (color == null) {
-			$('#message' + message.id).css('background', 'white');
+			$('#message' + message.id).addClass('white');
 		} else {
-			$('#message' + message.id).css('background', color);
+			$('#message' + message.id).addClass(color);
 		}
 		var tweenFadeIn = new TWEEN.Tween({alpha:0}).to({alpha:1}, 100)
 		.onComplete(function () {
@@ -355,7 +355,7 @@ gameSurface.updateMoveExtrapolation = function () {
 			
 		d.et -= 1;
 
-		if (d.et <= 0) {
+		if (d.et <= 0 && gameContent.gameElements[d.elementId] != null) {
 			var element = gameContent.gameElements[d.elementId].s;
 			this.setElementPosition(d, element.p.x, element.p.y);
 			d.et = 0;

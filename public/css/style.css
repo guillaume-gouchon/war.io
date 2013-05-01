@@ -56,7 +56,6 @@ canvas {
 
 #messages div div {
   font-size: 1.4em;
-  background: #eee;
   color: #111;
   margin-bottom: 5px;
   padding: 15px;
@@ -381,7 +380,7 @@ a:hover {
 }
 
 .blue {
-    background: #7F7FDB;
+    background: #9E9EF0;
 }
 
 .green {
@@ -397,13 +396,8 @@ a:hover {
 }
 
 .white {
-    background: #fff;
+    background: #eee;
 }
-
-
-
-
-
 
 #info {
     position: absolute;
@@ -430,7 +424,7 @@ a:hover {
 
 #firstHalfInfo #portrait {
     display: inline-block;
-    height: 40px;
+    height: 35px;
     width: 40px;
     vertical-align: top;
     margin-top: 15px;
@@ -440,11 +434,20 @@ a:hover {
 #name {
     margin-top: 15px;
     font-size: 0.9em;
+    line-height: 20px;
 }
 
 #life {
     font-weight: bold;
     font-size: 0.9em;
+    line-height: 20px;
+}
+
+#frags {
+  position: absolute;
+  left: -14px;
+  bottom: 4px;
+  font-size: 0.5em;
 }
 
 #stats {
@@ -521,11 +524,18 @@ a:hover {
     position: absolute;
 }
 
-.minimapPoint {
+.minimapPointBuilding {
   position: absolute;
   height: 8px;
   width: 8px;
-  border-radius: 7px;
+  border-radius: 8px;
+}
+
+.minimapPointUnit {
+  position: absolute;
+  height: 4px;
+  width: 4px;
+  border-radius: 4px;
 }
 
 

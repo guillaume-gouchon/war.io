@@ -101,6 +101,8 @@ production.gatherResources = function (game, builder, resource) {
 	builder.ga.amount += amount;
 	resource.ra -= amount;
 
+	tools.addUniqueElementToArray(game.modified, resource);
+
 	if (builder.ga.amount == gameData.ELEMENTS[builder.f][builder.r][builder.t].maxGathering) {
 		//the builder is full of resources, get back resources
 		var closestTownHall = mapLogic.getNearestBuilding(game, builder, gameData.ELEMENTS[gameData.FAMILIES.building][game.players[builder.o].r][0].t);
