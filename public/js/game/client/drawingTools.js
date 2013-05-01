@@ -6,7 +6,7 @@ gameSurface.setElementPosition = function (element, x, y) {
 	element.position.x = position.x;
 	element.position.y = position.y;
 	var z = this.terrain[parseInt(x * 65 / gameContent.map.size.x)][parseInt(y * 65 / gameContent.map.size.y)];
-	element.position.z = z;
+	element.position.z = Math.abs(z);
 }
 
 
