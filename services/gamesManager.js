@@ -87,6 +87,7 @@ module.exports = function(app){
 	app.gamesManager.addPlayerToGame = function (socket, game, playerInitialData) {
 		console.log(new Date() + ' | Add player to game '.info + game.id);
 		var player = new gameData.Player(playerInitialData.playerId, game.players.length, playerInitialData.army);
+		player.n = playerInitialData.name;
 		game.players.push(player);
 		game.sockets.push(socket);
 
