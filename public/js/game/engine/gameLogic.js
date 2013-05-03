@@ -35,7 +35,7 @@ gameLogic.update = function (game) {
 		this.resolveActions(game, element);
 		this.updateMoves(game, element);
 		this.updateBuildings(game, element);
-		if (element.f == gameData.FAMILIES.unit) {
+		if (element.f != gameData.FAMILIES.terrain) {
 			this.protectAround(game, element);	
 		}
 	}

@@ -15,13 +15,12 @@ gameSurface.ZOOM_MAX = 30;
 gameSurface.ZOOM_MIN = 150;
 gameSurface.ZOOM_STEP = 15;
 gameSurface.ZOOM_ROTATION_STEP = 0.1;
-gameSurface.ORDER_ROTATION_SPEED = 1/20;
+gameSurface.ORDER_ANIMATION_SPEED = 0.05;
 gameSurface.FOG_DENSITY = 0.0005;
 gameSurface.SELECTION_ENEMY_COLOR = '#f00';
 gameSurface.SELECTION_ALLY_COLOR = '#0f0';
 gameSurface.SELECTION_NEUTRAL_COLOR = '#e3e314';
 gameSurface.CAMERA_INIT_ANGLE = 0.7;
-gameSurface.ORDER_OPACITY = 0.7;
 gameSurface.SELECTION_RECTANGLE_HEIGHT = 0.5 * gameSurface.PIXEL_BY_NODE;
 gameSurface.SELECTION_RECTANGLE_OPACITY = 0.5;
 gameSurface.SELECTION_RECTANGLE_COLOR = 0x000000;
@@ -189,7 +188,8 @@ gameSurface.createScene = function () {
     scene.add(planeSurface);
 
 	//add order element
-	this.order = new THREE.Mesh(new THREE.TorusGeometry(5, 2, 2, 5), new THREE.MeshLambertMaterial({color: 0xff0000, opacity: this.ORDER_OPACITY, transparent: true}));
+	this.order = this.drawSelectionCircle(this.PIXEL_BY_NODE / 2, '#0f0');
+	this.order.rotation.x = this.de2ra(90);
 	this.order.visible = false;
 	scene.add(this.order);
 

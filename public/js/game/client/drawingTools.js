@@ -95,7 +95,14 @@ gameSurface.updateOrderPosition = function () {
 			position = (gameContent.gameElements[gameContent.selected[0]].s.rp != null ? gameContent.gameElements[gameContent.selected[0]].s.rp : gameContent.gameElements[gameContent.selected[0]].s.mt);
 		}
 		this.setElementPosition(this.order, position.x, position.y);
-		this.order.rotation.z += this.ORDER_ROTATION_SPEED;
+		/*if (Math.random() < 0.5) {
+			this.order.scale.y += this.ORDER_ANIMATION_SPEED;
+			this.order.scale.z += this.ORDER_ANIMATION_SPEED;	
+		} else {
+			this.order.scale.y -= this.ORDER_ANIMATION_SPEED;
+			this.order.scale.z -= this.ORDER_ANIMATION_SPEED;
+		}*/
+		
 		this.order.visible = true;
 	} else if (this.order.visible) {
 		this.order.visible = false;

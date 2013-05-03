@@ -14,6 +14,7 @@ gameData.Building = function (building, x, y, owner, isBuilt) {
 	this.rp = null;//where unit will go when created
 	this.q = [];//queue
 	this.qp = 0;//queue progression
+	this.fr = 0;
 
 	//fight-related data
 	this.l = building.l;
