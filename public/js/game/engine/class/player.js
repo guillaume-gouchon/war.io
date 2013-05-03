@@ -2,6 +2,7 @@ gameData.Player = function (playerId, owner, race) {
 	this.pid = playerId;
 	this.o = owner;//id of the player
 	this.r = race;//id of the race played
+	this.n = '';
 
 	this.re = [];//list of resources and quantities owned
 	this.ra = [];//list of players ranks (enemy, neutral, ...)

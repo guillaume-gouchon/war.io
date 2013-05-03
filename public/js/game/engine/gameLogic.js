@@ -110,14 +110,17 @@ gameLogic.resolveActions = function (game, element) {
 			} else if (elementData.isBuilder && element.a.f == gameData.FAMILIES.terrain) {
 				//gathering resources
 				action.doTheGathering(game, element, element.a);
-			} else if (!rank.isAlly(game.players, element.o, element.a)) {
+			} else if (rank.isEnemy(game.players, element.o, element.a)) {
 				//attack
 				action.doTheAttack(game, element, element.a);
 			}
 		} else if (distance <= elementData.range) {
-			if (!rank.isAlly(game.players, element.o, element.a)) {
+			if (rank.isEnemy(game.players, element.o, element.a)) {
 				//attack
 				action.doTheAttack(game, element, element.a);
+
+				//stop moving
+				element.mt = {x : null, y : null};
 			}
 		} else {
 			//move closer in order to do the action

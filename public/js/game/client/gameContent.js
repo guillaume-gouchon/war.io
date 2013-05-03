@@ -82,6 +82,15 @@ gameContent.update = function (data) {
 		}
 	}
 
+	//check if someone has changed its rank
+	for (var i in this.players) {
+		for (var j in this.players[i].ra) {
+			if (this.players[i].ra[j] != data.players[i].ra[j]) {
+				this.rankHasChanged(data.players[i], j);
+			}
+		}
+	}
+
 	//update players
 	this.players = data.players;
 
@@ -94,6 +103,21 @@ gameContent.update = function (data) {
 	//handles chat messages
 	for (var i in data.chat) {
 		gameSurface.showMessage({id: parseInt(Math.random() * 1000), text: data.chat[i].text}, gameSurface.PLAYERS_COLORS[data.chat[i].o]);
+	}
+}
+
+
+/**
+*	One player's rank has changed.
+*/
+gameContent.rankHasChanged = function (player1, player2) {
+	if (player1.ra[player2.o] == gameData.RANKS.enemy) {
+		gameSurface.showMessage({id: parseInt(Math.random() * 1000), text: player1.n + ' has declared the war to ' + player2.n + ' !'});
+	} else if (player1.ra[player2.o] == gameData.RANKS.neutral
+		&& player2.ra[player1.o] == gameData.RANKS.neutral) {
+		gameSurface.showMessage({id: parseInt(Math.random() * 1000), text: player1.n + ' and ' + player2.n + ' have signed an alliance !'});
+	} else if (player1.ra[player2.o] == gameData.RANKS.neutral) {
+		gameSurface.showMessage({id: parseInt(Math.random() * 1000), text: player1.n + ' wants to conclude a pact with ' + player2.n + '...'});
 	}
 }
 

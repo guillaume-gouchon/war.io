@@ -31,9 +31,9 @@
 
 	<body>
 
-	  <div id="introScreen" class="fullScreen blackBackground" onmousedown="return false">
+	  <div id="introScreen" class="fullScreen blackBackground">
 
-	  	<ul class="cb-slideshow">
+	  	<ul class="cb-slideshow" >
 			<li><span>Image 01</span><div><h3></h3></div></li>
 			<li><span>Image 02</span><div><h3></h3></div></li>
 			<li><span>Image 03</span><div><h3></h3></div></li>
@@ -41,30 +41,30 @@
 			<li><span>Image 05</span><div><h3></h3></div></li>
 		</ul>
 
-	  	<div id="chooseArmy" class="fullScreenTitle easeTransition">Choose your army</div>
-	  	<div id="loading" class="fullScreenTitle easeTransition hide">
+	  	<div id="chooseArmy" class="fullScreenTitle easeTransition" >Choose your army</div>
+	  	<div id="loading" class="fullScreenTitle easeTransition hide" >
 	  		<span id="loadingLabel">Waiting for Opponents</span><span class="one">.</span><span class="two">.</span><span class="three">.</span>​
 	  	</div>
 
-	  	<div id="nbPlayers" class="hide">
+	  	<div id="nbPlayers" class="hide" >
 	  		<div class="bigButton customRadio checked" data-name="nbPlayers" data-value="2"/>2 players</div>
 	  		<div class="bigButton customRadio" data-name="nbPlayers" data-value="3"/>3 players</div>
 	  		<div class="bigButton customRadio" data-name="nbPlayers" data-value="4"/>4 players</div>
 	  	</div>
 
-	  	<div id="errorWebGL" class="hide">
+	  	<div id="errorWebGL" class="hide" >
   			<p>Your browser does not support WebGL.</p> 
   			<p>Try <a href="http://google.com/chrome" target="_blank">Google Chrome</a> or <a href="http://get.webgl.org" target="_blank">follow this link</a> to know more !</p>
   		</div>
 
-	  	<div id="playOffline" class="hide">
+	  	<div id="playOffline" class="hide" >
   			<p><a href="#">Play Offline in Solo Mode </a></p>
   			<p class="smallText">(no AI yet... so it may be quite boring !)</p>
   		</div>
 
-	  	<div id="armies" class="easeTransition"></div>
+	  	<div id="armies" class="easeTransition" ></div>
 
-	  	<div id="about" class="popup easeTransition hide">
+	  	<div id="about" class="popup easeTransition hide" >
 	  		<h1>About WarNode</h1>
 	  		<p>WarNode is a free Multiplayer Real-Time Strategy Game.</p>
 	  		<p>In this game, you will confront real players and you surely need to use all your
@@ -73,7 +73,7 @@
 	  		<p>This project has been developed in 5 weeks using Three.js on client-side and Node.js on server-side.</p>
 	  	</div>
 
-	  	<div id="credits" class="popup easeTransition hide">
+	  	<div id="credits" class="popup easeTransition hide" >
 	  		<h1>Credits</h1>
 	  		<p>Game Development and Music by 
 	  			<a href="http://www.linkedin.com/profile/view?id=144913212" target="_blank">Guillaume Gouchon</a>.
@@ -97,18 +97,24 @@
 			<span class='st_email_large' displayText='Email'></span>
 	  	</div>
 
-	  	<div id="footer">
+	  	<div id="footer" >
 	  		<a data-id="1" href="#">Credits</a>
 	  		<a id="linkAbout" data-id="0" href="#" >About WarNode</a>
 	  		<a data-id="2" href="#">Share</a>
 	  	</div>
+
+	  	<div id="menu">
+	  		<div id="playerName">
+	  			<input type="text"/>
+	  		</div>
+	  	</div>
 	  </div>
 
 	  <div id="gui" class="fullScreen hide" onmousedown="return false">
-	  	<div id="resources" class="sprite sprite-bgResources"></div>
-	  	<div id="toolbar"></div>
-	  	<div id="population" class="sprite sprite-bgPop"><div class="spriteBefore sprite-population"></div></div>
-	  	<div id="info" class="sprite sprite-bgInfo hide">
+	  	<div id="resources" class="sprite sprite-bgResources" ></div>
+	  	<div id="toolbar" ></div>
+	  	<div id="population" class="sprite sprite-bgPop" ><div class="spriteBefore sprite-population"></div></div>
+	  	<div id="info" class="sprite sprite-bgInfo hide" >
 	  		<div id="firstHalfInfo">
   				<div id="portrait"></div>
 	  			<div>
@@ -119,16 +125,19 @@
 	  		</div>
 	  		<div id="stats"></div>
 	  	</div>
-	  	<div id="messages"></div>
-	  	<div id="minimap" class="sprite sprite-bgMinimap">
+	  	<div id="messages" ></div>
+	  	<div id="minimap" class="sprite sprite-bgMinimap" >
 	  		<div id="minimapLocation" class="sprite sprite-minimapLocation"></div>
 	  	</div>
-	  	<div id="chat" class="hide">
-	  		<input class="input-xxlarge" type="text" placeholder="chat..."/>
-	  	</div>
+  		<div id="diplomacy"></div>	
 	  </div>
 
-	  <div id="endGame" class="fullScreen blackBackground hide" onmousedown="return false">
+
+	  	<div id="chat" class="hide">
+	  		<input class="input-xxlarge" type="text" placeholder="chat..."/>
+  		</div>
+
+	  <div id="endGame" class="fullScreen blackBackground hide" >
 	  	<div id="endGameMessage" class="fullScreenTitle easeTransition"></div>
 	  	<div id="endGameStats">
 	  		<table class="table table-bordered">

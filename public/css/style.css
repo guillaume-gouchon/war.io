@@ -19,115 +19,16 @@ body {
 
 canvas {
 	background-color: #000;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 @media (max-device-width:768px) and (orientation:landscape) {
    html {-webkit-text-size-adjust:50%}
-}
-
-#resources {
-    position: absolute;
-    top: 2px;
-    left: 124px;
-    width: 210px;
-    height: 60px;
-    text-align: center;
-}
-
-#resources div {
-    display: inline-block;
-    width: 50%;
-    text-align: center;
-    font-size: 16px;
-    font-weight: bold;
-    color: #fff;
-    line-height: 60px;
-}
-
-#resources div div {
-    width: auto;
-}
-
-#messages {
-  position: absolute;
-  top: 80px;
-  left: 20px;
-}
-
-#messages div div {
-  font-size: 1.4em;
-  color: #111;
-  margin-bottom: 5px;
-  padding: 15px;
-  opacity: 0.7;
-  float: left;
-}
-
-.fadeOut {
-  opacity: 0!important;
-}
-
-#toolbar {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    display: inline-block;
-}
-
-#toolbar .toolbarButton {
-    height: 80px;
-    width: 80px;
-    font-size: 22px;
-    font-weight: bold;
-    color: #fff;
-}
-
-#toolbar .toolbarButton div {
-    text-align: center;
-}
-
-.disabled {
-    opacity: 0.5;
-}
-
-.sprite {
-  background: url('../js/game/data/g/sprite.png') no-repeat top left;
-}
-
-.spriteBefore:before {
-  float: left;
-  content: "";
-  background: url('../js/game/data/g/sprite.png') no-repeat top left;
-  margin-right: 5px;
-}
-
-
-#population {
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 120px;
-    height: 60px;
-    text-align: center;
-}
-
-#population div {
-    display: inline-block;
-    font-size: 16px;
-    font-weight: bold;
-    color: #fff;
-    line-height: 60px;
-    vertical-align: middle;
-}
-
-#chat {
-  position: absolute;
-  font-size: 1.2em;
-  color: #ddd;
-  background: #000;
-  opacity: 0.8;
-  padding: 10px 10px 0px 10px;
-  border-radius: 5px;
 }
 
 
@@ -139,6 +40,12 @@ canvas {
     left:0;
     width:100%;
     height:100%;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .blackBackground {
@@ -312,30 +219,6 @@ a:hover {
     font-size: 1.5em;
 }
 
-#endGame {
-    opacity: 0.8;
-    text-align: center;
-}
-
-.victory {
-    color : #0d0;
-}
-
-.defeat {
-    color : #d00;
-}
-
-#returnHome {
-    position: absolute;
-    bottom: 30px;
-    width: 100%;
-    text-align: center;
-}
-
-#returnHome a {
-    font-size: 2.2em;
-}
-
 #playOffline {
   position: absolute;
   bottom: 50px;
@@ -363,6 +246,170 @@ a:hover {
 
 #errorWebGL a:hover {
   color: #111;
+}
+
+#menu {
+  position: absolute;
+  top: 3px;
+  right: 3px;
+}
+
+#menu #playerName input {
+  background: none;
+  border: none;
+  box-shadow: none;
+  font-weight: bold;
+  font-size: 1.4em;
+  cursor: pointer;
+  -webkit-text-fill-color: #ddd;
+  -webkit-text-stroke-color: #111;
+  -webkit-text-stroke-width: 0.6px;
+  text-transform: uppercase;
+  font-family: 'godofwar';
+  text-align: right;
+  width: auto;
+}
+
+#menu #playerName input:hover {
+  -webkit-text-fill-color: #111;
+}
+
+
+.hide {
+  display: none!important;
+}
+
+
+
+/* IN GAME */
+
+#endGame {
+    opacity: 0.8;
+    text-align: center;
+}
+
+.victory {
+    color : #0d0;
+}
+
+.defeat {
+    color : #d00;
+}
+
+#returnHome {
+    position: absolute;
+    bottom: 30px;
+    width: 100%;
+    text-align: center;
+}
+
+#returnHome a {
+    font-size: 2.2em;
+}
+
+#resources {
+    position: absolute;
+    top: 2px;
+    left: 124px;
+    width: 210px;
+    height: 60px;
+    text-align: center;
+}
+
+#resources div {
+    display: inline-block;
+    width: 50%;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    line-height: 60px;
+}
+
+#resources div div {
+    width: auto;
+}
+
+#messages {
+  position: absolute;
+  top: 80px;
+  left: 20px;
+}
+
+#messages div div {
+  font-size: 1.4em;
+  color: #111;
+  margin-bottom: 5px;
+  padding: 15px;
+  opacity: 0.7;
+  float: left;
+}
+
+.fadeOut {
+  opacity: 0!important;
+}
+
+#toolbar {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    display: inline-block;
+}
+
+#toolbar .toolbarButton {
+    height: 80px;
+    width: 80px;
+    font-size: 22px;
+    font-weight: bold;
+    color: #fff;
+}
+
+#toolbar .toolbarButton div {
+    text-align: center;
+}
+
+.disabled {
+    opacity: 0.5;
+}
+
+.sprite {
+  background: url('../js/game/data/g/sprite.png') no-repeat top left;
+}
+
+.spriteBefore:before {
+  float: left;
+  content: "";
+  background: url('../js/game/data/g/sprite.png') no-repeat top left;
+  margin-right: 5px;
+}
+
+
+#population {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 120px;
+    height: 60px;
+    text-align: center;
+}
+
+#population div {
+    display: inline-block;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    line-height: 60px;
+    vertical-align: middle;
+}
+
+#chat {
+  position: absolute;
+  font-size: 1.2em;
+  color: #ddd;
+  background: #000;
+  opacity: 0.8;
+  padding: 10px 10px 0px 10px;
+  border-radius: 5px;
 }
 
 #endGameStats {
@@ -538,9 +585,36 @@ a:hover {
   border-radius: 4px;
 }
 
+#diplomacy {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  color: #111;
+}
 
+.smallButton {
+    display: inline-block;
+    font-size: 15px;
+    text-align: center;
+    padding: 4px;
+    -webkit-box-shadow:0px 0px 6px 3px rgba(0, 0, 0, 0.6);
+    box-shadow:0px 0px 6px 3px rgba(0, 0, 0, 0.6);
+    margin-right: 10px;
+    border-radius: 3px;
+}
 
+#diplomacy .customRadio {
+  opacity: 0.2;
+}
 
+#diplomacy .checked {
+  background: #eee;
+  opacity: 0.6!important;
+}
+
+#diplomacy .customRadio:hover {
+    background: #ccc;
+}
 
 
 

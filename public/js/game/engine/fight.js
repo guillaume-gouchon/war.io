@@ -40,6 +40,12 @@ fightLogic.attack = function (game, attacker, target) {
 	if (target.f == gameData.FAMILIES.unit && target.a == null && (target.mt == null || target.mt.x == null)) {
 		AI.targetReaction(game, target, attacker);
 	}
+
+	//change player's rank
+	var rank = game.players[target.o].ra[attacker.o];
+	if (rank != gameData.RANKS.enemy) {
+		rank = gameData.RANKS.enemy;
+	}
 }
 
 
@@ -48,10 +54,10 @@ fightLogic.attack = function (game, attacker, target) {
 *	Increments frag if any attacker.
 */
 fightLogic.applyDamage = function (game, damage, target, fragOwner) {
-	target.l = target.l - damage;
+	target.l -= damage;
 	//check if dead
 	if(fragOwner != null && target.l <= 0) {
-		fragOwner.frag = fragOwner.frag + 1;
+		fragOwner.fr = fragOwner.fr + 1;
 		fragOwner.a = null;
 		tools.addUniqueElementToArray(game.modified, fragOwner);
 		target.murderer = fragOwner.o;

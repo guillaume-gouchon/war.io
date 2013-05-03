@@ -225,9 +225,10 @@ userInput.onEnterKey = function () {
 		}
 		$('input', '#chat').val('');
 	} else {
+		$('#chat').removeClass('hide');
 		$('#chat').css('top', (window.innerHeight - $('#chat').height()) / 2);
 		$('#chat').css('left', (window.innerWidth - $('#chat').width()) / 2);
-		$('#chat').removeClass('hide');
+        $('input', '#chat')[0].focus();
 	}
 	this.isChatWindowOpen = !this.isChatWindowOpen;
 }

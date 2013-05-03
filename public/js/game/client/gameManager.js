@@ -8,6 +8,7 @@ gameManager.isOfflineGame = false;
 gameManager.offlineLoop = null;
 gameManager.offlineNbPlayers = 2;
 gameManager.playerId = null;
+gameManager.playerName = null;
 
 
 /**
@@ -16,6 +17,7 @@ gameManager.playerId = null;
 gameManager.initGame = function (gameInitData) {
 	if (gameContent.game == null) {//avoids to run the game twice
 		this.playerId = this.getPlayerId();
+		this.playerName = this.getPlayerName();
 		if(this.isOfflineGame) {
 			this.initOfflineGame(gameInitData);
 		} else {
@@ -57,8 +59,10 @@ gameManager.initOfflineGame = function (gameInitData) {
 	gameContent.myArmy = 0;
 	gameContent.players = [];
 	gameContent.players.push(new gameData.Player(0, 0, gameInitData.army));
+	gameContent.players[0].n = this.playerName;
 	for (var i = 1; i < this.offlineNbPlayers; i++) {
 		gameContent.players.push(new gameData.Player(0, i, 0));
+		gameContent.players[i].n = 'Olivier !';
 	}
   	gameContent.map = new gameData.Map(gameData.MAP_TYPES[gameInitData.mapType],
                     gameData.MAP_SIZES[gameInitData.mapSize],
@@ -80,7 +84,8 @@ gameManager.connectToServer = function (gameInitData) {
 		var userData = {
 			player: {
 				playerId: gameManager.playerId,
-				army: gameInitData.army
+				army: gameInitData.army,
+				name: gameManager.playerName
 			},
 			game: gameInitData
 		};
@@ -136,6 +141,19 @@ gameManager.getPlayerId = function () {
 	return playerId;
 }
 
+gameManager.getPlayerName = function () {
+	var playerName = utils.readCookie('rts_player_name');
+	if (playerName == null) {
+		return 	'Bobby ' + parseInt(Math.random() * 100);
+	} else {
+		return playerName;
+	}
+}
+
+gameManager.updatePlayerName = function (newName) {
+	utils.createCookie('rts_player_name', newName);
+	this.playerName = newName;
+}
 
 gameManager.sendOrderToEngine = function (type, params) {
 	if (this.isOfflineGame) {
@@ -174,13 +192,7 @@ gameManager.showStats = function (stats) {
 	$('table', '#endGameStats').css('width', window.innerWidth - 60);
 	for (var i in stats) {
 		var statPlayer = stats[i];
-		var playerName;
-		if (i == gameContent.myArmy) {
-			playerName = 'You';
-		} else {
-			var playerNumber = 1 + parseInt(i);
-			playerName = 'Player ' + playerNumber;
-		}
+		var playerName = gameContent.players[i].n;
 		$('#tableBody').append('<tr class="' + gameSurface.PLAYERS_COLORS[i] + '"><td>' +  
 			playerName + '</td><td>' +  
 			statPlayer.killed + '</td><td>' +  

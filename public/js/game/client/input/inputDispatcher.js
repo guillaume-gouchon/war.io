@@ -101,13 +101,6 @@ inputDispatcher.onMouseWheel = function (event) {
 inputDispatcher.onKeyDown = function (event) {
 	var keyCode = (window.event) ? event.which : event.keyCode;
 	switch(keyCode) {
-		case 8 :
-			//back key
-			if (userInput.isChatWindowOpen) {
-				var str = $('input', '#chat').val();
-				$('input', '#chat').val(str.substring(0, str.length - 1));
-			}
-			return false;
 		case 13 :
 			userInput.onEnterKey();
 			return true;
@@ -138,9 +131,6 @@ inputDispatcher.onKeyDown = function (event) {
 				return false;
 			}
 		}
-	} else {
-		var str = $('input', '#chat').val();
-		$('input', '#chat').val(str + String.fromCharCode(keyCode).toLowerCase());	
 	}
 
 	return true;

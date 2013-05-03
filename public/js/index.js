@@ -16,6 +16,20 @@ $('#footer').fadeIn();
 closePopups();
 
 
+//adds / update player's name
+$('input', '#playerName').val(gameManager.getPlayerName());
+$('input', '#playerName').change(function () {
+	gameManager.updatePlayerName($(this).val());
+});
+$('input', '#playerName').click(function () {
+	$(this).select();
+});
+$('input', '#playerName').keydown(function (e) {
+	if (e.which == 13) {
+		$(this).blur();
+	}
+});
+
 var hasClicked = false;
 var gameInitData = {};
 var timeout = null;
@@ -39,6 +53,7 @@ $('.bigButton', '#armies').bind(inputEvents, function () {
 		$('#armies').removeClass('moveToTop');
 		$('#footer').fadeOut();
 		$('#loading').removeClass('hide').addClass('moveToLeft');
+		$('#playOffline').removeClass('hide');
 
 		//check if webGL is supported
 		if (!isWebGLEnabled()) {

@@ -45,6 +45,7 @@ GUI.init = function () {
 	this.createResourcesBar();
 	this.initInfobar();
 	this.initMinimap();
+	this.initDiplomacy();
 }
 
 
@@ -342,4 +343,42 @@ GUI.updateElementOnMinimap = function (element) {
 */
 GUI.removeElementFromMinimap = function (element) {
 	$('#minimap' + element.id).remove();
+}
+
+
+/**
+*	Initializes the diplomacy section.
+*/
+GUI.initDiplomacy = function () {
+	for (var i in gameContent.players) {
+		if (i != gameContent.myArmy) {
+			var player = gameContent.players[i];
+			$('#diplomacy').append('<div id="diplomacy' + i + '">'
+				+ '<div class="smallButton ' + gameSurface.PLAYERS_COLORS[i] + '">' + player.n + '</div>'
+				+ '<div class="smallButton customRadio white" data-name="diplomacy' + i + '" data-value="' + gameData.RANKS.neutral + '">Neutral</div>'
+				+ '<div class="smallButton customRadio white" data-name="diplomacy' + i + '" data-value="' + gameData.RANKS.enemy + '">Enemy</div>'
+				+ '</div>');
+			this.updateDiplomacyButtons(player);
+		}
+	}
+
+	//add event
+	$('.customRadio', '#diplomacy').click(function () {
+		$('.customRadio[data-name="' + $(this).attr('data-name') + '"]').removeClass('checked');
+		$(this).addClass('checked');
+		gameManager.sendOrderToEngine(order.TYPES.diplomacy, [gameContent.myArmy, $(this).attr('data-name').replace('diplomacy', ''), $(this).attr('data-value')]);
+	});
+}
+
+
+/**
+*	Updates the diplomacy buttons for one player.
+*/
+GUI.updateDiplomacyButtons = function (player) {
+	$('.customRadio', '#diplomacy' + player.o).removeClass('checked');
+	if (gameContent.players[gameContent.myArmy].ra[player.o] == gameData.RANKS.neutral) {
+		$('.customRadio', '#diplomacy' + player.o).first().addClass('checked');
+	} else {
+		$('.customRadio', '#diplomacy' + player.o).last().addClass('checked');
+	}
 }

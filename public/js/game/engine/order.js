@@ -9,7 +9,8 @@ order.TYPES = {
 	buildThatHere : 1, 
 	buy : 2,
 	cancelConstruction : 3,
-	chat : 4
+	chat : 4,
+	diplomacy : 5
 }
 
 
@@ -29,6 +30,9 @@ order.dispatchReceivedOrder = function (game, type, params) {
 			break;
 		case 4 :
 			this.receiveChatMessage(game, params[0], params[1]);
+			break;
+		case 5 :
+			this.updateDiplomacy(game, params[0], params[1], params[2]);
 			break;
 	}
 }
@@ -110,6 +114,11 @@ order.gather = function (game, units, terrain) {
 
 order.receiveChatMessage = function (game, player, message) {
 	game.chat.push({ o: player, text: message });
+}
+
+
+order.updateDiplomacy = function (game, fromPlayer, toPlayer, newRank) {
+	game.players[fromPlayer].ra[toPlayer] = newRank;
 }
 
 

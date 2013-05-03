@@ -318,7 +318,7 @@ gameSurface.showMessage = function (message, color) {
 		.onComplete(function () {
 			$('#message' + message.id).removeClass('fadeOut');
 		}).start();
-		var tweenFadeOut = new TWEEN.Tween({alpha:0}).to({alpha:1}, 8000)
+		var tweenFadeOut = new TWEEN.Tween({alpha:0}).to({alpha:1}, 9000)
 		.onComplete(function () {
 			$('#message' + message.id).addClass('fadeOut');
 		});
