@@ -173,7 +173,7 @@ gameManager.endGame = function (status) {
 		$('#endGameMessage').addClass('defeat');
 		$('#endGameMessage').html('Defeat...');
 	}
-	$('#endGame').fadeIn();
+	$('#endGame').fadeIn().removeClass('hide');
 	$('#endGameMessage').addClass('moveToLeft');
 
 	if (this.isOfflineGame) {

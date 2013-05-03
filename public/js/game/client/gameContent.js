@@ -86,7 +86,7 @@ gameContent.update = function (data) {
 	for (var i in this.players) {
 		for (var j in this.players[i].ra) {
 			if (this.players[i].ra[j] != data.players[i].ra[j]) {
-				this.rankHasChanged(data.players[i], j);
+				this.rankHasChanged(data.players[i], data.players[j]);
 			}
 		}
 	}
