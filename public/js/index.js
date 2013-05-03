@@ -13,8 +13,6 @@ initArmyChooser();
 $('#chooseArmy').addClass('moveToLeft');
 $('#armies').addClass('moveToTop');
 $('#footer').fadeIn();
-closePopups();
-
 
 //adds / update player's name
 $('input', '#playerName').val(gameManager.getPlayerName());
@@ -108,10 +106,8 @@ $('a', '#footer').bind(inputEvents, function () {
 	}
 
 	//animation
-	element.fadeIn();
-	element.css('top', window.innerHeight / 2 - element.height() / 2);
-	element.css('left', window.innerWidth / 2 - element.width() / 2);
-	element.removeClass('hide');
+	element.css('top', (window.innerHeight - element.height()) / 2);
+	element.css('left', (window.innerWidth - element.width()) / 2);
 
 	return false;
 });
@@ -127,14 +123,24 @@ $('.customRadio').bind(inputEvents, function () {
 	$(this).addClass('checked');
 });
 
+var musicEnabled = false;
+
+//music button
+$('#music').click(function () {
+	if(musicEnabled) {
+		$('#music').removeClass('musicEnabled').html('Off');
+	} else {
+		$('#music').addClass('musicEnabled').html('On');
+	}
+	musicEnabled = !musicEnabled;
+});
+
 
 preloadImages();
 
 
 function closePopups() {
-	$('.popup').fadeOut();
 	$('.popup').css('top', -500);
-	$('.popup').css('left', window.innerWidth / 2);
 }
 
 function initArmyChooser () {

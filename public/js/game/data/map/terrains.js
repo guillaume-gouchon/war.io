@@ -10,19 +10,9 @@ gameData.ELEMENTS[gameData.FAMILIES.terrain].push(
 		g : 'tree.js',
 		image : 'forest.png'
 	},
-	{
-		name : 'Stone Mine',
-		t : 1,
-		shape : [[1, 1, 1], [1, 1, 1], [1, 1, 1]],
-		canMoveIn : false,
-		//resourceType : gameData.RESOURCES.stone.id,
-		ra : 500,
-		g : 'goldmine.js',
-		image : 'gold-mine.png'
-	},
 	{	
 		name : 'Gold Mine',
-		t : 2,
+		t : 1,
 		shape : [[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1]],
 		canMoveIn : false,
 		resourceType : gameData.RESOURCES.gold.id,

@@ -90,7 +90,7 @@ gameData.ELEMENTS[gameData.FAMILIES.unit].push(
 		weaponType : fightLogic.WEAPON_TYPES.piercing,
 		armorType : fightLogic.ARMOR_TYPES.light,
 		pop : 1,
-		needs : [{t : gameData.RESOURCES.gold.id, value : 60}],
+		needs : [{t : gameData.RESOURCES.gold.id, value : 60}, {t : gameData.RESOURCES.wood.id, value : 20}],
 		g : 'bowman.js',
 		image: 'bowman.png',
 		height: 6,

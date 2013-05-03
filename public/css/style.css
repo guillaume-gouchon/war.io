@@ -163,6 +163,9 @@ canvas {
     text-align: center;
     width: 100%;
     display: none;
+    background-color: #111;
+    opacity: 0.8;
+    padding-top: 2px;
 }
 
 #footer a {
@@ -170,16 +173,17 @@ canvas {
 }
 
 a {
-  color: #ddd;
+  color: #eee;
 }
 
 a:hover {
   text-decoration: none;
-  color: #111;
+  color: #aaa;
 }
 
 .popup {
     position: absolute;
+    top: -500px;
     background: #000;
     padding: 25px;
     -webkit-box-shadow:-10px -10px 40px 20px rgba(0, 0, 0, 0.7);
@@ -204,7 +208,7 @@ a:hover {
 }
 
 #credits {
-  width: 510px;
+  width: 600px;
 }
 
 #credits a {
@@ -250,30 +254,55 @@ a:hover {
 
 #menu {
   position: absolute;
-  top: 3px;
-  right: 3px;
+  top: 0px;
+  right: 0px;
+  height: 35px;
+  padding: 3px;
+  background: #111;
+  opacity: 0.7;
+  border-radius: 0px 0px 0px 5px;
+}
+
+#menu div {
+  display: inline-block;
+  height: 35px;
+  padding: 3px;
+  font-weight: bold;
+  color: #eee;
+  text-transform: uppercase;
+}
+
+#menu #playerName {
+  display: inline-table;
+}
+
+#menu #playerName input:hover {
+  color: #aaa;
 }
 
 #menu #playerName input {
+  width: 200px;
   background: none;
   border: none;
   box-shadow: none;
   font-weight: bold;
-  font-size: 1.4em;
-  cursor: pointer;
-  -webkit-text-fill-color: #ddd;
-  -webkit-text-stroke-color: #111;
-  -webkit-text-stroke-width: 0.6px;
-  text-transform: uppercase;
+  font-size: 26px;
+  color: #eee;
   font-family: 'godofwar';
-  text-align: right;
-  width: auto;
+  cursor: pointer;
 }
 
-#menu #playerName input:hover {
-  -webkit-text-fill-color: #111;
+#menu #music {
+  width: 95px;
+  cursor: pointer;
+  color: #C41616;
+  line-height: 33px;
+  font-size: 21px;
 }
 
+#menu #music.musicEnabled {
+  color: #70CC83;
+}
 
 .hide {
   display: none!important;
@@ -337,10 +366,10 @@ a:hover {
 }
 
 #messages div div {
-  font-size: 1.4em;
+  font-size: 1.2em;
   color: #111;
   margin-bottom: 5px;
-  padding: 15px;
+  padding: 10px;
   opacity: 0.7;
   float: left;
 }
@@ -964,7 +993,7 @@ a:hover {
 .sprite-bowman{ background-position: -918px 0; width: 50px; height: 50px; } 
 .sprite-bowman15{ background-position: -978px 0; width: 15px; height: 15px; } 
 .sprite-boxNormal{ background-position: -1093px 0; width: 80px; height: 80px; } 
-.sprite-boxSelect{ background-position: -1183px 0!important;} 
+.sprite-boxSelect{ background-position: -1183px 0; width: 80px; height: 80px; } 
 .sprite-build{ background-position: -1273px 0; width: 50px; height: 50px; } 
 .sprite-cancel{ background-position: -1333px 0; width: 50px; height: 50px; } 
 .sprite-casern{ background-position: -1393px 0; width: 50px; height: 50px; } 
@@ -979,16 +1008,20 @@ a:hover {
 .sprite-knight{ background-position: -1846px 0; width: 50px; height: 50px; } 
 .sprite-knight15{ background-position: -1906px 0; width: 15px; height: 15px; } 
 .sprite-minimapLocation{ background-position: -1931px 0; width: 16px; height: 16px; } 
-.sprite-peon{ background-position: -1957px 0; width: 50px; height: 50px; } 
-.sprite-peon15{ background-position: 0 -150px; width: 15px; height: 15px; } 
-.sprite-pop20:before{ background-position: -25px -150px; width: 20px; height: 20px; } 
-.sprite-population:before{ background-position: -55px -150px; width: 28px; height: 28px; } 
-.sprite-range:before{ background-position: -93px -150px; width: 20px; height: 20px; } 
-.sprite-stone:before{ background-position: -123px -150px; width: 40px; height: 40px; } 
-.sprite-swordsman{ background-position: -173px -150px; width: 50px; height: 50px; } 
-.sprite-swordsman15{ background-position: -233px -150px; width: 15px; height: 15px; } 
-.sprite-wood:before{ background-position: -258px -150px; width: 28px; height: 28px; } 
-.sprite-wood15:before{ background-position: -296px -150px; width: 15px; height: 15px; } 
+.sprite-music:before{ background-position: -1957px 0; width: 30px; height: 30px; } 
+.sprite-peon{ background-position: 0 -150px; width: 50px; height: 50px; } 
+.sprite-peon15{ background-position: -60px -150px; width: 15px; height: 15px; } 
+.sprite-playerName:before{ background-position: -85px -150px; width: 30px; height: 30px; } 
+.sprite-pop20:before{ background-position: -125px -150px; width: 20px; height: 20px; } 
+.sprite-population:before{ background-position: -155px -150px; width: 28px; height: 28px; } 
+.sprite-range:before{ background-position: -193px -150px; width: 20px; height: 20px; } 
+.sprite-stone:before{ background-position: -223px -150px; width: 40px; height: 40px; } 
+.sprite-swordsman{ background-position: -273px -150px; width: 50px; height: 50px; } 
+.sprite-swordsman15{ background-position: -333px -150px; width: 15px; height: 15px; } 
+.sprite-tower{ background-position: -358px -150px; width: 50px; height: 50px; } 
+.sprite-wood:before{ background-position: -418px -150px; width: 28px; height: 28px; } 
+.sprite-wood15:before{ background-position: -456px -150px; width: 15px; height: 15px; } 
+
 
 
 

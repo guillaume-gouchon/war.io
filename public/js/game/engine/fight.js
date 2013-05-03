@@ -20,10 +20,10 @@ fightLogic.ARMOR_TYPES = {
 }
 
 fightLogic.WEAPONS_EFFICIENCY = [
-	[1, 1, 1.5, 1, 0.5],
-	[1.5, 1.5, 0.5, 0.5, 0.3],
+	[1, 1, 1.5, 1, 0.3],
+	[1.5, 1.5, 0.5, 0.5, 0.15],
 	[1.5, 1, 0.5, 0.5, 2],
-	[1.5, 1.5, 1.5, 1.5, 0.3]
+	[1.5, 1.5, 1.5, 1.5, 0.15]
 ]
 
 
@@ -42,10 +42,7 @@ fightLogic.attack = function (game, attacker, target) {
 	}
 
 	//change player's rank
-	var rank = game.players[target.o].ra[attacker.o];
-	if (rank != gameData.RANKS.enemy) {
-		rank = gameData.RANKS.enemy;
-	}
+	game.players[target.o].ra[attacker.o] = gameData.RANKS.enemy;
 }
 
 

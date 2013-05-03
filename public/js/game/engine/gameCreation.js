@@ -144,9 +144,9 @@ gameCreation.createForest = function (game, from, to) {
 *	@param to : bottom right-handed corner
 */
 gameCreation.createGoldMine = function (game, map, from, to) {
-	var element = gameData.ELEMENTS[gameData.FAMILIES.terrain][0][2];
+	var element = gameData.ELEMENTS[gameData.FAMILIES.terrain][0][1];
 	var position = this.getRandomPositionInZoneForElement(element, from, to);
-	this.addGameElement(game, new gameData.Terrain(gameData.ELEMENTS[gameData.FAMILIES.terrain][0][2], position.x, position.y));
+	this.addGameElement(game, new gameData.Terrain(gameData.ELEMENTS[gameData.FAMILIES.terrain][0][1], position.x, position.y));
 }
 
 
