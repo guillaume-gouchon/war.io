@@ -21,6 +21,15 @@ userInput.clickToSelect = function (x, y) {
 
 	gameContent.selectionRectangle[0] = x;
 	gameContent.selectionRectangle[1] = y;
+
+	var intersect = gameSurface.getFirstIntersectObject(x, y);
+	if (intersect != null) {
+
+		if (intersect.object.elementId != null) {
+			gameContent.selected.push(intersect.object.elementId);
+			gameSurface.selectElement(intersect.object.elementId);
+		}
+	}
 }
 
 
