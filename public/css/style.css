@@ -645,6 +645,11 @@ a:hover {
     background: #ccc;
 }
 
+#selectionRectangle {
+  position: absolute;
+  border: 2px solid #5f5;
+  opacity: 0.8;
+}
 
 
 

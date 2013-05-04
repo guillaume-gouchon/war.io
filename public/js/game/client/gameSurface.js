@@ -25,9 +25,6 @@ gameSurface.SELECTION_ENEMY_COLOR = '#f00';
 gameSurface.SELECTION_ALLY_COLOR = '#0f0';
 gameSurface.SELECTION_NEUTRAL_COLOR = '#e3e314';
 gameSurface.CAMERA_INIT_ANGLE = 0.7;
-gameSurface.SELECTION_RECTANGLE_HEIGHT = 0.5 * gameSurface.PIXEL_BY_NODE;
-gameSurface.SELECTION_RECTANGLE_OPACITY = 0.5;
-gameSurface.SELECTION_RECTANGLE_COLOR = 0x000000;
 gameSurface.CAN_BUILD_CUBE_COLOR = 0x00ff00;
 gameSurface.CANNOT_BUILD_CUBE_COLOR = 0xff0000;
 gameSurface.BUILD_CUBE_OPACITY = 0.5;
@@ -64,7 +61,6 @@ gameSurface.orderFactor = -1;
 gameSurface.loader = null;
 gameSurface.projector = null;
 gameSurface.order = null;
-gameSurface.selectionRectangle = null;
 gameSurface.canBuildHereMaterial = null;
 gameSurface.cannotBuildHereMaterial = null;
 gameSurface.basicCubeGeometry = null;
@@ -186,11 +182,6 @@ gameSurface.createScene = function () {
 	this.order = new THREE.Mesh(new THREE.TorusGeometry(5, 2, 2, 6), new THREE.LineBasicMaterial( { color: '#0f0', opacity: this.ORDER_OPACITY, transparent: true} ));
 	this.order.visible = false;
 	scene.add(this.order);
-
-	//add selection rectangle
-	var geometry = new THREE.CubeGeometry(1, 1, this.SELECTION_RECTANGLE_HEIGHT);
-	this.selectionRectangle = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial( { color: this.SELECTION_RECTANGLE_COLOR, opacity: this.SELECTION_RECTANGLE_OPACITY, transparent: true } ));
-	scene.add(this.selectionRectangle);
 
 	//initialize basic materials and geometries
 	this.canBuildHereMaterial = new THREE.LineBasicMaterial({color: this.CAN_BUILD_CUBE_COLOR, opacity: this.BUILD_CUBE_OPACITY, transparent: true });

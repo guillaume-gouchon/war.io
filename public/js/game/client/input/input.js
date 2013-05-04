@@ -147,6 +147,7 @@ input.initTouch = function () {
 	});
 
 	$(document).hammer(hammerOptions).on('pinch', function (event) {
+		event.gesture.preventDefault();
 		var e = {
 			wheelDelta: (event.gesture.scale - 1) * 5
 		}

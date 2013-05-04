@@ -17,20 +17,10 @@ userInput.clickToSelect = function (x, y) {
 
 	//reset the selection rectangle
 	gameContent.selectionRectangle = [];
+	gameSurface.updateSelectionRectangle(-1, -1, -1, -1);
 
-	var intersect = gameSurface.getFirstIntersectObject(x, y);
-	if (intersect != null) {
-
-		if (intersect.object.elementId != null) {
-			gameContent.selected.push(intersect.object.elementId);
-			gameSurface.selectElement(intersect.object.elementId);
-		}
-
-		gameContent.selectionRectangle[0] = intersect.point.x;
-		gameContent.selectionRectangle[1] = intersect.point.y;
-		gameSurface.updateSelectionRectangle(-1, -1, -1, -1);
-	}
-
+	gameContent.selectionRectangle[0] = x;
+	gameContent.selectionRectangle[1] = y;
 }
 
 
@@ -47,18 +37,13 @@ userInput.selectGroup = function (x, y) {
 
 			var unitSelected = false;
 
-			var position = gameSurface.getFirstIntersectObject(x, y).point;
-			if (position.x < 0 || position.y < 0) {
-				return;
-			}
+			gameSurface.updateSelectionRectangle(gameContent.selectionRectangle[0], gameContent.selectionRectangle[1], x, y);
 
-			//get the last coordinates of the selection rectangle
-			gameContent.selectionRectangle[2] = position.x;
-			gameContent.selectionRectangle[3] = position.y;
-			gameSurface.updateSelectionRectangle(gameContent.selectionRectangle[0], gameContent.selectionRectangle[1], gameContent.selectionRectangle[2], gameContent.selectionRectangle[3]);
+			var position1 = gameSurface.getFirstIntersectObject(gameContent.selectionRectangle[0], gameContent.selectionRectangle[1]).point;
+			var position2 = gameSurface.getFirstIntersectObject(x, y).point;
 
-			var gamePosition1 = gameSurface.convertScenePositionToGamePosition({x: gameContent.selectionRectangle[0], y: gameContent.selectionRectangle[1]});
-			var gamePosition2 = gameSurface.convertScenePositionToGamePosition(position);
+			var gamePosition1 = gameSurface.convertScenePositionToGamePosition(position1);
+			var gamePosition2 = gameSurface.convertScenePositionToGamePosition(position2);
 			var selectionRectangleGamePosition = [
 				gamePosition1.x, gamePosition1.y, gamePosition2.x, gamePosition2.y
 			];

@@ -117,17 +117,11 @@ gameSurface.updateSelectionRectangle = function (x1, y1, x2, y2) {
 	var dx = Math.abs(x1 - x2);
 	var dy = Math.abs(y1 - y2);
 	if (dx > 0 &&  dy > 0) {
-		var position = {
-			x : Math.min(x1, x2) + dx / 2 + 1,
-			y : Math.min(y1, y2) + dy / 2,
-			z : 0
-		};
-		this.selectionRectangle.position = position;
-		this.selectionRectangle.scale.x = dx;
-		this.selectionRectangle.scale.y = dy;
-		this.selectionRectangle.visible = true;
+		$('#selectionRectangle').css('top', Math.min(y1, y2)).css('left', Math.min(x1, x2));
+		$('#selectionRectangle').css('width', dx).css('height', dy);
+		$('#selectionRectangle').removeClass('hide');
 	} else {
-		this.selectionRectangle.visible = false;
+		$('#selectionRectangle').addClass('hide');
 	}
 }
 
