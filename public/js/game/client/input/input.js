@@ -128,7 +128,7 @@ input.initTouch = function () {
 	$(document).hammer(hammerOptions).on('drag', function (event){
 		event.gesture.preventDefault();
 
-		if (event.gesture.touches.length == 1) {
+		if (event.gesture.touches.length == 2) {
 			//drag with only one finger
 			var e = {
 				dx: -event.gesture.deltaX * input.DRAG_FACTOR,
