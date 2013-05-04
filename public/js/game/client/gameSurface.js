@@ -434,7 +434,7 @@ gameSurface.updateElement = function (element) {
 	
 	var elementData = gameData.ELEMENTS[element.f][element.r][element.t];
 
-	if (element.f == gameData.FAMILIES.building && rank.isAlly(gameContent.players, gameContent.my, element)) {
+	if (element.f == gameData.FAMILIES.building && rank.isAlly(gameContent.players, gameContent.myArmy, element)) {
 		if (element.cp < 100) {
 			//update construction progress
 			d.position.z -= (100 - element.cp) / 20 * this.PIXEL_BY_NODE;
