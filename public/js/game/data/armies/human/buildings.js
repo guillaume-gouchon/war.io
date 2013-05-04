@@ -68,11 +68,11 @@ gameData.ELEMENTS[gameData.FAMILIES.building].push(
 		pop : 0,
 		g : 'tower.js',
 		image: 'tower.png',
-		height: 20,
+		height: 25,
 		buttonId : 13,
 		vision : 15,
 		attackSpeed : 1,
-		attack : 8, 
+		attack : 6, 
 		weaponType : fightLogic.WEAPON_TYPES.piercing,
 		range : 14
 	}

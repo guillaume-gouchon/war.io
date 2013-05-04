@@ -62,7 +62,7 @@ gameManager.initOfflineGame = function (gameInitData) {
 	gameContent.players[0].n = this.playerName;
 	for (var i = 1; i < this.offlineNbPlayers; i++) {
 		gameContent.players.push(new gameData.Player(0, i, 0));
-		gameContent.players[i].n = 'Olivier !';
+		gameContent.players[i].n = 'Olivier';
 	}
   	gameContent.map = new gameData.Map(gameData.MAP_TYPES[gameInitData.mapType],
                     gameData.MAP_SIZES[gameInitData.mapSize],

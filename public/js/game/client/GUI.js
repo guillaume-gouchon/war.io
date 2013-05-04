@@ -238,10 +238,11 @@ GUI.updateInfo = function () {
 			}
 		} else {
 			$('#life').html(element.l + '/' + elementData.l);
-			if (element.f == gameData.FAMILIES.building) {
+			if (element.f == gameData.FAMILIES.building && elementData.attack == null) {
 				//building
 				GUI.addStatLine("defense", elementData.defense, "Defense");
 				GUI.addStatLine("pop20", elementData.pop, "Max Population Bonus");
+
 				for (var i in element.q) {
 					var e = element.q[i];
 					var inConstruction = gameData.ELEMENTS[gameData.FAMILIES.unit][element.r][e];

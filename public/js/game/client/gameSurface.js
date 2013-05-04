@@ -15,7 +15,11 @@ gameSurface.ZOOM_MAX = 30;
 gameSurface.ZOOM_MIN = 150;
 gameSurface.ZOOM_STEP = 15;
 gameSurface.ZOOM_ROTATION_STEP = 0.1;
-gameSurface.ORDER_ANIMATION_SPEED = 0.05;
+gameSurface.ORDER_ANIMATION_SPEED = 0.015;
+gameSurface.ORDER_ROTATION_SPEED = 1 / 12;
+gameSurface.ORDER_SIZE_MAX = 0.9;
+gameSurface.ORDER_SIZE_MIN = 0.5;
+gameSurface.ORDER_OPACITY = 0.3;
 gameSurface.FOG_DENSITY = 0.0005;
 gameSurface.SELECTION_ENEMY_COLOR = '#f00';
 gameSurface.SELECTION_ALLY_COLOR = '#0f0';
@@ -38,7 +42,7 @@ gameSurface.BUILDING_INIT_Z = - 2 * gameSurface.PIXEL_BY_NODE;
 gameSurface.ARMIES_COLORS = ['_red', '_blu', '_gre', '_yel'];
 gameSurface.PLAYERS_COLORS = ['red', 'blue', 'green', 'yellow'];
 gameSurface.MOVEMENT_EXTRAPOLATION_ITERATION = 6;
-gameSurface.TERRAIN_HEIGHT_SMOOTH_FACTOR = 5;
+gameSurface.TERRAIN_HEIGHT_SMOOTH_FACTOR = 65;
 
 
 /**
@@ -47,11 +51,11 @@ gameSurface.TERRAIN_HEIGHT_SMOOTH_FACTOR = 5;
 gameSurface.iteration = 0;
 gameSurface.geometries = null;
 gameSurface.materials = null;
-gameSurface.terrain = null;
 gameSurface.scroll = [0, 0];
 gameSurface.isKeyboardScrolling = false;
 gameSurface.stuffToBeLoaded = 0;
 gameSurface.ex = [];
+gameSurface.orderFactor = -1;
 
 
 /**
@@ -168,16 +172,7 @@ gameSurface.createScene = function () {
 	scene.add(skybox);
 
 	//generate the terrain
-	var terrainGeneration = new TerrainGeneration(gameContent.map.size.x * this.PIXEL_BY_NODE, gameContent.map.size.y * this.PIXEL_BY_NODE, 64, this.TERRAIN_HEIGHT_SMOOTH_FACTOR);
-	this.terrain = terrainGeneration.diamondSquare();
 	var terrainGeometry = new THREE.PlaneGeometry(2200, 2200, 64, 64);
-	var index = 0;
-	for(var i = 0; i <= 64; i++) {
-		for(var j = 0; j <= 64; j++) {
-			//terrainGeometry.vertices[index].z = this.terrain[i][j];
-			index++;
-		}
-	}
 	var grassTexture  = THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'grass.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
 	grassTexture.wrapT = grassTexture.wrapS = THREE.RepeatWrapping;
 	var grassMaterial = new THREE.MeshBasicMaterial({ map: grassTexture });
@@ -188,8 +183,7 @@ gameSurface.createScene = function () {
     scene.add(planeSurface);
 
 	//add order element
-	this.order = this.drawSelectionCircle(this.PIXEL_BY_NODE / 2, '#0f0');
-	this.order.rotation.x = this.de2ra(90);
+	this.order = new THREE.Mesh(new THREE.TorusGeometry(5, 2, 2, 6), new THREE.LineBasicMaterial( { color: '#0f0', opacity: this.ORDER_OPACITY, transparent: true} ));
 	this.order.visible = false;
 	scene.add(this.order);
 
@@ -393,6 +387,11 @@ gameSurface.createObject = function (key, element) {
 		object.scale.x = 2;
 		object.scale.y = 2;
 		object.scale.z = 2;
+	} else if (key == 'tower.js') {
+		object.rotation.x = this.de2ra(90);
+		object.scale.x = 2;
+		object.scale.z = 2;
+		object.scale.y = 2;
 	}
 
 	if (element.f == gameData.FAMILIES.building) {
@@ -435,7 +434,7 @@ gameSurface.updateElement = function (element) {
 	
 	var elementData = gameData.ELEMENTS[element.f][element.r][element.t];
 
-	if (element.f == gameData.FAMILIES.building) {
+	if (element.f == gameData.FAMILIES.building && rank.isAlly(gameContent.players, gameContent.my, element)) {
 		if (element.cp < 100) {
 			//update construction progress
 			d.position.z -= (100 - element.cp) / 20 * this.PIXEL_BY_NODE;
@@ -537,77 +536,6 @@ gameSurface.getFirstIntersectObject = function (x, y) {
 	}
 	return null;
 }
-
-
-/*
- * @author Sann-Remy Chea / http://srchea.com/
- * Generate a random terrain using the diamond-square algorithm
- */
-
-TerrainGeneration = function(width, height, segments, smoothingFactor) {
-	this.width = width;
-	this.height = height;
-	this.segments = segments;
-	this.smoothingFactor = smoothingFactor;
-	
-	this.terrain = new Array();
-	
-	// internal functions
-	this._init = function() {
-		this.terrain = new Array();
-		for(var i = 0; i <= this.segments; i++) {
-			this.terrain[i] = new Array();
-			for(var j = 0; j <= this.segments; j++) {
-				this.terrain[i][j] = 0;
-			}
-		}
-	};
-	
-	this.diamondSquare = function() {
-		this._init();
-		
-		var size = this.segments+1;
-		for(var length = this.segments; length >= 2; length /= 2) {
-			var half = length/2;
-			this.smoothingFactor /= 2;
-
-			// generate the new square values
-			for(var x = 0; x < this.segments; x += length) {
-				for(var y = 0; y < this.segments; y += length) {
-					var average = this.terrain[x][y]+ // top left
-					this.terrain[x+length][y]+ // top right
-					this.terrain[x][y+length]+ // lower left
-					this.terrain[x+length][y+length]; // lower right
-					average /= 4;
-					average += 2*this.smoothingFactor*Math.random()-this.smoothingFactor;
-					
-					this.terrain[x+half][y+half] = average;
-				}
-			}
-
-			// generate the diamond values
-			for(var x = 0; x < this.segments; x += half) {
-				for(var y = (x+half)%length; y < this.segments; y += length) {
-					var average = this.terrain[(x-half+size)%size][y]+ // middle left
-							this.terrain[(x+half)%size][y]+ // middle right
-							this.terrain[x][(y+half)%size]+ // middle top
-							this.terrain[x][(y-half+size)%size]; // middle bottom
-					average /= 4;
-					average += 2*this.smoothingFactor*Math.random()-this.smoothingFactor;
-					
-					this.terrain[x][y] = average;
-
-					// values on the top and right edges
-					if(x === 0)
-						this.terrain[this.segments][y] = average;
-					if(y === 0)
-						this.terrain[x][this.segments] = average;
-				}
-			}
-		}
-		return this.terrain;
-	};
-};
 
 
 /**

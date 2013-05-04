@@ -5,8 +5,7 @@ gameSurface.setElementPosition = function (element, x, y) {
 	var position = this.convertGamePositionToScenePosition({x : x, y : y});
 	element.position.x = position.x;
 	element.position.y = position.y;
-	var z = this.terrain[parseInt(x * 65 / gameContent.map.size.x)][parseInt(y * 65 / gameContent.map.size.y)];
-	element.position.z = Math.abs(z);
+	element.position.z = 0.5;
 }
 
 
@@ -95,14 +94,15 @@ gameSurface.updateOrderPosition = function () {
 			position = (gameContent.gameElements[gameContent.selected[0]].s.rp != null ? gameContent.gameElements[gameContent.selected[0]].s.rp : gameContent.gameElements[gameContent.selected[0]].s.mt);
 		}
 		this.setElementPosition(this.order, position.x, position.y);
-		/*if (Math.random() < 0.5) {
-			this.order.scale.y += this.ORDER_ANIMATION_SPEED;
-			this.order.scale.z += this.ORDER_ANIMATION_SPEED;	
-		} else {
-			this.order.scale.y -= this.ORDER_ANIMATION_SPEED;
-			this.order.scale.z -= this.ORDER_ANIMATION_SPEED;
-		}*/
-		
+		this.order.rotation.z += gameSurface.ORDER_ROTATION_SPEED;
+		if (this.order.scale.x >= gameSurface.ORDER_SIZE_MAX) {
+			gameSurface.orderFactor = -1;
+				
+		} else if (this.order.scale.x <= gameSurface.ORDER_SIZE_MIN){
+			gameSurface.orderFactor = 1;
+		}
+		this.order.scale.x += this.ORDER_ANIMATION_SPEED * gameSurface.orderFactor;
+		this.order.scale.y += this.ORDER_ANIMATION_SPEED * gameSurface.orderFactor;
 		this.order.visible = true;
 	} else if (this.order.visible) {
 		this.order.visible = false;
