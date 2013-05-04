@@ -65,6 +65,7 @@ gameLogic.update = function (game) {
 */
 gameLogic.addNewBuildings = function (game) {
 	for (var i in game.newBuildings) {
+		game.newBuildings[i].l = 1;
 		gameCreation.addGameElement(game, game.newBuildings[i]);
 	}
 	game.newBuildings = [];
@@ -199,7 +200,8 @@ gameLogic.checkGameOver = function (game) {
 */
 gameLogic.protectAround = function (game, element) {
 	if ((element.mt == null || element.mt.x == null) && element.a == null && element.pa == null
-		&& !gameData.ELEMENTS[element.f][element.r][element.t].isBuilder) {
+		&& !gameData.ELEMENTS[element.f][element.r][element.t].isBuilder 
+		&& (element.f == gameData.FAMILIES.unit || element.cp >= 100)) {
 		AI.searchForNewEnemy(game, element);
 	}
 }

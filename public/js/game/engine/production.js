@@ -26,6 +26,8 @@ production.startConstruction = function (game, building) {
 */
 production.updateConstruction = function (game, building) {
 	building.cp += 100 / gameData.ELEMENTS[building.f][building.r][building.t].timeConstruction;
+	building.l += parseInt(gameData.ELEMENTS[building.f][building.r][building.t].l / gameData.ELEMENTS[building.f][building.r][building.t].timeConstruction);
+	building.l = Math.min(gameData.ELEMENTS[building.f][building.r][building.t].l, building.l);
 	if(building.cp >= 100) {
 		this.finishConstruction(game, building);
 	}

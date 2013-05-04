@@ -96,6 +96,6 @@ gameData.ELEMENTS[gameData.FAMILIES.unit].push(
 		height: 6,
 		range: 10,
 		buttonId : 104,
-		vision : 12
+		vision : 10
 	}
 ]);

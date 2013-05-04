@@ -70,7 +70,7 @@ gameData.ELEMENTS[gameData.FAMILIES.building].push(
 		image: 'tower.png',
 		height: 25,
 		buttonId : 13,
-		vision : 15,
+		vision : 14,
 		attackSpeed : 1,
 		attack : 6, 
 		weaponType : fightLogic.WEAPON_TYPES.piercing,
