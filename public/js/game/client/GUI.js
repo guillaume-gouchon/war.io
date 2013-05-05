@@ -331,10 +331,18 @@ GUI.addElementOnMinimap = function (element) {
 
 
 /**
+*	Adds an alert on the minimap.
+*/
+GUI.addAlertMinimap = function (element) {
+	$('#minimap' + element.id).html('!');
+}
+
+
+/**
 *	Updates an element on the minimap.
 */
 GUI.updateElementOnMinimap = function (element) {
-	$('#minimap' + element.id).css('left', (this.MINIMAP_SIZE) * element.p.x / gameContent.map.size.x);
+	$('#minimap' + element.id).html('&nbsp;').css('left', (this.MINIMAP_SIZE) * element.p.x / gameContent.map.size.x);
 	$('#minimap' + element.id).css('top', (this.MINIMAP_SIZE) * (1 - element.p.y / gameContent.map.size.y));
 }
 

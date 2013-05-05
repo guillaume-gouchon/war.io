@@ -407,8 +407,8 @@ gameSurface.createObject = function (key, element) {
 */
 gameSurface.updateElement = function (element) {
 	var d = gameContent.gameElements[element.id].d;
+	var s = gameContent.gameElements[element.id].s;
 	if (element.f == gameData.FAMILIES.unit) {
-		var s = gameContent.gameElements[element.id].s;
 		var dx = element.p.x - s.p.x;
 		var dy = element.p.y - s.p.y;
 
@@ -416,7 +416,6 @@ gameSurface.updateElement = function (element) {
 			this.updateOrientation(d, dx, dy);
 			this.extrapol(d, dx, dy);
 		}
-	
 	}
 
 	if (gameManager.isOfflineGame || element.f == gameData.FAMILIES.building) {
@@ -475,6 +474,11 @@ gameSurface.updateElement = function (element) {
 
 		//update minimap
 		GUI.updateElementOnMinimap(element);
+
+		if (element.o == gameContent.myArmy && s.l > element.l) {
+			//you are being attacked
+			GUI.addAlertMinimap(element);
+		}
 	}
 
 	gameContent.gameElements[element.id] = {d: d, s : element};
