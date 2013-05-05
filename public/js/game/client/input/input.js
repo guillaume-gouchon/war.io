@@ -95,12 +95,19 @@ input.DRAG_FACTOR = 1 / 35;
 
 
 /**
+*	TOUCH VARIABLES
+*/
+input.isSelectionRectangle = false;
+
+
+/**
 *	Binds the different needed touch inputs.
 */
 input.initTouch = function () {
 
 	var hammerOptions = {
-        tap_always: false
+        tap_always: false,
+        hold_timeout: 250
     };
 
     //fixes the mouse position in the center of the screen (used only for building construction)
@@ -123,26 +130,38 @@ input.initTouch = function () {
 			which: 1
 		};
 		inputDispatcher.onRightClick(e);
+		input.isSelectionRectangle = true;
 	});
 
 	$(document).hammer(hammerOptions).on('drag', function (event){
 		event.gesture.preventDefault();
+		if (gameContent.building != null) {
+			var e = {
+				x: event.gesture.center.pageX,
+				y: event.gesture.center.pageY
+			};
+			inputDispatcher.onMouseMove(e);
+		} else if (input.isSelectionRectangle) {
+			//selection rectangle
+			var e = {
+				x: event.gesture.center.pageX,
+				y: event.gesture.center.pageY
+			};
 
-		if (event.gesture.touches.length == 2) {
-			//drag with only one finger
+			if (gameContent.selectionRectangle.length == 0) {
+				gameContent.selectionRectangle[0] = e.x;
+				gameContent.selectionRectangle[1] = e.y;
+			}
+
+			userInput.selectGroup(e.x, e.y);
+			inputDispatcher.onMouseMove(e);
+		} else {
+			//drag map
 			var e = {
 				dx: -event.gesture.deltaX * input.DRAG_FACTOR,
 				dy: event.gesture.deltaY * input.DRAG_FACTOR
 			}
 			inputDispatcher.onTouchDrag(e);
-		} else {
-			//more than one finger
-			var e = {
-				x: event.gesture.center.pageX,
-				y: event.gesture.center.pageY
-			};
-			userInput.selectGroup(e.x, e.y);
-			inputDispatcher.onMouseMove(e);
 		}
 	});
 
@@ -153,8 +172,6 @@ input.initTouch = function () {
 		}
 		inputDispatcher.onMouseWheel(e);
 	});
-
-	
 
 	$(document).hammer(hammerOptions).on('doubletap', function (event) {
 		var e = {
@@ -167,6 +184,7 @@ input.initTouch = function () {
 
 	$(document).hammer(hammerOptions).on('release', function (event) {
   		inputDispatcher.onMouseUp(event);
+  		input.isSelectionRectangle = false;
 	});
 
 }
