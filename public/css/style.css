@@ -348,14 +348,21 @@ header #music.musicEnabled {
 
 #confirmGameCreation.bigButton {
   background: #5a5;
-  margin-top: 30px;
 }
 
 .backButton {
+  margin-top: 30px;
   background: #a22!important;
 }
 
+#lstGames .joinableGame span {
+  font-size: 0.7em;
+  opacity: 0.8;
+}
 
+#lstGames .backButton {
+  margin-top: 30px;
+}
 
 
 
