@@ -86,10 +86,26 @@ $('#confirmGameCreation').click(function () {
 	}, 600);
 });
 
+var socket = null;
+
 //join game
 $('#joinGameButton').click(function () {
-	$(this).unbind('click');
 	hideWelcomeScreen();
+	$('#joinGame').removeClass('hide').addClass('moveToTop');
+	$('#subTitle').html('Join a Game').removeClass('hide').addClass('moveToLeft');
+	socket = io.connect('http://warnode.com');
+	socket.on('askUserData', function (data) {
+		gameManager.socket.emit('userData', null);
+	});
+
+	socket.on('joinListUpdate', function (data) {
+		updateGamesList(data);
+	});
+});
+
+//confirm join game
+$('#joinGameButton').click(function () {
+	$(this).unbind('click');
 });
 
 //back home buttons
@@ -98,31 +114,12 @@ $('.backButton', '#setupNewGame').click(function () {
 	$('#setupNewGame').addClass('hide').removeClass('moveToTop');
 	showWelcomeScreen();
 });
-
-
-
-$('.bigButton', '#g').bind(inputEvents, function () {
-
-	if (!hasClicked) {
-		hasClicked = true;
-
-		//prepare game data
-		var army = $(this).attr('data-army');
-		
-
-		//animations
-		closePopups();
-		$('#mainTitle').addClass('hideToLeft');
-		$('#armies').removeClass('moveToTop');
-		$('footer').fadeOut();
-		$('#loadingTitle').removeClass('hide').addClass('moveToLeft');
-	
-
-		//wait for the end of the animations
-		timeout = setTimeout(function () {
-			$('#gameManagerButtons').addClass('hide');
-			gameManager.initGame(gameInitData);
-		}, 600);
+$('.backButton', '#joinGame').click(function () {
+	$('#subTitle').addClass('hide').removeClass('moveToLeft');
+	$('#joinGame').addClass('hide').removeClass('moveToTop');
+	showWelcomeScreen();
+	if (socket != null) {
+		socket.disconnect();
 	}
 });
 
@@ -236,4 +233,12 @@ function hideWelcomeScreen() {
 	$('#gameManagerButtons').removeClass('moveToTop');
 	$('header').fadeOut();
 	$('footer').fadeOut();
+}
+
+function updateGamesList(games) {
+	$('#joinGame').html('');
+	for (var i in games) {
+		var game = games[i];
+		$('#joinGame').append('<div class="bigButton">' + game.players[0].name + '<span>' + game.players.length + ' / ' + game.nbPlayers + '</span></div>')
+	}
 }

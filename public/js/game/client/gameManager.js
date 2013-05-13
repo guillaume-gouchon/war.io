@@ -201,7 +201,8 @@ gameManager.showStats = function (stats) {
 
 
 gameManager.updatePlayersInGame = function (data) {
-	$('#loadingLabel').html('Waiting for ' + (data.players.length - data.playersMax) + ' Players');
+	var playersNeeded = data.playersMax - data.players.length;
+	$('#loadingLabel').html('Waiting for ' + playersNeeded + ' player' + (playersNeeded > 1 ? 's' : ''));
 }
 
 
