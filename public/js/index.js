@@ -95,7 +95,7 @@ $('#joinGameButton').click(function () {
 	$('#subTitle').html('Join a Game').removeClass('hide').addClass('moveToLeft');
 	socket = io.connect('http://warnode.com');
 	socket.on('askUserData', function (data) {
-		gameManager.socket.emit('userData', null);
+		socket.emit('userData', null);
 	});
 
 	socket.on('joinListUpdate', function (data) {
