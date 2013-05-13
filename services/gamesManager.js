@@ -29,6 +29,7 @@ module.exports = function(app){
 	*	A player has created / joined a game.
 	*/
 	app.gamesManager.addPlayer = function (socket, data) {
+		console.log(data);
 		if (data.gameId != null) {
 			//join game
 			for (var i in app.gamesManager.games) {
