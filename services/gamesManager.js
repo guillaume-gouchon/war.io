@@ -297,9 +297,9 @@ module.exports = function(app){
 				availableGames.push(
 					{
 						id: game.id,
-						name: game.players[0].name,
+						name: game.players[0].n,
 						currentPlayers: game.players.length,
-						maxPlayers: game.maxPlayers
+						maxPlayers: game.nbPlayers
 					}
 				);
 			}

@@ -100,19 +100,19 @@ $('#joinGameButton').click(function () {
 
 	socket.on('joinListUpdate', function (data) {
 		updateGamesList(data);
+		
+		//confirm join game
+		$('.joinableGame', '#lstGames').click(function () {
+			$('#subTitle').addClass('hide');
+			$('#loadingTitle').removeClass('hide').addClass('moveToLeft');
+			$('#joinGame').removeClass('moveToTop');
+			gameInitData.army = $('.checked', '#factions').attr('data-army');
+			gameInitData.gameId = $(this).attr('data-id');
+			setTimeout(function () {
+				gameManager.initGame(gameInitData);
+			}, 600);
+		});
 	});
-});
-
-//confirm join game
-$('.joinableGame', '#joinGame').click(function () {
-	$('#subTitle').addClass('hide');
-	$('#loadingTitle').removeClass('hide').addClass('moveToLeft');
-	$('#joinGame').removeClass('moveToTop');
-	gameInitData.army = $('.checked', '#factions').attr('data-army');
-	gameInitData.gameId = $(this).attr('data-id');
-	setTimeout(function () {
-		gameManager.initGame(gameInitData);
-	}, 600);
 });
 
 //back home buttons
