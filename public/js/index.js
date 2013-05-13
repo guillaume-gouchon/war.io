@@ -89,6 +89,7 @@ var socket = null;
 
 //join game
 $('#joinGameButton').click(function () {
+	$('#lstGames').html('');
 	hideWelcomeScreen();
 	$('#joinGame').removeClass('hide').addClass('moveToTop');
 	$('#subTitle').html('Join a Game').removeClass('hide').addClass('moveToLeft');
@@ -100,7 +101,7 @@ $('#joinGameButton').click(function () {
 
 	socket.on('joinListUpdate', function (data) {
 		updateGamesList(data);
-		
+
 		//confirm join game
 		$('.joinableGame', '#lstGames').click(function () {
 			$('#subTitle').addClass('hide');
