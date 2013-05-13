@@ -358,6 +358,7 @@ header #music.musicEnabled {
 #lstGames .joinableGame span {
   font-size: 0.7em;
   opacity: 0.8;
+  margin-left: 40px;
 }
 
 #lstGames .backButton {

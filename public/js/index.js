@@ -242,4 +242,8 @@ function updateGamesList(games) {
 		var game = games[i];
 		$('#lstGames').append('<div class="joinableGame bigButton" data-id="' + game.id + '">' + game.name + '<span>' + game.currentPlayers + ' / ' + game.maxPlayers + '</span></div>')
 	}
+
+	if (games.length == 0) {
+		$('#lstGames').append('<div>No games available yet... create one !</div>');	
+	}
 }
