@@ -71,20 +71,16 @@ gameManager.initOfflineGame = function (gameInitData) {
 
 
 gameManager.connectToServer = function (gameInitData) {
-	gameManager.socket = io.connect('http://warnode.com');
 	
-	//the server asked for some player's info
-	this.socket.on('askUserData', function (data) {
-		var userData = {
-			player: {
-				playerId: gameManager.playerId,
-				army: gameInitData.army,
-				name: gameManager.playerName
-			},
-			game: gameInitData
-		};
-		gameManager.socket.emit('userData', userData);
-	});
+	var userData = {
+		player: {
+			playerId: this.playerId,
+			army: gameInitData.army,
+			name: this.playerName
+		},
+		game: gameInitData
+	};
+	this.socket.emit('userData', userData);
 
 	//a player has joined the game
 	this.socket.on('updateGamePlayers', function (data) {

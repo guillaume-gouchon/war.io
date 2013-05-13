@@ -85,7 +85,7 @@ $('#confirmGameCreation').click(function () {
 	}, 600);
 });
 
-var socket = null;
+gameManager.socket = io.connect('http://warnode.com');
 
 //join game
 $('#joinGameButton').click(function () {
@@ -93,13 +93,9 @@ $('#joinGameButton').click(function () {
 	hideWelcomeScreen();
 	$('#joinGame').removeClass('hide').addClass('moveToTop');
 	$('#subTitle').html('Join a Game').removeClass('hide').addClass('moveToLeft');
-	socket = io.connect('http://warnode.com');
-	//socket = io.connect('http://localhost:6969');
-	socket.on('askUserData', function (data) {
-		socket.emit('userData', null);
-	});
+	gameManager.socket.emit('userData', null);
 
-	socket.on('joinListUpdate', function (data) {
+	gameManager.socket.on('joinListUpdate', function (data) {
 		updateGamesList(data);
 
 		//confirm join game
@@ -126,9 +122,6 @@ $('.backButton', '#joinGame').click(function () {
 	$('#subTitle').addClass('hide').removeClass('moveToLeft');
 	$('#joinGame').addClass('hide').removeClass('moveToTop');
 	showWelcomeScreen();
-	if (socket != null) {
-		socket.disconnect();
-	}
 });
 
 //footer links

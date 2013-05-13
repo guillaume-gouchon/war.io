@@ -46,8 +46,6 @@ app.get('/', function (req, res) {
 //initialize socket.io
 io.sockets.on('connection', function (socket) {
 
-  socket.emit('askUserData', null);
-
   socket.on('userData', function (data) {
     if (data == null) {
       app.gamesManager.addPlayerToGamesUpdates(socket);

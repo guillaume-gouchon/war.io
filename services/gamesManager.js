@@ -32,8 +32,6 @@ module.exports = function(app){
 		if (data.gameId != null) {
 			//join game
 			for (var i in app.gamesManager.games) {
-				console.log(data.gameId);
-				console.log(app.gamesManager.games[i].id)
 				if (app.gamesManager.games[i].id == data.gameId) {
 					delete app.gamesManager.playersWaiting.id;
 					app.gamesManager.addPlayerToGame(socket, app.gamesManager.games[i], data.player);
@@ -257,7 +255,6 @@ module.exports = function(app){
 		        app.gamesManager.games[i].sockets[n] = null;
 		        if (app.gamesManager.isUselessGame(app.gamesManager.games[i])) {
 		        	console.log(new Date() + ' | Game '.info + app.gamesManager.games[i].id + ' has been removed'.info);
-		        	//TODO : save it
 		        	app.gamesManager.stopGame(i);
 		        }
 		        break;
