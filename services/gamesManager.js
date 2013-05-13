@@ -14,6 +14,12 @@ module.exports = function(app){
 
 
 	/**
+	* List of players in waiting list.
+	*/
+	app.gamesManager.playersWaiting = {};
+
+
+	/**
 	*	Main Loop.
 	*/
 	app.gamesManager.loop = null;
@@ -27,6 +33,7 @@ module.exports = function(app){
 			//join game
 			for (var i in app.gamesManager.games) {
 				if (app.gamesManager.games[i].id == data.gameId) {
+					delete app.gamesManager.playersWaiting.id;
 					app.gamesManager.addPlayerToGame(socket, app.gamesManager.games[i], data.player);
 					break;
 				}
@@ -53,6 +60,8 @@ module.exports = function(app){
 	                    gameData.VEGETATION_TYPES[gameInitialData.vegetation],
 	                    gameData.INITIAL_RESOURCES[gameInitialData.initialResources]);
 		app.gamesManager.games.push(game);
+
+		app.gamesManager.sendGameListUpdate();
 	}
 
 
@@ -80,6 +89,8 @@ module.exports = function(app){
 				);	
 			}
 		}
+
+		app.gamesManager.sendGameListUpdate();
 	}
 
 
@@ -156,6 +167,8 @@ module.exports = function(app){
 		if (app.gamesManager.loop == null) {
 			app.gamesManager.startLoop();
 		}
+
+		app.gamesManager.sendGameListUpdate();
 	}
 
 
@@ -263,4 +276,33 @@ module.exports = function(app){
 		return true;
 	}
 
+
+	/**
+	*
+	*/
+	app.gameManager.addPlayerToGamesUpdates = function (socket) {
+		app.gamesManager.playersWaiting[socket.id] = socket;
+		app.gamesManager.sendGameListUpdate(socket);
+	}
+
+
+	/**
+	*
+	*/
+	app.gamesManager.sendGameListUpdate = function (socket) {
+		var availableGames = []; 
+		for (var i in app.gamesManager.games) {
+			if (!app.gamesManager.games[i].hasStarted) {
+				availableGames.push(app.gamesManager.games[i]);
+			}
+		}
+
+		if (socket == null) {
+			for (var i in app.gamesManager.playersWaiting) {
+				app.gamesManager.playersWaiting[i].emit('joinListUpdate', availableGames);
+			}
+		} else {
+			socket.emit('joinListUpdate', availableGames);
+		}
+	}
 }

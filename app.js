@@ -49,7 +49,11 @@ io.sockets.on('connection', function (socket) {
   socket.emit('askUserData', null);
 
   socket.on('userData', function (data) {
-    app.gamesManager.addPlayer(socket, data);
+    if (data == null) {
+      app.gamesManager.addPlayerToGamesUpdates(socket);
+    } else {
+      app.gamesManager.addPlayer(socket, data);
+    }
   });
 
   socket.on('goOffline', function() {
