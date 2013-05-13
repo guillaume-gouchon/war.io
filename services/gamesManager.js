@@ -30,10 +30,10 @@ module.exports = function(app){
 	*/
 	app.gamesManager.addPlayer = function (socket, data) {
 		console.log(data);
-		if (data.gameId != null) {
+		if (data.game.gameId != null) {
 			//join game
 			for (var i in app.gamesManager.games) {
-				if (app.gamesManager.games[i].id == data.gameId) {
+				if (app.gamesManager.games[i].id == data.game.gameId) {
 					delete app.gamesManager.playersWaiting.id;
 					app.gamesManager.addPlayerToGame(socket, app.gamesManager.games[i], data.player);
 					break;

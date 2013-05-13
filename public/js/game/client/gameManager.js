@@ -134,7 +134,7 @@ gameManager.getPlayerId = function () {
 gameManager.getPlayerName = function () {
 	var playerName = utils.readCookie('rts_player_name');
 	if (playerName == null) {
-		return 	'Lord Bobby ' + parseInt(Math.random() * 100);
+		return 	'Lord Bobby ' + parseInt(Math.random() * 10);
 	} else {
 		return playerName;
 	}
