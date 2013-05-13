@@ -29,7 +29,6 @@ module.exports = function(app){
 	*	A player has created / joined a game.
 	*/
 	app.gamesManager.addPlayer = function (socket, data) {
-		console.log(data);
 		if (data.game.gameId != null) {
 			//join game
 			for (var i in app.gamesManager.games) {
@@ -257,6 +256,7 @@ module.exports = function(app){
 		        if (app.gamesManager.isUselessGame(app.gamesManager.games[i])) {
 		        	console.log(new Date() + ' | Game '.info + app.gamesManager.games[i].id + ' has been removed'.info);
 		        	app.gamesManager.stopGame(i);
+		        	app.gamesManager.sendGameListUpdate();
 		        }
 		        break;
 	      	}

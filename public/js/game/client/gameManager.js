@@ -80,7 +80,7 @@ gameManager.connectToServer = function (gameInitData) {
 		},
 		game: gameInitData
 	};
-	this.socket.emit('userData', userData);
+	this.socket.emit('enter', userData);
 
 	//a player has joined the game
 	this.socket.on('updateGamePlayers', function (data) {

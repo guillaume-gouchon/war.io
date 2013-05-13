@@ -93,7 +93,7 @@ $('#joinGameButton').click(function () {
 	hideWelcomeScreen();
 	$('#joinGame').removeClass('hide').addClass('moveToTop');
 	$('#subTitle').html('Join a Game').removeClass('hide').addClass('moveToLeft');
-	gameManager.socket.emit('userData', null);
+	gameManager.socket.emit('enter', null);
 
 	gameManager.socket.on('joinListUpdate', function (data) {
 		updateGamesList(data);
