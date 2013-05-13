@@ -51,6 +51,7 @@ production.cancelConstruction = function (game, building) {
 */
 production.finishConstruction = function (game, building) {
 	building.cp = 100;
+	building.l = gameData.ELEMENTS[building.f][building.r][building.t].l;
 
 	//udpates player's max population
 	if(gameData.ELEMENTS[building.f][building.r][building.t].pop > 0) {
