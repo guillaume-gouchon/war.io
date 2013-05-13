@@ -6,14 +6,6 @@ if ('ontouchstart' in window || window.DocumentTouch && document instanceof Docu
 	inputEvents = 'click';
 }
 
-//adds armies buttons
-initArmyChooser();
-
-//buttons entrance animation
-$('#chooseArmy').addClass('moveToLeft');
-$('#armies').addClass('moveToTop');
-$('#footer').fadeIn();
-
 //adds / update player's name
 $('input', '#playerName').val(gameManager.getPlayerName());
 $('input', '#playerName').change(function () {
@@ -28,67 +20,114 @@ $('input', '#playerName').keydown(function (e) {
 	}
 });
 
-var hasClicked = false;
-var gameInitData = {};
-var timeout = null;
+//init music button
+if(utils.readCookie('rts_music_enabled') == 'true') {
+	gameManager.musicEnabled = true;
+	$('#music').addClass('musicEnabled').html('On');
+}
 
-$('.bigButton', '#armies').bind(inputEvents, function () {
+//adds armies buttons
+initArmyChooser();
+$('div', '#factions').first().addClass('checked');
+
+
+$('#mainTitle').addClass('moveToLeft');
+
+//check if webGL is supported
+if (!isWebGLEnabled()) {
+	// Browser has no idea what WebGL is. Suggest they
+	// get a new browser by presenting the user with link to
+	// http://get.webgl.org
+	$('#errorWebGL').fadeIn();
+} else {
+	//buttons entrance
+	$('#gameManagerButtons').addClass('moveToTop');
+}
+
+
+var gameInitData = {
+	mapType: 'random',
+	mapSize: 'medium',
+	vegetation: 'standard',
+	initialResources: 'standard'
+};
+
+//solo mode
+$('#soloGameButton').click(function () {
+	$(this).unbind('click');
+	hideWelcomeScreen();
+	$('#loadingLabel').html('Loading');
+	$('#loadingTitle').removeClass('hide').addClass('moveToLeft');
+	gameInitData.army = $('.checked', '#factions').attr('data-army');
+	gameManager.isOfflineGame = true;
+	setTimeout(function () {
+		gameManager.initGame(gameInitData);
+	}, 600);
+});
+
+//create game
+$('#createGameButton').click(function () {
+	hideWelcomeScreen();
+	$('#setupNewGame').removeClass('hide').addClass('moveToTop');
+	$('#subTitle').html('How many players ?').removeClass('hide').addClass('moveToLeft');
+});
+
+//confirm game creation
+$('#confirmGameCreation').click(function () {
+	$(this).unbind('click');
+	$('#setupNewGame').removeClass('hide').addClass('moveToTop');
+	$('#subTitle').addClass('hide');
+	$('#loadingTitle').removeClass('hide').addClass('moveToLeft');
+	$('#setupNewGame').removeClass('moveToTop');
+	gameInitData.army = $('.checked', '#factions').attr('data-army');
+	gameInitData.nbPlayers = $('.checked', '#setupNewGame').attr('data-value');
+	setTimeout(function () {
+		gameManager.initGame(gameInitData);
+	}, 600);
+});
+
+//join game
+$('#joinGameButton').click(function () {
+	$(this).unbind('click');
+	hideWelcomeScreen();
+});
+
+//back home buttons
+$('.backButton', '#setupNewGame').click(function () {
+	$('#subTitle').addClass('hide').removeClass('moveToLeft');
+	$('#setupNewGame').addClass('hide').removeClass('moveToTop');
+	showWelcomeScreen();
+});
+
+
+
+$('.bigButton', '#g').bind(inputEvents, function () {
 
 	if (!hasClicked) {
 		hasClicked = true;
 
 		//prepare game data
 		var army = $(this).attr('data-army');
-		gameInitData.army = army;
-		gameInitData.mapType = 'random';
-		gameInitData.mapSize = 'medium';
-		gameInitData.vegetation = 'standard';
-		gameInitData.initialResources = 'standard';
+		
 
 		//animations
 		closePopups();
-		$('#chooseArmy').addClass('hideToLeft');
+		$('#mainTitle').addClass('hideToLeft');
 		$('#armies').removeClass('moveToTop');
-		$('#footer').fadeOut();
-		$('#loading').removeClass('hide').addClass('moveToLeft');
-		$('#playOffline').removeClass('hide');
-
-		//check if webGL is supported
-		if (!isWebGLEnabled()) {
-			// Browser has no idea what WebGL is. Suggest they
-			// get a new browser by presenting the user with link to
-			// http://get.webgl.org
-			$('#errorWebGL').fadeIn();
-			return;   
-		} else {
-			$('#playOffline').fadeIn();
-		}
+		$('footer').fadeOut();
+		$('#loadingTitle').removeClass('hide').addClass('moveToLeft');
+	
 
 		//wait for the end of the animations
 		timeout = setTimeout(function () {
-			$('#armies').addClass('hide');
+			$('#gameManagerButtons').addClass('hide');
 			gameManager.initGame(gameInitData);
 		}, 600);
 	}
 });
 
-var launchGame = false;
-
-//play in offline mode
-$('a', '#playOffline').bind(inputEvents, function () {
-	clearInterval(timeout);
-	if (!launchGame) {
-		launchGame = true;
-		$('#armies').addClass('hide');
-		$('#playOffline').fadeOut();
-		$('#nbPlayers').addClass('hide');
-		gameManager.isOfflineGame = true;
-		gameManager.initGame(gameInitData);
-	}
-});
-
 //footer links
-$('a', '#footer').bind(inputEvents, function () {
+$('a', 'footer').bind(inputEvents, function () {
 	
 	closePopups();
 
@@ -102,6 +141,12 @@ $('a', '#footer').bind(inputEvents, function () {
 			break;
 		case 2:
 			element = $('#share');
+			break;
+		case 3:
+			element = $('#tutorial');
+			break;
+		case 4:
+			element = $('#devNotes');
 			break;
 	}
 
@@ -123,18 +168,16 @@ $('.customRadio').bind(inputEvents, function () {
 	$(this).addClass('checked');
 });
 
-var musicEnabled = false;
-
 //music button
 $('#music').click(function () {
-	if(musicEnabled) {
+	if(gameManager.musicEnabled) {
 		$('#music').removeClass('musicEnabled').html('Off');
 	} else {
 		$('#music').addClass('musicEnabled').html('On');
 	}
-	musicEnabled = !musicEnabled;
+	gameManager.musicEnabled = !gameManager.musicEnabled;
+	utils.createCookie('rts_music_enabled', gameManager.musicEnabled);
 });
-
 
 preloadImages();
 
@@ -146,12 +189,12 @@ function closePopups() {
 function initArmyChooser () {
 	for (var i in gameData.RACES) {
 		var army = gameData.RACES[i];
-		$('#armies').append(createArmyBox(army));
+		$('#factions').append(createArmyBox(army));
 	}
 }
 
 function createArmyBox (army) {
-	return '<div class="bigButton" data-army="' + army.id + '"><div class="spriteBefore sprite-' + army.image.replace('.png', '') + '">' + army.name + '</div></div>';
+	return '<div class="customRadio smallButton spriteBefore sprite-' + army.image.replace('.png', '') + '" data-army="' + army.id + '">' + army.name + '</div>';
 }
 
 function preloadImages() {
@@ -178,4 +221,19 @@ function isWebGLEnabled() {
 	} catch(e) { 
 		return false; 
 	}
+}
+
+function showWelcomeScreen() {
+	$('#mainTitle').removeClass('hideToLeft');
+	$('#gameManagerButtons').addClass('moveToTop');
+	$('header').fadeIn();
+	$('footer').fadeIn();
+}
+
+function hideWelcomeScreen() {
+	closePopups();
+	$('#mainTitle').addClass('hideToLeft');
+	$('#gameManagerButtons').removeClass('moveToTop');
+	$('header').fadeOut();
+	$('footer').fadeOut();
 }

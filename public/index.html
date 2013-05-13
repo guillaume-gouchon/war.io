@@ -41,28 +41,35 @@
 			<li><span>Image 05</span><div><h3></h3></div></li>
 		</ul>
 
-	  	<div id="chooseArmy" class="fullScreenTitle easeTransition" >Choose your army</div>
-	  	<div id="loading" class="fullScreenTitle easeTransition hide" >
+	  	<div id="mainTitle" class="fullScreenTitle easeTransition" >Welcome to WarNode !</div>
+	  	<div id="subTitle" class="fullScreenTitle easeTransition hide" ></div>
+
+	  	<div id="loadingTitle" class="fullScreenTitle easeTransition hide" >
 	  		<span id="loadingLabel">Waiting for Opponents</span><span class="one">.</span><span class="two">.</span><span class="three">.</span>​
 	  	</div>
 
-	  	<div id="nbPlayers" class="hide" >
-	  		<div class="bigButton customRadio" data-name="nbPlayers" data-value="2"/>2 players</div>
-	  		<div class="bigButton customRadio" data-name="nbPlayers" data-value="3"/>3 players</div>
-	  		<div class="bigButton customRadio checked" data-name="nbPlayers" data-value="4"/>4 players</div>
+	  	<div id="gameManagerButtons" class="bigButtonsChooser easeTransition">
+	  		<div id="createGameButton" class="bigButton">Create Game</div>
+	  		<div id="joinGameButton" class="bigButton">Join Game</div>
+			<div id="soloGameButton" class="bigButton">Solo Game</div>
+	  	</div>
+
+	  	<div id="setupNewGame" class="bigButtonsChooser easeTransition hide" >
+	  		<p>
+		  		<div class="bigButton customRadio checked" data-name="nbPlayers" data-value="2">2 players</div>
+		  		<div class="bigButton customRadio" data-name="nbPlayers" data-value="3">3 players</div>
+		  		<div class="bigButton customRadio" data-name="nbPlayers" data-value="4">4 players</div>
+		  	</p>
+		  	<p>
+		  		<div class="backButton bigButton">Back</div>
+		  		<div id="confirmGameCreation" class="bigButton">Create Game !</div>
+		  </p>
 	  	</div>
 
 	  	<div id="errorWebGL" class="hide" >
   			<p>Your browser does not support WebGL.</p> 
   			<p>Try <a href="http://google.com/chrome" target="_blank">Google Chrome</a> or <a href="http://get.webgl.org" target="_blank">follow this link</a> to know more !</p>
   		</div>
-
-	  	<div id="playOffline" class="hide" >
-  			<p><a href="#">Play Offline in Solo Mode </a></p>
-  			<p class="smallText">(no AI yet... so it may be quite boring !)</p>
-  		</div>
-
-	  	<div id="armies" class="easeTransition" ></div>
 
 	  	<div id="about" class="popup easeTransition" >
 	  		<h1>About WarNode</h1>
@@ -97,18 +104,38 @@
 			<span class='st_email_large' displayText='Email'></span>
 	  	</div>
 
-	  	<div id="footer" >
-	  		<a data-id="1" href="#">Credits</a>
-	  		<a id="linkAbout" data-id="0" href="#" >About WarNode</a>
-	  		<a data-id="2" href="#">Share</a>
+	  	<div id="tutorial" class="popup easeTransition">
+	  		<h1>How to Play ?</h1>
 	  	</div>
 
-	  	<div id="menu">
+	  	<div id="devNotes" class="popup easeTransition">
+	  		<h1>Upcoming Features</h1>
+	  		<ul>
+	  			<li>New Lands Elements</li>
+		  		<li>Fogs of War</li>
+		  		<li>AI Opponent</li>
+		  		<li>New Musics</li>
+		  		<li>New Faction ?</li>
+	  		</ul>
+	  	</div>
+
+	  	<header>
 	  		<div id="playerName" class="spriteBefore sprite-playerName">
 	  			<input type="text"/>
 	  		</div>
+		  	<div id="factions"></div>
 	  		<div id="music" class="spriteBefore sprite-music" >Off</div>
-	  	</div>
+	  	</header>
+
+	  	<footer>
+	  		<a data-id="3" href="#">How to Play ?</a>
+	  		<a data-id="4" href="#">Dev Notes</a>
+	  		<a id="linkAbout" data-id="0" href="#" >About WarNode</a>
+	  		<a data-id="1" href="#">Credits</a>
+	  		<a data-id="2" href="#">Invite your Friends !</a>
+	  	</footer>
+
+	  	
 	  </div>
 
 	  <div id="gui" class="fullScreen hide" onmousedown="return false">
@@ -136,9 +163,9 @@
 	  </div>
 
 
-	  	<div id="chat" class="hide">
-	  		<input class="input-xxlarge" type="text" placeholder="chat..."/>
-  		</div>
+	<div id="chat" class="hide">
+		<input class="input-xxlarge" type="text" placeholder="chat..."/>
+	</div>
 
 	  <div id="endGame" class="fullScreen blackBackground hide" >
 	  	<div id="endGameMessage" class="fullScreenTitle easeTransition"></div>

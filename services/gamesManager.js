@@ -20,47 +20,22 @@ module.exports = function(app){
 
 
 	/**
-	*	Dispatches a player in a game.
+	*	A player has created / joined a game.
 	*/
-	app.gamesManager.dispatchPlayer = function (socket, playerData) {
-		if (!app.gamesManager.isPlayerInGame(socket, playerData.player)) {
-			var lastGame = app.gamesManager.games[app.gamesManager.games.length - 1];
-			if (app.gamesManager.games.length == 0 || lastGame.players.length == lastGame.nbPlayers) {
-				//no room available, create a new game
-				app.gamesManager.createNewGame(playerData.game);
-				socket.emit('gameCreator', app.gamesManager.games[app.gamesManager.games.length - 1].id);
+	app.gamesManager.addPlayer = function (socket, data) {
+		if (data.gameId != null) {
+			//join game
+			for (var i in app.gamesManager.games) {
+				if (app.gamesManager.games[i].id == data.gameId) {
+					app.gamesManager.addPlayerToGame(socket, app.gamesManager.games[i], data.player);
+					break;
+				}
 			}
-
-			//add player to the last game
-			app.gamesManager.addPlayerToGame(socket, app.gamesManager.games[app.gamesManager.games.length - 1], playerData.player);
-		}		  
-	}
-
-
-	/**
-	*	Checks if the player was already in a game.
-	*/
-	app.gamesManager.isPlayerInGame = function (socket, playerInitialData) {
-		for (var i in app.gamesManager.games) {
-			var game = app.gamesManager.games[i];
-		    for (var j in game.players) {
-		      	if(game.players[j].pid == playerInitialData.playerId) {
-		      		//the player was in a game, update his socket
-			        game.sockets[j] = socket;
-			        if(game.iterate >= 0) {
-			        	//game has started, send the player the game info
-						app.gamesManager.sendGameInfo(socket, game, j);
-
-						//reinit the order socket
-						game.sockets[j].on('order', function (data) {
-							game.orders.push([data[0], data[1]]);
-						});
-		        	}
-		        	return true;
-		    	}
-	    	}
-	    }
-	    return false;
+		} else {
+			//create new game
+			app.gamesManager.createNewGame(data.game);
+			app.gamesManager.addPlayerToGame(socket, app.gamesManager.games[app.gamesManager.games.length - 1], data.player);
+		}	  
 	}
 
 
@@ -72,7 +47,7 @@ module.exports = function(app){
 		var game = new gameData.Game();
 		game.id = gameData.createUniqueId();
 		game.sockets = [];
-		game.nbPlayers = 4;
+		game.nbPlayers = gameInitialData.nbPlayers;
  		game.map = new gameData.Map(gameData.MAP_TYPES[gameInitialData.mapType],
 	                    gameData.MAP_SIZES[gameInitialData.mapSize],
 	                    gameData.VEGETATION_TYPES[gameInitialData.vegetation],
@@ -94,8 +69,45 @@ module.exports = function(app){
 		if (game.players.length == game.nbPlayers) {
 			//starts the game if it is full
 			app.gamesManager.startGame(game);
+		} else {
+			//send to player that a new player has joined
+			for (var i in game.sockets) {
+				game.sockets[i].emit('updateGamePlayers', 
+					{
+						players: game.players,
+						playersMax: game.nbPlayers
+					}
+				);	
+			}
 		}
 	}
+
+
+	/**
+	*	Checks if the player was already in a game.
+	*/
+	/*app.gamesManager.isPlayerInGame = function (socket, playerInitialData) {
+		for (var i in app.gamesManager.games) {
+			var game = app.gamesManager.games[i];
+		    for (var j in game.players) {
+		      	if(game.players[j].pid == playerInitialData.playerId) {
+		      		//the player was in a game, update his socket
+			        game.sockets[j] = socket;
+			        if(game.iterate >= 0) {
+			        	//game has started, send the player the game info
+						app.gamesManager.sendGameInfo(socket, game, j);
+
+						//reinit the order socket
+						game.sockets[j].on('order', function (data) {
+							game.orders.push([data[0], data[1]]);
+						});
+		        	}
+		        	return true;
+		    	}
+	    	}
+	    }
+	    return false;
+	}*/
 
 
 	/**
@@ -249,26 +261,6 @@ module.exports = function(app){
 			}
 		}
 		return true;
-	}
-
-
-	/**
-	*	Changes the game data before it starts.
-	*/
-	app.gamesManager.changeGameData = function (gameData) {
-		for (var i in app.gamesManager.games) {
-      		var game = app.gamesManager.games[i];
-      		if (game.id == gameData.gameId) {
-      			//change number of players
-      			if (game.players.length <= gameData.nbPlayers) {
-	      			game.nbPlayers = gameData.nbPlayers;
-	      			if (game.players.length == gameData.nbPlayers) {
-						app.gamesManager.startGame(game);
-	      			}
-      			}
-      			break;	
-      		}
-      	}
 	}
 
 }

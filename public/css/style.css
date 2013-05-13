@@ -92,7 +92,7 @@ canvas {
     top: 50%!important;
 }
 
-#armies {
+.bigButtonsChooser {
     position: absolute;
     top : 100%;
     width: 100%;
@@ -102,7 +102,6 @@ canvas {
 .bigButton {
     display: inline-block;
     font-size: 25px;
-    background-color: #55a;
     text-align: center;
     cursor: pointer;
     line-height: 90px;
@@ -112,11 +111,12 @@ canvas {
     box-shadow:0px 0px 20px 10px rgba(0, 0, 0, 0.6);
     margin-right: 40px;
     border-radius: 3px;
+    background: #111;
 }
 
 .bigButton:hover {
-    background-color: #eee;
-    color : #bbb;
+    background-color: #eee!important;
+    color : #888;
 }
 
 .bigButton img {
@@ -125,20 +125,20 @@ canvas {
 
 .one {
     opacity: 0;
-    -webkit-animation: dot 1.3s infinite;
+    -webkit-animation: dot 1s infinite;
     -webkit-animation-delay: 0.0s;
 }
 
 .two {
     opacity: 0;
-    -webkit-animation: dot 1.3s infinite;
-    -webkit-animation-delay: 0.2s;
+    -webkit-animation: dot 1s infinite;
+    -webkit-animation-delay: 0.1s;
 }
 
 .three {
     opacity: 0;
-    -webkit-animation: dot 1.3s infinite;
-    -webkit-animation-delay: 0.3s;
+    -webkit-animation: dot 1s infinite;
+    -webkit-animation-delay: 0.2s;
 }
 
 @-webkit-keyframes dot {
@@ -147,28 +147,26 @@ canvas {
     100% { opacity: 1; }
 }
 
-#nbPlayers {
-  position: absolute;
-  width: 100%;
-  text-align: center;
-}
-
 .customRadio.checked {
-  background-color: #a22;
+  background-color: #55a;
 }
 
-#footer {
+footer {
     position: absolute;
     bottom: 1px;
     text-align: center;
     width: 100%;
-    display: none;
     background-color: #111;
     opacity: 0.8;
     padding-top: 2px;
+    -webkit-box-shadow: 0px -3px 10px 1px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px -3px 10px 1px rgba(0, 0, 0, 0.5);
+    -moz-box-shadow: 0px -3px 10px 1px rgba(0, 0, 0, 0.5);
+    -o-box-shadow: 0px -3px 10px 1px rgba(0, 0, 0, 0.5);
+    filter: progid:DXImageTransform.Microsoft.Shadow(color=#000000, Direction=180, Strength=10);
 }
 
-#footer a {
+footer a {
     margin-right: 15px;
 }
 
@@ -207,7 +205,7 @@ a:hover {
     width: 700px;
 }
 
-#credits {
+#credits, #devNotes {
   width: 600px;
 }
 
@@ -237,7 +235,7 @@ a:hover {
 
 #errorWebGL {
   position: absolute;
-  bottom: 50px;
+  top: 45%;
   width: 100%;
   text-align: center;
   font-size: 1.6em;
@@ -252,35 +250,66 @@ a:hover {
   color: #111;
 }
 
-#menu {
+header {
   position: absolute;
   top: 0px;
-  right: 0px;
-  height: 35px;
-  padding: 3px;
+  width: 100%;
+  height: 30px;
+  padding: 5px;
   background: #111;
   opacity: 0.7;
-  border-radius: 0px 0px 0px 5px;
+  -webkit-box-shadow: 0px 10px 10px 1px rgba(0, 0, 0, 0.7);
+  box-shadow: 0px 10px 10px 1px rgba(0, 0, 0, 0.7);
+  -moz-box-shadow: 0px 10px 10px 1px rgba(0, 0, 0, 0.7);
+  -o-box-shadow: 0px 10px 10px 1px rgba(0, 0, 0, 0.7);
+  filter: progid:DXImageTransform.Microsoft.Shadow(color=#000000, Direction=180, Strength=10);
 }
 
-#menu div {
-  display: inline-block;
-  height: 35px;
-  padding: 3px;
+header div {
   font-weight: bold;
   color: #eee;
+  line-height: 35px;
   text-transform: uppercase;
 }
 
-#menu #playerName {
-  display: inline-table;
+#playerName, #factions {
+  float: left;
 }
 
-#menu #playerName input:hover {
+#factions {
+  margin-left: 5px;
+}
+
+#factions div {
+  display: inline-block;
+  height: 22px;
+  background-color: #ddd;
+  font-size: 13px;
+  margin-right: 15px;
+  cursor: pointer;
+  padding-right: 8px;
+  line-height: 28px;
+}
+
+#factions div:hover {
+  background-color: #aaa;
+}
+
+.checked {
+  background-color: #55a!important;
+  cursor: default!important;
+  color: #eee!important;
+}
+
+.checked:hover {
+  background-color: #55a!important;
+}
+
+header #playerName input:hover {
   color: #aaa;
 }
 
-#menu #playerName input {
+header #playerName input {
   width: 200px;
   background: none;
   border: none;
@@ -292,21 +321,44 @@ a:hover {
   cursor: pointer;
 }
 
-#menu #music {
-  width: 95px;
-  cursor: pointer;
+header #music {
+  width: 100px;
+  float: right;
   color: #C41616;
-  line-height: 33px;
   font-size: 21px;
+  cursor: pointer;
+  line-height: 30px;
 }
 
-#menu #music.musicEnabled {
+header #music.musicEnabled {
   color: #70CC83;
+}
+
+#createGameButton {
+  background-color: #5a5;
+}
+
+#joinGameButton, #soloGameButton {
+  background-color: #55a;
 }
 
 .hide {
   display: none!important;
 }
+
+#confirmGameCreation.bigButton {
+  background: #5a5;
+  margin-top: 30px;
+}
+
+.backButton {
+  background: #a22!important;
+}
+
+
+
+
+
 
 
 
@@ -1010,7 +1062,7 @@ a:hover {
 .sprite-gold:before{ background-position: -1663px 0; width: 28px; height: 28px; } 
 .sprite-gold15:before{ background-position: -1701px 0; width: 15px; height: 15px; } 
 .sprite-house{ background-position: -1726px 0; width: 50px; height: 50px; } 
-.sprite-human:before{ background-position: -1786px 0; width: 50px; height: 50px; } 
+.sprite-human:before{ background-position: -1786px 0; width: 30px; height: 22px; } 
 .sprite-knight{ background-position: -1846px 0; width: 50px; height: 50px; } 
 .sprite-knight15{ background-position: -1906px 0; width: 15px; height: 15px; } 
 .sprite-minimapLocation{ background-position: -1931px 0; width: 16px; height: 16px; } 

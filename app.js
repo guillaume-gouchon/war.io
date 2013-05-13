@@ -33,20 +33,12 @@ colors.setTheme({
 });
 
 
-//database
-/*var db = require('./db')(app);
-app.on('close', db.close); // Close open DB connection when server exits*/
-
-
-//load packages
-/*require('./daos')(app);
-require('./front')(app);*/
 require('./services')(app);
 
 
 //setup index page
 app.get('/', function (req, res) {
- // if (!res.getHeader('Cache-Control')) res.setHeader('Cache-Control', 'public, max-age=' + (31557600));
+  if (!res.getHeader('Cache-Control')) res.setHeader('Cache-Control', 'public, max-age=' + (31557600));
   res.sendfile(__dirname + '/public/index.html');
 });
 
@@ -57,11 +49,7 @@ io.sockets.on('connection', function (socket) {
   socket.emit('askUserData', null);
 
   socket.on('userData', function (data) {
-    app.gamesManager.dispatchPlayer(socket, data);
-  });
-
-  socket.on('changeGameData', function(data) {
-    app.gamesManager.changeGameData(data);
+    app.gamesManager.addPlayer(socket, data);
   });
 
   socket.on('goOffline', function() {

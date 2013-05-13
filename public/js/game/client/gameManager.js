@@ -9,6 +9,7 @@ gameManager.offlineLoop = null;
 gameManager.offlineNbPlayers = 2;
 gameManager.playerId = null;
 gameManager.playerName = null;
+gameManager.musicEnabled = false;
 
 
 /**
@@ -34,9 +35,8 @@ gameManager.initGame = function (gameInitData) {
 *	Starts the game.
 */
 gameManager.startGame = function () {
-	$('#playOffline').fadeOut();
 	$('#gui').removeClass('hide');
-	$('#introScreen').addClass('hide');
+	$('#introScreen').remove();
 
 	gameContent.init(this.waitingData);
 
@@ -50,19 +50,13 @@ gameManager.startGame = function () {
 
 
 gameManager.initOfflineGame = function (gameInitData) {
-	
-	try {
-		this.disconnect();
-	} catch (e) {
-	}
-
 	gameContent.myArmy = 0;
 	gameContent.players = [];
 	gameContent.players.push(new gameData.Player(0, 0, gameInitData.army));
 	gameContent.players[0].n = this.playerName;
 	for (var i = 1; i < this.offlineNbPlayers; i++) {
 		gameContent.players.push(new gameData.Player(0, i, 0));
-		gameContent.players[i].n = 'Olivier';
+		gameContent.players[i].n = 'AI';
 	}
   	gameContent.map = new gameData.Map(gameData.MAP_TYPES[gameInitData.mapType],
                     gameData.MAP_SIZES[gameInitData.mapSize],
@@ -92,9 +86,9 @@ gameManager.connectToServer = function (gameInitData) {
 		gameManager.socket.emit('userData', userData);
 	});
 
-	//this player is the game creator, he can change the game data
-	this.socket.on('gameCreator', function (gameId) {
-		gameManager.showGameData(gameId);
+	//a player has joined the game
+	this.socket.on('updateGamePlayers', function (data) {
+		gameManager.updatePlayersInGame(data);
 	});
 
 	//the server launched the game !
@@ -144,7 +138,7 @@ gameManager.getPlayerId = function () {
 gameManager.getPlayerName = function () {
 	var playerName = utils.readCookie('rts_player_name');
 	if (playerName == null) {
-		return 	'Bobby ' + parseInt(Math.random() * 100);
+		return 	'Lord Bobby ' + parseInt(Math.random() * 100);
 	} else {
 		return playerName;
 	}
@@ -206,24 +200,11 @@ gameManager.showStats = function (stats) {
 }
 
 
-/**
-*	Shows the different input and selectors to change the game data.
-*/
-gameManager.showGameData = function (gameId) {
-	if (gameContent.game == null) {
-		$('#nbPlayers').css('top', (window.innerHeight - $('#nbPlayers').height()) / 2);
-		$('#nbPlayers').removeClass('hide');
-		$('#nbPlayers').attr('data-gameId', gameId);
-
-		$('div', '#nbPlayers').click(function () {
-			try {
-				var data = {};
-				data.gameId = $('#nbPlayers').attr('data-gameId');
-				data.nbPlayers = $(this).attr('data-value');
-				gameManager.socket.emit('changeGameData', data);
-			} catch (e) {
-			}
-		});
-	}
+gameManager.updatePlayersInGame = function (data) {
+	$('#loadingLabel').html('Waiting for ' + (data.players.length - data.playersMax) + ' Players');
 }
+
+
+
+
 
