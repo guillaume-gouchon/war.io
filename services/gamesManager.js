@@ -280,7 +280,7 @@ module.exports = function(app){
 	/**
 	*
 	*/
-	app.gameManager.addPlayerToGamesUpdates = function (socket) {
+	app.gamesManager.addPlayerToGamesUpdates = function (socket) {
 		app.gamesManager.playersWaiting[socket.id] = socket;
 		app.gamesManager.sendGameListUpdate(socket);
 	}
