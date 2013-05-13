@@ -75,7 +75,6 @@ $('#createGameButton').click(function () {
 //confirm game creation
 $('#confirmGameCreation').click(function () {
 	$(this).unbind('click');
-	$('#setupNewGame').removeClass('hide').addClass('moveToTop');
 	$('#subTitle').addClass('hide');
 	$('#loadingTitle').removeClass('hide').addClass('moveToLeft');
 	$('#setupNewGame').removeClass('moveToTop');
@@ -94,6 +93,7 @@ $('#joinGameButton').click(function () {
 	$('#joinGame').removeClass('hide').addClass('moveToTop');
 	$('#subTitle').html('Join a Game').removeClass('hide').addClass('moveToLeft');
 	socket = io.connect('http://warnode.com');
+	//socket = io.connect('http://localhost:6969');
 	socket.on('askUserData', function (data) {
 		socket.emit('userData', null);
 	});
@@ -104,8 +104,15 @@ $('#joinGameButton').click(function () {
 });
 
 //confirm join game
-$('#joinGameButton').click(function () {
-	$(this).unbind('click');
+$('.joinableGame', '#joinGame').click(function () {
+	$('#subTitle').addClass('hide');
+	$('#loadingTitle').removeClass('hide').addClass('moveToLeft');
+	$('#joinGame').removeClass('moveToTop');
+	gameInitData.army = $('.checked', '#factions').attr('data-army');
+	gameInitData.gameId = $(this).attr('data-id');
+	setTimeout(function () {
+		gameManager.initGame(gameInitData);
+	}, 600);
 });
 
 //back home buttons
@@ -236,9 +243,9 @@ function hideWelcomeScreen() {
 }
 
 function updateGamesList(games) {
-	$('#joinGame').html('');
+	$('#lstGames').html('');
 	for (var i in games) {
 		var game = games[i];
-		$('#joinGame').append('<div class="bigButton">' + game.players[0].name + '<span>' + game.players.length + ' / ' + game.nbPlayers + '</span></div>')
+		$('#lstGames').append('<div class="joinableGame bigButton" data-id="' + game.id + '">' + game.name + '<span>' + game.currentPlayers + ' / ' + game.maxPlayers + '</span></div>')
 	}
 }

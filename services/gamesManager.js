@@ -293,7 +293,15 @@ module.exports = function(app){
 		var availableGames = []; 
 		for (var i in app.gamesManager.games) {
 			if (!app.gamesManager.games[i].hasStarted) {
-				availableGames.push(app.gamesManager.games[i]);
+				var game = app.gamesManager.games[i];
+				availableGames.push(
+					{
+						id: game.id,
+						name: game.players[0].name,
+						currentPlayers: game.players.length,
+						maxPlayers: game.maxPlayers
+					}
+				);
 			}
 		}
 
