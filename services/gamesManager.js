@@ -292,7 +292,7 @@ module.exports = function(app){
 	app.gamesManager.sendGameListUpdate = function (socket) {
 		var availableGames = []; 
 		for (var i in app.gamesManager.games) {
-			if (!app.gamesManager.games[i].hasStarted) {
+			if (!app.gamesManager.games[i].hasStarted && game.players.length > 0) {
 				var game = app.gamesManager.games[i];
 				availableGames.push(
 					{
