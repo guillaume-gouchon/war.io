@@ -384,13 +384,8 @@ header #music.musicEnabled {
 
 #igPlayersList div {
   line-height: 40px;
-  opacity: 0.5;
+  opacity: 0.7;
 }
-
-#igPlayersList div.ready {
-  opacity: 1;
-}
-
 
 
 
