@@ -95,33 +95,6 @@ module.exports = function(app){
 
 
 	/**
-	*	Checks if the player was already in a game.
-	*/
-	/*app.gamesManager.isPlayerInGame = function (socket, playerInitialData) {
-		for (var i in app.gamesManager.games) {
-			var game = app.gamesManager.games[i];
-		    for (var j in game.players) {
-		      	if(game.players[j].pid == playerInitialData.playerId) {
-		      		//the player was in a game, update his socket
-			        game.sockets[j] = socket;
-			        if(game.iterate >= 0) {
-			        	//game has started, send the player the game info
-						app.gamesManager.sendGameInfo(socket, game, j);
-
-						//reinit the order socket
-						game.sockets[j].on('order', function (data) {
-							game.orders.push([data[0], data[1]]);
-						});
-		        	}
-		        	return true;
-		    	}
-	    	}
-	    }
-	    return false;
-	}*/
-
-
-	/**
 	*	Sends a player the game info he needs to initializes the game.
 	*/
 	app.gamesManager.sendGameInfo = function (socket, game, playerIndex) {
@@ -278,7 +251,7 @@ module.exports = function(app){
 
 
 	/**
-	*
+	*	The player will receive the joinable games list updates.
 	*/
 	app.gamesManager.addPlayerToGamesUpdates = function (socket) {
 		app.gamesManager.playersWaiting[socket.id] = socket;
@@ -287,7 +260,7 @@ module.exports = function(app){
 
 
 	/**
-	*
+	*	Sends the updated joinable games list.
 	*/
 	app.gamesManager.sendGameListUpdate = function (socket) {
 		var availableGames = []; 
@@ -312,5 +285,57 @@ module.exports = function(app){
 		} else {
 			socket.emit('joinListUpdate', availableGames);
 		}
+	}
+
+
+	/**
+	*	Checks if player is already IG. If so, tell him.
+	*/
+	app.gamesManager.checkIfPlayerIsIG = function (socket, playerId) {
+		for (var i in app.gamesManager.games) {
+			var game = app.gamesManager.games[i];
+		    for (var j in game.players) {
+		      	if(game.players[j].pid == playerId) {
+		      		//ask player
+		      		socket.emit('askRejoin', {
+						id: game.id,
+						name: game.players[0].n,
+						currentPlayers: game.players.length,
+						maxPlayers: game.nbPlayers
+					});
+		        	return;
+		    	}
+	    	}
+	    }
+	}
+
+
+	/**
+	*	The player rejoins a game.
+	*/
+	app.gamesManager.rejoinGame = function (socket, playerId) {
+		for (var i in app.gamesManager.games) {
+			var game = app.gamesManager.games[i];
+		    for (var j in game.players) {
+		      	if(game.players[j].pid == playerId) {
+
+		      		game.sockets[j] = socket;
+
+					//the player was in a game
+			        if(game.iterate >= 0) {
+			        	//game has started, send the player the game info
+						app.gamesManager.sendGameInfo(socket, game, j);
+
+						//update his socket
+
+						//reinit the order socket
+						game.sockets[j].on('order', function (data) {
+							game.orders.push([data[0], data[1]]);
+						});
+			    	}
+		      	}
+		    }
+	  	}
+		
 	}
 }

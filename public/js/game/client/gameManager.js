@@ -7,9 +7,36 @@ var gameManager = {};
 gameManager.isOfflineGame = false;
 gameManager.offlineLoop = null;
 gameManager.offlineNbPlayers = 2;
-gameManager.playerId = null;
-gameManager.playerName = null;
 gameManager.musicEnabled = false;
+
+
+try {
+	gameManager.socket = io.connect('http://warnode.com');
+
+	//send Player ID
+	gameManager.socket.on('askPID', function () {
+		gameManager.playerId = gameManager.getPlayerId();
+		gameManager.playerName = gameManager.getPlayerName();
+		gameManager.socket.emit('PID', gameManager.playerId);
+	});
+
+} catch (e) {
+}
+
+
+//the player is asked if he wants to rejoin a game
+gameManager.socket.on('askRejoin', function (game) {
+	$('#rejoin').append('<div class="bigButton" data-id="' + game.id + '">' + game.name + '</div>');
+	$('#rejoin').css('top', (window.innerHeight - $('#rejoin').height()) / 2);
+	$('#rejoin').css('left', (window.innerWidth - $('#rejoin').width()) / 2);
+	$('.bigButton', '#rejoin').click(function () {
+		gameManager.connectToServer(null);
+		gameManager.socket.emit('rejoinResponse', game.id);
+		hideWelcomeScreen();
+		$('#loadingTitle').removeClass('hide').addClass('moveToLeft');
+		$('#rejoin').addClass('hide');
+	});
+});
 
 
 /**
@@ -17,8 +44,8 @@ gameManager.musicEnabled = false;
 */
 gameManager.initGame = function (gameInitData) {
 	if (gameContent.game == null) {//avoids to run the game twice
-		this.playerId = this.getPlayerId();
-		this.playerName = this.getPlayerName();
+		gameManager.playerId = gameManager.getPlayerId();
+		gameManager.playerName = gameManager.getPlayerName();
 		if(this.isOfflineGame) {
 			this.initOfflineGame(gameInitData);
 		} else {
@@ -71,17 +98,18 @@ gameManager.initOfflineGame = function (gameInitData) {
 
 
 gameManager.connectToServer = function (gameInitData) {
+	if (gameInitData != null) {
+		var userData = {
+			player: {
+				playerId: this.playerId,
+				army: gameInitData.army,
+				name: this.playerName
+			},
+			game: gameInitData
+		};
+		this.socket.emit('enter', userData);
+	}
 	
-	var userData = {
-		player: {
-			playerId: this.playerId,
-			army: gameInitData.army,
-			name: this.playerName
-		},
-		game: gameInitData
-	};
-	this.socket.emit('enter', userData);
-
 	//a player has joined the game
 	this.socket.on('updateGamePlayers', function (data) {
 		gameManager.updatePlayersInGame(data);
@@ -89,7 +117,6 @@ gameManager.connectToServer = function (gameInitData) {
 
 	//the server launched the game !
 	this.socket.on('gameStart', function (data) {
-		$('#nbPlayers').addClass('hide');
 		gameContent.players = data.players;
 		gameContent.myArmy = data.myArmy;
 		gameContent.map = data.map;
@@ -134,7 +161,7 @@ gameManager.getPlayerId = function () {
 gameManager.getPlayerName = function () {
 	var playerName = utils.readCookie('rts_player_name');
 	if (playerName == null) {
-		return 	'Lord Bobby ' + parseInt(Math.random() * 10);
+		return 	'Lord Bobby ' + parseInt(1 + Math.random() * 8);
 	} else {
 		return playerName;
 	}

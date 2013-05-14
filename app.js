@@ -43,8 +43,18 @@ app.get('/', function (req, res) {
 });
 
 
-//initialize socket.io
+//init socket.io
 io.sockets.on('connection', function (socket) {
+
+  socket.emit('askPID', null);
+
+  socket.on('PID', function (data) {
+    app.gamesManager.checkIfPlayerIsIG(socket, data);
+  });
+
+  socket.on('rejoinResponse', function (data) {
+      app.gamesManager.rejoinGame(socket, data);    
+  });
 
   socket.on('enter', function (data) {
     if (data == null) {

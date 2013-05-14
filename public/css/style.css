@@ -197,6 +197,10 @@ a:hover {
     border-bottom: 1px solid #ddd;
 }
 
+#rejoin {
+  text-align: center;
+}
+
 #about p, #credits p {
     text-align: center;
 }
@@ -359,6 +363,11 @@ header #music.musicEnabled {
   font-size: 0.7em;
   opacity: 0.8;
   margin-left: 40px;
+}
+
+#noGames {
+  color: #111;
+  font-size: 1.5em;
 }
 
 #lstGames .backButton {

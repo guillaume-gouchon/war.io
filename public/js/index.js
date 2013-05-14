@@ -85,8 +85,6 @@ $('#confirmGameCreation').click(function () {
 	}, 600);
 });
 
-gameManager.socket = io.connect('http://warnode.com');
-
 //join game
 $('#joinGameButton').click(function () {
 	$('#lstGames').html('');
@@ -244,6 +242,6 @@ function updateGamesList(games) {
 	}
 
 	if (games.length == 0) {
-		$('#lstGames').append('<div>No games available yet... create one !</div>');	
+		$('#lstGames').append('<div id="noGames">No games available yet... create one !</div>');	
 	}
 }
