@@ -187,7 +187,8 @@ module.exports = function(app){
 			for (var i in data.players) {
 				if (game.sockets[i] != null) {
 					if (data.players[i].s == gameData.PLAYER_STATUSES.defeat
-						|| data.players[i].s == gameData.PLAYER_STATUSES.victory) {
+						|| data.players[i].s == gameData.PLAYER_STATUSES.victory
+						|| data.players[i].s == gameData.PLAYER_STATUSES.surrender) {
 						game.sockets[i].emit('gameStats', game.stats);
 						game.sockets[i] = null;
 					}

@@ -373,6 +373,7 @@ GUI.initDiplomacy = function () {
 
 	//add event
 	$('.customRadio', '#diplomacy').click(function () {
+		soundManager.playSound(soundManager.SOUNDS_LIST.button);
 		$('.customRadio[data-name="' + $(this).attr('data-name') + '"]').removeClass('checked');
 		$(this).addClass('checked');
 		gameManager.sendOrderToEngine(order.TYPES.diplomacy, [gameContent.myArmy, $(this).attr('data-name').replace('diplomacy', ''), $(this).attr('data-value')]);

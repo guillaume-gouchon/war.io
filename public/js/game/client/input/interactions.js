@@ -20,6 +20,7 @@ userInput.isChatWindowOpen = false;
 */
 userInput.clickOnToolbar = function (button) {
 	if (button.isEnabled) {
+		soundManager.playSound(soundManager.SOUNDS_LIST.button);
 		if (button.buttonId == GUI.TOOLBAR_BUTTONS.build.buttonId) {
 			//build something
 			GUI.showBuildings = true;
@@ -170,6 +171,7 @@ userInput.checkIfMapScrolling = function (x, y) {
 */
 userInput.tryBuildHere = function () {
 	if(gameContent.building.canBeBuiltHere) {
+		soundManager.playSound(soundManager.SOUNDS_LIST.hammer);
 		//let's start the construction
 		gameManager.sendOrderToEngine(order.TYPES.buildThatHere,
 							 [gameContent.selected, gameContent.building, 
@@ -224,11 +226,11 @@ userInput.onEnterKey = function () {
 		if (message != '') {
 			if (message == 'olivier !' || message == '/soundon') {
 				gameManager.musicEnabled = true;
-				gameManager.playMusic();
+				soundManager.playMusic();
 				gameSurface.showMessage(gameSurface.MESSAGES.musicEnabled);
 			} else if (message == 'paranormalement' || message == '/soundoff') {
 				gameManager.musicEnabled = false;
-				gameManager.stopMusic();
+				soundManager.stopMusic();
 				gameSurface.showMessage(gameSurface.MESSAGES.musicDisabled);
 			} else if (message == '/surrender') {
 				gameManager.sendOrderToEngine(order.TYPES.surrender, [gameContent.myArmy]);

@@ -20,11 +20,14 @@ $('input', '#playerName').keydown(function (e) {
 	}
 });
 
+//init the sound manager
+soundManager.init();
+
 //init music button
 if(utils.readCookie('rts_music_enabled') == 'true') {
 	gameManager.musicEnabled = true;
 	$('#music').addClass('musicEnabled').html('On');
-	gameManager.playMusic();
+	soundManager.playMusic();
 }
 
 //adds armies buttons
@@ -55,6 +58,7 @@ var gameInitData = {
 
 //solo mode
 $('#soloGameButton').click(function () {
+	soundManager.playSound(soundManager.SOUNDS_LIST.button);
 	$(this).unbind('click');
 	hideWelcomeScreen();
 	$('#loadingLabel').html('Loading');
@@ -68,6 +72,7 @@ $('#soloGameButton').click(function () {
 
 //create game
 $('#createGameButton').click(function () {
+	soundManager.playSound(soundManager.SOUNDS_LIST.button);
 	hideWelcomeScreen();
 	$('#setupNewGame').removeClass('hide').addClass('moveToTop');
 	$('#subTitle').html('How many players ?').removeClass('hide').addClass('moveToLeft');
@@ -75,6 +80,7 @@ $('#createGameButton').click(function () {
 
 //confirm game creation
 $('#confirmGameCreation').click(function () {
+	soundManager.playSound(soundManager.SOUNDS_LIST.button);
 	$(this).unbind('click');
 	$('#subTitle').addClass('hide');
 	$('#loadingTitle').removeClass('hide').addClass('moveToLeft');
@@ -88,6 +94,7 @@ $('#confirmGameCreation').click(function () {
 
 //join game
 $('#joinGameButton').click(function () {
+	soundManager.playSound(soundManager.SOUNDS_LIST.button);
 	$('#lstGames').html('');
 	hideWelcomeScreen();
 	$('#joinGame').removeClass('hide').addClass('moveToTop');
@@ -99,6 +106,7 @@ $('#joinGameButton').click(function () {
 
 		//confirm join game
 		$('.joinableGame', '#lstGames').click(function () {
+			soundManager.playSound(soundManager.SOUNDS_LIST.button);
 			$('#subTitle').addClass('hide');
 			$('#loadingTitle').removeClass('hide').addClass('moveToLeft');
 			$('#joinGame').removeClass('moveToTop');
@@ -113,11 +121,13 @@ $('#joinGameButton').click(function () {
 
 //back home buttons
 $('.backButton', '#setupNewGame').click(function () {
+	soundManager.playSound(soundManager.SOUNDS_LIST.button);
 	$('#subTitle').addClass('hide').removeClass('moveToLeft');
 	$('#setupNewGame').addClass('hide').removeClass('moveToTop');
 	showWelcomeScreen();
 });
 $('.backButton', '#joinGame').click(function () {
+	soundManager.playSound(soundManager.SOUNDS_LIST.button);
 	$('#subTitle').addClass('hide').removeClass('moveToLeft');
 	$('#joinGame').addClass('hide').removeClass('moveToTop');
 	showWelcomeScreen();
@@ -167,17 +177,18 @@ $('.customRadio').bind(inputEvents, function () {
 
 //music button
 $('#music').click(function () {
-	if(gameManager.musicEnabled) {
+	gameManager.musicEnabled = !gameManager.musicEnabled;
+	if(!gameManager.musicEnabled) {
 		$('#music').removeClass('musicEnabled').html('Off');
-		gameManager.stopMusic();
+		soundManager.stopMusic();
 	} else {
 		$('#music').addClass('musicEnabled').html('On');
-		gameManager.playMusic();
+		soundManager.playMusic();
 	}
-	gameManager.musicEnabled = !gameManager.musicEnabled;
 	utils.createCookie('rts_music_enabled', gameManager.musicEnabled);
 });
 
+//preload necessary image files
 preloadImages();
 
 
