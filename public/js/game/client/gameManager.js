@@ -226,6 +226,11 @@ gameManager.showStats = function (stats) {
 gameManager.updatePlayersInGame = function (data) {
 	var playersNeeded = data.playersMax - data.players.length;
 	$('#loadingLabel').html('Waiting for ' + playersNeeded + ' player' + (playersNeeded > 1 ? 's' : ''));
+
+	$('#igPlayersList').removeClass('hide').html('');
+	for (var i in data.players) {
+		$('#igPlayersList').append('<div class="' + gameSurface.PLAYERS_COLORS[i] +  '" data-id="' + data.players[i].pid + '">' + data.players[i].n + '</div>'));
+	}
 }
 
 

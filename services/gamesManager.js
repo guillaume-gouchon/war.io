@@ -79,7 +79,7 @@ module.exports = function(app){
 			//starts the game if it is full
 			app.gamesManager.startGame(game);
 		} else {
-			//send to player that a new player has joined
+			//send to the players that a new player has joined
 			for (var i in game.sockets) {
 				game.sockets[i].emit('updateGamePlayers', 
 					{
@@ -336,6 +336,5 @@ module.exports = function(app){
 		      	}
 		    }
 	  	}
-		
 	}
 }
