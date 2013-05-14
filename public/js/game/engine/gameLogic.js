@@ -27,18 +27,26 @@ gameLogic.update = function (game) {
 		game.players[n].s = gameData.PLAYER_STATUSES.defeat;
 	}
 
-	for(var n in game.gameElements) {
-		var element  = game.gameElements[n];
-		if (element.f == gameData.FAMILIES.building) {
-			game.players[element.o].s = gameData.PLAYER_STATUSES.ig;
-		}
+	//units
+	for(var n in game.gameElements[gameData.FAMILIES.unit]) {
+		var element  = game.gameElements[gameData.FAMILIES.unit][n];
+		
 		this.resolveActions(game, element);
 		this.updateMoves(game, element);
-		this.updateBuildings(game, element);
-		if (element.f != gameData.FAMILIES.terrain) {
-			this.protectAround(game, element);	
-		}
+		this.protectAround(game, element);
 	}
+
+	//buildings
+	for (var n in game.gameElements[gameData.FAMILIES.building]) {
+		var element  = game.gameElements[gameData.FAMILIES.building][n];
+
+		//player is still alive
+		game.players[element.o].s = gameData.PLAYER_STATUSES.ig;
+		
+		this.updateBuildings(game, element);
+		this.protectAround(game, element);
+	}
+
 	this.addNewBuildings(game);
 	this.removeDeads(game);
 	this.checkGameOver(game);
@@ -108,7 +116,7 @@ gameLogic.resolveActions = function (game, element) {
 					//repair
 					action.doTheBuild(game, element, element.a);
 				}
-			} else if (elementData.isBuilder && element.a.f == gameData.FAMILIES.terrain) {
+			} else if (elementData.isBuilder && element.a.f == gameData.FAMILIES.land) {
 				//gathering resources
 				action.doTheGathering(game, element, element.a);
 			} else if (rank.isEnemy(game.players, element.o, element.a)) {
@@ -134,20 +142,15 @@ gameLogic.resolveActions = function (game, element) {
 
 
 /**
-*	Removes dead units and destroyed buildings from gameElements.	
+*	Removes dead units from gameElements.	
 */
 gameLogic.removeDeads= function (game) {
-	var n = game.gameElements.length;
+	var n = game.gameElements[gameData.FAMILIES.unit].length;
 	while (n--) {
-		var element = game.gameElements[n]; 
-		if (element.l <= 0 || element.ra == 0) {
-			if (element.f == gameData.FAMILIES.terrain) {
-			} else if (element.f == gameData.FAMILIES.building) {
-				production.removeBuilding(game, element);
-			} else if (element.f == gameData.FAMILIES.unit) {
-				production.removeUnit(game, element);
-			}
-			this.removeElement(game, n);
+		var element = game.gameElements[gameData.FAMILIES.unit][n]; 
+		if (element.l <= 0) {
+			production.removeUnit(game, element);
+			game.gameElements[gameData.FAMILIES.unit].splice(n, 1);
 			gameCreation.removeGameElement(game, element);
 		}
 	}
@@ -158,20 +161,10 @@ gameLogic.removeDeads= function (game) {
 *	Updates buildings constructions, units production and research.
 */
 gameLogic.updateBuildings = function (game, building) {
-	if (building.f == gameData.FAMILIES.building) {
-		if (building.q.length > 0) {
-			production.updateQueueProgress(game, building);
-			tools.addUniqueElementToArray(game.modified, building);
-		}
+	if (building.q.length > 0) {
+		production.updateQueueProgress(game, building);
+		tools.addUniqueElementToArray(game.modified, building);
 	}
-}
-
-
-/**
-*	Removes n-element from the gameElements array.
-*/
-gameLogic.removeElement = function (game, n) {
-	game.gameElements.splice(n, 1);
 }
 
 

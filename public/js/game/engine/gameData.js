@@ -7,7 +7,7 @@ var gameData = {}
 gameData.FAMILIES = {
 	unit : 0,
 	building : 1,
-	terrain : 2
+	land : 2
 }
 
 

@@ -6,9 +6,9 @@ gameData.Game = function () {
 
 	/**
 	*	Main variable used during the game.
-	*  	It contains all the terrain's elements, units and buildings.
+	*  	It contains all the land's elements, units and buildings.
 	*/
-	this.gameElements = [];
+	this.gameElements = [[], [], []];
 
 
 	this.modified = [];

@@ -121,8 +121,22 @@ tools.getTilesAroundElements = function (game, element) {
 *	Returns the game element under the mouse.
 */
 tools.getElementUnder = function (game, x, y) {
-	for(var i in game.gameElements) {
-		var element = game.gameElements[i];
+	for(var i in game.gameElements[gameData.FAMILIES.unit]) {
+		var element = game.gameElements[gameData.FAMILIES.unit][i];
+	  	if(tools.isElementThere(element, {x : x, y : y})) {
+	  		return element;
+	  	}
+	}
+
+	for(var i in game.gameElements[gameData.FAMILIES.building]) {
+		var element = game.gameElements[gameData.FAMILIES.building][i];
+	  	if(tools.isElementThere(element, {x : x, y : y})) {
+	  		return element;
+	  	}
+	}
+
+	for(var i in game.gameElements[gameData.FAMILIES.land]) {
+		var element = game.gameElements[gameData.FAMILIES.land][i];
 	  	if(tools.isElementThere(element, {x : x, y : y})) {
 	  		return element;
 	  	}
@@ -136,8 +150,8 @@ tools.getElementUnder = function (game, x, y) {
 */
 tools.getGameElementsFromIds = function (game, ids) {
 	var elements = [];
-	for (var i in game.gameElements) {
-		var gameElement = game.gameElements[i];
+	for (var i in game.gameElements[gameData.FAMILIES.unit]) {
+		var gameElement = game.gameElements[gameData.FAMILIES.unit][i];
 		for (var j in ids) {
 			if(gameElement.id == ids[j]) {
 				elements.push(gameElement);
@@ -148,6 +162,20 @@ tools.getGameElementsFromIds = function (game, ids) {
 			}
 		}
 	}
+
+	for (var i in game.gameElements[gameData.FAMILIES.building]) {
+		var gameElement = game.gameElements[gameData.FAMILIES.building][i];
+		for (var j in ids) {
+			if(gameElement.id == ids[j]) {
+				elements.push(gameElement);
+				if(elements.length == ids.length) {
+					return elements;
+				}
+				break;
+			}
+		}
+	}
+
 	return elements;
 }
 

@@ -227,8 +227,8 @@ GUI.updateInfo = function () {
 			$('#frags').html('');
 		}
 		$('#stats').html('');
-		if (element.f == gameData.FAMILIES.terrain) {
-			//terrain
+		if (element.f == gameData.FAMILIES.land) {
+			//land
 			$('#life').html('&infin; / &infin;');
 			for (var i in gameData.RESOURCES) {
 				if (gameData.RESOURCES[i].id == elementData.resourceType) {

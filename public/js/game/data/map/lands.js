@@ -1,4 +1,4 @@
-gameData.ELEMENTS[gameData.FAMILIES.terrain].push(
+gameData.ELEMENTS[gameData.FAMILIES.land].push(
 [
 	{
 		name : 'Tree',

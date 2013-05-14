@@ -2,13 +2,6 @@ var AI = {};
 
 
 /**
-*	CONSTANTS
-*/
-AI.RESOURCE_DISTANCE_THRESHOLD = 10;
-AI.ENEMY_DISTANCE_THRESHOLD = 15;
-
-
-/**
 *	Search for new resources to gather.
 */
 AI.searchForNewResources = function (game, builder, fromWhere, resourceType) {
@@ -28,7 +21,7 @@ AI.searchForNewResources = function (game, builder, fromWhere, resourceType) {
 */
 AI.searchForNewEnemy = function (game, unit) {
 	var nearestEnemy = mapLogic.getNearestEnemy(game, unit);
-	if(nearestEnemy != null && tools.getElementsDistance(unit, nearestEnemy) <= gameData.ELEMENTS[unit.f][unit.r][unit.t].vision) {
+	if(nearestEnemy != null) {
 		unit.a = nearestEnemy;
 	}
 }

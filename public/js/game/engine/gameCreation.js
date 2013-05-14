@@ -34,7 +34,7 @@ gameCreation.createNewGame = function(map, players) {
 
 
 /**
-*	Creates a random map, sets up the terrain and the players basecamps.
+*	Creates a random map, sets up the land and the players basecamps.
 */
 gameCreation.createNewMap = function (game, map, players) {
 	game.grid = this.initGrid(map.size);
@@ -131,7 +131,7 @@ gameCreation.createForest = function (game, from, to) {
 	for(var i = from.x; i < to.x; i++) {
 		for(var j = from.y; j < to.y; j++) {
 			if(Math.random() < this.PROBABILITY_TREE) {
-				this.addGameElement(game, new gameData.Terrain(gameData.ELEMENTS[gameData.FAMILIES.terrain][0][0], i, j));
+				this.addGameElement(game, new gameData.Terrain(gameData.ELEMENTS[gameData.FAMILIES.land][0][0], i, j));
 			}
 		}
 	}
@@ -144,9 +144,9 @@ gameCreation.createForest = function (game, from, to) {
 *	@param to : bottom right-handed corner
 */
 gameCreation.createGoldMine = function (game, map, from, to) {
-	var element = gameData.ELEMENTS[gameData.FAMILIES.terrain][0][1];
+	var element = gameData.ELEMENTS[gameData.FAMILIES.land][0][1];
 	var position = this.getRandomPositionInZoneForElement(element, from, to);
-	this.addGameElement(game, new gameData.Terrain(gameData.ELEMENTS[gameData.FAMILIES.terrain][0][1], position.x, position.y));
+	this.addGameElement(game, new gameData.Terrain(gameData.ELEMENTS[gameData.FAMILIES.land][0][1], position.x, position.y));
 }
 
 
@@ -166,7 +166,7 @@ gameCreation.getRandomPositionInZoneForElement = function (element, from, to) {
 */
 gameCreation.addGameElement = function (game, element) {
 	var shape = gameData.ELEMENTS[element.f][element.r][element.t].shape;
-	game.gameElements.push(element);
+	game.gameElements[element.f].push(element);
 	for(var i in shape) {
 		var row = shape[i];
 		for(var j in row) {
@@ -237,7 +237,7 @@ gameCreation.dispatchPlayers = function (game, zones, players, dx, dy) {
 
 
 /**
-*	Adds a terrain zone randomly around another zone
+*	Adds a land zone randomly around another zone
 */
 gameCreation.placeZoneRandomlyAround = function (zoneToPlace, zones, aroundX, aroundY) {
 	var x = null;

@@ -39,7 +39,7 @@ gameSurface.BUILDING_INIT_Z = - 2 * gameSurface.PIXEL_BY_NODE;
 gameSurface.ARMIES_COLORS = ['_red', '_blu', '_gre', '_yel'];
 gameSurface.PLAYERS_COLORS = ['red', 'blue', 'green', 'yellow'];
 gameSurface.MOVEMENT_EXTRAPOLATION_ITERATION = 6;
-gameSurface.TERRAIN_HEIGHT_SMOOTH_FACTOR = 65;
+gameSurface.LAND_HEIGHT_SMOOTH_FACTOR = 65;
 
 
 /**
@@ -105,7 +105,7 @@ gameSurface.init = function () {
 				//geometry + 1 texture
 				gameSurface.stuffToBeLoaded += 2;
 				//additional textures for players colors
-				if (i != gameData.FAMILIES.terrain) {
+				if (i != gameData.FAMILIES.land) {
 					gameSurface.stuffToBeLoaded += gameContent.players.length - 1;
 				}
 			}
@@ -167,12 +167,12 @@ gameSurface.createScene = function () {
 	skybox.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
 	scene.add(skybox);
 
-	//generate the terrain
-	var terrainGeometry = new THREE.PlaneGeometry(2200, 2200, 64, 64);
+	//generate the land
+	var landGeometry = new THREE.PlaneGeometry(2200, 2200, 64, 64);
 	var grassTexture  = THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'grass.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
 	grassTexture.wrapT = grassTexture.wrapS = THREE.RepeatWrapping;
 	var grassMaterial = new THREE.MeshBasicMaterial({ map: grassTexture });
-	var planeSurface = new THREE.Mesh(terrainGeometry, grassMaterial);
+	var planeSurface = new THREE.Mesh(landGeometry, grassMaterial);
     planeSurface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
     planeSurface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
     planeSurface.overdraw = true;
@@ -227,7 +227,7 @@ gameSurface.init3DModels = function () {
 */
 gameSurface.loadObject = function (key, elementFamily) {
 	this.loader.load(this.MODELS_PATH + key, this.geometryLoaded(key));
-	if (elementFamily != gameData.FAMILIES.terrain) {
+	if (elementFamily != gameData.FAMILIES.land) {
 		for (var n = 0; n < gameContent.players.length; n++) {
 			var color = this.ARMIES_COLORS[n];
 			gameSurface.materials[key + color] = new THREE.MeshBasicMaterial({map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key.replace('.js', '') + color + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
@@ -328,7 +328,7 @@ gameSurface.addElement = function (element) {
 */
 gameSurface.createObject = function (key, element) {
 	var material;
-	if (element.f == gameData.FAMILIES.terrain) {
+	if (element.f == gameData.FAMILIES.land) {
 		material = this.materials[key];
 	} else  {
 		material = this.materials[key + this.ARMIES_COLORS[element.o]];
@@ -395,7 +395,7 @@ gameSurface.createObject = function (key, element) {
 		}
 	}
 
-	if (element.f != gameData.FAMILIES.terrain) {
+	if (element.f != gameData.FAMILIES.land) {
 		//update minimap
 		GUI.addElementOnMinimap(element);
 	}
@@ -466,7 +466,7 @@ gameSurface.updateElement = function (element) {
 		}
 	}
 
-	if (element.f != gameData.FAMILIES.terrain) {
+	if (element.f != gameData.FAMILIES.land) {
 		//update life bar
 		for (var i in d.children) {
 			if (d.children[i].id == 'life') {
@@ -500,7 +500,7 @@ gameSurface.removeElement = function (element) {
 		gameContent.selected.splice(gameContent.selected.indexOf(element.id), 1);
 	}
 
-	if (element.f != gameData.FAMILIES.terrain) {
+	if (element.f != gameData.FAMILIES.land) {
 		//update minimap
 		GUI.removeElementFromMinimap(element);
 	}

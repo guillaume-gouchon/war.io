@@ -72,6 +72,7 @@ production.repairBuilding = function (game, building) {
 		playerResources[gameData.RESOURCES.gold.id]--;
 		playerResources[gameData.RESOURCES.wood.id]--;
 		building.l += this.REPAIRING_SPEED;
+		building.l = Math.min(building.l, gameData.ELEMENTS[building.f][building.r][building.t].l);
 		tools.addUniqueElementToArray(game.modified, building);
 	}
 }
@@ -113,6 +114,15 @@ production.gatherResources = function (game, builder, resource) {
 	} else if (resource.ra == 0) {
 		//the resource is now empty, searching a new resource of the same type
 		AI.searchForNewResources(game, builder, builder, gameData.ELEMENTS[builder.pa.f][builder.pa.r][builder.pa.t].resourceType);
+
+		//remove resource
+		for (var i in game.gameElements[gameData.FAMILIES.land]) {
+			if (game.gameElements[gameData.FAMILIES.land][i].id == resource.id) {
+				gameCreation.removeGameElement(game, resource);
+				game.gameElements[gameData.FAMILIES.land].splice(i, 1);
+				break;
+			}
+		}
 	}
 }
 

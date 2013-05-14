@@ -102,11 +102,11 @@ order.move = function (game, units, x, y) {
 }
 
 
-order.gather = function (game, units, terrain) {
+order.gather = function (game, units, land) {
 	for(var i in units) {
 		var element = units[i];
-		element.a = terrain;
-		element.pa = terrain;
+		element.a = land;
+		element.pa = land;
 		tools.addUniqueElementToArray(game.modified, element);
 	}
 }
@@ -165,9 +165,9 @@ order.convertDestinationToOrder = function (game, elementsIds, x, y) {
 					order.attack(game, elements, element);
 					return;
 				}
-			} else if (element.f == gameData.FAMILIES.terrain 
+			} else if (element.f == gameData.FAMILIES.land 
 						&& gameData.ELEMENTS[element.f][0][element.t].resourceType >= 0) {
-				//resource terrain element
+				//resource land element
 				for(var i in elements) {
 					var e = elements[i];
 					if(gameData.ELEMENTS[e.f][e.r][e.t].isBuilder) {

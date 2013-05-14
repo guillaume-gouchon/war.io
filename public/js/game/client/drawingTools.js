@@ -152,7 +152,7 @@ gameSurface.selectElement = function (elementId) {
 	var d = gameContent.gameElements[elementId].d;
 	d.add(this.drawSelectionCircle(elementData.shape.length / 2 * this.PIXEL_BY_NODE / 2, color));
 	
-	if (element.f != gameData.FAMILIES.terrain) {
+	if (element.f != gameData.FAMILIES.land) {
 		var lifeBar = this.drawLifeBar(element, elementData);
 		lifeBar.rotation.y = - d.rotation.y + this.de2ra(90);
 		d.add(lifeBar);

@@ -61,6 +61,18 @@ fightLogic.applyDamage = function (game, damage, target, fragOwner) {
 
 		//attack a new enemy
 		AI.searchForNewEnemy(game, fragOwner);
+
+		//destroy building (not the units because of asynchronism)
+		if (target.f == gameData.FAMILIES.building) {
+			production.removeBuilding(game, target);
+			for (var i in game.gameElements[gameData.FAMILIES.building]) {
+				if (game.gameElements[gameData.FAMILIES.building][i].id == target.id) {
+					gameCreation.removeGameElement(game, target);
+					game.gameElements[gameData.FAMILIES.building].splice(i, 1);
+					break;
+				}
+			}
+		}
 	}
 }
 

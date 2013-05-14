@@ -60,7 +60,7 @@ userInput.selectGroup = function (x, y) {
 			for(var i in gameContent.gameElements) {
 				var element = gameContent.gameElements[i].s;
 	  			if(rank.isAlly(gameContent.players, gameContent.myArmy, element)
-	  				&& element.f != gameData.FAMILIES.terrain
+	  				&& element.f != gameData.FAMILIES.land
 	  				&& (selectionRectangleGamePosition[0] - selectionRectangleGamePosition[2] < 0 
 			  		&& element.p.x <= selectionRectangleGamePosition[2]
 			  		&& element.p.x >= selectionRectangleGamePosition[0]

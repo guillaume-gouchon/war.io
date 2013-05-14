@@ -12,7 +12,7 @@ gameContent.game = null;
 
 /**
 *	Main variable used during the game.
-*  	It contains all the terrain's elements, units and buildings.
+*  	It contains all the land's elements, units and buildings.
 */
 gameContent.gameElements = {};
 
@@ -41,12 +41,14 @@ gameContent.selectionRectangle = [];
 gameContent.init = function (data) {
 	//add new elements
 	for (var i in data) {
-		var element = data[i];
-		gameSurface.addElement(element);
-		//center camera
-		if (element.f == gameData.FAMILIES.building
-			&& element.o == this.myArmy) {
-			gameSurface.centerCameraOnElement(element);
+		for (var j in data[i]) {
+			var element = data[i][j];
+			gameSurface.addElement(element);
+			//center camera
+			if (element.f == gameData.FAMILIES.building
+				&& element.o == this.myArmy) {
+				gameSurface.centerCameraOnElement(element);
+			}
 		}
 	}
 }
