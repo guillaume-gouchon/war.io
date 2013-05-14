@@ -229,7 +229,7 @@ gameManager.updatePlayersInGame = function (data) {
 
 	$('#igPlayersList').removeClass('hide').html('');
 	for (var i in data.players) {
-		$('#igPlayersList').append('<div class="' + gameSurface.PLAYERS_COLORS[i] +  '" data-id="' + data.players[i].pid + '">' + data.players[i].n + '</div>'));
+		$('#igPlayersList').append('<div class="' + gameSurface.PLAYERS_COLORS[i] +  '" data-id="' + data.players[i].pid + '">' + data.players[i].n + '</div>');
 	}
 }
 
