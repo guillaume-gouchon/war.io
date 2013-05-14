@@ -61,7 +61,7 @@ canvas {
 
 .fullScreenTitle {
     position: absolute;
-    top : 10%;
+    top : 80px;
     left: 100%;
     width: 100%;
     text-align: center;
@@ -374,6 +374,22 @@ header #music.musicEnabled {
   margin-top: 30px;
 }
 
+#igPlayersList {
+  position: absolute;
+  top: 250px;
+  width: 100%;
+  text-align: center;
+  font-size: 2.0em;
+}
+
+#igPlayersList div {
+  line-height: 40px;
+  opacity: 0.5;
+}
+
+#igPlayersList div.ready {
+  opacity: 1;
+}
 
 
 

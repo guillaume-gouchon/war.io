@@ -255,7 +255,11 @@ gameSurface.geometryLoaded = function (key) {
 gameSurface.updateLoadingCounter = function () {
 	this.stuffToBeLoaded --;
 	if(this.stuffToBeLoaded == 0) {
-		gameManager.startGame();
+		if (gameManager.isOfflineGame) {
+			gameManager.startGame();
+		} else {
+			gameManager.readyToPlay();	
+		}
 	}
 }
 

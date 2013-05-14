@@ -296,6 +296,7 @@ module.exports = function(app){
 			var game = app.gamesManager.games[i];
 		    for (var j in game.players) {
 		      	if(game.players[j].pid == playerId) {
+
 		      		//ask player
 		      		socket.emit('askRejoin', {
 						id: game.id,
@@ -303,6 +304,7 @@ module.exports = function(app){
 						currentPlayers: game.players.length,
 						maxPlayers: game.nbPlayers
 					});
+
 		        	return;
 		    	}
 	    	}
@@ -333,6 +335,52 @@ module.exports = function(app){
 							game.orders.push([data[0], data[1]]);
 						});
 			    	}
+
+			    	return;
+		      	}
+		    }
+	  	}
+	}
+
+
+	/**
+	*	One player has loaded the game and is ready to play.
+	*/
+	app.gamesManager.playerIsReady = function (socket, playerId) {
+		for (var i in app.gamesManager.games) {
+			var game = app.gamesManager.games[i];
+		    for (var j in game.players) {
+		      	if(game.players[j].pid == playerId) {
+		      		game.players[j].ready = 1;
+
+					//launch game ?
+					for (var n in game.players) {
+						if (game.sockets[n] != null && game.players[n].ready == null) {
+
+							//at least one player is not ready
+							for (var i in game.sockets) {
+				      			if (game.sockets[i] != null) {
+									game.sockets[i].emit('updateGamePlayers', 
+										{
+											players: game.players,
+											playersMax: game.nbPlayers
+										}
+									);
+								}
+							}
+
+							return;
+						}
+					}
+
+					//launch game !
+					for (var i in game.sockets) {
+						if (game.sockets[i] != null) {
+							game.sockets[i].emit('go', null);
+						}
+					}
+
+			    	return;
 		      	}
 		    }
 	  	}

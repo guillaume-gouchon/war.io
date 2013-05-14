@@ -20,23 +20,27 @@ try {
 		gameManager.socket.emit('PID', gameManager.playerId);
 	});
 
+	//the player is asked if he wants to rejoin a game
+	gameManager.socket.on('askRejoin', function (game) {
+		$('#rejoin').append('<div class="bigButton" data-id="' + game.id + '">' + game.name + '</div>');
+		$('#rejoin').css('top', (window.innerHeight - $('#rejoin').height()) / 2);
+		$('#rejoin').css('left', (window.innerWidth - $('#rejoin').width()) / 2);
+		$('.bigButton', '#rejoin').click(function () {
+			gameManager.connectToServer(null);
+			gameManager.socket.emit('rejoinResponse', gameManager.playerId);
+			hideWelcomeScreen();
+			$('#loadingTitle').removeClass('hide').addClass('moveToLeft');
+			$('#rejoin').addClass('hide');
+		});
+	});
+
+	//the game has started
+	gameManager.socket.on('go', function () {
+		gameManager.startGame();
+	});
+
 } catch (e) {
 }
-
-
-//the player is asked if he wants to rejoin a game
-gameManager.socket.on('askRejoin', function (game) {
-	$('#rejoin').append('<div class="bigButton" data-id="' + game.id + '">' + game.name + '</div>');
-	$('#rejoin').css('top', (window.innerHeight - $('#rejoin').height()) / 2);
-	$('#rejoin').css('left', (window.innerWidth - $('#rejoin').width()) / 2);
-	$('.bigButton', '#rejoin').click(function () {
-		gameManager.connectToServer(null);
-		gameManager.socket.emit('rejoinResponse', gameManager.playerId);
-		hideWelcomeScreen();
-		$('#loadingTitle').removeClass('hide').addClass('moveToLeft');
-		$('#rejoin').addClass('hide');
-	});
-});
 
 
 /**
@@ -223,17 +227,24 @@ gameManager.showStats = function (stats) {
 }
 
 
+/**
+*	Updates the players list.
+*/
 gameManager.updatePlayersInGame = function (data) {
 	var playersNeeded = data.playersMax - data.players.length;
 	$('#loadingLabel').html('Waiting for ' + playersNeeded + ' player' + (playersNeeded > 1 ? 's' : ''));
 
 	$('#igPlayersList').removeClass('hide').html('');
 	for (var i in data.players) {
-		$('#igPlayersList').append('<div class="' + gameSurface.PLAYERS_COLORS[i] +  '" data-id="' + data.players[i].pid + '">' + data.players[i].n + '</div>');
+		$('#igPlayersList').append('<div class="' + gameSurface.PLAYERS_COLORS[i] +  ' ' + (data.players[i].ready == 1 ? 'ready':'') + '" data-id="' + data.players[i].pid + '">' + data.players[i].n + '</div>');
 	}
 }
 
 
-
-
+/**
+*	Tells the server that I am ready to play.
+*/
+gameManager.readyToPlay = function () {
+	this.socket.emit('ready', this.playerId);
+}
 

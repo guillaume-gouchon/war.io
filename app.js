@@ -56,6 +56,10 @@ io.sockets.on('connection', function (socket) {
     app.gamesManager.rejoinGame(socket, data);    
   });
 
+  socket.on('ready', function (data) {
+    app.gamesManager.playerIsReady(socket, data);    
+  });
+
   socket.on('enter', function (data) {
     if (data == null) {
       app.gamesManager.addPlayerToGamesUpdates(socket);
