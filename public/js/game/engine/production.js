@@ -39,9 +39,16 @@ production.updateConstruction = function (game, building) {
 *	The user cancels the construction of a building.
 */
 production.cancelConstruction = function (game, building) {
-	if (building != null && building.cp < 100) {
+	if (building != null && building.cp < 95) {
 		this.sellsElement(game, building.o, gameData.ELEMENTS[building.f][building.r][building.t]);
-		building.l = 0;
+		production.removeBuilding(game, building);
+		for (var i in game.gameElements[gameData.FAMILIES.building]) {
+			if (game.gameElements[gameData.FAMILIES.building][i].id == building.id) {
+				gameCreation.removeGameElement(game, building);
+				game.gameElements[gameData.FAMILIES.building].splice(i, 1);
+				break;
+			}
+		}
 	}
 }
 
