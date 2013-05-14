@@ -11,6 +11,7 @@ soundManager.SOUNDS_LIST = {
 	hammer: 'hammer',
 	saw: 'saw'
 };
+soundManager.SOUND_VOLUME = 0.5;
 
 
 /**
@@ -27,6 +28,7 @@ soundManager.soundTag = null;
 soundManager.init = function () {
 	this.musicTag = $('audio', '#musicTags')[0];
 	this.soundTag = $('audio', '#musicTags')[1];
+	
 	if(this.musicTag.canPlayType('audio/ogg') != ''){
         this.audioFilesFormat = '.ogg';
     } else if(this.musicTag.canPlayType('audio/mp3') != ''){
@@ -37,6 +39,8 @@ soundManager.init = function () {
         soundManager.musicTag.src = null;
         soundManager.playMusic();
     });
+
+    this.soundTag.volume = this.SOUND_VOLUME;
 }
 
 
