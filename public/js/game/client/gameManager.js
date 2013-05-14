@@ -31,7 +31,7 @@ gameManager.socket.on('askRejoin', function (game) {
 	$('#rejoin').css('left', (window.innerWidth - $('#rejoin').width()) / 2);
 	$('.bigButton', '#rejoin').click(function () {
 		gameManager.connectToServer(null);
-		gameManager.socket.emit('rejoinResponse', this.playerId);
+		gameManager.socket.emit('rejoinResponse', gameManager.playerId);
 		hideWelcomeScreen();
 		$('#loadingTitle').removeClass('hide').addClass('moveToLeft');
 		$('#rejoin').addClass('hide');
