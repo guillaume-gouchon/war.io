@@ -53,7 +53,7 @@ io.sockets.on('connection', function (socket) {
   });
 
   socket.on('rejoinResponse', function (data) {
-      app.gamesManager.rejoinGame(socket, data);    
+    app.gamesManager.rejoinGame(socket, data);    
   });
 
   socket.on('enter', function (data) {
