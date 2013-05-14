@@ -41,7 +41,7 @@ if (!isWebGLEnabled()) {
 	$('#errorWebGL').fadeIn();
 } else {
 	//buttons entrance
-	$('#gameManagerButtons').addClass('moveToTop');
+	$('#gameManagerButtons').addClass('moveToTopHalf');
 }
 
 
@@ -221,7 +221,7 @@ function isWebGLEnabled() {
 
 function showWelcomeScreen() {
 	$('#mainTitle').removeClass('hideToLeft');
-	$('#gameManagerButtons').addClass('moveToTop');
+	$('#gameManagerButtons').addClass('moveToTopHalf');
 	$('header').fadeIn();
 	$('footer').fadeIn();
 }
@@ -229,7 +229,7 @@ function showWelcomeScreen() {
 function hideWelcomeScreen() {
 	closePopups();
 	$('#mainTitle').addClass('hideToLeft');
-	$('#gameManagerButtons').removeClass('moveToTop');
+	$('#gameManagerButtons').removeClass('moveToTopHalf');
 	$('header').fadeOut();
 	$('footer').fadeOut();
 }

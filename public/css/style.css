@@ -92,6 +92,11 @@ canvas {
     top: 250px!important;
 }
 
+.moveToTopHalf {
+    top: 50%!important;
+}
+
+
 .bigButtonsChooser {
     position: absolute;
     top : 100%;
@@ -355,7 +360,7 @@ header #music.musicEnabled {
 }
 
 .backButton {
-  margin-top: 30px;
+  margin-top: 80px;
   background: #a22!important;
 }
 
@@ -371,7 +376,7 @@ header #music.musicEnabled {
 }
 
 #lstGames .backButton {
-  margin-top: 30px;
+  margin-top: 80px;
 }
 
 #igPlayersList {
