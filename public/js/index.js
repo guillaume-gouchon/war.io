@@ -58,7 +58,7 @@ var gameInitData = {
 
 //solo mode
 $('#soloGameButton').click(function () {
-	soundManager.playSound(soundManager.SOUNDS_LIST.button);
+	soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
 	$(this).unbind('click');
 	hideWelcomeScreen();
 	$('#loadingLabel').html('Loading');
@@ -72,7 +72,7 @@ $('#soloGameButton').click(function () {
 
 //create game
 $('#createGameButton').click(function () {
-	soundManager.playSound(soundManager.SOUNDS_LIST.button);
+	soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
 	hideWelcomeScreen();
 	$('#setupNewGame').removeClass('hide').addClass('moveToTop');
 	$('#subTitle').html('How many players ?').removeClass('hide').addClass('moveToLeft');
@@ -80,7 +80,7 @@ $('#createGameButton').click(function () {
 
 //confirm game creation
 $('#confirmGameCreation').click(function () {
-	soundManager.playSound(soundManager.SOUNDS_LIST.button);
+	soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
 	$(this).unbind('click');
 	$('#subTitle').addClass('hide');
 	$('#loadingTitle').removeClass('hide').addClass('moveToLeft');
@@ -94,7 +94,7 @@ $('#confirmGameCreation').click(function () {
 
 //join game
 $('#joinGameButton').click(function () {
-	soundManager.playSound(soundManager.SOUNDS_LIST.button);
+	soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
 	$('#lstGames').html('');
 	hideWelcomeScreen();
 	$('#joinGame').removeClass('hide').addClass('moveToTop');
@@ -106,7 +106,7 @@ $('#joinGameButton').click(function () {
 
 		//confirm join game
 		$('.joinableGame', '#lstGames').click(function () {
-			soundManager.playSound(soundManager.SOUNDS_LIST.button);
+			soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
 			$('#subTitle').addClass('hide');
 			$('#loadingTitle').removeClass('hide').addClass('moveToLeft');
 			$('#joinGame').removeClass('moveToTop');
@@ -121,13 +121,13 @@ $('#joinGameButton').click(function () {
 
 //back home buttons
 $('.backButton', '#setupNewGame').click(function () {
-	soundManager.playSound(soundManager.SOUNDS_LIST.button);
+	soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
 	$('#subTitle').addClass('hide').removeClass('moveToLeft');
 	$('#setupNewGame').addClass('hide').removeClass('moveToTop');
 	showWelcomeScreen();
 });
 $('.backButton', '#joinGame').click(function () {
-	soundManager.playSound(soundManager.SOUNDS_LIST.button);
+	soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
 	$('#subTitle').addClass('hide').removeClass('moveToLeft');
 	$('#joinGame').addClass('hide').removeClass('moveToTop');
 	showWelcomeScreen();

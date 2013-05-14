@@ -7,7 +7,8 @@ var soundManager = {};
 soundManager.MUSIC_FILES_PATH = 'music/';
 soundManager.MUSICS_LIST = ['0', '1'];
 soundManager.SOUNDS_LIST = {
-	button: 'button_sound',
+	mainButton: 'main_button',
+	button: 'button',
 	hammer: 'hammer',
 	saw: 'saw'
 };
