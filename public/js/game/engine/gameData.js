@@ -35,7 +35,8 @@ gameData.PLAYER_STATUSES = {
 	ig : 0,
 	defeat : 1,
 	victory : 2,
-	watcher : 3
+	watcher : 3,
+	surrender : 4
 }
 
 

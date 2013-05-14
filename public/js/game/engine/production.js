@@ -41,12 +41,17 @@ production.updateConstruction = function (game, building) {
 production.cancelConstruction = function (game, building) {
 	if (building != null && building.cp < 95) {
 		this.sellsElement(game, building.o, gameData.ELEMENTS[building.f][building.r][building.t]);
-		production.removeBuilding(game, building);
+		this.removeBuilding(game, building);
+		for (var i in game.gameElements[gameData.FAMILIES.unit]) {
+			if (game.gameElements[gameData.FAMILIES.unit][i].a == building) {
+				game.gameElements[gameData.FAMILIES.unit][i].a = null;
+			}
+		}
 		for (var i in game.gameElements[gameData.FAMILIES.building]) {
 			if (game.gameElements[gameData.FAMILIES.building][i].id == building.id) {
-				gameCreation.removeGameElement(game, building);
+				game.cancelBuildings.push(building);
 				game.gameElements[gameData.FAMILIES.building].splice(i, 1);
-				break;
+				break;	
 			}
 		}
 	}

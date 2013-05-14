@@ -21,6 +21,7 @@ gameData.Game = function () {
 	*	Used to synchronize user's build action with the game engine loop.
 	*/
 	this.newBuildings = [];
+	this.cancelBuildings = [];
 	this.orders = [];
 
 

@@ -300,6 +300,12 @@ gameSurface.getLifeBarColor = function (lifeRatio) {
 gameSurface.MESSAGES = {
 	popLimitReached : {
 		id : 0, text : 'You need more houses'
+	},
+	musicEnabled : {
+		id : 1, text : 'Music enabled'
+	},
+	musicDisabled : {
+		id : 2, text : 'Music disabled'
 	}
 };
 

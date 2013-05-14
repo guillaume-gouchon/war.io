@@ -220,8 +220,21 @@ userInput.sendOrder = function (x, y) {
 userInput.onEnterKey = function () {
 	if (this.isChatWindowOpen) {
 		$('#chat').addClass('hide');
-		if ($('input', '#chat').val() != '') {
-			gameManager.sendOrderToEngine(order.TYPES.chat, [gameContent.myArmy, $('input', '#chat').val()]);
+		var message = $('input', '#chat').val();
+		if (message != '') {
+			if (message == 'olivier !' || message == '/soundon') {
+				gameManager.musicEnabled = true;
+				gameManager.playMusic();
+				gameSurface.showMessage(gameSurface.MESSAGES.musicEnabled);
+			} else if (message == 'paranormalement' || message == '/soundoff') {
+				gameManager.musicEnabled = false;
+				gameManager.stopMusic();
+				gameSurface.showMessage(gameSurface.MESSAGES.musicDisabled);
+			} else if (message == '/surrender') {
+				gameManager.sendOrderToEngine(order.TYPES.surrender, [gameContent.myArmy]);
+			} else {
+				gameManager.sendOrderToEngine(order.TYPES.chat, [gameContent.myArmy, $('input', '#chat').val()]);
+			}
 		}
 		$('input', '#chat').val('');
 	} else {

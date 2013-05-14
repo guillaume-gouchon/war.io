@@ -24,6 +24,7 @@ $('input', '#playerName').keydown(function (e) {
 if(utils.readCookie('rts_music_enabled') == 'true') {
 	gameManager.musicEnabled = true;
 	$('#music').addClass('musicEnabled').html('On');
+	gameManager.playMusic();
 }
 
 //adds armies buttons
@@ -168,8 +169,10 @@ $('.customRadio').bind(inputEvents, function () {
 $('#music').click(function () {
 	if(gameManager.musicEnabled) {
 		$('#music').removeClass('musicEnabled').html('Off');
+		gameManager.stopMusic();
 	} else {
 		$('#music').addClass('musicEnabled').html('On');
+		gameManager.playMusic();
 	}
 	gameManager.musicEnabled = !gameManager.musicEnabled;
 	utils.createCookie('rts_music_enabled', gameManager.musicEnabled);

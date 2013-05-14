@@ -10,7 +10,8 @@ order.TYPES = {
 	buy : 2,
 	cancelConstruction : 3,
 	chat : 4,
-	diplomacy : 5
+	diplomacy : 5,
+	surrender : 6
 }
 
 
@@ -33,6 +34,9 @@ order.dispatchReceivedOrder = function (game, type, params) {
 			break;
 		case 5 :
 			this.updateDiplomacy(game, params[0], params[1], params[2]);
+			break;
+		case 6 :
+			this.surrender(game, params[0]);
 			break;
 	}
 }
@@ -119,6 +123,11 @@ order.receiveChatMessage = function (game, player, message) {
 
 order.updateDiplomacy = function (game, fromPlayer, toPlayer, newRank) {
 	game.players[fromPlayer].ra[toPlayer] = newRank;
+}
+
+
+order.surrender = function (game, army) {
+	game.players[army].s = gameData.PLAYER_STATUSES.surrender;
 }
 
 

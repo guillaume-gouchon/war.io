@@ -252,3 +252,18 @@ gameManager.readyToPlay = function () {
 	this.socket.emit('ready', this.playerId);
 }
 
+
+/**
+*	Plays the music.
+*/
+gameManager.playMusic = function () {
+
+}
+
+
+/**
+*	Stops the music.
+*/
+gameManager.stopMusic = function () {
+
+}

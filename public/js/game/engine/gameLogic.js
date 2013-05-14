@@ -24,7 +24,9 @@ gameLogic.update = function (game) {
 	game.orders = [];
 
 	for (var n in game.players) {
-		game.players[n].s = gameData.PLAYER_STATUSES.defeat;
+		if (game.players[n].s != gameData.PLAYER_STATUSES.surrender) {
+			game.players[n].s = gameData.PLAYER_STATUSES.defeat;
+		}
 	}
 
 	//units
@@ -40,8 +42,10 @@ gameLogic.update = function (game) {
 	for (var n in game.gameElements[gameData.FAMILIES.building]) {
 		var element  = game.gameElements[gameData.FAMILIES.building][n];
 
-		//player is still alive
-		game.players[element.o].s = gameData.PLAYER_STATUSES.ig;
+		if (game.players[element.o].s != gameData.PLAYER_STATUSES.surrender) {
+			//player is still alive
+			game.players[element.o].s = gameData.PLAYER_STATUSES.ig;
+		}
 		
 		this.updateBuildings(game, element);
 		this.protectAround(game, element);
@@ -77,6 +81,12 @@ gameLogic.addNewBuildings = function (game) {
 		gameCreation.addGameElement(game, game.newBuildings[i]);
 	}
 	game.newBuildings = [];
+
+	for (var i in game.cancelBuildings) {
+		gameCreation.removeGameElement(game, game.cancelBuildings[i]);
+	}
+
+	game.cancelBuildings = [];
 }
 
 
@@ -175,7 +185,8 @@ gameLogic.checkGameOver = function (game) {
 	var nbPlayersDefeated = 0;
 	var victory = -1;
 	for (var i in game.players) {
-		if (game.players[i].s == gameData.PLAYER_STATUSES.defeat) {
+		if (game.players[i].s == gameData.PLAYER_STATUSES.defeat
+			|| game.players[i].s == gameData.PLAYER_STATUSES.surrender) {
 			nbPlayersDefeated++;
 		} else {
 			victory = game.players[i].o;

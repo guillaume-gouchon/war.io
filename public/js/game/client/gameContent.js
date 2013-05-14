@@ -98,7 +98,8 @@ gameContent.update = function (data) {
 
 	//check for victory / defeat
 	if (this.players[this.myArmy].s == gameData.PLAYER_STATUSES.victory
-		|| this.players[this.myArmy].s == gameData.PLAYER_STATUSES.defeat) {
+		|| this.players[this.myArmy].s == gameData.PLAYER_STATUSES.defeat
+		|| this.players[this.myArmy].s == gameData.PLAYER_STATUSES.surrender) {
 		gameManager.endGame(this.players[this.myArmy].s);
 	}
 
