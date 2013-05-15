@@ -81,12 +81,14 @@ module.exports = function(app){
 		} else {
 			//send to the players that a new player has joined
 			for (var i in game.sockets) {
-				game.sockets[i].emit('updateGamePlayers', 
-					{
-						players: game.players,
-						playersMax: game.nbPlayers
-					}
-				);	
+				if (game.sockets[i] != null) {
+					game.sockets[i].emit('updateGamePlayers', 
+						{
+							players: game.players,
+							playersMax: game.nbPlayers
+						}
+					);
+				}
 			}
 		}
 
