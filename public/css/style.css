@@ -65,7 +65,7 @@ audio {
 
 .fullScreenTitle {
     position: absolute;
-    top : 80px;
+    top : 60px;
     left: 100%;
     width: 100%;
     text-align: center;
@@ -364,7 +364,7 @@ header #music.musicEnabled {
 }
 
 .backButton {
-  margin-top: 80px;
+  margin-top: 60px;
   background: #a22!important;
 }
 
@@ -380,7 +380,7 @@ header #music.musicEnabled {
 }
 
 #lstGames .backButton {
-  margin-top: 80px;
+  margin-top: 60px;
 }
 
 #igPlayersList {

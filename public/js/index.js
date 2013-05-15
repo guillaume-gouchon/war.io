@@ -51,7 +51,7 @@ if (!isWebGLEnabled()) {
 
 var gameInitData = {
 	mapType: 'random',
-	mapSize: 'medium',
+	mapSize: 'small',
 	vegetation: 'standard',
 	initialResources: 'standard'
 };

@@ -31,8 +31,9 @@ AI.searchForNewEnemy = function (game, unit) {
 *	An unit reacts when it is being attacked and has no order.
 */
 AI.targetReaction = function (game, target, attacker) {
-	if (gameData.ELEMENTS[target.f][target.r][target.t].isBuilder) {
-		//flee if it is a builder
+	if (gameData.ELEMENTS[target.f][target.r][target.t].isBuilder
+		|| (gameData.ELEMENTS[target.f][target.r][target.t].range > 1 && gameData.ELEMENTS[attacker.f][attacker.r][attacker.t].range == 1)) {
+		//flee if it is a builder or a bowman attacked in close combat
 		var around = tools.getTilesAroundElements(game, target);
 		if (around.length > 0) {
 			target.mt = around[parseInt(Math.random() * (around.length - 1))];	

@@ -36,17 +36,11 @@ gameData.INITIAL_RESOURCES = {
 }
 
 gameData.MAP_SIZES = {
-	test : {
-		name : 'Test',
-		x : 80,
-		y : 80
-	},
 	small : {
 		name : 'Small',
-		x : 80,
-		y : 80
+		x : 100,
+		y : 100
 	},
-
 	medium : {
 		name : 'Medium',
 		x : 140,
@@ -55,8 +49,8 @@ gameData.MAP_SIZES = {
 
 	large : {
 		name : 'Large',
-		x : 200,
-		y : 200
+		x : 180,
+		y : 180
 	}
 }
 

@@ -32,7 +32,6 @@ gameLogic.update = function (game) {
 	//units
 	for(var n in game.gameElements[gameData.FAMILIES.unit]) {
 		var element  = game.gameElements[gameData.FAMILIES.unit][n];
-		
 		this.resolveActions(game, element);
 		this.updateMoves(game, element);
 		this.protectAround(game, element);
@@ -48,7 +47,10 @@ gameLogic.update = function (game) {
 		}
 		
 		this.updateBuildings(game, element);
-		this.protectAround(game, element);
+		if (gameData.ELEMENTS[element.f][element.r][element.t].attack != null) {
+			this.resolveActions(game, element);
+			this.protectAround(game, element);
+		}
 	}
 
 	this.addNewBuildings(game);
