@@ -77,11 +77,11 @@ audio {
 }
 
 .easeTransition {
-    -webkit-transition: all 800ms cubic-bezier(0.000, 0.000, 0.580, 1.000); 
-    -moz-transition: all 800ms cubic-bezier(0.000, 0.000, 0.580, 1.000); 
-    -ms-transition: all 800ms cubic-bezier(0.000, 0.000, 0.580, 1.000); 
-    -o-transition: all 800ms cubic-bezier(0.000, 0.000, 0.580, 1.000); 
-    transition: all 800ms cubic-bezier(0.000, 0.000, 0.580, 1.000); /* ease-out */
+    -webkit-transition: all 600ms cubic-bezier(0.000, 0.000, 0.580, 1.000); 
+    -moz-transition: all 600ms cubic-bezier(0.000, 0.000, 0.580, 1.000); 
+    -ms-transition: all 600ms cubic-bezier(0.000, 0.000, 0.580, 1.000); 
+    -o-transition: all 600ms cubic-bezier(0.000, 0.000, 0.580, 1.000); 
+    transition: all 600ms cubic-bezier(0.000, 0.000, 0.580, 1.000); /* ease-out */
 }
 
 .moveToLeft {
@@ -89,7 +89,7 @@ audio {
 }
 
 .hideToLeft {
-    left: -100%;
+    left: -300%;
 }
 
 .moveToTop {
@@ -103,7 +103,7 @@ audio {
 
 .bigButtonsChooser {
     position: absolute;
-    top : 100%;
+    top : 150%;
     width: 100%;
     text-align: center;
 }
@@ -190,7 +190,7 @@ a:hover {
 
 .popup {
     position: absolute;
-    top: -500px;
+    top: -1200px;
     background: #000;
     padding: 25px;
     -webkit-box-shadow:-10px -10px 40px 20px rgba(0, 0, 0, 0.7);
@@ -396,6 +396,21 @@ header #music.musicEnabled {
   opacity: 0.7;
 }
 
+#tutorial {
+  height: 80%;
+  width: 80%;
+  background: none;
+  box-shadow: none;
+}
+
+#tutorial ul {
+  height: 100%;
+  width: 100%;
+}
+
+#tutorial li div {
+  position: relative;
+}
 
 
 
@@ -1047,6 +1062,26 @@ header #music.musicEnabled {
 }
 @media screen and (max-width: 600px) { 
   .cb-slideshow li div h3 { font-size: 50px }
+}
+
+.roundabout-holder {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  height: 5em;
+  width: 5em;
+}
+.roundabout-moveable-item {
+  height: 250px;
+  width: 400px;
+  cursor: pointer;
+  background-color: #111;
+  border: 2px solid #999;
+  padding: 30px;
+  text-align: center;
+}
+.roundabout-in-focus {
+  cursor: auto;
 }
 
 

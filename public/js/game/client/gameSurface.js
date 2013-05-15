@@ -35,7 +35,7 @@ gameSurface.CENTER_CAMERA_Y_OFFSET = 10 * gameSurface.PIXEL_BY_NODE;
 gameSurface.BARS_HEIGHT = 0.5;
 gameSurface.BARS_DEPTH = 0.2;
 gameSurface.BUILDING_STRUCTURE_SIZE = 5;
-gameSurface.BUILDING_INIT_Z = - 2 * gameSurface.PIXEL_BY_NODE;
+gameSurface.BUILDING_INIT_Z = - 1.5 * gameSurface.PIXEL_BY_NODE;
 gameSurface.ARMIES_COLORS = ['_red', '_blu', '_gre', '_yel'];
 gameSurface.PLAYERS_COLORS = ['red', 'blue', 'green', 'yellow'];
 gameSurface.MOVEMENT_EXTRAPOLATION_ITERATION = 6;
@@ -391,7 +391,7 @@ gameSurface.createObject = function (key, element) {
 
 	if (element.f == gameData.FAMILIES.building) {
 		if (element.cp < 100) {
-			object.position.z += this.BUILDING_INIT_Z;	
+			object.position.z += this.BUILDING_INIT_Z;
 		}
 	}
 
@@ -430,9 +430,12 @@ gameSurface.updateElement = function (element) {
 
 	if (element.f == gameData.FAMILIES.building && rank.isAlly(gameContent.players, gameContent.myArmy, element)) {
 		if (element.cp < 100) {
+
 			//update construction progress
-			d.position.z -= (100 - element.cp) / 20 * this.PIXEL_BY_NODE;
+			d.position.z = (100 - element.cp) / 100 * this.BUILDING_INIT_Z;
+
 		} else if (element.q.length > 0) {
+
 			//update progress bar
 			var progressBar = null;
 			for (var i in d.children) {
@@ -476,12 +479,14 @@ gameSurface.updateElement = function (element) {
 			}
 		}
 
-		//update minimap
-		GUI.updateElementOnMinimap(element);
+		
 
 		if (element.o == gameContent.myArmy && s.l > element.l) {
 			//you are being attacked
 			GUI.addAlertMinimap(element);
+		} else {
+			//update minimap
+			GUI.updateElementOnMinimap(element);
 		}
 	}
 

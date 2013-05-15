@@ -166,7 +166,11 @@ $('a', 'footer').bind(inputEvents, function () {
 
 //hide popups
 $('#introScreen').bind(inputEvents, function () {
-	closePopups();
+    closePopups();	
+});
+
+$(".popup").not('#tutorial').click(function (e) {
+    e.stopPropagation();
 });
 
 //custom radio buttons
@@ -193,7 +197,7 @@ preloadImages();
 
 
 function closePopups() {
-	$('.popup').css('top', -500);
+	$('.popup').css('top', -1200);
 }
 
 function initArmyChooser () {
@@ -259,3 +263,16 @@ function updateGamesList(games) {
 		$('#lstGames').append('<div id="noGames">No games available yet... create one !</div>');	
 	}
 }
+
+$(document).ready(function () {
+	$('ul', '#tutorial').roundabout({
+		easing: 'easeOutQuad',
+		enableDrag: true,
+		dropEasing: 'easeOutBounce',
+		responsive: true
+	});
+
+	$('div', '#tutorial li').each(function () {
+		$(this).css('top', (250 - $(this).height()) / 2);
+	});
+});

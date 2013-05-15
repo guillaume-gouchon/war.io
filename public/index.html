@@ -34,11 +34,11 @@
 	  <div id="introScreen" class="fullScreen blackBackground">
 
 	  	<ul class="cb-slideshow" >
-			<li><span>Image 01</span><div><h3></h3></div></li>
-			<li><span>Image 02</span><div><h3></h3></div></li>
-			<li><span>Image 03</span><div><h3></h3></div></li>
-			<li><span>Image 04</span><div><h3></h3></div></li>
-			<li><span>Image 05</span><div><h3></h3></div></li>
+			<li><span></span></li>
+			<li><span></span></li>
+			<li><span></span></li>
+			<li><span></span></li>
+			<li><span></span></li>
 		</ul>
 
 	  	<div id="mainTitle" class="fullScreenTitle easeTransition" >Welcome to WarNode !</div>
@@ -110,7 +110,68 @@
 	  	</div>
 
 	  	<div id="tutorial" class="popup easeTransition">
-	  		<h1>How to Play ?</h1>
+	  		<ul>
+			   	<li>
+				   	<div>
+						<p>WarNode is a multiplayer game working nicely on Chrome, Safari, Chromium and Chrome for Android.</p>
+						<p><img src="img/browsers.png" alt="Compatible Browsers"/></p>
+						<p>You will need WebGL enabled. Follow <a href="http://get.webgl.org" target="_blank">this link</a> to know more about it.</p>
+				   	</div>
+			   </li>
+			   <li>
+			   		<div>
+						<p>Change your name, choose your army and manage the sound here :</a></p>
+						<p><img src="img/help10.png" alt="Main Screen"/></p>
+						<p>You are then ready for battle.</p>
+						<p>Create a game or join an available one.</p>
+						<p>You can even play solo in Offline Mode !</p>
+				   	</div>
+			   </li>
+			   <li>
+			   		<div>
+						<p>Use your villagers to gather gold in the mine and to chop trees.</p>
+						<p><img src="img/help20.png" alt="Base Camp"/></p>
+						<p>It will give you resources to build structures and hire troops.</p>
+				   	</div>
+			   </li>
+			   <li>
+				   	<div>
+				   		<p>Here is your population and resources counters :</p>
+						<p><img src="img/help21.png" alt="Resources"/></p>
+						<p>When your max population is reached, you will not be able to hire more units.</p>
+						<p>Build houses to increase it.</p>
+					</div>
+			   </li>
+			   <li>
+			   		<div>
+						<p>Select a game element with a left-click (simple touch).</p>
+						<p>You can then give orders with a right-click (long touch).</p>
+						<p>You can draw selection rectangles by clicking (long touch) and releasing (dragging).</p>
+						<p><img src="img/help30.png" alt="Selection Rectangle"/></p>
+				   	</div>
+			   </li>
+			   <li>
+			   		<div>
+						<p>Here are the selected elements information :</p>
+						<p><img src="img/help31.png" alt="Game Element Information"/></p>
+						<p>It displays the current life points, attack, defense, attack speed, and range characteristics.</p>
+				   	</div>
+			   </li>
+			   <li>
+			   		<div>
+						<p>The villagers can create buildings; use this button :</p>
+						<p><img src="img/help32.png" alt="Build button"/></p>
+						<p>Choose then which building and where to build it (drag it on touchscreen devices).</p>
+				   	</div>
+			   </li>
+			   <li>
+			   		<div>
+						<p>Build a casern to hire units.</p>
+						<p><img src="img/help40.png" alt="Casern"/></p>
+						<p>Then destroy all your enemies' buildings to win !</p>
+				   	</div>
+			   </li>
+			</ul>
 	  	</div>
 
 	  	<div id="devNotes" class="popup easeTransition">
@@ -146,7 +207,6 @@
 	  	</footer>
 
 	  	<div id="igPlayersList" class="hide"></div>
-
 	  	
 	  </div>
 
@@ -233,6 +293,7 @@
 
 	<!-- SCRIPTS -->
 	<script src="http://code.jquery.com/jquery-latest.js"></script>
+	<script type="text/javascript" src="js/jquery.roundabout.min.js"></script>
 	<script type="text/javascript" src="js/index.js"></script>
 
 	<!-- SHARE THIS -->
