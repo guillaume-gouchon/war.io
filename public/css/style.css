@@ -89,7 +89,7 @@ audio {
 }
 
 .hideToLeft {
-    left: -300%;
+    left: -100%;
 }
 
 .moveToTop {
@@ -103,7 +103,7 @@ audio {
 
 .bigButtonsChooser {
     position: absolute;
-    top : 150%;
+    top : 120%;
     width: 100%;
     text-align: center;
 }
