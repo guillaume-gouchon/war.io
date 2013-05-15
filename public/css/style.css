@@ -44,12 +44,12 @@ audio {
     left:0;
     width:100%;
     height:100%;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .blackBackground {
@@ -1072,8 +1072,8 @@ header #music.musicEnabled {
   width: 5em;
 }
 .roundabout-moveable-item {
-  height: 250px;
-  width: 400px;
+  height: 280px;
+  width: 420px;
   cursor: pointer;
   background-color: #111;
   border: 2px solid #999;
