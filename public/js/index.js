@@ -265,6 +265,8 @@ function updateGamesList(games) {
 }
 
 $(document).ready(function () {
+	$('#tutorial').removeClass('hide');
+
 	$('ul', '#tutorial').roundabout({
 		easing: 'easeOutQuad',
 		enableDrag: true,
@@ -273,6 +275,7 @@ $(document).ready(function () {
 	});
 
 	$('div', '#tutorial li').each(function () {
-		$(this).css('top', (250 - $(this).height()) / 2);
+		$(this).css('top', (300 - $(this).height()) / 2);
 	});
+
 });

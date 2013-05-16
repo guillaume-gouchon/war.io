@@ -1072,8 +1072,8 @@ header #music.musicEnabled {
   width: 5em;
 }
 .roundabout-moveable-item {
-  height: 280px;
-  width: 420px;
+  height: 300px;
+  width: 450px;
   cursor: pointer;
   background-color: #111;
   border: 2px solid #999;

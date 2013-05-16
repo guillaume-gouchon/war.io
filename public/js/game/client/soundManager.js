@@ -27,21 +27,24 @@ soundManager.soundTag = null;
 *	Initializes the sound manager.
 */
 soundManager.init = function () {
-	this.musicTag = $('audio', '#musicTags')[0];
-	this.soundTag = $('audio', '#musicTags')[1];
-	
-	if(this.musicTag.canPlayType('audio/ogg') != ''){
-        this.audioFilesFormat = '.ogg';
-    } else if(this.musicTag.canPlayType('audio/mp3') != ''){
-        this.audioFilesFormat = '.mp3';
-    }
+	try {
+		this.musicTag = $('audio', '#musicTags')[0];
+		this.soundTag = $('audio', '#musicTags')[1];
+		
+		if(this.musicTag.canPlayType('audio/ogg') != ''){
+	        this.audioFilesFormat = '.ogg';
+	    } else if(this.musicTag.canPlayType('audio/mp3') != ''){
+	        this.audioFilesFormat = '.mp3';
+	    }
 
-    this.musicTag.addEventListener('ended', function () {
-        soundManager.musicTag.src = null;
-        soundManager.playMusic();
-    });
+	    this.musicTag.addEventListener('ended', function () {
+	        soundManager.musicTag.src = null;
+	        soundManager.playMusic();
+	    });
 
-    this.soundTag.volume = this.SOUND_VOLUME;
+	    this.soundTag.volume = this.SOUND_VOLUME;
+	} catch (e) {
+	}
 }
 
 
