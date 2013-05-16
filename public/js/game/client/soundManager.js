@@ -65,8 +65,10 @@ soundManager.playMusic = function () {
 *	Stops the music.
 */
 soundManager.stopMusic = function () {
-	this.musicTag.pause();
-	this.soundTag.pause();
+	if (this.audioFilesFormat != null) {
+		this.musicTag.pause();
+		this.soundTag.pause();
+	}
 }
 
 
