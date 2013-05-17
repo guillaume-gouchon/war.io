@@ -42,7 +42,7 @@ if (!isWebGLEnabled()) {
 	// Browser has no idea what WebGL is. Suggest they
 	// get a new browser by presenting the user with link to
 	// http://get.webgl.org
-	$('#errorWebGL').fadeIn();
+	$('#errorWebGL').fadeIn().removeClass('hide');
 } else {
 	//buttons entrance
 	$('#gameManagerButtons').addClass('moveToTopHalf');
@@ -275,7 +275,7 @@ $(document).ready(function () {
 	});
 
 	$('div', '#tutorial li').each(function () {
-		$(this).css('top', (250 - $(this).height()) / 2);
+		$(this).css('top', (300 - $(this).height()) / 2);
 	});
 
 });

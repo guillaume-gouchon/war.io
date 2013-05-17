@@ -252,15 +252,23 @@ a:hover {
   width: 100%;
   text-align: center;
   font-size: 1.6em;
-  color: #ddd;
+  color: #111;
 }
 
 #errorWebGL a {
-  color: #f22;
+  color: #c22;
 }
 
 #errorWebGL a:hover {
   color: #111;
+}
+
+#tutorial a {
+  color: #c22;
+}
+
+#tutorial a:hover {
+  color: #aaa;
 }
 
 header {
