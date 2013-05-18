@@ -314,18 +314,21 @@ onLoadCallback = function() {
 }
 
 startGameForReal = function() {
+	console.log('authorizing...');
   // We start by trying to sign-in the user behind the scenes
   gapi.auth.authorize({client_id: '1090979611868.apps.googleusercontent.com', scope: 'https://www.googleapis.com/auth/games', response_type: 'code', immediate: true}, handleAuthResult);
 };
 
 handleAuthResult = function(authResult) {
   if (authResult && !authResult.error) {
+  	console.log(authResult);
   	$('#signinButton').addClass('hide');
     $('#revokeButton').removeClass('hide');
 
     // Start the game!
     gapi.client.request({
       path: '/games/v1/players/me',
+      params: {},
       callback: function(response) {
       	console.log(response);
         gameManager.updatePlayerName(response);
@@ -336,6 +339,7 @@ handleAuthResult = function(authResult) {
     // Display the login link or button
     $('#signinButton').removeClass('hide');
     $('#revokeButton').addClass('hide');
+    console.log('error');
   }
 }
 
