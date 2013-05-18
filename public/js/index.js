@@ -334,7 +334,6 @@ handleAuthResult = function(authResult) {
     });
   } else {
     // Display the login link or button
-    console.log(authResult.error);
     $('#signinButton').removeClass('hide');
     $('#revokeButton').addClass('hide');
   }
