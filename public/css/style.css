@@ -314,6 +314,7 @@ header div {
 }
 
 #revokeButton {
+  margin-left: 10px;
   float: left;
   line-height: 23px;
   background-color: #a00;
@@ -326,6 +327,7 @@ header div {
 
 #signinButton {
   float: left;
+  margin-left: 10px;
 }
 
 #factions div:hover {
