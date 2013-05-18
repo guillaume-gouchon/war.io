@@ -1,13 +1,14 @@
 var application_root = __dirname,
     express = require("express"),
-    path = require("path")
+    path = require("path"), fs = require("fs")
+var http = require('https');
 
 var privateKey = fs.readFileSync('privatekey.pem').toString();
 var certificate = fs.readFileSync('certificate.pem').toString();
-var credentials = crypto.createCredentials({key: privateKey, cert: certificate});
+var credentials = {key: privateKey, cert: certificate};
 
 var app = module.exports = express();
-var https = app.createServer(credentials, app);
+var https = http.createServer(credentials, app);
 var server = https.listen(443);
 console.log("WarNode Server is running !");
 
@@ -18,12 +19,12 @@ io.set('log level', 1);
 
 
 //config 
-app.configure(function () {
-  app.use(express.bodyParser());
-  app.use(express.methodOverride());
-  app.use(app.router);
-  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-  app.use(express.static(__dirname + '/public', { maxAge: 31557600000 }));
+server.configure(function () {
+  server.use(express.bodyParser());
+  server.use(express.methodOverride());
+  server.use(server.router);
+  server.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+  server.use(express.static(__dirname + '/public', { maxAge: 31557600000 }));
 });
 
 
@@ -42,7 +43,7 @@ require('./services')(app);
 
 
 //setup index page
-app.get('/', function (req, res) {
+server.get('/', function (req, res) {
   if (!res.getHeader('Cache-Control')) res.setHeader('Cache-Control', 'public, max-age=' + (31557600));
   res.sendfile(__dirname + '/public/index.html');
 });
