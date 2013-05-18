@@ -2,8 +2,13 @@ var application_root = __dirname,
     express = require("express"),
     path = require("path")
 
+var privateKey = fs.readFileSync('privatekey.pem').toString();
+var certificate = fs.readFileSync('certificate.pem').toString();
+var credentials = crypto.createCredentials({key: privateKey, cert: certificate});
+
 var app = module.exports = express();
-var server = app.listen(80);
+var https = app.createServer(credentials, app);
+var server = https.listen(443);
 console.log("WarNode Server is running !");
 
 //initializes Socket IO
