@@ -336,6 +336,7 @@ startGameForReal = function() {
 handleAuthResult = function(authResult) {
   if (authResult && !authResult.error) {
     // Start the game!
+    console.log('start!');
   } else {
     // Display the login link or button
     $('#signinButton').removeClass('hide');
