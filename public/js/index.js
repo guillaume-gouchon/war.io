@@ -322,7 +322,7 @@ handleAuthResult = function(authResult) {
   if (authResult && !authResult.error) {
   	$('#signinButton').addClass('hide');
     $('#revokeButton').removeClass('hide');
-    
+
     // Start the game!
     gapi.client.request({
       path: '/games/v1/players/me',
@@ -334,7 +334,7 @@ handleAuthResult = function(authResult) {
     });
   } else {
     // Display the login link or button
-    console.log('error')
+    console.log(authResult.error);
     $('#signinButton').removeClass('hide');
     $('#revokeButton').addClass('hide');
   }
