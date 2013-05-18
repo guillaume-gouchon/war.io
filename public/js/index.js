@@ -280,21 +280,6 @@ $(document).ready(function () {
 
 });
 
-signinCallback = function (authResult) {
-  if (authResult['access_token']) {
-    // Successfully authorized
-    // Hide the sign-in button now that the user is authorized, for example:
-	$('revokeButton').removeClass('hide');
-  	$('#signinButton').addClass('hide');
-  } else if (authResult['error']) {
-    // There was an error.
-    // Possible error codes:
-    //   "access_denied" - User denied access to your app
-    //   "immediate_failed" - Could not automatically log in the user
-    // console.log('There was an error: ' + authResult['error']);
-  }
-}
-
 function disconnectUser(access_token) {
   var revokeUrl = 'https://accounts.google.com/o/oauth2/revoke?token=' +
       access_token;
@@ -336,9 +321,17 @@ startGameForReal = function() {
 handleAuthResult = function(authResult) {
   if (authResult && !authResult.error) {
     // Start the game!
+    gapi.client.request({
+      path: '/games/v1/players/me',
+      callback: function(response) {
+        gameManager.updatePlayerName(response);
+        $('input', '#playerName').val(response);
+      }
+    });
   } else {
     // Display the login link or button
     $('#signinButton').removeClass('hide');
+    $('#revokeButton').addClass('hide');
   }
 }
 
