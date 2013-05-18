@@ -310,7 +310,7 @@ function disconnectUser(access_token) {
 $('#revokeButton').click(disconnectUser);
 
 onLoadCallback = function() {
-  window.setTimeout(startGameForReal, 1000);
+  window.setTimeout(startGameForReal, 50);
 }
 
 startGameForReal = function() {
