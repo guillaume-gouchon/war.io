@@ -25,6 +25,7 @@ canvas {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  cursor: url("../js/game/data/g/cursor.png"), auto;
 }
 
 audio {

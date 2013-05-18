@@ -272,7 +272,7 @@ $(document).ready(function () {
 		enableDrag: true,
 		dropEasing: 'easeOutBounce',
 		responsive: true
-	});
+	}).roundabout("stopAutoplay");
 
 	$('div', '#tutorial li').each(function () {
 		$(this).css('top', (300 - $(this).height()) / 2);
