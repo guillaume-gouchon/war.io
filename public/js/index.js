@@ -212,7 +212,7 @@ function createArmyBox (army) {
 }
 
 function preloadImages() {
-	var images = new Array()
+	var images = new Array();
 	function preload() {
 
 		for (i = 0; i < preload.arguments.length; i++) {
@@ -279,3 +279,73 @@ $(document).ready(function () {
 	});
 
 });
+
+function signinCallback(authResult) {
+  if (authResult['access_token']) {
+    // Successfully authorized
+    // Hide the sign-in button now that the user is authorized, for example:
+	$('revokeButton').removeClass('hide');
+  	$('#signinButton').addClass('hide');
+  } else if (authResult['error']) {
+    // There was an error.
+    // Possible error codes:
+    //   "access_denied" - User denied access to your app
+    //   "immediate_failed" - Could not automatically log in the user
+    // console.log('There was an error: ' + authResult['error']);
+  }
+}
+
+function disconnectUser(access_token) {
+  var revokeUrl = 'https://accounts.google.com/o/oauth2/revoke?token=' +
+      access_token;
+
+  // Perform an asynchronous GET request.
+  $.ajax({
+    type: 'GET',
+    url: revokeUrl,
+    async: false,
+    contentType: "application/json",
+    dataType: 'jsonp',
+    success: function(nullResponse) {
+      // Do something now that user is disconnected
+      // The response is always undefined.
+      $('#signinButton').removeClass('hide');
+      $('#revokeButton').addClass('hide');
+    },
+    error: function(e) {
+      // Handle the error
+      // console.log(e);
+      // You could point users to manually disconnect if unsuccessful
+      // https://plus.google.com/apps
+    }
+  });
+}
+
+// Could trigger the disconnect on a button click
+$('#revokeButton').click(disconnectUser);
+
+onLoadCallback = function() {
+  window.setTimeout(startGameForReal, 1);
+}
+
+startGameForReal = function() {
+  // We start by trying to sign-in the user behind the scenes
+  gapi.auth.authorize({client_id: '1090979611868.apps.googleusercontent.com', scope: scopes, response_type: 'code', immediate: true}, handleAuthResult);
+};
+
+handleAuthResult = function(authResult) {
+  if (authResult && !authResult.error) {
+    // Start the game!
+  } else {
+    // Display the login link or button
+    $('#signinButton').removeClass('hide');
+  }
+}
+
+showAuthDialog = function() {
+  // Same as above, except immediate is set to false
+  gapi.auth.authorize({client_id: clientId, scope: scopes, response_type: 'code', immediate: false}, handleAuthResult);
+};
+
+$('#signinButton').click(showAuthDialog);
+

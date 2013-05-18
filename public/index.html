@@ -41,6 +41,25 @@
 			<li><span></span></li>
 		</ul>
 
+	  	<header>
+	  		<div id="playerName" class="spriteBefore sprite-playerName">
+	  			<input type="text"/>
+	  		</div>
+		  	<span id="signinButton" class="hide">
+			  <span
+			    class="g-signin"
+			    data-callback="signinCallback"
+			    data-clientid="1090979611868.apps.googleusercontent.com"
+			    data-cookiepolicy="single_host_origin"
+			    data-requestvisibleactions="http://schemas.google.com/AddActivity"
+			    data-scope="https://www.googleapis.com/auth/games">
+			  </span>
+			</span>
+			<span id="revokeButton" class="smallButton hide">Logout</span>
+	  		<div id="music" class="spriteBefore sprite-music" >Off</div>
+		  	<div id="factions"></div>
+	  	</header>
+
 	  	<div id="mainTitle" class="fullScreenTitle easeTransition" >Welcome to WarNode !</div>
 	  	<div id="subTitle" class="fullScreenTitle easeTransition hide" ></div>
 
@@ -191,14 +210,8 @@
 	  		<h3>Do you want to rejoin it ?</h3>
 	  	</div>
 
-	  	<header>
-	  		<div id="playerName" class="spriteBefore sprite-playerName">
-	  			<input type="text"/>
-	  		</div>
-		  	<div id="factions"></div>
-	  		<div id="music" class="spriteBefore sprite-music" >Off</div>
-	  	</header>
-
+	  	<div id="igPlayersList" class="hide"></div>
+	  	
 	  	<footer>
 	  		<a data-id="3" href="#">How to Play ?</a>
 	  		<a data-id="4" href="#">Dev Notes</a>
@@ -206,9 +219,6 @@
 	  		<a data-id="1" href="#">Credits</a>
 	  		<a data-id="2" href="#">Invite your Friends !</a>
 	  	</footer>
-
-	  	<div id="igPlayersList" class="hide"></div>
-	  	
 	  </div>
 
 	  <div id="gui" class="fullScreen hide" onmousedown="return false">
@@ -277,6 +287,14 @@
 			<audio controls preload></audio>
 		</div>
 
+		<script type="text/javascript">
+      (function() {
+       var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+       po.src = 'https://apis.google.com/js/client:plusone.js';
+       var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+     })();
+    </script>
+
 	</body>
 
 	<script src="/socket.io/socket.io.js"></script>
@@ -293,6 +311,7 @@
 	<script type="text/javascript" src="js/game/client.js"></script>
 
 	<!-- SCRIPTS -->
+	<script src="https://apis.google.com/js/client.js?onload=onLoadCallback"></script>
 	<script src="http://code.jquery.com/jquery-latest.js"></script>
 	<script type="text/javascript" src="js/jquery.roundabout.min.js"></script>
 	<script type="text/javascript" src="js/index.js"></script>
@@ -319,4 +338,5 @@
 
 	<!-- TOUCHSCREEN GESTURES -->
 	<script type="text/javascript" src="js/hammer.js"></script>
+
 </html>

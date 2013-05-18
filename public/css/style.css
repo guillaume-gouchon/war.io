@@ -25,7 +25,6 @@ canvas {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  cursor: url("../js/game/data/g/cursor.png"), auto;
 }
 
 audio {
@@ -294,11 +293,12 @@ header div {
   text-transform: uppercase;
 }
 
-#playerName, #factions {
+#playerName {
   float: left;
 }
 
 #factions {
+  float: right;
   margin-left: 5px;
 }
 
@@ -311,6 +311,21 @@ header div {
   cursor: pointer;
   padding-right: 8px;
   line-height: 28px;
+}
+
+#revokeButton {
+  float: left;
+  line-height: 23px;
+  background-color: #a00;
+  cursor: pointer;
+}
+
+#revokeButton:hover {
+  background-color: #aaa;
+}
+
+#signinButton {
+  float: left;
 }
 
 #factions div:hover {
