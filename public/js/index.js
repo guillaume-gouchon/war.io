@@ -280,7 +280,7 @@ $(document).ready(function () {
 
 });
 
-function disconnectUser(access_token) {
+/*function disconnectUser(access_token) {
   var revokeUrl = 'https://accounts.google.com/o/oauth2/revoke?token=' +
       access_token;
 
@@ -321,7 +321,6 @@ startGameForReal = function() {
 
 handleAuthResult = function(authResult) {
   if (authResult && !authResult.error) {
-  	console.log(authResult);
   	$('#signinButton').addClass('hide');
     $('#revokeButton').removeClass('hide');
 
@@ -331,8 +330,8 @@ handleAuthResult = function(authResult) {
       params: {},
       callback: function(response) {
       	console.log(response);
-        gameManager.updatePlayerName(response);
-        $('input', '#playerName').val(response);
+        gameManager.updatePlayerName(response.displayName);
+        $('input', '#playerName').val(response.displayName);
       }
     });
   } else {
@@ -348,5 +347,5 @@ showAuthDialog = function() {
   gapi.auth.authorize({client_id: '1090979611868.apps.googleusercontent.com', scope: 'https://www.googleapis.com/auth/games', response_type: 'code', immediate: false}, handleAuthResult);
 };
 
-$('#signinButton').click(showAuthDialog);
+$('#signinButton').click(showAuthDialog);*/
 
