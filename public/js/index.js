@@ -280,7 +280,7 @@ $(document).ready(function () {
 
 });
 
-function signinCallback(authResult) {
+signinCallback = function (authResult) {
   if (authResult['access_token']) {
     // Successfully authorized
     // Hide the sign-in button now that the user is authorized, for example:
@@ -330,7 +330,7 @@ onLoadCallback = function() {
 
 startGameForReal = function() {
   // We start by trying to sign-in the user behind the scenes
-  gapi.auth.authorize({client_id: '1090979611868.apps.googleusercontent.com', scope: scopes, response_type: 'code', immediate: true}, handleAuthResult);
+  gapi.auth.authorize({client_id: '1090979611868.apps.googleusercontent.com', scope: 'https://www.googleapis.com/auth/games', response_type: 'code', immediate: true}, handleAuthResult);
 };
 
 handleAuthResult = function(authResult) {
@@ -344,7 +344,7 @@ handleAuthResult = function(authResult) {
 
 showAuthDialog = function() {
   // Same as above, except immediate is set to false
-  gapi.auth.authorize({client_id: clientId, scope: scopes, response_type: 'code', immediate: false}, handleAuthResult);
+  gapi.auth.authorize({client_id: '1090979611868.apps.googleusercontent.com', scope: 'https://www.googleapis.com/auth/games', response_type: 'code', immediate: false}, handleAuthResult);
 };
 
 $('#signinButton').click(showAuthDialog);
