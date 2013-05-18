@@ -19,12 +19,12 @@ io.set('log level', 1);
 
 
 //config 
-server.configure(function () {
-  server.use(express.bodyParser());
-  server.use(express.methodOverride());
-  server.use(server.router);
-  server.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-  server.use(express.static(__dirname + '/public', { maxAge: 31557600000 }));
+app.configure(function () {
+  app.use(express.bodyParser());
+  app.use(express.methodOverride());
+  app.use(app.router);
+  app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
+  app.use(express.static(__dirname + '/public', { maxAge: 31557600000 }));
 });
 
 
@@ -43,7 +43,7 @@ require('./services')(app);
 
 
 //setup index page
-server.get('/', function (req, res) {
+app.get('/', function (req, res) {
   if (!res.getHeader('Cache-Control')) res.setHeader('Cache-Control', 'public, max-age=' + (31557600));
   res.sendfile(__dirname + '/public/index.html');
 });
