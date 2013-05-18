@@ -320,16 +320,21 @@ startGameForReal = function() {
 
 handleAuthResult = function(authResult) {
   if (authResult && !authResult.error) {
+  	$('#signinButton').addClass('hide');
+    $('#revokeButton').removeClass('hide');
+    
     // Start the game!
     gapi.client.request({
       path: '/games/v1/players/me',
       callback: function(response) {
+      	console.log(response);
         gameManager.updatePlayerName(response);
         $('input', '#playerName').val(response);
       }
     });
   } else {
     // Display the login link or button
+    console.log('error')
     $('#signinButton').removeClass('hide');
     $('#revokeButton').addClass('hide');
   }
