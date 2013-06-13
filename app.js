@@ -18,7 +18,7 @@ app.configure(function () {
   app.use(express.methodOverride());
   app.use(app.router);
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-  app.use(express.static(__dirname + '/public'));
+  app.use(express.static(__dirname + '/public', { maxAge: config.server.ageCache * 1000 }));
 });
 
 
@@ -39,7 +39,7 @@ require('./services')(app);
 //setup index page route
 app.get('/', function (req, res) {
   if (config.server.enableCaching && !res.getHeader('Cache-Control')) {
-    res.setHeader('Cache-Control', 'public, max-age=' + (31557600));
+    res.setHeader('Cache-Control', 'public, max-age=' + config.server.ageCache);
   }
   res.sendfile(__dirname + '/public/index.html');
 });
