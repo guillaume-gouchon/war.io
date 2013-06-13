@@ -1,9 +1,9 @@
 var application_root = __dirname,
     express = require("express"),
-    path = require("path")
+    config = require('./config');
 
 var app = module.exports = express();
-var server = app.listen(80);
+var server = app.listen(config.server.port);
 console.log("WarNode Server is running !");
 
 //initializes Socket IO
@@ -18,7 +18,6 @@ app.configure(function () {
   app.use(express.methodOverride());
   app.use(app.router);
   app.use(express.errorHandler({ dumpExceptions: true, showStack: true }));
-  app.use(express.static(__dirname + '/public', { maxAge: 31557600000 }));
 });
 
 
@@ -38,7 +37,9 @@ require('./services')(app);
 
 //setup index page route
 app.get('/', function (req, res) {
-  if (!res.getHeader('Cache-Control')) res.setHeader('Cache-Control', 'public, max-age=' + (31557600));
+  if (config.server.enableCaching && !res.getHeader('Cache-Control')) {
+    res.setHeader('Cache-Control', 'public, max-age=' + (31557600));
+  }
   res.sendfile(__dirname + '/public/index.html');
 });
 
