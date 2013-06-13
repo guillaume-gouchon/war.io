@@ -12,7 +12,7 @@ var io = require('socket.io').listen(server);
 io.set('log level', 1);
 
 
-//config 
+//config
 app.configure(function () {
   app.use(express.bodyParser());
   app.use(express.methodOverride());
@@ -36,7 +36,7 @@ colors.setTheme({
 require('./services')(app);
 
 
-//setup index page
+//setup index page route
 app.get('/', function (req, res) {
   if (!res.getHeader('Cache-Control')) res.setHeader('Cache-Control', 'public, max-age=' + (31557600));
   res.sendfile(__dirname + '/public/index.html');
