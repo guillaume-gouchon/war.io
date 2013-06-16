@@ -136,9 +136,12 @@ order.surrender = function (game, army) {
 */
 order.convertDestinationToOrder = function (game, elementsIds, x, y) {
 	var elements = tools.getGameElementsFromIds(game, elementsIds);
-	if (elements.length == 0 || x >= game.grid[0].length
-		|| y >= game.grid.length) {
-		return;
+	if (elements.length == 0 || !game.grid[x] || !game.grid[x][y]) { return; }
+
+	var target = null;
+	var targetId = game.grid[x][y].content;
+	if (targetId != null) {
+		target = tools.getGameElementsFromIds(game, [targetId]);
 	}
 
 	if(elements[0].f == gameData.FAMILIES.building) {
@@ -146,23 +149,22 @@ order.convertDestinationToOrder = function (game, elementsIds, x, y) {
 		this.updateRallyingPoint(game, elements, x, y);
 	} else {
 		//units are selected
-		var element = tools.getElementUnder(game, x, y);
-		if (element != null) {
+		if (target != null && target.length > 0) {
 			//something is under the click
-			if (element.f == gameData.FAMILIES.unit) {
-				if (!rank.isAlly(game.players, elements[0].o, element)) {
+			if (target[0].f == gameData.FAMILIES.unit) {
+				if (!rank.isAlly(game.players, elements[0].o, target[0])) {
 					//enemy unit
-					this.attack(game, elements, element);
+					this.attack(game, elements, target[0]);
 					return;
 				}
-			} else if (element.f == gameData.FAMILIES.building) {
-				if (rank.isAlly(game.players, elements[0].o, element)) {
+			} else if (target[0].f == gameData.FAMILIES.building) {
+				if (rank.isAlly(game.players, elements[0].o, target[0])) {
 					//friend building
 					for(var i in elements) {
 						var e = elements[i];
 						if(gameData.ELEMENTS[e.f][e.r][e.t].isBuilder) {
 							//builders are sent to build / repair
-							order.build(game, [e], element);
+							order.build(game, [e], target[0]);
 						} else {
 							//non-builders are given a move order
 							order.move(game, [e], x, y);
@@ -171,18 +173,18 @@ order.convertDestinationToOrder = function (game, elementsIds, x, y) {
 					return;
 				} else {
 					//enemy building
-					order.attack(game, elements, element);
+					order.attack(game, elements, target[0]);
 					return;
 				}
-			} else if (element.f == gameData.FAMILIES.land 
-						&& gameData.ELEMENTS[element.f][0][element.t].resourceType >= 0) {
+			} else if (target[0].f == gameData.FAMILIES.land 
+						&& gameData.ELEMENTS[target[0].f][0][target[0].t].resourceType >= 0) {
 				//resource land element
 				for(var i in elements) {
 					var e = elements[i];
 					if(gameData.ELEMENTS[e.f][e.r][e.t].isBuilder) {
 						//builders are sent to gather resources
-						order.gather(game, [e], element);
-						e.a = element;
+						order.gather(game, [e], target[0]);
+						e.a = target[0];
 					} else {
 						//non-builders are given a move order
 						order.move(game, [e], x, y);

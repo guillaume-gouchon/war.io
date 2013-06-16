@@ -42,18 +42,14 @@ production.cancelConstruction = function (game, building) {
 	if (building != null && building.cp < 95) {
 		this.sellsElement(game, building.o, gameData.ELEMENTS[building.f][building.r][building.t]);
 		this.removeBuilding(game, building);
-		for (var i in game.gameElements[gameData.FAMILIES.unit]) {
-			if (game.gameElements[gameData.FAMILIES.unit][i].a == building) {
-				game.gameElements[gameData.FAMILIES.unit][i].a = null;
+		for (var i in game.gameElements.unit) {
+			if (game.gameElements.unit[i].a == building) {
+				game.gameElements.unit[i].a = null;
 			}
 		}
-		for (var i in game.gameElements[gameData.FAMILIES.building]) {
-			if (game.gameElements[gameData.FAMILIES.building][i].id == building.id) {
-				game.cancelBuildings.push(building);
-				game.gameElements[gameData.FAMILIES.building].splice(i, 1);
-				break;	
-			}
-		}
+
+		game.cancelBuildings.push(building);
+		delete game.gameElements.building[building.id];
 	}
 }
 
@@ -121,20 +117,15 @@ production.gatherResources = function (game, builder, resource) {
 
 	if (builder.ga.amount == gameData.ELEMENTS[builder.f][builder.r][builder.t].maxGathering) {
 		//the builder is full of resources, get back resources
-		var closestTownHall = mapLogic.getNearestBuilding(game, builder, gameData.ELEMENTS[gameData.FAMILIES.building][game.players[builder.o].r][0].t);
+		var closestTownHall = tools.getNearestStuff(game, builder, gameData.FAMILIES.building, gameData.ELEMENTS[gameData.FAMILIES.building][game.players[builder.o].r][0].t, gameData.RANKS.me);
 		builder.a = closestTownHall;
 	} else if (resource.ra == 0) {
 		//the resource is now empty, searching a new resource of the same type
 		AI.searchForNewResources(game, builder, builder, gameData.ELEMENTS[builder.pa.f][builder.pa.r][builder.pa.t].resourceType);
 
 		//remove resource
-		for (var i in game.gameElements[gameData.FAMILIES.land]) {
-			if (game.gameElements[gameData.FAMILIES.land][i].id == resource.id) {
-				gameCreation.removeGameElement(game, resource);
-				game.gameElements[gameData.FAMILIES.land].splice(i, 1);
-				break;
-			}
-		}
+		gameCreation.removeGameElement(game, resource);
+		delete game.gameElements.land[resource.id];
 	}
 }
 

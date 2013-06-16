@@ -30,16 +30,16 @@ gameLogic.update = function (game) {
 	}
 
 	//units
-	for(var n in game.gameElements[gameData.FAMILIES.unit]) {
-		var element  = game.gameElements[gameData.FAMILIES.unit][n];
+	for(var n in game.gameElements.unit) {
+		var element  = game.gameElements.unit[n];
 		this.resolveActions(game, element);
 		this.updateMoves(game, element);
 		this.protectAround(game, element);
 	}
 
 	//buildings
-	for (var n in game.gameElements[gameData.FAMILIES.building]) {
-		var element  = game.gameElements[gameData.FAMILIES.building][n];
+	for (var n in game.gameElements.building) {
+		var element  = game.gameElements.building[n];
 
 		if (game.players[element.o].s != gameData.PLAYER_STATUSES.surrender) {
 			//player is still alive
@@ -64,6 +64,7 @@ gameLogic.update = function (game) {
 		chatMessages.push(game.chat[i]);
 	}
 	game.chat = [];
+	
 	return {
 		modified : game.modified,
 		added: game.added,
@@ -157,13 +158,13 @@ gameLogic.resolveActions = function (game, element) {
 *	Removes dead units from gameElements.	
 */
 gameLogic.removeDeads= function (game) {
-	var n = game.gameElements[gameData.FAMILIES.unit].length;
+	var n = game.gameElements.unit.length;
 	while (n--) {
-		var element = game.gameElements[gameData.FAMILIES.unit][n]; 
+		var element = game.gameElements.unit[n]; 
 		if (element.l <= 0) {
 			production.removeUnit(game, element);
-			game.gameElements[gameData.FAMILIES.unit].splice(n, 1);
 			gameCreation.removeGameElement(game, element);
+			delete game.gameElements.unit[element.id];
 		}
 	}
 }

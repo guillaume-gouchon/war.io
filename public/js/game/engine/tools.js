@@ -75,25 +75,6 @@ tools.getPartPosition = function (element, i, j) {
 
 
 /**
-*	Checks if this element is at this position (includes shape).
-*/
-tools.isElementThere = function (element, position) {
-	var shape = gameData.ELEMENTS[element.f][element.r][element.t].shape;
-	for(var i in shape) {
-		for(var j in shape[i]) {
-			if(shape[i][j] > 0) {
-				var partPosition = this.getPartPosition(element, i, j);
-				if(partPosition.x == position.x && partPosition.y == position.y) {
-					return true;
-				}
-			}
-		}
-	}
-	return false;
-}
-
-
-/**
 *	Returns closest tiles around the element.
 */
 tools.getTilesAroundElements = function (game, element) {
@@ -118,62 +99,12 @@ tools.getTilesAroundElements = function (game, element) {
 
 
 /**
-*	Returns the game element under the mouse.
-*/
-tools.getElementUnder = function (game, x, y) {
-	for(var i in game.gameElements[gameData.FAMILIES.unit]) {
-		var element = game.gameElements[gameData.FAMILIES.unit][i];
-	  	if(tools.isElementThere(element, {x : x, y : y})) {
-	  		return element;
-	  	}
-	}
-
-	for(var i in game.gameElements[gameData.FAMILIES.building]) {
-		var element = game.gameElements[gameData.FAMILIES.building][i];
-	  	if(tools.isElementThere(element, {x : x, y : y})) {
-	  		return element;
-	  	}
-	}
-
-	for(var i in game.gameElements[gameData.FAMILIES.land]) {
-		var element = game.gameElements[gameData.FAMILIES.land][i];
-	  	if(tools.isElementThere(element, {x : x, y : y})) {
-	  		return element;
-	  	}
-	}
-	return null;
-}
-
-
-/**
 *	Returns the game elements from their ids.
 */
 tools.getGameElementsFromIds = function (game, ids) {
 	var elements = [];
-	for (var i in game.gameElements[gameData.FAMILIES.unit]) {
-		var gameElement = game.gameElements[gameData.FAMILIES.unit][i];
-		for (var j in ids) {
-			if(gameElement.id == ids[j]) {
-				elements.push(gameElement);
-				if(elements.length == ids.length) {
-					return elements;
-				}
-				break;
-			}
-		}
-	}
-
-	for (var i in game.gameElements[gameData.FAMILIES.building]) {
-		var gameElement = game.gameElements[gameData.FAMILIES.building][i];
-		for (var j in ids) {
-			if(gameElement.id == ids[j]) {
-				elements.push(gameElement);
-				if(elements.length == ids.length) {
-					return elements;
-				}
-				break;
-			}
-		}
+	for (var i in ids) {
+		elements.push(game.gameElements[Object.keys(gameData.FAMILIES)[ids[i].charAt(0)]][ids[i]]);
 	}
 
 	return elements;
@@ -200,4 +131,61 @@ tools.clone = function (obj) {
         if (obj.hasOwnProperty(attr) && attr != 'a') copy[attr] = obj[attr];
     }
     return copy;
+}
+
+
+tools.getNearestStuff = function (game, fromElement, family, type, rank) {
+
+	var nearestStuff = null;
+	var distance = 0;
+
+	do {
+		distance ++;
+		nearestStuff = tools.searchInTiles(game, this.getTilesAround(game.grid, fromElement.p, distance, false), fromElement, family, type, rank);
+	} while (nearestStuff == null && distance < gameData.ELEMENTS[fromElement.f][fromElement.r][fromElement.t].vision);
+
+	return nearestStuff;
+}
+
+/**
+*	Returns tiles inside a square.
+*/
+tools.getTilesAround = function (grid, center, size, isFilled) {
+	var tiles = [];
+	
+	for (var i = center.x - size; i <= center.x + size; i++) {
+		if (grid[i]) {
+			if (isFilled || i == center.x - size || i == center.x + size) {
+				for (var j = center.y - size; j <= center.y + size; j++) {
+					if (grid [i][j]) {
+						tiles.push(grid[i][j]);
+					}
+				}
+			} else {
+				if (grid [i][center.y - size]) {
+					tiles.push(grid[i][center.y - size]);
+				} else if (grid [i][center.y + size]) {
+					tiles.push(grid[i][center.y + size]);
+				};
+			}
+		}
+	}
+
+	return tiles;
+}
+
+tools.searchInTiles = function (game, tiles, fromElement, family, type, rank) {
+
+	for (var i in tiles) {
+		// if there is something
+		if (tiles[i].content != null) {
+			var content = game.gameElements[Object.keys(gameData.FAMILIES)[family]][tiles[i].content];
+			if (content != null && content.f == family && (type == null || content.t == type)
+				&& (rank == null || game.players[fromElement.o].ra[content.o] == rank)) {
+				return content;
+			}
+		}
+	}
+	
+	return null;
 }

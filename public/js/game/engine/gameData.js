@@ -49,8 +49,8 @@ gameData.unitId = 0;
 /**
 *	Creates a unique id for every game element.
 */
-gameData.createUniqueId = function () {
+gameData.createUniqueId = function (family) {
 	this.unitId += 1;
 	var m = new Date().getMilliseconds();
-	return m + 'i' + this.unitId;
+	return family + 'i' + m + this.unitId;
 }

@@ -53,7 +53,7 @@ gameCreation.initGrid = function (size) {
 	for(var i = 0; i < size.x; i++) {
 		grid[i] = [];
 		for(var j = 0; j < size.y; j++) {
-			grid[i][j] = {x : i, y : j, isWall : false};
+			grid[i][j] = {x : i, y : j, isWall : false, content: null};
 		}
 	}
 	return grid;
@@ -166,7 +166,7 @@ gameCreation.getRandomPositionInZoneForElement = function (element, from, to) {
 */
 gameCreation.addGameElement = function (game, element) {
 	var shape = gameData.ELEMENTS[element.f][element.r][element.t].shape;
-	game.gameElements[element.f].push(element);
+	game.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id] = element;
 	for(var i in shape) {
 		var row = shape[i];
 		for(var j in row) {
@@ -174,6 +174,7 @@ gameCreation.addGameElement = function (game, element) {
 			if(part > 0) {
 				var position = tools.getPartPosition(element, i, j);
 				game.grid[position.x][position.y].isWall = true;
+				game.grid[position.x][position.y].content = element.id;
 			}
 		}
 	}
@@ -194,6 +195,7 @@ gameCreation.removeGameElement = function (game, element) {
 			if(part > 0) {
 				var position = tools.getPartPosition(element, i, j);
 				game.grid[position.x][position.y].isWall = false;
+				game.grid[position.x][position.y].content = null;
 			}
 		}
 	}

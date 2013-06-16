@@ -1,12 +1,11 @@
 gameData.Terrain = function (land, x, y) {
-	//personal data
-	this.id = gameData.createUniqueId();
-	this.f = gameData.FAMILIES.land;
-	this.t = land.t;
-	this.r = 0;
+	// personal data
+	this.f = gameData.FAMILIES.land;// family of the element
+	this.id = gameData.createUniqueId(this.f);// unique id
+	this.t = land.t;// type
+	this.r = 0;// race
 
-	//drawing-related data
-	this.p = {x : x, y : y};
+	this.p = {x : x, y : y};// position
 
 	//game-related data
 	this.ra = land.ra; //resource amount

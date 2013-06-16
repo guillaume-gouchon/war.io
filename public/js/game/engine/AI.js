@@ -5,8 +5,8 @@ var AI = {};
 *	Search for new resources to gather.
 */
 AI.searchForNewResources = function (game, builder, fromWhere, resourceType) {
-	var nearestResource = mapLogic.getNearestResource(game, fromWhere, resourceType);
-	if(tools.getElementsDistance(fromWhere, nearestResource) <= gameData.ELEMENTS[builder.f][builder.r][builder.t].vision) {
+	var nearestResource = tools.getNearestStuff(game, builder, gameData.FAMILIES.land, resourceType);
+	if(nearestResource != null) {
 		builder.a = nearestResource;
 		builder.pa = nearestResource;
 	} else {
@@ -20,9 +20,15 @@ AI.searchForNewResources = function (game, builder, fromWhere, resourceType) {
 *	Search for new enemy to attack.
 */
 AI.searchForNewEnemy = function (game, unit) {
-	var nearestEnemy = mapLogic.getNearestEnemy(game, unit);
+	// units have the priority
+	var nearestEnemy = tools.getNearestStuff(game, unit, gameData.FAMILIES.unit, null, gameData.RANKS.enemy);
+	if (nearestEnemy == null) {
+		nearestEnemy = tools.getNearestStuff(game, unit, gameData.FAMILIES.building, null, gameData.RANKS.enemy);
+	}
 	if(nearestEnemy != null) {
 		unit.a = nearestEnemy;
+	} else {
+		unit.a = null;
 	}
 }
 

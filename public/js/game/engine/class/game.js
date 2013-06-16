@@ -1,24 +1,30 @@
 gameData.Game = function () {
 
 	this.stats = [];
+
 	this.players = [];
+
+
+	/**
+	*	Tells which tile is occupied and which tile is free.
+	*/
+	this.grid = [];
 
 
 	/**
 	*	Main variable used during the game.
 	*  	It contains all the land's elements, units and buildings.
 	*/
-	this.gameElements = [[], [], []];
-
-
-	this.modified = [];
-	this.added = [];
-	this.removed = [];
+	this.gameElements = {
+		land: {},
+		building: {},
+		unit: {}
+	};
 
 
 	/**
 	*	Buildings freshly created by the players.
-	*	Used to synchronize user's build action with the game engine loop.
+	*	Used to synchronize user's actions with the game engine loop.
 	*/
 	this.newBuildings = [];
 	this.cancelBuildings = [];
@@ -26,14 +32,17 @@ gameData.Game = function () {
 
 
 	/**
+	*	Data sent to the client.
+	*/
+	this.modified = [];
+	this.added = [];
+	this.removed = [];
+
+
+	/**
 	*	New chat messages to spread.
 	*/
 	this.chat = [];
-
-	/**
-	*	Tells which tile is occupied and which tile is free.
-	*/
-	this.grid = [];
 
 
 	/**
