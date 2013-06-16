@@ -72,7 +72,7 @@ fightLogic.applyDamage = function (game, damage, target, fragOwner) {
 			if (target.f == gameData.FAMILIES.building) {
 				production.removeBuilding(game, target);
 				gameCreation.removeGameElement(game, target);
-				delete game.gameElements.buildings[target.id];
+				delete game.gameElements.building[target.id];
 			}
 		}
 	} else if(fragOwner != null) {

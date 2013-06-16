@@ -1,7 +1,10 @@
 /* TEAM */
-  Mr Guillaume Gouchon
+  Guillaume Gouchon
+  Thomas Cadiou
+  Romain Bertrand
+  Didier Brissaud
 
 /* THANKS */
 
 /* SITE */
-  Standards: HTML5
+  Standards: HTML5, Three.js, WebGL
