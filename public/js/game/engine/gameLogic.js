@@ -158,9 +158,8 @@ gameLogic.resolveActions = function (game, element) {
 *	Removes dead units from gameElements.	
 */
 gameLogic.removeDeads= function (game) {
-	var n = game.gameElements.unit.length;
-	while (n--) {
-		var element = game.gameElements.unit[n]; 
+	for (var n in game.gameElements.unit) {
+		var element = game.gameElements.unit[n];
 		if (element.l <= 0) {
 			production.removeUnit(game, element);
 			gameCreation.removeGameElement(game, element);
