@@ -67,10 +67,18 @@ gameSurface.basicCubeGeometry = null;
 gameSurface.building = null;
 
 
+gameSurface.fogOfWarSurface = null;
+gameSurface.deepFogOfWarSurface = null;
+gameSurface.clock = null;
+gameSurface.buildingsMemorizedInFog = [];
+
+
 /**
 *	Initializes the game surface.
 */
 gameSurface.init = function () {
+	gameSurface.clock = new THREE.Clock();
+
 	$('#loadingLabel').html('Loading');
 
 	scene = new THREE.Scene();
@@ -146,6 +154,7 @@ gameSurface.init = function () {
 *	Creates the scene.
 */
 gameSurface.createScene = function () {
+
 	//add light
 	var pointLight = new THREE.PointLight(0xFFFFFF);
 	pointLight.position.x = 0;
@@ -177,6 +186,34 @@ gameSurface.createScene = function () {
     planeSurface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
     planeSurface.overdraw = true;
     scene.add(planeSurface);
+
+    //generate the fog
+	var fogGeometry = new THREE.PlaneGeometry(1000, 1000, gameContent.map.size.x, gameContent.map.size.y);
+	var fogTexture  = THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'fog.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
+	fogTexture.wrapT = fogTexture.wrapS = THREE.RepeatWrapping;
+	var fogMaterial = new THREE.MeshBasicMaterial({ map: fogTexture, transparent: true });
+	fogMaterial.opacity = 0.5;
+	var planeSurface = new THREE.Mesh(fogGeometry, fogMaterial);
+    planeSurface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
+    planeSurface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
+    planeSurface.position.z = 6;
+    planeSurface.overdraw = true;
+    scene.add(planeSurface);
+    gameSurface.fogOfWarSurface = planeSurface;
+
+    //generate the deep fog
+	var fogGeometry = new THREE.PlaneGeometry(1000, 1000, gameContent.map.size.x, gameContent.map.size.y);
+	var fogTexture  = THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'fog.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
+	fogTexture.wrapT = fogTexture.wrapS = THREE.RepeatWrapping;
+	var fogMaterial = new THREE.MeshBasicMaterial({ map: fogTexture });
+	fogMaterial.opacity = 1;
+	var planeSurface = new THREE.Mesh(fogGeometry, fogMaterial);
+    planeSurface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
+    planeSurface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
+    planeSurface.position.z = 20;
+    planeSurface.overdraw = true;
+    scene.add(planeSurface);
+    gameSurface.deepFogOfWarSurface = planeSurface;
 
 	//add order element
 	this.order = new THREE.Mesh(new THREE.TorusGeometry(5, 2, 2, 6), new THREE.LineBasicMaterial( { color: '#0f0', opacity: this.ORDER_OPACITY, transparent: true} ));
@@ -389,19 +426,17 @@ gameSurface.createObject = function (key, element) {
 		object.scale.y = 2;
 	}
 
+	gameContent.gameElements[element.id] = {d: object, s : element};
+
+	if (element.f == gameData.FAMILIES.land || rank.isAlly(gameContent.players, gameContent.myArmy, element)) {
+		this.showElement(element);
+	}
+
 	if (element.f == gameData.FAMILIES.building) {
 		if (element.cp < 100) {
 			object.position.z += this.BUILDING_INIT_Z;
 		}
 	}
-
-	if (element.f != gameData.FAMILIES.land) {
-		//update minimap
-		GUI.addElementOnMinimap(element);
-	}
-
-	scene.add(object);
-	gameContent.gameElements[element.id] = {d: object, s : element};
 
 }
 
@@ -484,7 +519,7 @@ gameSurface.updateElement = function (element) {
 		if (element.o == gameContent.myArmy && s.l > element.l) {
 			//you are being attacked
 			GUI.addAlertMinimap(element);
-		} else {
+		} else if (element.visible) {
 			//update minimap
 			GUI.updateElementOnMinimap(element);
 		}
@@ -498,17 +533,21 @@ gameSurface.updateElement = function (element) {
 *	Removes a game element.
 */
 gameSurface.removeElement = function (element) {
-	scene.remove(gameContent.gameElements[element.id].d);
+	console.log("remove");
+
 
 	//removes from the selected elements if it was
 	if (gameContent.selected.indexOf(element.id) >= 0) {
 		gameContent.selected.splice(gameContent.selected.indexOf(element.id), 1);
 	}
 
-	if (element.f != gameData.FAMILIES.land) {
-		//update minimap
-		GUI.removeElementFromMinimap(element);
-	}
+	if (element.f == gameData.FAMILIES.building) {
+		// if it is a building, take care of it to respect fog of war memory
+		if (element.visible)
+			gameSurface.removeBuildingForGood(element, gameContent.gameElements[element.id].d);
+	} else
+		// otherwise let the classic handling do it
+		gameSurface.hideElement(element);
 
 	delete gameContent.gameElements[element.id];
 }
@@ -535,6 +574,8 @@ gameSurface.getFirstIntersectObject = function (x, y) {
 	this.projector.unprojectVector( vector, camera );
 	var raycaster = new THREE.Raycaster( camera.position, vector.sub( camera.position ).normalize() );
 	var intersects = raycaster.intersectObjects(scene.children);
+	while (intersects[0] != undefined && (intersects[0] == gameSurface.fogOfWarSurface || intersects[0] == gameSurface.deepFogOfWarSurface))
+		intersects.unshift();
 	if ( intersects.length > 0 ) {
 		return intersects[0];	
 	}
@@ -549,4 +590,138 @@ gameSurface.centerCameraOnElement = function (element) {
 	var position = this.convertGamePositionToScenePosition(element.p);
 	camera.position.x = position.x;
 	camera.position.y = position.y - this.CENTER_CAMERA_Y_OFFSET;
+}
+
+
+gameSurface.showElement = function (element) {
+	if (!element.visible) {
+		element.visible = true;
+		if (element.f == gameData.FAMILIES.building && (index = gameSurface.buildingsMemorizedInFog.indexOf(gameContent.gameElements[element.id])) > -1) {
+			// if it is a building and it is in our fog memory, just remove it from the fog memory as it is now showing
+			gameSurface.buildingsMemorizedInFog.splice(index, 1);
+		} else {
+			var object = gameContent.gameElements[element.id].d;
+			object.geometry.opacity = 0.5;
+			if (element.f != gameData.FAMILIES.land) {
+				//update minimap
+				GUI.addElementOnMinimap(element);
+			}
+			scene.add(object);
+		}
+	}
+}
+
+gameSurface.hideElement = function (element) {
+	if (element.visible) {
+		element.visible = false;
+		if (element.f == gameData.FAMILIES.building) {
+			// if it is a building, put it in our fog memory rather than hiding it
+			gameSurface.buildingsMemorizedInFog.push(gameContent.gameElements[element.id]);
+		} else {
+			object = gameContent.gameElements[element.id].d;
+			if (element.f != gameData.FAMILIES.land) {
+				//update minimap
+				GUI.removeElementFromMinimap(element);
+			}
+			scene.remove(object);
+		}
+	}
+}
+
+gameSurface.removeBuildingForGood = function (element, object) {
+	GUI.removeElementFromMinimap(element);
+	scene.remove(object);
+}
+
+gameSurface.manageElementsVisibility = function () {
+	var mapW = gameContent.map.size.x;
+	var mapH = gameContent.map.size.y;
+	var visionMatrix = [];
+	var unitsToCheck = [];
+	for (var id in gameContent.gameElements) {
+		var element = gameContent.gameElements[id].s;
+		if (rank.isAlly(gameContent.players, gameContent.myArmy, element)) {
+			// ally unit, show vision
+			var unitX = element.p.x;
+			var unitY = element.p.y;
+			var elementData = gameData.ELEMENTS[element.f][element.r][element.t];
+			var vision = elementData.vision;
+
+			// manhattan vision
+			/*for (x = Math.max(0, unitX-vision), maxX = Math.min(mapW, unitX+vision); x<maxX; x++) {
+				for (y = Math.max(0, unitY-vision), maxY = Math.min(mapH, unitY+vision); y<maxY; y++) {
+					if (visionMatrix[x] == undefined)
+						visionMatrix[x] = [];
+					visionMatrix[x][y] = true;
+				}
+			}*/
+
+			// pythagorean vision
+			var squareVision = vision*vision;
+			var x,y,squarY;
+			for(y=-vision; y<=vision; y++) {
+				var squareY = y*y;
+   				 for(x=-vision; x<=vision; x++) {
+        			if(x*x+squareY <= squareVision) {
+        				if (visionMatrix[unitX+x] == undefined)
+							visionMatrix[unitX+x] = [];
+            			visionMatrix[unitX+x][unitY+y] = true;
+            		}
+            	}
+            }
+
+		} else if (element.f != gameData.FAMILIES.land) {
+			// enemy unit, add to the units to check
+			unitsToCheck.push(element);
+		}
+	}
+
+
+	while (unitsToCheck.length > 0) {
+		var element = unitsToCheck.pop();
+		if (visionMatrix[element.p.x] != undefined && visionMatrix[element.p.x][element.p.y])
+			this.showElement(element);
+		else
+			this.hideElement(element);
+	}
+
+	for (index in gameSurface.buildingsMemorizedInFog) {
+		var element = gameSurface.buildingsMemorizedInFog[index].s;
+		if (visionMatrix[element.p.x] != undefined && visionMatrix[element.p.x][element.p.y]) {
+			// the building could now be visible
+			console.log("building to show");
+			if (gameData.gameElements.indexOf(gameSurface.buildingsMemorizedInFog[index]) == -1) {
+				// but it has been destroyed, so we remove it for good
+				console.log("BOOOM IT DIED");
+				var object = gameSurface.buildingsMemorizedInFog[index].d;
+				gameSurface.removeBuildingForGood(element, object);
+			} else {
+				// otherwise we set it to visible
+				console.log("show it");
+				gameSurface.showElement(element);
+			}
+			gameSurface.buildingsMemorizedInFog.splice(index, 1);
+		}
+	}
+
+
+
+var fogGeometry = gameSurface.fogOfWarSurface.geometry;
+var deepFogGeometry = gameSurface.deepFogOfWarSurface.geometry;
+time = gameSurface.clock.getElapsedTime() * 10;
+				for ( var i = 0, l = fogGeometry.vertices.length; i < l; i ++ ) {
+					var x = Math.round((fogGeometry.vertices[i].x / gameSurface.PIXEL_BY_NODE + mapW/2));
+					var y = Math.round((fogGeometry.vertices[i].y / gameSurface.PIXEL_BY_NODE + mapH/2));
+					if (visionMatrix[x] != undefined && visionMatrix[x][y]) {
+						fogGeometry.vertices[ i ].z = -7;
+						deepFogGeometry.vertices[i].z = -30;
+					} else
+						fogGeometry.vertices[ i ].z = 0;// + 1 * Math.sin(time + i);
+				}
+
+				fogGeometry.verticesNeedUpdate = true;
+				deepFogGeometry.verticesNeedUpdate = true;
+
+				// controls.update( delta );
+				// renderer.render( scene, camera );
 }

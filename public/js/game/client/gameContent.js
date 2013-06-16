@@ -84,6 +84,8 @@ gameContent.update = function (data) {
 		}
 	}
 
+	gameSurface.manageElementsVisibility();
+
 	//check if someone has changed its rank
 	for (var i in this.players) {
 		for (var j in this.players[i].ra) {
