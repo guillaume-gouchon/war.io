@@ -117,7 +117,7 @@ production.gatherResources = function (game, builder, resource) {
 
 	if (builder.ga.amount == gameData.ELEMENTS[builder.f][builder.r][builder.t].maxGathering) {
 		//the builder is full of resources, get back resources
-		var closestTownHall = tools.getNearestStuff(game, builder, gameData.FAMILIES.building, gameData.ELEMENTS[gameData.FAMILIES.building][game.players[builder.o].r][0].t, gameData.RANKS.me);
+		var closestTownHall = tools.getNearestStuff(game, builder, gameData.FAMILIES.building, gameData.ELEMENTS[gameData.FAMILIES.building][game.players[builder.o].r][0].t, gameData.RANKS.me, true);
 		builder.a = closestTownHall;
 	} else if (resource.ra == 0) {
 		//the resource is now empty, searching a new resource of the same type
