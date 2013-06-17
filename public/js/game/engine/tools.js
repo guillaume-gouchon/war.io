@@ -134,18 +134,42 @@ tools.clone = function (obj) {
 }
 
 
-tools.getNearestStuff = function (game, fromElement, family, type, rank) {
+/**
+*	Returns the nearest specified element.
+*/
+tools.getNearestStuff = function (game, fromElement, family, type, rank, noLimit) {
 
 	var nearestStuff = null;
-	var distance = 0;
 
-	do {
-		distance ++;
-		nearestStuff = tools.searchInTiles(game, this.getTilesAround(game.grid, fromElement.p, distance, false), fromElement, family, type, rank);
-	} while (nearestStuff == null && distance < gameData.ELEMENTS[fromElement.f][fromElement.r][fromElement.t].vision);
+	if (noLimit) {// search within the limit of the element's vision
+
+		var distance = 0;
+
+		do {
+			distance ++;
+			nearestStuff = tools.searchInTiles(game, this.getTilesAround(game.grid, fromElement.p, distance, false), fromElement, family, type, rank);
+		} while (nearestStuff == null && distance < gameData.ELEMENTS[fromElement.f][fromElement.r][fromElement.t].vision);
+	
+	} else {// search anywhere
+
+		var min = 1000;
+		for (var i in game.gameElements[Object.keys(gameData.FAMILIES)[family]]) {
+			var element = game.gameElements[Object.keys(gameData.FAMILIES)[family]][i];
+			if ((type == null || element.t == type) && (rank == null || game.players[fromElement.o].ra[element.o] == rank)) {
+				var distance = this.getElementsDistance(fromElement, element);
+				if (distance < min) {
+					min = distance;
+					nearestStuff = element;
+					if (min < 5) { return nearestStuff; }
+				}
+			}  
+		}
+
+	}
 
 	return nearestStuff;
 }
+
 
 /**
 *	Returns tiles inside a square.
@@ -174,6 +198,10 @@ tools.getTilesAround = function (grid, center, size, isFilled) {
 	return tiles;
 }
 
+
+/**
+*	Search for any element in a list of tiles.
+*/
 tools.searchInTiles = function (game, tiles, fromElement, family, type, rank) {
 
 	for (var i in tiles) {
