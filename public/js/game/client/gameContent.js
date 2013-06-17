@@ -54,7 +54,7 @@ gameContent.init = function (data) {
 	for(var i = 0; i < this.map.size.x; i++) {
 		this.grid[i] = [];
 		for(var j = 0; j < this.map.size.y; j++) {
-			this.grid[i][j] = {x : i, y : j, isWall : false, content: null};
+			this.grid[i][j] = 0;
 		}
 	}
 

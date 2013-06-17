@@ -60,8 +60,8 @@ userInput.selectGroup = function (x, y) {
 
 			for (var i = Math.min(selectionRectangleGamePosition[0], selectionRectangleGamePosition[2]); i <= Math.max(selectionRectangleGamePosition[0], selectionRectangleGamePosition[2]); i++) {
 				for (var j = Math.min(selectionRectangleGamePosition[1], selectionRectangleGamePosition[3]); j <= Math.max(selectionRectangleGamePosition[1], selectionRectangleGamePosition[3]); j++) {
-					if (gameContent.grid[i][j].content != null) {
-						var element = utils.getElementFromId(gameContent.grid[i][j].content);
+					if (gameContent.grid[i][j] > 0) {
+						var element = utils.getElementFromId(gameContent.grid[i][j]);
 						if(rank.isAlly(gameContent.players, gameContent.myArmy, element)) {
 					  		//select the element
 					  		gameContent.selected.push(element.id);
@@ -109,8 +109,8 @@ userInput.doubleClickToSelect = function (x, y) {
 		if(rank.isAlly(gameContent.players, gameContent.myArmy, selected)) {
 			var tiles = tools.getTilesAround(gameContent.grid, selected.p, userInput.DOUBLE_CLICK_RADIUS_SIZE, true);
 			for (var i in tiles) {
-				if (tiles[i].content != null) {
-					var element = utils.getElementFromId(tiles[i].content);
+				if (tiles[i] > 0) {
+					var element = utils.getElementFromId(tiles[i]);
 					if(element.f == selected.f && rank.isAlly(gameContent.players, gameContent.myArmy, element) && element.t == selected.t) {
 				  		//select the element
 				  		gameContent.selected.push(element.id);

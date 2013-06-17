@@ -2,76 +2,76 @@ var move = {};
 
 
 /**
-* CONSTANTS
+*   CONSTANTS
 */
 move.ASTAR_MAX_STEPS_SEARCH = 4;
+move.DESTINATION_SEARCH_NUMBER = 5;
+move.ASTAR_MAX_RADIUS_SEARCH = 10;
 
 
 /**
 *	Moves an element one step closer to its destination.
 */
 move.moveElement = function (game, element) {
-  if (game.iterate % gameData.ELEMENTS[element.f][element.r][element.t].speed == 0) {
-  	var destination = game.grid[element.mt.x][element.mt.y];
+    if (game.iterate % gameData.ELEMENTS[element.f][element.r][element.t].speed == 0) {
+      	var destination = element.mt;
 
-    //if destination forbids movement, search neighbors for a new one
-  	var counter = 0;
-  	while(destination.isWall && counter < 10) {
-  		counter++;
-  	    var endNeighbors = astar.neighbors(game.grid, destination, true);
-  	    for(var i in endNeighbors){
-  	      if(!endNeighbors[i].isWall) {
-  	        destination = endNeighbors[i];
-  	        element.mt = {x : destination.x, y : destination.y};
-  	        break;
-  	      }
-  	    }
-  	}
-  	
-  	//use A* algorithm to find the path
-  	var path = astar.search(game.grid, game.grid[element.p.x][element.p.y], 
-  							destination, true);
+        // if destination forbids movement, search neighbors for a new one
+      	var counter = 0;
+      	grosBoucle : while(game.grid[destination.x][destination.y].c > 0 && counter < this.DESTINATION_SEARCH_NUMBER) {
+      		counter ++;
+      	    var endNeighbors = astar.neighbors(game.grid, destination.x, destination.y, true);
+      	    for(var i in endNeighbors){
+                if(endNeighbors[i].c == 0) {// if this tile is free, let's go there !
+                    destination = endNeighbors[i];
+                    element.mt = {x : destination.x, y : destination.y};
+                    break grosBoucle;
+                }
+      	    }
+            destination = {x: endNeighbors[1].x, y : endNeighbors[1].y};
+      	}
 
-  	if(path.length > 0) {
+        if (destination.c > 0) {// if destination is unreachable for now, stop the movement
+            element.mt = {x : null, y : null};
+            return;
+        }
+      	
+      	// use A* algorithm to find the path
+      	var path = astar.search(game.grid, element.p, game.grid[destination.x][destination.y], true);
 
-  		var newPosition = {x : path[0].x, y : path[0].y};
+      	if(path.length > 0) {
 
-  		if(!game.grid[newPosition.x][newPosition.y].isWall) {
-
-  			//removes old position
-        var shape = gameData.ELEMENTS[element.f][element.r][element.t].shape;
+  			// remove old position
+            var shape = gameData.ELEMENTS[element.f][element.r][element.t].shape;
   			for (var i in shape) {
   				for (var j in shape[i]) {
   					if (shape[i][j] > 0) {
   						var partPosition = tools.getPartPosition(element, i, j);
-  						game.grid[partPosition.x][partPosition.y].isWall = false;
-              game.grid[partPosition.x][partPosition.y].content = null;
+  						game.grid[partPosition.x][partPosition.y].c = 0;
   					}
   				}
   			}
 
-  			//updates new position
-  			element.p = newPosition;
+  			// update new position
+  			element.p.x = path[0].x;
+            element.p.y = path[0].y;
   			for (var i in shape) {
   				for (var j in shape[i]) {
   					if (shape[i][j] > 0) {
   						var partPosition = tools.getPartPosition(element, i, j);
-  						game.grid[partPosition.x][partPosition.y].isWall = true;
-              game.grid[partPosition.x][partPosition.y].content = element.id;
+  						game.grid[partPosition.x][partPosition.y].c = element.id;
   					}
   				}
   			}
 
-  		}
-
-  		//if element has arrived to its destination, updates its order
-  		if(element.mt.x == element.p.x && element.mt.y == element.p.y) {
-  			element.mt = {x : null, y : null};
-  		}
-  	}
-  }
-
+      		// if element has arrived to its destination, updates its order
+      		if(element.mt.x == element.p.x && element.mt.y == element.p.y) {
+      			element.mt = {x : null, y : null};
+      		}
+      	}
+    }
 }
+
 
 
 
@@ -80,33 +80,40 @@ move.moveElement = function (game, element) {
 */
 var astar = {
   
-  init: function(grid) {
-      for(var x = 0, xl = grid.length; x < xl; x++) {
-          for(var y = 0, yl = grid[x].length; y < yl; y++) {
-              var node = grid[x][y];
-              node.f = 0;
-              node.g = 0;
-              node.h = 0;
-              node.cost = 1;
-              node.visited = false;
-              node.closed = false;
-              node.parent = null;
-          }
-      }
+  init: function(grid, start, end) {
+    var xi = Math.max(0, Math.min(start.x, end.x) - move.ASTAR_MAX_RADIUS_SEARCH);
+    var xf = Math.min(grid[0].length - 1, Math.max(start.x, end.x) + move.ASTAR_MAX_RADIUS_SEARCH);
+    var yi = Math.max(0, Math.min(start.y, end.y) - move.ASTAR_MAX_RADIUS_SEARCH);
+    var yf = Math.min(grid.length - 1, Math.max(start.y, end.y) + move.ASTAR_MAX_RADIUS_SEARCH);
+
+    for(var x = xi; x < xf; x++) {
+        for(var y = yi; y < yf; y++) {
+            var node = grid[x][y];
+            node.f = 0;
+            node.g = 0;
+            node.h = 0;
+            node.cost = 1;
+            node.visited = false;
+            node.closed = false;
+            node.parent = null;
+        }
+    }
   },
+
   heap: function() {
       return new BinaryHeap(function(node) { 
           return node.f; 
       });
   },
+
   search: function(grid, start, end, diagonal, heuristic) {
-    astar.init(grid);
+    astar.init(grid, start, end);
     heuristic = heuristic || astar.manhattan;
     diagonal = !!diagonal;
 
     var openHeap = astar.heap();
 
-    openHeap.push(start);
+    openHeap.push(grid[start.x][start.y]);
 
     while(openHeap.size() > 0) {
 
@@ -114,7 +121,7 @@ var astar = {
       var currentNode = openHeap.pop();
 
       // End case -- result has been found, return the traced path.
-      if(currentNode === end || openHeap.size > this.ASTAR_MAX_STEPS_SEARCH) {
+      if(currentNode === end || openHeap.size() > this.ASTAR_MAX_STEPS_SEARCH) {
           var curr = currentNode;
           var ret = [];
           while(curr.parent) {
@@ -127,11 +134,11 @@ var astar = {
       currentNode.closed = true;
 
       // Find all neighbors for the current node. Optionally find diagonal neighbors as well (false by default).
-      var neighbors = astar.neighbors(grid, currentNode, diagonal);
+      var neighbors = astar.neighbors(grid, currentNode.x, currentNode.y, diagonal);
 
-      for(var i=0, il = neighbors.length; i < il; i++) {
+      for(var i = 0, il = neighbors.length; i < il; i++) {
           var neighbor = neighbors[i];
-          if(neighbor.closed || neighbor.isWall) {
+          if(neighbor.closed || neighbor.c > 0) {
               // Not a valid node to process, skip to next neighbor.
               continue;
           }
@@ -164,6 +171,7 @@ var astar = {
     // No result was found - empty array signifies failure to find path.
     return [];   
   },
+
   manhattan: function(pos0, pos1) {
       // See list of heuristics: http://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html
 
@@ -171,10 +179,10 @@ var astar = {
       var d2 = Math.abs (pos1.y - pos0.y);
       return d1 + d2;
   },
-  neighbors: function(grid, node, diagonals) {
+
+  neighbors: function(grid, x, y, diagonals) {
       var ret = [];
-      var x = node.x;
-      var y = node.y;
+
       // West
       if(grid[x-1] && grid[x-1][y]) {
           ret.push(grid[x-1][y]);
@@ -221,6 +229,7 @@ var astar = {
 
       return ret;
   }
+
 };
 
 // Binary Heap

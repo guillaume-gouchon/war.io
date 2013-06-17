@@ -136,11 +136,11 @@ order.surrender = function (game, army) {
 */
 order.convertDestinationToOrder = function (game, elementsIds, x, y) {
 	var elements = tools.getGameElementsFromIds(game, elementsIds);
-	if (elements.length == 0 || !game.grid[x] || !game.grid[x][y]) { return; }
+	if (elements.length == 0 || game.grid[x] == null || game.grid[x][y] == null) { return; }
 
 	var target = null;
-	var targetId = game.grid[x][y].content;
-	if (targetId != null) {
+	var targetId = game.grid[x][y].c;
+	if (targetId > 0) {
 		target = tools.getGameElementsFromIds(game, [targetId]);
 	}
 

@@ -454,7 +454,7 @@ gameSurface.addElement = function (element) {
 	gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id] = element;
 	
 	// add life bar on top
-	this.addLifeBar(element);
+	//this.addLifeBar(element);
 
 	// fogs
 	if (element.f == gameData.FAMILIES.land || rank.isAlly(gameContent.players, gameContent.myArmy, element)) {
@@ -476,8 +476,7 @@ gameSurface.addElement = function (element) {
 			var part = row[j];
 			if(part > 0) {
 				var position = tools.getPartPosition(element, i, j);
-				gameContent.grid[position.x][position.y].isWall = true;
-				gameContent.grid[position.x][position.y].content = element.id;
+				gameContent.grid[position.x][position.y] = element.id;
 			}
 		}
 	}
@@ -576,8 +575,7 @@ gameSurface.updateElement = function (element) {
 		for (var j in shape[i]) {
 			if (shape[i][j] > 0) {
 				var partPosition = tools.getPartPosition(gameElement, i, j);
-				gameContent.grid[partPosition.x][partPosition.y].isWall = false;
-				gameContent.grid[partPosition.x][partPosition.y].content = null;
+				gameContent.grid[partPosition.x][partPosition.y] = 0;
 			}
 		}
 	}
@@ -587,8 +585,7 @@ gameSurface.updateElement = function (element) {
 		for (var j in shape[i]) {
 			if (shape[i][j] > 0) {
 				var partPosition = tools.getPartPosition(element, i, j);
-				gameContent.grid[partPosition.x][partPosition.y].isWall = true;
-				gameContent.grid[partPosition.x][partPosition.y].content = element.id;
+				gameContent.grid[partPosition.x][partPosition.y] = element.id;
 			}
 		}
 	}
@@ -626,8 +623,7 @@ gameSurface.removeElement = function (element) {
 			var part = row[j];
 			if(part > 0) {
 				var position = tools.getPartPosition(element, i, j);
-				gameContent.grid[position.x][position.y].isWall = false;
-				gameContent.grid[position.x][position.y].content = null;
+				gameContent.grid[position.x][position.y] = 0;
 			}
 		}
 	}
