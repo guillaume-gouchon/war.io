@@ -71,6 +71,9 @@ gameSurface.fogOfWarSurface = null;
 gameSurface.deepFogOfWarSurface = null;
 gameSurface.clock = null;
 gameSurface.buildingsMemorizedInFog = [];
+gameSurface.fogOfWarMatrix = null;
+gameSurface.deepFogOfWarMatrix = null;
+gameSurface.fogOfWarVerticeIndexesMatrix = null;
 
 
 /**
@@ -214,6 +217,34 @@ gameSurface.createScene = function () {
     planeSurface.overdraw = true;
     scene.add(planeSurface);
     gameSurface.deepFogOfWarSurface = planeSurface;
+
+
+    // link game coordinates to fog of war vertice indexes
+    this.fogOfWarVerticeIndexesMatrix = [];
+    for ( var i = 0, l = fogGeometry.vertices.length; i < l; i ++ ) {
+    	var verticeGamePosition = {x:Math.round((fogGeometry.vertices[i].x / gameSurface.PIXEL_BY_NODE + gameContent.map.size.x/2)),
+    		y:Math.round((fogGeometry.vertices[i].y / gameSurface.PIXEL_BY_NODE + gameContent.map.size.y/2))};
+		//var verticeGamePosition = this.convertScenePositionToGamePosition({x:fogGeometry.vertices[i].x, y:fogGeometry.vertices[i].y});
+		if (this.fogOfWarVerticeIndexesMatrix[verticeGamePosition.x] == undefined)
+			this.fogOfWarVerticeIndexesMatrix[verticeGamePosition.x] = [];
+		if (this.fogOfWarVerticeIndexesMatrix[verticeGamePosition.x][verticeGamePosition.y] == undefined)
+			this.fogOfWarVerticeIndexesMatrix[verticeGamePosition.x][verticeGamePosition.y] = [];
+		this.fogOfWarVerticeIndexesMatrix[verticeGamePosition.x][verticeGamePosition.y].push(i);
+	}
+	console.log(this.fogOfWarVerticeIndexesMatrix);
+
+
+	this.fogOfWarMatrix = [];
+	this.deepFogOfWarMatrix = [];
+	for ( var x = 0; x < gameContent.map.size.x; x++) {
+		this.fogOfWarMatrix[x] = [];
+		this.deepFogOfWarMatrix[x] = [];
+		for ( var y = 0; y < gameContent.map.size.y; y++) {
+			this.fogOfWarMatrix[x][y] = false;
+			this.deepFogOfWarMatrix[x][y] = false;
+	}
+
+
 
 	//add order element
 	this.order = new THREE.Mesh(new THREE.TorusGeometry(5, 2, 2, 6), new THREE.LineBasicMaterial( { color: '#0f0', opacity: this.ORDER_OPACITY, transparent: true} ));
@@ -663,6 +694,9 @@ gameSurface.manageElementsVisibility = function () {
 				var squareY = y*y;
    				 for(x=-vision; x<=vision; x++) {
         			if(x*x+squareY <= squareVision) {
+
+        				// TODO link with fog of war matrixes
+
         				if (visionMatrix[unitX+x] == undefined)
 							visionMatrix[unitX+x] = [];
             			visionMatrix[unitX+x][unitY+y] = true;
@@ -685,42 +719,76 @@ gameSurface.manageElementsVisibility = function () {
 			this.hideElement(element);
 	}
 
-	for (index in gameSurface.buildingsMemorizedInFog) {
-		var element = gameSurface.buildingsMemorizedInFog[index].s;
+	for (index in this.buildingsMemorizedInFog) {
+		var element = this.buildingsMemorizedInFog[index].s;
 		if (visionMatrix[element.p.x] != undefined && visionMatrix[element.p.x][element.p.y]) {
 			// the building could now be visible
 			console.log("building to show");
-			if (gameData.gameElements.indexOf(gameSurface.buildingsMemorizedInFog[index]) == -1) {
+			if (gameData.gameElements.indexOf(this.buildingsMemorizedInFog[index]) == -1) {
 				// but it has been destroyed, so we remove it for good
 				console.log("BOOOM IT DIED");
-				var object = gameSurface.buildingsMemorizedInFog[index].d;
-				gameSurface.removeBuildingForGood(element, object);
+				var object = this.buildingsMemorizedInFog[index].d;
+				this.removeBuildingForGood(element, object);
 			} else {
 				// otherwise we set it to visible
 				console.log("show it");
-				gameSurface.showElement(element);
+				this.showElement(element);
 			}
-			gameSurface.buildingsMemorizedInFog.splice(index, 1);
+			this.buildingsMemorizedInFog.splice(index, 1);
 		}
 	}
 
+	var fogGeometry = gameSurface.fogOfWarSurface.geometry;
+	var deepFogGeometry = gameSurface.deepFogOfWarSurface.geometry;
 
-
-var fogGeometry = gameSurface.fogOfWarSurface.geometry;
-var deepFogGeometry = gameSurface.deepFogOfWarSurface.geometry;
-time = gameSurface.clock.getElapsedTime() * 10;
-				for ( var i = 0, l = fogGeometry.vertices.length; i < l; i ++ ) {
-					var x = Math.round((fogGeometry.vertices[i].x / gameSurface.PIXEL_BY_NODE + mapW/2));
-					var y = Math.round((fogGeometry.vertices[i].y / gameSurface.PIXEL_BY_NODE + mapH/2));
-					if (visionMatrix[x] != undefined && visionMatrix[x][y]) {
-						fogGeometry.vertices[ i ].z = -7;
-						deepFogGeometry.vertices[i].z = -30;
-					} else
-						fogGeometry.vertices[ i ].z = 0;// + 1 * Math.sin(time + i);
+	var visible;
+	var fogChanged = false;
+	var deepFogChanged = false;
+	var i, l, z;
+	for (var x = 0; x < mapW; x++) {
+		for (var y = 0; y < mapH; y++) {
+			visible = (visionMatrix[x] != undefined && visionMatrix[x][y]);
+			if (visible != this.fogOfWarMatrix[x][y]) {
+				this.fogOfWarMatrix[x][y] = visible;
+				fogChanged = true;
+				z = (visible) ? -7 : 0;
+				for (i = 0, l=this.fogOfWarVerticeIndexesMatrix[x][y].length; i<l; i++) {
+					fogGeometry.vertices[this.fogOfWarVerticeIndexesMatrix[x][y][i]].z = z;
 				}
 
-				fogGeometry.verticesNeedUpdate = true;
-				deepFogGeometry.verticesNeedUpdate = true;
+				if (visible && !this.deepFogOfWarMatrix[x][y]) {
+					this.deepFogOfWarMatrix[x][y] = true;
+					deepFogChanged = true;
+					for (i = 0, l=this.fogOfWarVerticeIndexesMatrix[x][y].length; i<l; i++) {
+						deepFogGeometry.vertices[this.fogOfWarVerticeIndexesMatrix[x][y][i]].z = -30;
+					}
+				}
+			}
+		}
+	}
+	if (fogChanged)
+		fogGeometry.verticesNeedUpdate = true;
+	if (deepFogChanged)
+		deepFogGeometry.verticesNeedUpdate = true;
+
+}
+
+
+// var fogGeometry = gameSurface.fogOfWarSurface.geometry;
+// var deepFogGeometry = gameSurface.deepFogOfWarSurface.geometry;
+// time = gameSurface.clock.getElapsedTime() * 10;
+// 				for ( var i = 0, l = fogGeometry.vertices.length; i < l; i ++ ) {
+// 					var x = Math.round((fogGeometry.vertices[i].x / gameSurface.PIXEL_BY_NODE + mapW/2));
+// 					var y = Math.round((fogGeometry.vertices[i].y / gameSurface.PIXEL_BY_NODE + mapH/2));
+// 					if (visionMatrix[x] != undefined && visionMatrix[x][y]) {
+// 						fogGeometry.vertices[ i ].z = -7;
+// 						deepFogGeometry.vertices[i].z = -30;
+// 					} else
+// 						fogGeometry.vertices[ i ].z = 0;// + 1 * Math.sin(time + i);
+// 				}
+
+// 				fogGeometry.verticesNeedUpdate = true;
+// 				deepFogGeometry.verticesNeedUpdate = true;
 
 				// controls.update( delta );
 				// renderer.render( scene, camera );
