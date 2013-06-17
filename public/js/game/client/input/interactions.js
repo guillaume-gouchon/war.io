@@ -92,6 +92,14 @@ userInput.changeZoom = function (dz) {
 
 
 /**
+*	The user changes the zoom
+*/
+userInput.changeRotation = function (dz) {
+	gameSurface.updateRotation(dz);
+}
+
+
+/**
 *	Toolbar's keyboard shortcuts
 */
 userInput.pressToolbarShortcut = function (i) {

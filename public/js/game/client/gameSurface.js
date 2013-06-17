@@ -14,6 +14,7 @@ gameSurface.ZOOM_MAX = 30;
 gameSurface.ZOOM_MIN = 150;
 gameSurface.ZOOM_STEP = 15;
 gameSurface.ZOOM_ROTATION_STEP = 0.1;
+gameSurface.ROTATION_STEP = 10;
 gameSurface.ORDER_ANIMATION_SPEED = 0.015;
 gameSurface.ORDER_ROTATION_SPEED = 1 / 12;
 gameSurface.ORDER_SIZE_MAX = 0.9;
@@ -65,7 +66,7 @@ gameSurface.cannotBuildHereMaterial = null;
 gameSurface.basicCubeGeometry = null;
 gameSurface.building = null;
 
-
+//fogs of war
 gameSurface.fogOfWarSurface = null;
 gameSurface.deepFogOfWarSurface = null;
 gameSurface.clock = null;
@@ -146,7 +147,7 @@ gameSurface.init = function () {
 		if (gameSurface.iteration % (1 / GUI.UPDATE_FREQUENCY) == 0) {
 			GUI.update();
 		}
-		
+
 		renderer.render(scene, camera);
 
 	}
@@ -371,6 +372,15 @@ gameSurface.updateZoom = function (dz) {
 
 
 /**
+*	The user has just made the camera rotating.
+*/
+gameSurface.updateRotation = function (dz) {
+	console.log(scene);
+	camera.rotation.z += this.de2ra(dz * this.ROTATION_STEP);
+}
+
+
+/**
 *	Called when the user has resized the browser window.
 */
 gameSurface.onWindowResize = function() {
@@ -569,7 +579,7 @@ gameSurface.updateElement = function (element) {
 		}
 	}
 
-	//removes old positions from grid
+	// remove old positions from grid
     var shape = gameData.ELEMENTS[element.f][element.r][element.t].shape;
 	for (var i in shape) {
 		for (var j in shape[i]) {
@@ -580,7 +590,7 @@ gameSurface.updateElement = function (element) {
 		}
 	}
 
-	//updates new positions
+	// update new positions
 	for (var i in shape) {
 		for (var j in shape[i]) {
 			if (shape[i][j] > 0) {

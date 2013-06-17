@@ -45,9 +45,9 @@ input.initMouse = function () {
 	}
 
 	document.onmousemove = function (event) {
+		userInput.selectGroup(event.x, event.y);
 		userInput.checkIfMapScrolling(event.x, event.y);
 		userInput.updateMouseIcon(event.x, event.y);
-		userInput.selectGroup(event.x, event.y);
 		if (Math.abs(event.x - input.mousePosition.x) + Math.abs(event.y - input.mousePosition.y) > 3) {
 			inputDispatcher.onMouseMove(event); 
 		}
