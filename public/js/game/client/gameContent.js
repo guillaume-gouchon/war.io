@@ -2,7 +2,7 @@ var gameContent = {};
 
 
 /**
-*	Important data.
+*	Useful game information.
 */
 gameContent.map = null;
 gameContent.players = null;
@@ -19,6 +19,12 @@ gameContent.gameElements = {
 	building: {},
 	unit: {}
 };
+
+
+/**
+*	Tells which tile is occupied and which tile is free.
+*/
+gameContent.grid = [];
 
 
 /**
@@ -43,18 +49,29 @@ gameContent.selectionRectangle = [];
 *	Initializes the game content by retrieving all the game elements from the engine.
 */
 gameContent.init = function (data) {
-	//add new elements
+
+	// init grid
+	for(var i = 0; i < this.map.size.x; i++) {
+		this.grid[i] = [];
+		for(var j = 0; j < this.map.size.y; j++) {
+			this.grid[i][j] = {x : i, y : j, isWall : false, content: null};
+		}
+	}
+
+	// add new elements
 	for (var i in data) {
 		for (var j in data[i]) {
 			var element = data[i][j];
 			gameSurface.addElement(element);
-			//center camera
-			if (element.f == gameData.FAMILIES.building
-				&& element.o == this.myArmy) {
+
+			// center camera on town hall
+			if (element.f == gameData.FAMILIES.building && element.o == this.myArmy) {
 				gameSurface.centerCameraOnElement(element);
 			}
+
 		}
 	}
+
 }
 
 
@@ -62,35 +79,42 @@ gameContent.init = function (data) {
 *	Updates the game content with the changes the engine sent us.	
 */
 gameContent.update = function (data) {
-	//add new elements
+
+	// add new elements
 	for (var i in data.added) {
 		var element = data.added[i];
-		if (this.gameElements[element.id] == null) {
+		if (utils.getElementFromId(element.id) == null) {
 			gameSurface.addElement(element);
 		}
 	}
-	//remove some elements
+
+	// remove some elements
 	for (var i in data.removed) {
 		var element = data.removed[i];
-		if (this.gameElements[element.id] != null) {
+		if (utils.getElementFromId(element.id) != null) {
+
+			// remove from selected elements
 			var index = this.selected.indexOf(element.id);
 			if (index >= 0) {
 				this.selected.splice(index, 1);
 			}
+
 			gameSurface.removeElement(element);
 		}
 	}
-	//update some modified elements
+
+	// update some modified elements
 	for (var i in data.modified) {
 		var element = data.modified[i];
-		if (this.gameElements[element.id] != null) {
+		if (utils.getElementFromId(element.id) != null) {
 			gameSurface.updateElement(element);
 		}
 	}
 
+	// update fogs of war
 	gameSurface.manageElementsVisibility();
 
-	//check if someone has changed its rank
+	// check some diplomacy changes
 	for (var i in this.players) {
 		for (var j in this.players[i].ra) {
 			if (this.players[i].ra[j] != data.players[i].ra[j]) {
@@ -99,17 +123,17 @@ gameContent.update = function (data) {
 		}
 	}
 
-	//update players
+	// update players
 	this.players = data.players;
 
-	//check for victory / defeat
+	// check for victory / defeat
 	if (this.players[this.myArmy].s == gameData.PLAYER_STATUSES.victory
 		|| this.players[this.myArmy].s == gameData.PLAYER_STATUSES.defeat
 		|| this.players[this.myArmy].s == gameData.PLAYER_STATUSES.surrender) {
 		gameManager.endGame(this.players[this.myArmy].s);
 	}
 
-	//handles chat messages
+	// show chat messages
 	for (var i in data.chat) {
 		gameSurface.showMessage({id: parseInt(Math.random() * 1000), text: data.chat[i].text}, gameSurface.PLAYERS_COLORS[data.chat[i].o]);
 	}
@@ -129,4 +153,3 @@ gameContent.rankHasChanged = function (player1, player2) {
 		gameSurface.showMessage({id: parseInt(Math.random() * 1000), text: player1.n + ' wants to conclude a pact with ' + player2.n + '...'});
 	}
 }
-

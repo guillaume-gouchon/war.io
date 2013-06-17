@@ -1,3 +1,4 @@
+userInput.DOUBLE_CLICK_RADIUS_SIZE = 15;
 
 /**
 *	The user is clicking on the screen to select / unselect some elements.
@@ -57,33 +58,28 @@ userInput.selectGroup = function (x, y) {
 				gamePosition1.x, gamePosition1.y, gamePosition2.x, gamePosition2.y
 			];
 
-			for(var i in gameContent.gameElements) {
-				var element = gameContent.gameElements[i].s;
-	  			if(rank.isAlly(gameContent.players, gameContent.myArmy, element)
-	  				&& element.f != gameData.FAMILIES.land
-	  				&& (selectionRectangleGamePosition[0] - selectionRectangleGamePosition[2] < 0 
-			  		&& element.p.x <= selectionRectangleGamePosition[2]
-			  		&& element.p.x >= selectionRectangleGamePosition[0]
-			  		|| element.p.x >= selectionRectangleGamePosition[2]
-			  		&& element.p.x <= selectionRectangleGamePosition[0])
-			  		&& (selectionRectangleGamePosition[1] - selectionRectangleGamePosition[3] < 0 
-			  		&& element.p.y <= selectionRectangleGamePosition[3]
-			  		&& element.p.y >= selectionRectangleGamePosition[1]
-			  		|| element.p.y >= selectionRectangleGamePosition[3]
-			  		&& element.p.y <= selectionRectangleGamePosition[1])) {
-				  		gameContent.selected.push(element.id);
-			  	  		gameSurface.selectElement(element.id);
-				  		if(element.f == gameData.FAMILIES.unit) {
-				  			unitSelected = true;
-				  		}
-			  	}
+			for (var i = Math.min(selectionRectangleGamePosition[0], selectionRectangleGamePosition[2]); i <= Math.max(selectionRectangleGamePosition[0], selectionRectangleGamePosition[2]); i++) {
+				for (var j = Math.min(selectionRectangleGamePosition[1], selectionRectangleGamePosition[3]); j <= Math.max(selectionRectangleGamePosition[1], selectionRectangleGamePosition[3]); j++) {
+					if (gameContent.grid[i][j].content != null) {
+						var element = utils.getElementFromId(gameContent.grid[i][j].content);
+						if(rank.isAlly(gameContent.players, gameContent.myArmy, element)) {
+					  		//select the element
+					  		gameContent.selected.push(element.id);
+				  	  		gameSurface.selectElement(element.id);
+
+				  	  		if(element.f == gameData.FAMILIES.unit) {
+					  			unitSelected = true;
+					  		}
+					  	}
+					}
+				}
 			}
 
 			//unselect the buildings if one or more units are selected
 			if(unitSelected) {
 				var len = gameContent.selected.length;
 				while(len--) {
-					var element = gameContent.gameElements[gameContent.selected[len]].s;
+					var element = utils.getElementFromId(gameContent.selected[len]);
 					if(element.f == gameData.FAMILIES.building) {
 						gameContent.selected.splice(len, 1);
 				  		gameSurface.unselectElement(element.id);
@@ -108,16 +104,20 @@ userInput.removeSelectionRectangle = function () {
 *	Selects all similar ally units.
 */
 userInput.doubleClickToSelect = function (x, y) {
-	if(gameContent.selected.length > 0 && rank.isAlly(gameContent.players, gameContent.myArmy, gameContent.gameElements[gameContent.selected[0]].s)) {
-		var selected = gameContent.gameElements[gameContent.selected[0]].s;
-		for(var i in gameContent.gameElements) {
-			var element = gameContent.gameElements[i].s;
-		  	if(element.f == selected.f && rank.isAlly(gameContent.players, gameContent.myArmy, element)
-		  		&& element.t == selected.t) {
-		  		//select the clicked element
-		  		gameContent.selected.push(element.id);
-	  	  		gameSurface.selectElement(element.id);
-		  	}
+	if(gameContent.selected.length > 0) {
+		var selected = utils.getElementFromId(gameContent.selected[0]);
+		if(rank.isAlly(gameContent.players, gameContent.myArmy, selected)) {
+			var tiles = tools.getTilesAround(gameContent.grid, selected.p, userInput.DOUBLE_CLICK_RADIUS_SIZE, true);
+			for (var i in tiles) {
+				if (tiles[i].content != null) {
+					var element = utils.getElementFromId(tiles[i].content);
+					if(element.f == selected.f && rank.isAlly(gameContent.players, gameContent.myArmy, element) && element.t == selected.t) {
+				  		//select the element
+				  		gameContent.selected.push(element.id);
+			  	  		gameSurface.selectElement(element.id);
+				  	}
+				}
+			}
 		}
 	}
 }

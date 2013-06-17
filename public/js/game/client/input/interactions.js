@@ -29,8 +29,8 @@ userInput.clickOnToolbar = function (button) {
 			this.enterConstructionMode(button);
 		} else if (button.buttonId == GUI.TOOLBAR_BUTTONS.cancel.buttonId) {
 			//cancel construction
-			gameManager.sendOrderToEngine(order.TYPES.cancelConstruction, [gameContent.gameElements[gameContent.selected[0]].s.id]);
-		} else if (gameContent.gameElements[gameContent.selected[0]].s.f == gameData.FAMILIES.building) {
+			gameManager.sendOrderToEngine(order.TYPES.cancelConstruction, [utils.getElementFromId(gameContent.selected[0]).id]);
+		} else if (utils.getElementFromId(gameContent.selected[0]).f == gameData.FAMILIES.building) {
 			gameManager.sendOrderToEngine(order.TYPES.buy,
 					 					[gameContent.selected, button]);
 		}
@@ -110,7 +110,7 @@ userInput.updateMouseIcon = function (mouseX, mouseY) {
 	var y = gameSurface.scroll[1];
 	
 	if (elementUnder != null && elementUnder.object.elementId != null) {
-		var e = gameContent.gameElements[elementUnder.object.elementId].s;
+		var e = utils.getElementFromId(elementUnder.object.elementId);
 		if (e != null && e.f != gameData.FAMILIES.land && rank.isEnemy(gameContent.players, gameContent.myArmy, e)) {
 			GUI.updateMouse(GUI.MOUSE_ICONS.attack);
 		} else {
@@ -192,7 +192,7 @@ userInput.dispatchUnitAction = function (x, y) {
 	var elementUnder = gameSurface.getFirstIntersectObject(x, y);
 	if (elementUnder != null) {
 		if (elementUnder.object.elementId != null) {
-			destination = gameContent.gameElements[elementUnder.object.elementId].s.p;
+			destination = utils.getElementFromId(elementUnder.object.elementId).p;
 			gameSurface.animateSelectionCircle(elementUnder.object.elementId);
 		} else {
 			destination = {

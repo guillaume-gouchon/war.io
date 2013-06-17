@@ -31,6 +31,7 @@ GUI.MOUSE_ICONS = {
 	arrowRight : 'e-resize',
 	arrowLeft : 'w-resize'
 }
+GUI.UPDATE_FREQUENCY = 0.2;
 
 
 /**
@@ -67,8 +68,8 @@ GUI.update = function () {
 *	Updates the toolbar depending on the elements selected.
 */
 GUI.updateToolbar = function () {
-	if (gameContent.selected.length > 0 && rank.isAlly(gameContent.players, gameContent.myArmy, utils.getElementFromId(gameContent.selected[0]).s)) {
-		var selected = utils.getElementFromId(gameContent.selected[0]).s;
+	if (gameContent.selected.length > 0 && rank.isAlly(gameContent.players, gameContent.myArmy, utils.getElementFromId(gameContent.selected[0]))) {
+		var selected = utils.getElementFromId(gameContent.selected[0]);
 		if (selected.f == gameData.FAMILIES.building) {
 			// building(s) are selected
 			if (selected.cp < 100) {
@@ -218,7 +219,7 @@ GUI.initInfobar = function () {
 */
 GUI.updateInfo = function () {
 	if (gameContent.selected.length > 0) {
-		var element = utils.getElementFromId(gameContent.selected[0]).s;
+		var element = utils.getElementFromId(gameContent.selected[0]);
 		var elementData = gameData.ELEMENTS[element.f][element.r][element.t];
 		$('#name').html(elementData.name);
 		$('#portrait').attr('class', 'sprite sprite-' + elementData.image.replace('.png', ''));
@@ -295,9 +296,9 @@ GUI.initMinimap = function () {
 			camera.position.x = x;
 			camera.position.y = y;
 		} else if (e.which == 3 && gameContent.selected.length > 0
-			&& rank.isAlly(gameContent.players, gameContent.myArmy, utils.getElementFromId(gameContent.selected[0]).s)
-			&& utils.getElementFromId(gameContent.selected[0]).s.f == gameData.FAMILIES.unit
-		|| utils.getElementFromId(gameContent.selected[0]).s.f == gameData.FAMILIES.building)) {
+			&& rank.isAlly(gameContent.players, gameContent.myArmy, utils.getElementFromId(gameContent.selected[0]))
+			&& utils.getElementFromId(gameContent.selected[0]).f == gameData.FAMILIES.unit
+		|| utils.getElementFromId(gameContent.selected[0]).f == gameData.FAMILIES.building) {
 			x = parseInt(x / gameSurface.PIXEL_BY_NODE);
 			y = parseInt(y / gameSurface.PIXEL_BY_NODE);
 			userInput.sendOrder(x, y);

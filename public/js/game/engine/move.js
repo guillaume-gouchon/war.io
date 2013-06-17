@@ -45,6 +45,7 @@ move.moveElement = function (game, element) {
   					if (shape[i][j] > 0) {
   						var partPosition = tools.getPartPosition(element, i, j);
   						game.grid[partPosition.x][partPosition.y].isWall = false;
+              game.grid[partPosition.x][partPosition.y].content = null;
   					}
   				}
   			}
@@ -56,6 +57,7 @@ move.moveElement = function (game, element) {
   					if (shape[i][j] > 0) {
   						var partPosition = tools.getPartPosition(element, i, j);
   						game.grid[partPosition.x][partPosition.y].isWall = true;
+              game.grid[partPosition.x][partPosition.y].content = element.id;
   					}
   				}
   			}

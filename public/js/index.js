@@ -222,10 +222,10 @@ function preloadImages() {
 		}
 	}
 	preload(
-		gameSurface.IMG_PATH + 'sprite.png',
-		gameSurface.IMG_PATH + 'cursor.png',
-		gameSurface.IMG_PATH + 'cursor_hover.png',
-		gameSurface.IMG_PATH + 'cursor_attack.png'
+		GUI.IMAGES_PATH + 'sprite.png',
+		GUI.IMAGES_PATH + 'cursor.png',
+		GUI.IMAGES_PATH + 'cursor_hover.png',
+		GUI.IMAGES_PATH + 'cursor_attack.png'
 	)
 }
 
