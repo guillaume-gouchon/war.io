@@ -41,6 +41,12 @@ gameSurface.PLAYERS_COLORS = ['red', 'blue', 'green', 'yellow'];
 gameSurface.MOVEMENT_EXTRAPOLATION_ITERATION = 6;
 gameSurface.LAND_HEIGHT_SMOOTH_FACTOR = 65;
 
+gameSurface.FOG_OF_WAR_HEIGHT = 6;
+gameSurface.FOG_OF_WAR_UNCOVERED_HEIGHT = -8; // should be < -gameSurface.FOG_OF_WAR_HEIGHT
+
+gameSurface.DEEP_FOG_OF_WAR_HEIGHT = 18;
+gameSurface.DEEP_FOG_OF_WAR_UNCOVERED_HEIGHT = -19; // should be < -gameSurface.DEEP_FOG_OF_WAR_HEIGHT
+
 
 /**
 *	VARIABLES
@@ -194,26 +200,24 @@ gameSurface.createScene = function () {
 	var fogGeometry = new THREE.PlaneGeometry(1000, 1000, gameContent.map.size.x, gameContent.map.size.y);
 	var fogTexture  = THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'fog.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
 	fogTexture.wrapT = fogTexture.wrapS = THREE.RepeatWrapping;
-	var fogMaterial = new THREE.MeshBasicMaterial({ map: fogTexture, transparent: true });
-	fogMaterial.opacity = 0.5;
+	var fogMaterial = new THREE.MeshBasicMaterial({ map: fogTexture, transparent: true, opacity:0.5 });
 	var planeSurface = new THREE.Mesh(fogGeometry, fogMaterial);
     planeSurface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
     planeSurface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
-    planeSurface.position.z = 6;
+    planeSurface.position.z = this.FOG_OF_WAR_HEIGHT;
     planeSurface.overdraw = true;
     scene.add(planeSurface);
     gameSurface.fogOfWarSurface = planeSurface;
 
     //generate the deep fog
 	var fogGeometry = new THREE.PlaneGeometry(1000, 1000, gameContent.map.size.x, gameContent.map.size.y);
-	var fogTexture  = THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'fog.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
-	fogTexture.wrapT = fogTexture.wrapS = THREE.RepeatWrapping;
+	//var fogTexture  = THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'fog.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
+	//fogTexture.wrapT = fogTexture.wrapS = THREE.RepeatWrapping;
 	var fogMaterial = new THREE.MeshBasicMaterial({ map: fogTexture });
-	fogMaterial.opacity = 1;
 	var planeSurface = new THREE.Mesh(fogGeometry, fogMaterial);
     planeSurface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
     planeSurface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
-    planeSurface.position.z = 20;
+    planeSurface.position.z = this.DEEP_FOG_OF_WAR_HEIGHT;
     planeSurface.overdraw = true;
     scene.add(planeSurface);
     gameSurface.deepFogOfWarSurface = planeSurface;
@@ -605,10 +609,8 @@ gameSurface.getFirstIntersectObject = function (x, y) {
 	this.projector.unprojectVector( vector, camera );
 	var raycaster = new THREE.Raycaster( camera.position, vector.sub( camera.position ).normalize() );
 	var intersects = raycaster.intersectObjects(scene.children);
-	while (intersects[0] != undefined && (intersects[0] == gameSurface.fogOfWarSurface || intersects[0] == gameSurface.deepFogOfWarSurface))
-		intersects.unshift();
 	if ( intersects.length > 0 ) {
-		return intersects[0];	
+		return intersects[0];
 	}
 	return null;
 }
@@ -751,7 +753,7 @@ gameSurface.manageElementsVisibility = function () {
 			if (visible != this.fogOfWarMatrix[x][y]) {
 				this.fogOfWarMatrix[x][y] = visible;
 				fogChanged = true;
-				z = (visible) ? -7 : 0;
+				z = (visible) ? this.FOG_OF_WAR_UNCOVERED_HEIGHT : 0;
 				for (i = 0, l=this.fogOfWarVerticeIndexesMatrix[x][y].length; i<l; i++) {
 					fogGeometry.vertices[this.fogOfWarVerticeIndexesMatrix[x][y][i]].z = z;
 				}
@@ -760,7 +762,7 @@ gameSurface.manageElementsVisibility = function () {
 					this.deepFogOfWarMatrix[x][y] = true;
 					deepFogChanged = true;
 					for (i = 0, l=this.fogOfWarVerticeIndexesMatrix[x][y].length; i<l; i++) {
-						deepFogGeometry.vertices[this.fogOfWarVerticeIndexesMatrix[x][y][i]].z = -30;
+						deepFogGeometry.vertices[this.fogOfWarVerticeIndexesMatrix[x][y][i]].z = this.DEEP_FOG_OF_WAR_UNCOVERED_HEIGHT;
 					}
 				}
 			}
