@@ -84,14 +84,15 @@ gameSurface.updateLifeBar = function (lifeBar, element, elementData) {
 *	Updates the target element position.
 */
 gameSurface.updateOrderPosition = function () {
-	if (gameContent.selected.length > 0 && (gameContent.gameElements[gameContent.selected[0]].s.mt != null
-		&& gameContent.gameElements[gameContent.selected[0]].s.mt.x != null || gameContent.gameElements[gameContent.selected[0]].s.rp != null
-		|| gameContent.gameElements[gameContent.selected[0]].s.a != null)) {
+	var element = utils.getElementFromId(gameContent.selected[0]);
+	if (gameContent.selected.length > 0 && (element.s.mt != null
+		&& element.s.mt.x != null || element.s.rp != null
+		|| element.s.a != null)) {
 		var position;
-		if (gameContent.gameElements[gameContent.selected[0]].s.a != null) {
-			position = gameContent.gameElements[gameContent.selected[0]].s.a.p;
+		if (element.s.a != null) {
+			position = element.s.a.p;
 		} else  {
-			position = (gameContent.gameElements[gameContent.selected[0]].s.rp != null ? gameContent.gameElements[gameContent.selected[0]].s.rp : gameContent.gameElements[gameContent.selected[0]].s.mt);
+			position = (element.s.rp != null ? element.s.rp : element.s.mt);
 		}
 		this.setElementPosition(this.order, position.x, position.y);
 		this.order.rotation.z += gameSurface.ORDER_ROTATION_SPEED;
@@ -138,22 +139,23 @@ gameSurface.de2ra = function(degree) {
 *	The user selected an element.
 */
 gameSurface.selectElement = function (elementId) {
-	var element = gameContent.gameElements[elementId].s;
-	var elementData = gameData.ELEMENTS[element.f][element.r][element.t];
+	var element = utils.getElementFromId(elementId);
+	var elementStats = element.s;
+	var elementData = gameData.ELEMENTS[elementStats.f][elementStats.r][elementStats.t];
 	var color;
-	if (rank.isEnemy(gameContent.players, gameContent.myArmy, element)) {
+	if (rank.isEnemy(gameContent.players, gameContent.myArmy, elementStats)) {
 		color = this.SELECTION_ENEMY_COLOR;
-	} else if (rank.isAlly(gameContent.players, gameContent.myArmy, element)) {
+	} else if (rank.isAlly(gameContent.players, gameContent.myArmy, elementStats)) {
 		color = this.SELECTION_ALLY_COLOR;
 	} else {
 		color = this.SELECTION_NEUTRAL_COLOR;
 	}
 
-	var d = gameContent.gameElements[elementId].d;
+	var d = element.d;
 	d.add(this.drawSelectionCircle(elementData.shape.length / 2 * this.PIXEL_BY_NODE / 2, color));
 	
-	if (element.f != gameData.FAMILIES.land) {
-		var lifeBar = this.drawLifeBar(element, elementData);
+	if (elementStats.f != gameData.FAMILIES.land) {
+		var lifeBar = this.drawLifeBar(elementStats, elementData);
 		lifeBar.rotation.y = - d.rotation.y + this.de2ra(90);
 		d.add(lifeBar);
 	}
@@ -165,7 +167,7 @@ gameSurface.selectElement = function (elementId) {
 */
 gameSurface.unselectElement = function (elementId) {
 	try {
-		var d = gameContent.gameElements[elementId].d;
+		var d = utils.getElementFromId(elementId).d;
 		var index = d.children.length;
 		while (index --) {
 			var child = d.children[index];
@@ -255,7 +257,7 @@ gameSurface.removeBuildingGeometry = function () {
 */
 gameSurface.animateSelectionCircle = function (elementId) {
 	this.selectElement(elementId);
-	var d = gameContent.gameElements[elementId].d;
+	var d = utils.getElementFromId(elementId).d;
 	var target;
 	for (var i in d.children) {
 		if (d.children[i].id == 'select') {
@@ -362,8 +364,8 @@ gameSurface.updateMoveExtrapolation = function () {
 			
 		d.et -= 1;
 
-		if (d.et <= 0 && gameContent.gameElements[d.elementId] != null) {
-			var element = gameContent.gameElements[d.elementId].s;
+		if (d.et <= 0 && utils.getElementFromId(d.elementId) != null) {
+			var element = utils.getElementFromId(d.elementId).s;
 			this.setElementPosition(d, element.p.x, element.p.y);
 			d.et = 0;
 			d.ex = 0;

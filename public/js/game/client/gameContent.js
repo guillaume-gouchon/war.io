@@ -14,7 +14,11 @@ gameContent.game = null;
 *	Main variable used during the game.
 *  	It contains all the land's elements, units and buildings.
 */
-gameContent.gameElements = {};
+gameContent.gameElements = {
+	land: {},
+	building: {},
+	unit: {}
+};
 
 
 /**

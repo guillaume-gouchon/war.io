@@ -55,3 +55,11 @@ utils.canBeBuiltHere = function (building) {
 		} 
 	}
 }
+
+
+/**
+*	Returns the game element from a chosen id.
+*/
+utils.getElementFromId = function (id) {
+	return gameContent.gameElements[Object.keys(gameData.FAMILIES)[id.charAt(0)]][id];
+}

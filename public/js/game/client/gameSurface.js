@@ -6,8 +6,7 @@ var scene, camera;
 /**
 *	CONSTANTS
 */
-gameSurface.IMG_PATH = 'js/game/data/g/';
-gameSurface.MODELS_PATH = 'js/game/data/g/3D/';
+gameSurface.MODELS_PATH = 'img/3D/';
 gameSurface.PIXEL_BY_NODE = 10;
 gameSurface.NEAR = 1;
 gameSurface.FAR = 2000;

@@ -16,7 +16,7 @@ move.moveElement = function (game, element) {
 
     //if destination forbids movement, search neighbors for a new one
   	var counter = 0;
-  	while(destination.isWall && counter < 20) {
+  	while(destination.isWall && counter < 10) {
   		counter++;
   	    var endNeighbors = astar.neighbors(game.grid, destination, true);
   	    for(var i in endNeighbors){

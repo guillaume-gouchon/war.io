@@ -24,7 +24,7 @@ gameData.ELEMENTS[gameData.FAMILIES.unit].push(
 		height: 6,
 		range: 1,
 		buttonId : 101,
-		vision : 8
+		vision : 12
 	},
 	{
 		name : 'Footman',
@@ -48,7 +48,7 @@ gameData.ELEMENTS[gameData.FAMILIES.unit].push(
 		height: 6,
 		range: 1,
 		buttonId : 102,
-		vision : 8
+		vision : 12
 	},
 	{
 		name : 'Knight',
@@ -72,7 +72,7 @@ gameData.ELEMENTS[gameData.FAMILIES.unit].push(
 		height: 6,
 		range: 1,
 		buttonId : 103,
-		vision : 8
+		vision : 12
 	},
 	{
 		name : 'Bowman',
@@ -96,6 +96,6 @@ gameData.ELEMENTS[gameData.FAMILIES.unit].push(
 		height: 6,
 		range: 10,
 		buttonId : 104,
-		vision : 10
+		vision : 12
 	}
 ]);
