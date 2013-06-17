@@ -82,4 +82,3 @@ fightLogic.applyDamage = function (game, damage, target, fragOwner) {
 		
 	}
 }
-

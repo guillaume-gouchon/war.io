@@ -11,6 +11,7 @@ GUI.toolbar = [];
 /**
 *	CONSTANTS
 */
+GUI.IMAGES_PATH = 'img/GUI/';
 GUI.MINIMAP_SIZE = 140;
 GUI.BUTTONS_SIZE = 80;
 GUI.TOOLBAR_BUTTONS = {
@@ -18,9 +19,9 @@ GUI.TOOLBAR_BUTTONS = {
 	cancel : {buttonId : 1001, image : 'cancel.png', isEnabled : true, name: 'Cancel'}
 }
 GUI.MOUSE_ICONS = {
-	standard : 'url("js/game/data/g/cursor.png"), auto', 
-	select : 'url("js/game/data/g/cursor_hover.png"), auto',
-	attack : 'url("js/game/data/g/cursor_attack.png"), auto',
+	standard : 'url("' + GUI.IMAGES_PATH + 'cursor.png"), auto', 
+	select : 'url("' + GUI.IMAGES_PATH + 'cursor_hover.png"), auto',
+	attack : 'url("' + GUI.IMAGES_PATH + 'cursor_attack.png"), auto',
 	arrowTop : 'n-resize',
 	arrowTopRight : 'ne-resize',
 	arrowTopLeft : 'nw-resize',
@@ -30,6 +31,7 @@ GUI.MOUSE_ICONS = {
 	arrowRight : 'e-resize',
 	arrowLeft : 'w-resize'
 }
+GUI.UPDATE_FREQUENCY = 0.2;
 
 
 /**
@@ -66,18 +68,18 @@ GUI.update = function () {
 *	Updates the toolbar depending on the elements selected.
 */
 GUI.updateToolbar = function () {
-	if (gameContent.selected.length > 0 && rank.isAlly(gameContent.players, gameContent.myArmy, gameContent.gameElements[gameContent.selected[0]].s)) {
-		var selected = gameContent.gameElements[gameContent.selected[0]].s;
+	if (gameContent.selected.length > 0 && rank.isAlly(gameContent.players, gameContent.myArmy, utils.getElementFromId(gameContent.selected[0]))) {
+		var selected = utils.getElementFromId(gameContent.selected[0]);
 		if (selected.f == gameData.FAMILIES.building) {
-			//building(s) are selected
+			// building(s) are selected
 			if (selected.cp < 100) {
-				//building is not finished yet, show cancel button
+				// building is not finished yet, show cancel button
 				this.toolbar = [GUI.TOOLBAR_BUTTONS.cancel];
 			} else {
 				this.toolbar = production.getWhatCanBeBought(gameContent.players, selected.o, gameData.ELEMENTS[gameData.FAMILIES.building][selected.r][selected.t].buttons);
 			}
 		} else if (selected.f == gameData.FAMILIES.unit) {
-			//unit(s) are selected
+			// unit(s) are selected
 			if(this.showBuildings) {
 				this.toolbar = this.getBuildingButtons(selected);
 			} else {
@@ -217,7 +219,7 @@ GUI.initInfobar = function () {
 */
 GUI.updateInfo = function () {
 	if (gameContent.selected.length > 0) {
-		var element = gameContent.gameElements[gameContent.selected[0]].s;
+		var element = utils.getElementFromId(gameContent.selected[0]);
 		var elementData = gameData.ELEMENTS[element.f][element.r][element.t];
 		$('#name').html(elementData.name);
 		$('#portrait').attr('class', 'sprite sprite-' + elementData.image.replace('.png', ''));
@@ -294,9 +296,9 @@ GUI.initMinimap = function () {
 			camera.position.x = x;
 			camera.position.y = y;
 		} else if (e.which == 3 && gameContent.selected.length > 0
-			&& rank.isAlly(gameContent.players, gameContent.myArmy, gameContent.gameElements[gameContent.selected[0]].s)
-			&& (gameContent.gameElements[gameContent.selected[0]].s.f == gameData.FAMILIES.unit
-		|| gameContent.gameElements[gameContent.selected[0]].s.f == gameData.FAMILIES.building)) {
+			&& rank.isAlly(gameContent.players, gameContent.myArmy, utils.getElementFromId(gameContent.selected[0]))
+			&& utils.getElementFromId(gameContent.selected[0]).f == gameData.FAMILIES.unit
+		|| utils.getElementFromId(gameContent.selected[0]).f == gameData.FAMILIES.building) {
 			x = parseInt(x / gameSurface.PIXEL_BY_NODE);
 			y = parseInt(y / gameSurface.PIXEL_BY_NODE);
 			userInput.sendOrder(x, y);

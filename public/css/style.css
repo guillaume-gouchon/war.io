@@ -532,13 +532,13 @@ header #music.musicEnabled {
 }
 
 .sprite {
-  background: url('../js/game/data/g/sprite.png') no-repeat top left;
+  background: url('../img/GUI/sprite.png') no-repeat top left;
 }
 
 .spriteBefore:before {
   float: left;
   content: "";
-  background: url('../js/game/data/g/sprite.png') no-repeat top left;
+  background: url('../img/GUI/sprite.png') no-repeat top left;
   margin-right: 5px;
 }
 

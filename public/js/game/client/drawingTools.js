@@ -59,7 +59,8 @@ gameSurface.drawSelectionCircle = function(radius, color) {
 /**
 *	Draws a life bar on top of an element.
 */
-gameSurface.drawLifeBar = function (element, elementData) {
+gameSurface.drawLifeBar = function (element) {
+	var elementData = gameData.ELEMENTS[element.f][element.r][element.t];
 	var lifeBar = new THREE.Mesh(new THREE.CubeGeometry(this.BARS_DEPTH, this.BARS_HEIGHT, 1), new THREE.MeshBasicMaterial({color: 0xffffff}));
 	lifeBar.id = 'life';
 	lifeBar.position.x = 0;
@@ -67,6 +68,17 @@ gameSurface.drawLifeBar = function (element, elementData) {
 	lifeBar.rotation.y = this.de2ra(90);
 	this.updateLifeBar(lifeBar, element, elementData);
 	return lifeBar;
+}
+
+
+/**
+*	Adds a life bar on top of element.
+*/
+gameSurface.addLifeBar = function (element) {
+	var lifeBar = this.drawLifeBar(element);
+	var model = element.m;
+	lifeBar.rotation.y = - model.rotation.y + this.de2ra(90);
+	model.add(lifeBar);
 }
 
 
@@ -84,28 +96,29 @@ gameSurface.updateLifeBar = function (lifeBar, element, elementData) {
 *	Updates the target element position.
 */
 gameSurface.updateOrderPosition = function () {
-	if (gameContent.selected.length > 0 && (gameContent.gameElements[gameContent.selected[0]].s.mt != null
-		&& gameContent.gameElements[gameContent.selected[0]].s.mt.x != null || gameContent.gameElements[gameContent.selected[0]].s.rp != null
-		|| gameContent.gameElements[gameContent.selected[0]].s.a != null)) {
-		var position;
-		if (gameContent.gameElements[gameContent.selected[0]].s.a != null) {
-			position = gameContent.gameElements[gameContent.selected[0]].s.a.p;
-		} else  {
-			position = (gameContent.gameElements[gameContent.selected[0]].s.rp != null ? gameContent.gameElements[gameContent.selected[0]].s.rp : gameContent.gameElements[gameContent.selected[0]].s.mt);
+	if (gameContent.selected.length > 0) {
+		var element = utils.getElementFromId(gameContent.selected[0]);
+	 	if (element.mt != null && element.mt.x != null || element.rp != null || element.a != null) {
+			var position;
+			if (element.a != null) {
+				position = element.a.p;
+			} else  {
+				position = (element.rp != null ? element.rp : element.mt);
+			}
+			this.setElementPosition(this.order, position.x, position.y);
+			this.order.rotation.z += gameSurface.ORDER_ROTATION_SPEED;
+			if (this.order.scale.x >= gameSurface.ORDER_SIZE_MAX) {
+				gameSurface.orderFactor = -1;
+					
+			} else if (this.order.scale.x <= gameSurface.ORDER_SIZE_MIN){
+				gameSurface.orderFactor = 1;
+			}
+			this.order.scale.x += this.ORDER_ANIMATION_SPEED * gameSurface.orderFactor;
+			this.order.scale.y += this.ORDER_ANIMATION_SPEED * gameSurface.orderFactor;
+			this.order.visible = true;
+		} else if (this.order.visible) {
+			this.order.visible = false;
 		}
-		this.setElementPosition(this.order, position.x, position.y);
-		this.order.rotation.z += gameSurface.ORDER_ROTATION_SPEED;
-		if (this.order.scale.x >= gameSurface.ORDER_SIZE_MAX) {
-			gameSurface.orderFactor = -1;
-				
-		} else if (this.order.scale.x <= gameSurface.ORDER_SIZE_MIN){
-			gameSurface.orderFactor = 1;
-		}
-		this.order.scale.x += this.ORDER_ANIMATION_SPEED * gameSurface.orderFactor;
-		this.order.scale.y += this.ORDER_ANIMATION_SPEED * gameSurface.orderFactor;
-		this.order.visible = true;
-	} else if (this.order.visible) {
-		this.order.visible = false;
 	}
 }
 
@@ -138,7 +151,8 @@ gameSurface.de2ra = function(degree) {
 *	The user selected an element.
 */
 gameSurface.selectElement = function (elementId) {
-	var element = gameContent.gameElements[elementId].s;
+	var element = utils.getElementFromId(elementId);
+	var model = element.m;
 	var elementData = gameData.ELEMENTS[element.f][element.r][element.t];
 	var color;
 	if (rank.isEnemy(gameContent.players, gameContent.myArmy, element)) {
@@ -149,14 +163,7 @@ gameSurface.selectElement = function (elementId) {
 		color = this.SELECTION_NEUTRAL_COLOR;
 	}
 
-	var d = gameContent.gameElements[elementId].d;
-	d.add(this.drawSelectionCircle(elementData.shape.length / 2 * this.PIXEL_BY_NODE / 2, color));
-	
-	if (element.f != gameData.FAMILIES.land) {
-		var lifeBar = this.drawLifeBar(element, elementData);
-		lifeBar.rotation.y = - d.rotation.y + this.de2ra(90);
-		d.add(lifeBar);
-	}
+	model.add(this.drawSelectionCircle(elementData.shape.length / 2 * this.PIXEL_BY_NODE / 2, color));
 }
 
 
@@ -165,12 +172,12 @@ gameSurface.selectElement = function (elementId) {
 */
 gameSurface.unselectElement = function (elementId) {
 	try {
-		var d = gameContent.gameElements[elementId].d;
-		var index = d.children.length;
+		var model = utils.getElementFromId(elementId).m;
+		var index = model.children.length;
 		while (index --) {
-			var child = d.children[index];
-			if (child.id == 'select' || child.id == 'life') {
-				d.remove(child);
+			var child = model.children[index];
+			if (child.id == 'select') {
+				model.remove(child);
 			}
 		}
 	} catch (e) {
@@ -255,11 +262,11 @@ gameSurface.removeBuildingGeometry = function () {
 */
 gameSurface.animateSelectionCircle = function (elementId) {
 	this.selectElement(elementId);
-	var d = gameContent.gameElements[elementId].d;
+	var model = utils.getElementFromId(elementId).m;
 	var target;
-	for (var i in d.children) {
-		if (d.children[i].id == 'select') {
-			target = d.children[i];
+	for (var i in model.children) {
+		if (model.children[i].id == 'select') {
+			target = model.children[i];
 			break;
 		}
 	}
@@ -342,11 +349,11 @@ gameSurface.showMessage = function (message, color) {
 /**
 *	Initializes movement extrapolation for one unit.
 */
-gameSurface.extrapol = function (d, dx, dy) {
-	d.ex = dx;
-	d.ey = dy;
-	d.et = this.MOVEMENT_EXTRAPOLATION_ITERATION;
-	this.ex.push(d);
+gameSurface.extrapol = function (model, dx, dy) {
+	model.ex = dx;
+	model.ey = dy;
+	model.et = this.MOVEMENT_EXTRAPOLATION_ITERATION;
+	this.ex.push(model);
 }
 
 
@@ -356,18 +363,18 @@ gameSurface.extrapol = function (d, dx, dy) {
 gameSurface.updateMoveExtrapolation = function () {
 	var index = this.ex.length;
 	while (index --) {
-		var d = this.ex[index];
-		d.position.x += d.ex * this.PIXEL_BY_NODE / this.MOVEMENT_EXTRAPOLATION_ITERATION;
-		d.position.y += d.ey * this.PIXEL_BY_NODE / this.MOVEMENT_EXTRAPOLATION_ITERATION;
+		var model = this.ex[index];
+		model.position.x += d.ex * this.PIXEL_BY_NODE / this.MOVEMENT_EXTRAPOLATION_ITERATION;
+		model.position.y += d.ey * this.PIXEL_BY_NODE / this.MOVEMENT_EXTRAPOLATION_ITERATION;
 			
-		d.et -= 1;
+		model.et -= 1;
 
-		if (d.et <= 0 && gameContent.gameElements[d.elementId] != null) {
-			var element = gameContent.gameElements[d.elementId].s;
-			this.setElementPosition(d, element.p.x, element.p.y);
-			d.et = 0;
-			d.ex = 0;
-			d.ey = 0;
+		var element = utils.getElementFromId(model.elementId);
+		if (model.et <= 0 && element != null) {
+			this.setElementPosition(model, element.p.x, element.p.y);
+			model.et = 0;
+			model.ex = 0;
+			model.ey = 0;
 			this.ex.splice(index, 1);
 		}
 	}

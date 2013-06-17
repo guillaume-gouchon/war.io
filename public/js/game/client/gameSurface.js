@@ -6,8 +6,7 @@ var scene, camera;
 /**
 *	CONSTANTS
 */
-gameSurface.IMG_PATH = 'js/game/data/g/';
-gameSurface.MODELS_PATH = 'js/game/data/g/3D/';
+gameSurface.MODELS_PATH = 'img/3D/';
 gameSurface.PIXEL_BY_NODE = 10;
 gameSurface.NEAR = 1;
 gameSurface.FAR = 2000;
@@ -145,9 +144,12 @@ gameSurface.init = function () {
 		gameSurface.updateMoveExtrapolation();
 		gameSurface.updateGameWindow();
 		gameSurface.updateOrderPosition();
+
+		// animations
 		TWEEN.update();
 
-		if (gameSurface.iteration % 5 == 0) {
+		// update GUI
+		if (gameSurface.iteration % (1 / GUI.UPDATE_FREQUENCY) == 0) {
 			GUI.update();
 		}
 		
@@ -235,8 +237,6 @@ gameSurface.createScene = function () {
 			this.fogOfWarVerticeIndexesMatrix[verticeGamePosition.x][verticeGamePosition.y] = [];
 		this.fogOfWarVerticeIndexesMatrix[verticeGamePosition.x][verticeGamePosition.y].push(i);
 	}
-	console.log(this.fogOfWarVerticeIndexesMatrix);
-
 
 	this.fogOfWarMatrix = [];
 	this.deepFogOfWarMatrix = [];
@@ -248,14 +248,12 @@ gameSurface.createScene = function () {
 			this.deepFogOfWarMatrix[x][y] = false;
 	}
 
-
-
-	//add order element
+	//add order geometry
 	this.order = new THREE.Mesh(new THREE.TorusGeometry(5, 2, 2, 6), new THREE.LineBasicMaterial( { color: '#0f0', opacity: this.ORDER_OPACITY, transparent: true} ));
 	this.order.visible = false;
 	scene.add(this.order);
 
-	//initialize basic materials and geometries
+	//init basic materials and geometries
 	this.canBuildHereMaterial = new THREE.LineBasicMaterial({color: this.CAN_BUILD_CUBE_COLOR, opacity: this.BUILD_CUBE_OPACITY, transparent: true });
 	this.cannotBuildHereMaterial = new THREE.LineBasicMaterial({color: this.CANNOT_BUILD_CUBE_COLOR, opacity: this.BUILD_CUBE_OPACITY, transparent: true });
 	this.basicCubeGeometry = new THREE.CubeGeometry(this.PIXEL_BY_NODE, this.PIXEL_BY_NODE, this.PIXEL_BY_NODE);
@@ -295,7 +293,7 @@ gameSurface.init3DModels = function () {
 
 
 /**
-*	Loads the geometry.
+*	Loads a geometry.
 */
 gameSurface.loadObject = function (key, elementFamily) {
 	this.loader.load(this.MODELS_PATH + key, this.geometryLoaded(key));
@@ -388,91 +386,105 @@ gameSurface.onWindowResize = function() {
 
 /**
 *	Adds a new game element.
+*	It creates the game element's 3D model and adds it to the scene.
 */
 gameSurface.addElement = function (element) {
 	var elementData = gameData.ELEMENTS[element.f][element.r][element.t];
-	this.createObject(elementData.g, element);
-}
+	var model = elementData.g;
 
-
-/**
-*	Creates the game element's 3D model and adds it to the scene.
-*/
-gameSurface.createObject = function (key, element) {
 	var material;
 	if (element.f == gameData.FAMILIES.land) {
-		material = this.materials[key];
+		material = this.materials[model];
 	} else  {
-		material = this.materials[key + this.ARMIES_COLORS[element.o]];
+		material = this.materials[model + this.ARMIES_COLORS[element.o]];
 	}
-	var object = new THREE.Mesh(this.geometries[key], material);
+
+	var object = new THREE.Mesh(this.geometries[model], material);
 	object.elementId = element.id;
 	this.setElementPosition(object, element.p.x, element.p.y);
-
-	if (key == 'tree.js') {
+	if (model == 'tree.js') {
 		object.rotation.x = this.de2ra(90);
 		object.rotation.y = this.de2ra(Math.random() * 360);
 		object.scale.y = 1.3;
-	} else if ( key == 'castle.js') {
+	} else if ( model == 'castle.js') {
 		object.rotation.x = this.de2ra(90);
 		object.scale.x = 3;
 		object.scale.y = 3;
 		object.scale.z = 3;
-	} else if (key == 'goldmine.js') {
+	} else if (model == 'goldmine.js') {
 		object.rotation.x = this.de2ra(90);
 		object.scale.x = 1.5;
 		object.scale.y = 1.5;
 		object.scale.z = 1.5;
 		object.rotation.y = this.de2ra(Math.random() * 360);
-	} else if (key == 'house.js') {
+	} else if (model == 'house.js') {
 		object.rotation.x = this.de2ra(90);
 		object.scale.x = 3;
 		object.scale.y = 3;
 		object.scale.z = 3;
-	} else if (key == 'casern.js') {
+	} else if (model == 'casern.js') {
 		object.rotation.x = this.de2ra(90);
 		object.scale.x = 2;
 		object.scale.y = 2;
 		object.scale.z = 2;
-	} else if ( key == 'peon.js') {
+	} else if (model == 'peon.js') {
 		object.rotation.x = this.de2ra(90);
 		object.scale.x = 2;
 		object.scale.y = 2;
 		object.scale.z = 2;
-	} else if (key == 'swordsman.js') {
+	} else if (model == 'swordsman.js') {
 		object.rotation.x = this.de2ra(90);
 		object.scale.x = 2;
 		object.scale.y = 2;
 		object.scale.z = 2;
-	} else if (key == 'bowman.js') {
+	} else if (model == 'bowman.js') {
 		object.rotation.x = this.de2ra(90);
 		object.scale.x = 2;
 		object.scale.y = 2;
 		object.scale.z = 2;
-	} else if (key == 'knight.js') {
+	} else if (model == 'knight.js') {
 		object.rotation.x = this.de2ra(90);
 		object.scale.x = 2;
 		object.scale.y = 2;
 		object.scale.z = 2;
-	} else if (key == 'tower.js') {
+	} else if (model == 'tower.js') {
 		object.rotation.x = this.de2ra(90);
 		object.scale.x = 2;
 		object.scale.z = 2;
 		object.scale.y = 2;
 	}
 
-	gameContent.gameElements[element.id] = {d: object, s : element};
+	element.m = object;
+	gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id] = element;
+	
+	// add life bar on top
+	this.addLifeBar(element);
 
+	// fogs
 	if (element.f == gameData.FAMILIES.land || rank.isAlly(gameContent.players, gameContent.myArmy, element)) {
 		this.showElement(element);
 	}
 
+	// building in construction
 	if (element.f == gameData.FAMILIES.building) {
 		if (element.cp < 100) {
 			object.position.z += this.BUILDING_INIT_Z;
 		}
 	}
 
+	// add element to grid
+	var shape = elementData.shape;
+	for(var i in shape) {
+		var row = shape[i];
+		for(var j in row) {
+			var part = row[j];
+			if(part > 0) {
+				var position = tools.getPartPosition(element, i, j);
+				gameContent.grid[position.x][position.y].isWall = true;
+				gameContent.grid[position.x][position.y].content = element.id;
+			}
+		}
+	}
 }
 
 
@@ -480,20 +492,22 @@ gameSurface.createObject = function (key, element) {
 *	Updates an existing game element.
 */
 gameSurface.updateElement = function (element) {
-	var d = gameContent.gameElements[element.id].d;
-	var s = gameContent.gameElements[element.id].s;
-	if (element.f == gameData.FAMILIES.unit) {
-		var dx = element.p.x - s.p.x;
-		var dy = element.p.y - s.p.y;
+	var gameElement = utils.getElementFromId(element.id);
+	var object = gameElement.m;
+
+	// movement extrapolation
+	if (gameElement.f == gameData.FAMILIES.unit) {
+		var dx = element.p.x - gameElement.p.x;
+		var dy = element.p.y - gameElement.p.y;
 
 		if (dx != 0 || dy != 0) {
-			this.updateOrientation(d, dx, dy);
-			this.extrapol(d, dx, dy);
+			this.updateOrientation(object, dx, dy);
+			this.extrapol(object, dx, dy);
 		}
 	}
 
 	if (gameManager.isOfflineGame || element.f == gameData.FAMILIES.building) {
-		this.setElementPosition(d, element.p.x, element.p.y);	
+		this.setElementPosition(object, element.p.x, element.p.y);	
 	}
 	
 	var elementData = gameData.ELEMENTS[element.f][element.r][element.t];
@@ -501,16 +515,16 @@ gameSurface.updateElement = function (element) {
 	if (element.f == gameData.FAMILIES.building && rank.isAlly(gameContent.players, gameContent.myArmy, element)) {
 		if (element.cp < 100) {
 
-			//update construction progress
-			d.position.z = (100 - element.cp) / 100 * this.BUILDING_INIT_Z;
+			// update construction progress
+			object.position.z = (100 - element.cp) / 100 * this.BUILDING_INIT_Z;
 
 		} else if (element.q.length > 0) {
 
-			//update progress bar
+			// update progress bar
 			var progressBar = null;
-			for (var i in d.children) {
-				if (d.children[i].id == 'prog') {
-					progressBar = d.children[i];
+			for (var i in object.children) {
+				if (object.children[i].id == 'prog') {
+					progressBar = object.children[i];
 					break;
 				}
 			}
@@ -520,47 +534,71 @@ gameSurface.updateElement = function (element) {
 				progress.position.x = elementData.shape.length / 3 * this.PIXEL_BY_NODE / 2;
 				progress.position.y = elementData.height + 1;
 				progress.rotation.y = this.de2ra(90);
-				d.add(progress);
+				object.add(progress);
 			} else {
 				progressBar.scale.z = element.qp / 100 * elementData.shape.length / 3 * this.PIXEL_BY_NODE;
 				progressBar.position.x = elementData.shape.length / 3 * this.PIXEL_BY_NODE / 2 * (1 - element.qp / 100);
 				
-				//population limit reached message
+				// population limit reached message
 				if (element.qp >= 99 && gameContent.players[gameContent.myArmy].pop.current == gameContent.players[gameContent.myArmy].pop.max) {
 					this.showMessage(this.MESSAGES.popLimitReached);
 				}
 			}
 		} else {
-			for (var i in d.children) {
-				if (d.children[i].id == 'prog') {
-					d.remove(d.children[i]);
+			for (var i in object.children) {
+				if (object.children[i].id == 'prog') {
+					object.remove(object.children[i]);
 				}
 			}
 		}
 	}
 
 	if (element.f != gameData.FAMILIES.land) {
-		//update life bar
-		for (var i in d.children) {
-			if (d.children[i].id == 'life') {
-				this.updateLifeBar(d.children[i], element, elementData);
-				d.children[i].rotation.y = - d.rotation.y + this.de2ra(90);
+		// update life bar
+		for (var i in object.children) {
+			if (object.children[i].id == 'life') {
+				this.updateLifeBar(object.children[i], element, elementData);
+				object.children[i].rotation.y = - object.rotation.y + this.de2ra(90);
 				break;
 			}
 		}
 
 		
 
-		if (element.o == gameContent.myArmy && s.l > element.l) {
-			//you are being attacked
+		if (element.o == gameContent.myArmy && gameElement.l > element.l) {
+			// you are being attacked
 			GUI.addAlertMinimap(element);
 		} else if (element.visible) {
-			//update minimap
+			// update minimap
 			GUI.updateElementOnMinimap(element);
 		}
 	}
 
-	gameContent.gameElements[element.id] = {d: d, s : element};
+	//removes old positions from grid
+    var shape = gameData.ELEMENTS[element.f][element.r][element.t].shape;
+	for (var i in shape) {
+		for (var j in shape[i]) {
+			if (shape[i][j] > 0) {
+				var partPosition = tools.getPartPosition(gameElement, i, j);
+				gameContent.grid[partPosition.x][partPosition.y].isWall = false;
+				gameContent.grid[partPosition.x][partPosition.y].content = null;
+			}
+		}
+	}
+
+	//updates new positions
+	for (var i in shape) {
+		for (var j in shape[i]) {
+			if (shape[i][j] > 0) {
+				var partPosition = tools.getPartPosition(element, i, j);
+				gameContent.grid[partPosition.x][partPosition.y].isWall = true;
+				gameContent.grid[partPosition.x][partPosition.y].content = element.id;
+			}
+		}
+	}
+
+	element.m = object;
+	gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id] = element;
 }
 
 
@@ -568,23 +606,37 @@ gameSurface.updateElement = function (element) {
 *	Removes a game element.
 */
 gameSurface.removeElement = function (element) {
-	console.log("remove");
 
-
-	//removes from the selected elements if it was
+	// remove from the selected elements if it was
 	if (gameContent.selected.indexOf(element.id) >= 0) {
 		gameContent.selected.splice(gameContent.selected.indexOf(element.id), 1);
 	}
 
 	if (element.f == gameData.FAMILIES.building) {
 		// if it is a building, take care of it to respect fog of war memory
-		if (element.visible)
-			gameSurface.removeBuildingForGood(element, gameContent.gameElements[element.id].d);
-	} else
+		if (element.visible) {
+			gameSurface.removeBuildingForGood(element, utils.getElementFromId(element.id).m);
+		}
+	} else {
 		// otherwise let the classic handling do it
 		gameSurface.hideElement(element);
+	}
 
-	delete gameContent.gameElements[element.id];
+	// remove element from the grid
+	var shape = gameData.ELEMENTS[element.f][element.r][element.t].shape;
+	for(var i in shape) {
+		var row = shape[i];
+		for(var j in row) {
+			var part = row[j];
+			if(part > 0) {
+				var position = tools.getPartPosition(element, i, j);
+				gameContent.grid[position.x][position.y].isWall = false;
+				gameContent.grid[position.x][position.y].content = null;
+			}
+		}
+	}
+
+	delete gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id];
 }
 
 
@@ -629,11 +681,11 @@ gameSurface.centerCameraOnElement = function (element) {
 gameSurface.showElement = function (element) {
 	if (!element.visible) {
 		element.visible = true;
-		if (element.f == gameData.FAMILIES.building && (index = gameSurface.buildingsMemorizedInFog.indexOf(gameContent.gameElements[element.id])) > -1) {
+		if (element.f == gameData.FAMILIES.building && (index = gameSurface.buildingsMemorizedInFog.indexOf(utils.getElementFromId(element.id))) > -1) {
 			// if it is a building and it is in our fog memory, just remove it from the fog memory as it is now showing
 			gameSurface.buildingsMemorizedInFog.splice(index, 1);
 		} else {
-			var object = gameContent.gameElements[element.id].d;
+			var object = utils.getElementFromId(element.id).m;
 			object.geometry.opacity = 0.5;
 			if (element.f != gameData.FAMILIES.land) {
 				//update minimap
@@ -649,9 +701,9 @@ gameSurface.hideElement = function (element) {
 		element.visible = false;
 		if (element.f == gameData.FAMILIES.building) {
 			// if it is a building, put it in our fog memory rather than hiding it
-			gameSurface.buildingsMemorizedInFog.push(gameContent.gameElements[element.id]);
+			gameSurface.buildingsMemorizedInFog.push(utils.getElementFromId(element.id));
 		} else {
-			object = gameContent.gameElements[element.id].d;
+			object = utils.getElementFromId(element.id).m;
 			if (element.f != gameData.FAMILIES.land) {
 				//update minimap
 				GUI.removeElementFromMinimap(element);
@@ -671,47 +723,48 @@ gameSurface.manageElementsVisibility = function () {
 	var mapH = gameContent.map.size.y;
 	var visionMatrix = [];
 	var unitsToCheck = [];
-	for (var id in gameContent.gameElements) {
-		var element = gameContent.gameElements[id].s;
-		if (rank.isAlly(gameContent.players, gameContent.myArmy, element)) {
-			// ally unit, show vision
-			var unitX = element.p.x;
-			var unitY = element.p.y;
-			var elementData = gameData.ELEMENTS[element.f][element.r][element.t];
-			var vision = elementData.vision;
+	for (var type in gameContent.gameElements) {
+		for (var id in gameContent.gameElements[type]) {
+			var element = gameContent.gameElements[type][id];
+			if (rank.isAlly(gameContent.players, gameContent.myArmy, element)) {
+				// ally unit, show vision
+				var unitX = element.p.x;
+				var unitY = element.p.y;
+				var elementData = gameData.ELEMENTS[element.f][element.r][element.t];
+				var vision = elementData.vision;
 
-			// manhattan vision
-			/*for (x = Math.max(0, unitX-vision), maxX = Math.min(mapW, unitX+vision); x<maxX; x++) {
-				for (y = Math.max(0, unitY-vision), maxY = Math.min(mapH, unitY+vision); y<maxY; y++) {
-					if (visionMatrix[x] == undefined)
-						visionMatrix[x] = [];
-					visionMatrix[x][y] = true;
-				}
-			}*/
+				// manhattan vision
+				/*for (x = Math.max(0, unitX-vision), maxX = Math.min(mapW, unitX+vision); x<maxX; x++) {
+					for (y = Math.max(0, unitY-vision), maxY = Math.min(mapH, unitY+vision); y<maxY; y++) {
+						if (visionMatrix[x] == undefined)
+							visionMatrix[x] = [];
+						visionMatrix[x][y] = true;
+					}
+				}*/
 
-			// pythagorean vision
-			var squareVision = vision*vision;
-			var x,y,squarY;
-			for(y=-vision; y<=vision; y++) {
-				var squareY = y*y;
-   				 for(x=-vision; x<=vision; x++) {
-        			if(x*x+squareY <= squareVision) {
+				// pythagorean vision
+				var squareVision = vision*vision;
+				var x,y,squarY;
+				for(y=-vision; y<=vision; y++) {
+					var squareY = y*y;
+	   				 for(x=-vision; x<=vision; x++) {
+	        			if(x*x+squareY <= squareVision) {
 
-        				// TODO link with fog of war matrixes
+	        				// TODO link with fog of war matrixes
 
-        				if (visionMatrix[unitX+x] == undefined)
-							visionMatrix[unitX+x] = [];
-            			visionMatrix[unitX+x][unitY+y] = true;
-            		}
-            	}
-            }
+	        				if (visionMatrix[unitX+x] == undefined)
+								visionMatrix[unitX+x] = [];
+	            			visionMatrix[unitX+x][unitY+y] = true;
+	            		}
+	            	}
+	            }
 
-		} else if (element.f != gameData.FAMILIES.land) {
-			// enemy unit, add to the units to check
-			unitsToCheck.push(element);
+			} else if (element.f != gameData.FAMILIES.land) {
+				// enemy unit, add to the units to check
+				unitsToCheck.push(element);
+			}
 		}
 	}
-
 
 	while (unitsToCheck.length > 0) {
 		var element = unitsToCheck.pop();
@@ -722,14 +775,14 @@ gameSurface.manageElementsVisibility = function () {
 	}
 
 	for (index in this.buildingsMemorizedInFog) {
-		var element = this.buildingsMemorizedInFog[index].s;
+		var element = this.buildingsMemorizedInFog[index];
 		if (visionMatrix[element.p.x] != undefined && visionMatrix[element.p.x][element.p.y]) {
 			// the building could now be visible
 			console.log("building to show");
 			if (gameData.gameElements.indexOf(this.buildingsMemorizedInFog[index]) == -1) {
 				// but it has been destroyed, so we remove it for good
 				console.log("BOOOM IT DIED");
-				var object = this.buildingsMemorizedInFog[index].d;
+				var object = this.buildingsMemorizedInFog[index].m;
 				this.removeBuildingForGood(element, object);
 			} else {
 				// otherwise we set it to visible

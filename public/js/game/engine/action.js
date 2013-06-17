@@ -45,4 +45,3 @@ action.doTheGathering = function (game, element, resource) {
 		production.gatherResources(game, element, resource);
 	}
 }
-

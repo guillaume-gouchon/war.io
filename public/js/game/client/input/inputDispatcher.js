@@ -58,11 +58,12 @@ inputDispatcher.onRightClick = function (event) {
 	//leave the construction mode if activated
 	if(gameContent.building != null) {
 		userInput.leaveConstructionMode();
-	} else if(gameContent.selected.length > 0 
-		&& rank.isAlly(gameContent.players, gameContent.myArmy, gameContent.gameElements[gameContent.selected[0]].s)
-		&& (gameContent.gameElements[gameContent.selected[0]].s.f == gameData.FAMILIES.unit
-			|| gameContent.gameElements[gameContent.selected[0]].s.f == gameData.FAMILIES.building)) {
-			userInput.dispatchUnitAction(event.x, event.y); 
+	} else if(gameContent.selected.length > 0) {
+		var selected = utils.getElementFromId(gameContent.selected[0]);
+		if (rank.isAlly(gameContent.players, gameContent.myArmy, selected)
+			&& (selected.f == gameData.FAMILIES.unit || selected.f == gameData.FAMILIES.building)) {
+				userInput.dispatchUnitAction(event.x, event.y);
+		}
 	}
 	return false;
 }
