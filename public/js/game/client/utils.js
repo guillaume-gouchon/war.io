@@ -36,7 +36,7 @@ utils.canBeBuiltHere = function (building) {
 
 	for (var i = point1.x; i <= point2.x; i++) {
 		for (var j = point1.y; j <= point2.y; j++) {
-			if (gameContent.grid[i][j] > 0) {
+			if (gameContent.grid[i][j] > 0 || !gameSurface.fogOfWarMatrix[i][j]) {
 				building.canBeBuiltHere = false;
 				building.shape[i - point1.x][j - point1.y] = userInput.CANNOT_BE_BUILT_HERE;
 			}

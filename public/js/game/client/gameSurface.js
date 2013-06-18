@@ -200,10 +200,10 @@ gameSurface.createScene = function () {
     scene.add(planeSurface);
 
     //generate the fog
-	var fogGeometry = new THREE.PlaneGeometry(1000, 1000, gameContent.map.size.x, gameContent.map.size.y);
+	var fogGeometry = new THREE.PlaneGeometry(1000, 1000, gameContent.map.size.x*5, gameContent.map.size.y*5);
 	var fogTexture  = THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'fog.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
 	fogTexture.wrapT = fogTexture.wrapS = THREE.RepeatWrapping;
-	var fogMaterial = new THREE.MeshBasicMaterial({ map: fogTexture, transparent: true, opacity:0.5 });
+	var fogMaterial = new THREE.MeshBasicMaterial({ map: fogTexture, transparent: true, opacity:.5 });
 	var planeSurface = new THREE.Mesh(fogGeometry, fogMaterial);
     planeSurface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
     planeSurface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
@@ -216,13 +216,13 @@ gameSurface.createScene = function () {
 	var fogGeometry = new THREE.PlaneGeometry(1000, 1000, gameContent.map.size.x, gameContent.map.size.y);
 	//var fogTexture  = THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'fog.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
 	//fogTexture.wrapT = fogTexture.wrapS = THREE.RepeatWrapping;
-	var fogMaterial = new THREE.MeshBasicMaterial({ map: fogTexture });
+	var fogMaterial = new THREE.MeshBasicMaterial({ map: fogTexture, transparent:true, opacity:.75 });
 	var planeSurface = new THREE.Mesh(fogGeometry, fogMaterial);
     planeSurface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
     planeSurface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
     planeSurface.position.z = this.DEEP_FOG_OF_WAR_HEIGHT;
     planeSurface.overdraw = true;
-    //scene.add(planeSurface);
+    scene.add(planeSurface);
     gameSurface.deepFogOfWarSurface = planeSurface;
 
 
