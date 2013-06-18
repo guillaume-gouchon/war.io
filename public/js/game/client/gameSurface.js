@@ -236,6 +236,7 @@ gameSurface.createScene = function () {
 		if (this.fogOfWarVerticeIndexesMatrix[verticeGamePosition.x][verticeGamePosition.y] == undefined)
 			this.fogOfWarVerticeIndexesMatrix[verticeGamePosition.x][verticeGamePosition.y] = [];
 		this.fogOfWarVerticeIndexesMatrix[verticeGamePosition.x][verticeGamePosition.y].push(i);
+		// this.fogOfWarVerticeIndexesMatrix[verticeGamePosition.x][verticeGamePosition.y] = i;
 	}
 
 	this.fogOfWarMatrix = [];
@@ -679,38 +680,58 @@ gameSurface.centerCameraOnElement = function (element) {
 
 
 gameSurface.showElement = function (element) {
-	if (!element.visible) {
-		element.visible = true;
-		if (element.f == gameData.FAMILIES.building && (index = gameSurface.buildingsMemorizedInFog.indexOf(utils.getElementFromId(element.id))) > -1) {
-			// if it is a building and it is in our fog memory, just remove it from the fog memory as it is now showing
-			gameSurface.buildingsMemorizedInFog.splice(index, 1);
-		} else {
-			var object = utils.getElementFromId(element.id).m;
-			object.geometry.opacity = 0.5;
-			if (element.f != gameData.FAMILIES.land) {
-				//update minimap
-				GUI.addElementOnMinimap(element);
-			}
-			scene.add(object);
-		}
+	if (element.visible)
+		return;
+
+	element.visible = true;
+
+	var elementData = gameData.ELEMENTS[element.f][element.r][element.t];
+	if (element.f == gameData.FAMILIES.building && (index = gameSurface.buildingsMemorizedInFog.indexOf(utils.getElementFromId(element.id))) > -1) {
+		// if it is a building and it is in our fog memory, just remove it from the fog memory as it is now showing
+		this.buildingsMemorizedInFog.splice(index, 1);
 	}
+	this.showElementModel(element);
 }
 
 gameSurface.hideElement = function (element) {
-	if (element.visible) {
-		element.visible = false;
-		if (element.f == gameData.FAMILIES.building) {
-			// if it is a building, put it in our fog memory rather than hiding it
-			gameSurface.buildingsMemorizedInFog.push(utils.getElementFromId(element.id));
-		} else {
-			object = utils.getElementFromId(element.id).m;
-			if (element.f != gameData.FAMILIES.land) {
-				//update minimap
-				GUI.removeElementFromMinimap(element);
-			}
-			scene.remove(object);
-		}
+	if (!element.visible)
+		return;
+
+	element.visible = false;
+
+	var elementData = gameData.ELEMENTS[element.f][element.r][element.t];
+	if (elementData.memorizeInFog) {
+		// if it is a building, put it in our fog memory rather than hiding it
+		this.buildingsMemorizedInFog.push(utils.getElementFromId(element.id));
+	} else {
+		this.hideElementModel(element);
 	}
+}
+
+gameSurface.showElementModel = function (element) {
+	if (element.modelVisible)
+		return;
+
+	element.modelVisible = true;
+	var object = utils.getElementFromId(element.id).m;
+	if (element.f != gameData.FAMILIES.land) {
+		//update minimap
+		GUI.addElementOnMinimap(element);
+	}
+	scene.add(object);
+}
+
+gameSurface.hideElementModel = function (element) {
+	if (!element.modelVisible)
+		return;
+
+	element.modelVisible = false;
+	object = utils.getElementFromId(element.id).m;
+	if (element.f != gameData.FAMILIES.land) {
+		//update minimap
+		GUI.removeElementFromMinimap(element);
+	}
+	scene.remove(object);
 }
 
 gameSurface.removeBuildingForGood = function (element, object) {
@@ -793,6 +814,10 @@ gameSurface.manageElementsVisibility = function () {
 		}
 	}
 
+	// return here to avoid fog update
+	//return;
+
+
 	var fogGeometry = gameSurface.fogOfWarSurface.geometry;
 	var deepFogGeometry = gameSurface.deepFogOfWarSurface.geometry;
 
@@ -810,6 +835,7 @@ gameSurface.manageElementsVisibility = function () {
 				for (i = 0, l=this.fogOfWarVerticeIndexesMatrix[x][y].length; i<l; i++) {
 					fogGeometry.vertices[this.fogOfWarVerticeIndexesMatrix[x][y][i]].z = z;
 				}
+				// fogGeometry.vertices[this.fogOfWarVerticeIndexesMatrix[x][y]].z = z;
 
 				if (visible && !this.deepFogOfWarMatrix[x][y]) {
 					this.deepFogOfWarMatrix[x][y] = true;
@@ -817,6 +843,7 @@ gameSurface.manageElementsVisibility = function () {
 					for (i = 0, l=this.fogOfWarVerticeIndexesMatrix[x][y].length; i<l; i++) {
 						deepFogGeometry.vertices[this.fogOfWarVerticeIndexesMatrix[x][y][i]].z = this.DEEP_FOG_OF_WAR_UNCOVERED_HEIGHT;
 					}
+					// deepFogGeometry.vertices[this.fogOfWarVerticeIndexesMatrix[x][y]].z = this.DEEP_FOG_OF_WAR_UNCOVERED_HEIGHT;
 				}
 			}
 		}
