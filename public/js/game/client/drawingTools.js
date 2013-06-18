@@ -132,8 +132,12 @@ gameSurface.updateSelectionRectangle = function (x1, y1, x2, y2) {
 	var dx = Math.abs(x1 - x2);
 	var dy = Math.abs(y1 - y2);
 	if (dx > 0 &&  dy > 0) {
-		$('#selectionRectangle').css('top', Math.min(y1, y2)).css('left', Math.min(x1, x2));
-		$('#selectionRectangle').css('width', dx).css('height', dy);
+		$('#selectionRectangle').css({
+			'top' : Math.min(y1, y2),
+			'left': Math.min(x1, x2),
+			'width': dx,
+			'height': dy
+		});
 		$('#selectionRectangle').removeClass('hide');
 	} else {
 		$('#selectionRectangle').addClass('hide');

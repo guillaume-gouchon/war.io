@@ -5,7 +5,7 @@ var inputDispatcher = {};
 *	Stores the list of shortcuts keys.
 */
 inputDispatcher.TOOLBAR_KEYBOARD_SHORTCUTS = [81, 87, 69, 82, 65, 83, 68, 70];
-
+inputDispatcher.isCTRLDown = false;
 
 /**
 *	Single left click
@@ -89,8 +89,14 @@ inputDispatcher.onMouseUp = function () {
 *	The mouse wheel is scrolling
 */
 inputDispatcher.onMouseWheel = function (event) {
-	if(Math.abs(event.wheelDelta) > 0) {
-		userInput.changeZoom(event.wheelDelta / Math.abs(event.wheelDelta));
+	if (!this.isMAJDown) {
+		if(Math.abs(event.wheelDelta) > 0) {
+			userInput.changeZoom(event.wheelDelta / Math.abs(event.wheelDelta));
+		}
+	} else {
+		if(Math.abs(event.wheelDelta) > 0) {
+			userInput.changeRotation(event.wheelDelta / Math.abs(event.wheelDelta));
+		}
 	}
 	return false;
 }
@@ -102,6 +108,9 @@ inputDispatcher.onMouseWheel = function (event) {
 inputDispatcher.onKeyDown = function (event) {
 	var keyCode = (window.event) ? event.which : event.keyCode;
 	switch(keyCode) {
+		case 16 :
+			this.isMAJDown = true;
+			return true;
 		case 13 :
 			userInput.onEnterKey();
 			return true;
@@ -145,6 +154,9 @@ inputDispatcher.onKeyUp = function (event) {
 	//map navigation
 	var keyCode = (window.event) ? event.which : event.keyCode;
 	switch(keyCode) {
+		case 16 :
+			this.isMAJDown = false;
+			return true;
 		case 38 :
 			gameSurface.updateScrolling(1, 0, true);
 			return false;
