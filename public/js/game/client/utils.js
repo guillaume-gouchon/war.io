@@ -36,7 +36,7 @@ utils.canBeBuiltHere = function (building) {
 
 	for (var i = point1.x; i <= point2.x; i++) {
 		for (var j = point1.y; j <= point2.y; j++) {
-			if (gameContent.grid[i][j].isWall) {
+			if (gameContent.grid[i][j] > 0) {
 				building.canBeBuiltHere = false;
 				building.shape[i - point1.x][j - point1.y] = userInput.CANNOT_BE_BUILT_HERE;
 			}
@@ -49,5 +49,6 @@ utils.canBeBuiltHere = function (building) {
 *	Returns the game element from a chosen id.
 */
 utils.getElementFromId = function (id) {
-	return gameContent.gameElements[Object.keys(gameData.FAMILIES)[id.charAt(0)]][id];
+	var sId = '' + id;
+	return gameContent.gameElements[Object.keys(gameData.FAMILIES)[sId.charAt(1)]][id];
 }

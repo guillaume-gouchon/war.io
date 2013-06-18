@@ -51,6 +51,5 @@ gameData.unitId = 0;
 */
 gameData.createUniqueId = function (family) {
 	this.unitId += 1;
-	var m = new Date().getMilliseconds();
-	return family + 'i' + m + this.unitId;
+	return parseInt('1' + family + '' + this.unitId);
 }

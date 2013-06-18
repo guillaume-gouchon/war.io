@@ -116,9 +116,11 @@ gameSurface.updateOrderPosition = function () {
 			this.order.scale.x += this.ORDER_ANIMATION_SPEED * gameSurface.orderFactor;
 			this.order.scale.y += this.ORDER_ANIMATION_SPEED * gameSurface.orderFactor;
 			this.order.visible = true;
-		} else if (this.order.visible) {
+		}  else if (this.order.visible) {
 			this.order.visible = false;
 		}
+	} else if (this.order.visible) {
+		this.order.visible = false;
 	}
 }
 

@@ -119,7 +119,9 @@ production.gatherResources = function (game, builder, resource) {
 		//the builder is full of resources, get back resources
 		var closestTownHall = tools.getNearestStuff(game, builder, gameData.FAMILIES.building, gameData.ELEMENTS[gameData.FAMILIES.building][game.players[builder.o].r][0].t, gameData.RANKS.me, true);
 		builder.a = closestTownHall;
-	} else if (resource.ra == 0) {
+	} 
+
+	if (resource.ra == 0) {
 		//the resource is now empty, searching a new resource of the same type
 		AI.searchForNewResources(game, builder, builder, gameData.ELEMENTS[builder.pa.f][builder.pa.r][builder.pa.t].resourceType);
 
@@ -198,7 +200,7 @@ production.updateQueueProgress = function (game, building) {
 */
 production.createNewUnit = function (game, unitType, factory) {
 	var unit = gameData.ELEMENTS[gameData.FAMILIES.unit][factory.r][unitType];
-	var possiblePositions = tools.getTilesAroundElements(game, factory);
+	var possiblePositions = tools.getFreeTilesAroundElements(game, factory);
 	var playerPopulation = game.players[factory.o].pop;
 	if(possiblePositions.length > 0 && playerPopulation.current + unit.pop <= playerPopulation.max) {
 		

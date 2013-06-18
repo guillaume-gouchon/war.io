@@ -75,19 +75,19 @@ tools.getPartPosition = function (element, i, j) {
 
 
 /**
-*	Returns closest tiles around the element.
+*	Returns closest free tiles around the element.
 */
-tools.getTilesAroundElements = function (game, element) {
+tools.getFreeTilesAroundElements = function (game, element) {
 	var array = [];
 	var shape = gameData.ELEMENTS[element.f][element.r][element.t].shape;
 	for(var i in shape) {
 		for(var j in shape[i]) {
 			if(shape[i][j] > 0) {
 				var partPosition = this.getPartPosition(element, i, j);
-				var neighbors = astar.neighbors(game.grid, game.grid[partPosition.x][partPosition.y], true);
+				var neighbors = this.getNeighbors(game.grid, partPosition.x, partPosition.y);
 				for(var n in neighbors) {
 					var neighbor = neighbors[n];
-					if(!neighbor.isWall) {
+					if(game.grid[neighbor.x][neighbor.y].c == 0) {
 						array.push({x : neighbor.x, y : neighbor.y});
 					}
 				}
@@ -99,14 +99,62 @@ tools.getTilesAroundElements = function (game, element) {
 
 
 /**
+*	Returns neighbors.
+*/
+tools.getNeighbors = function (grid, x, y) {
+	 var ret = [];
+
+	// West
+	if(grid[x-1] && grid[x-1][y] != null) {
+		ret.push({x: x-1, y: y});
+	}
+
+	// East
+	if(grid[x+1] && grid[x+1][y] != null) {
+		ret.push({x: x+1, y: y});
+	}
+
+	// South
+	if(grid[x] && grid[x][y-1] != null) {
+		ret.push({x: x, y: y-1});
+	}
+
+	// North
+	if(grid[x] && grid[x][y+1] != null) {
+		ret.push({x: x, y: y+1});
+	}
+
+	// Southwest
+	if(grid[x-1] && grid[x-1][y-1] != null) {
+  		ret.push({x: x-1, y: y-1});
+	}
+
+	// Southeast
+	if(grid[x+1] && grid[x+1][y-1] != null) {
+		ret.push({x: x+1, y: y-1});
+	}
+
+	// Northwest
+	if(grid[x-1] && grid[x-1][y+1] != null) {
+		ret.push({x: x-1, y: y+1});
+	}
+
+	// Northeast
+	if(grid[x+1] && grid[x+1][y+1] != null) {
+		ret.push({x: x+1, y: y+1});
+	}
+
+	return ret;
+}
+
+/**
 *	Returns the game elements from their ids.
 */
 tools.getGameElementsFromIds = function (game, ids) {
 	var elements = [];
 	for (var i in ids) {
-		elements.push(game.gameElements[Object.keys(gameData.FAMILIES)[ids[i].charAt(0)]][ids[i]]);
+		elements.push(game.gameElements[Object.keys(gameData.FAMILIES)[('' + ids[i]).charAt(1)]][ids[i]]);
 	}
-
 	return elements;
 }
 
@@ -141,7 +189,7 @@ tools.getNearestStuff = function (game, fromElement, family, type, rank, noLimit
 
 	var nearestStuff = null;
 
-	if (noLimit) {// search within the limit of the element's vision
+	if (!noLimit) {// search within the limit of the element's vision
 
 		var distance = 0;
 
@@ -178,7 +226,7 @@ tools.getTilesAround = function (grid, center, size, isFilled) {
 	var tiles = [];
 	
 	for (var i = center.x - size; i <= center.x + size; i++) {
-		if (grid[i]) {
+		if (grid[i] != null) {
 			if (isFilled || i == center.x - size || i == center.x + size) {
 				for (var j = center.y - size; j <= center.y + size; j++) {
 					if (grid [i][j]) {
@@ -206,8 +254,8 @@ tools.searchInTiles = function (game, tiles, fromElement, family, type, rank) {
 
 	for (var i in tiles) {
 		// if there is something
-		if (tiles[i].content != null) {
-			var content = game.gameElements[Object.keys(gameData.FAMILIES)[family]][tiles[i].content];
+		if (tiles[i].c > 0) {
+			var content = game.gameElements[Object.keys(gameData.FAMILIES)[family]][tiles[i].c];
 			if (content != null && content.f == family && (type == null || content.t == type)
 				&& (rank == null || game.players[fromElement.o].ra[content.o] == rank)) {
 				return content;

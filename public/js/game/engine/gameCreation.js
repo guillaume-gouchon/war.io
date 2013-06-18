@@ -46,14 +46,14 @@ gameCreation.createNewMap = function (game, map, players) {
 
 
 /**
-*	Initializes the staticGrid.
+*	Initializes the grid.
 */
 gameCreation.initGrid = function (size) {
 	var grid = [];
 	for(var i = 0; i < size.x; i++) {
 		grid[i] = [];
 		for(var j = 0; j < size.y; j++) {
-			grid[i][j] = {x : i, y : j, isWall : false, content: null};
+			grid[i][j] = {c : 0, x: i, y: j};
 		}
 	}
 	return grid;
@@ -173,8 +173,7 @@ gameCreation.addGameElement = function (game, element) {
 			var part = row[j];
 			if(part > 0) {
 				var position = tools.getPartPosition(element, i, j);
-				game.grid[position.x][position.y].isWall = true;
-				game.grid[position.x][position.y].content = element.id;
+				game.grid[position.x][position.y].c = element.id;
 			}
 		}
 	}
@@ -194,8 +193,7 @@ gameCreation.removeGameElement = function (game, element) {
 			var part = row[j];
 			if(part > 0) {
 				var position = tools.getPartPosition(element, i, j);
-				game.grid[position.x][position.y].isWall = false;
-				game.grid[position.x][position.y].content = null;
+				game.grid[position.x][position.y].c = 0;
 			}
 		}
 	}
@@ -263,7 +261,7 @@ gameCreation.setupBasecamp = function (game, player, position) {
 	this.addGameElement(game, townHall);
 	
 	//place units
-	var aroundTownHall = tools.getTilesAroundElements(game, townHall);
+	var aroundTownHall = tools.getFreeTilesAroundElements(game, townHall);
 	for(var i in basecamp.units) {
 		this.addGameElement(game, new gameData.Unit(basecamp.units[i], aroundTownHall[i].x, aroundTownHall[i].y, player.o));
 	}
