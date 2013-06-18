@@ -75,7 +75,7 @@ gameSurface.building = null;
 gameSurface.fogOfWarSurface = null;
 gameSurface.deepFogOfWarSurface = null;
 gameSurface.clock = null;
-gameSurface.buildingsMemorizedInFog = [];
+gameSurface.elementsMemorizedInFog = [];
 gameSurface.fogOfWarMatrix = null;
 gameSurface.deepFogOfWarMatrix = null;
 gameSurface.fogOfWarVerticeIndexesMatrix = null;
@@ -221,7 +221,7 @@ gameSurface.createScene = function () {
     planeSurface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
     planeSurface.position.z = this.DEEP_FOG_OF_WAR_HEIGHT;
     planeSurface.overdraw = true;
-    scene.add(planeSurface);
+    //scene.add(planeSurface);
     gameSurface.deepFogOfWarSurface = planeSurface;
 
 
@@ -462,7 +462,7 @@ gameSurface.addElement = function (element) {
 	//this.addLifeBar(element);
 
 	// fogs
-	if (element.f == gameData.FAMILIES.land || rank.isAlly(gameContent.players, gameContent.myArmy, element)) {
+	if (/*element.f == gameData.FAMILIES.land ||*/ rank.isAlly(gameContent.players, gameContent.myArmy, element)) {
 		this.showElement(element);
 	}
 
@@ -610,14 +610,12 @@ gameSurface.removeElement = function (element) {
 		gameContent.selected.splice(gameContent.selected.indexOf(element.id), 1);
 	}
 
-	if (element.f == gameData.FAMILIES.building) {
-		// if it is a building, take care of it to respect fog of war memory
-		if (element.visible) {
-			gameSurface.removeBuildingForGood(element, utils.getElementFromId(element.id).m);
-		}
-	} else {
-		// otherwise let the classic handling do it
+	var elementData = gameData.ELEMENTS[element.f][element.r][element.t];
+	var shouldMemorizeInFog = this.shouldMemorizeInFog(element);
+	if (!shouldMemorizeInFog) {
 		gameSurface.hideElement(element);
+	} else if (element.visible) {
+		gameSurface.hideElementModel(element);
 	}
 
 	// remove element from the grid
@@ -681,12 +679,13 @@ gameSurface.showElement = function (element) {
 
 	element.visible = true;
 
-	var elementData = gameData.ELEMENTS[element.f][element.r][element.t];
-	if (element.f == gameData.FAMILIES.building && (index = gameSurface.buildingsMemorizedInFog.indexOf(utils.getElementFromId(element.id))) > -1) {
-		// if it is a building and it is in our fog memory, just remove it from the fog memory as it is now showing
-		this.buildingsMemorizedInFog.splice(index, 1);
+	if (this.shouldMemorizeInFog(element) && (index = gameSurface.elementsMemorizedInFog.indexOf(utils.getElementFromId(element.id))) > -1) {
+		// if it must be memorized in fog and it is in our fog memory, just remove it from the fog memory as it is now showing
+		this.elementsMemorizedInFog.splice(index, 1);
+		// TODO set alpha or something
+	} else {
+		this.showElementModel(element);
 	}
-	this.showElementModel(element);
 }
 
 gameSurface.hideElement = function (element) {
@@ -695,10 +694,10 @@ gameSurface.hideElement = function (element) {
 
 	element.visible = false;
 
-	var elementData = gameData.ELEMENTS[element.f][element.r][element.t];
-	if (elementData.memorizeInFog) {
-		// if it is a building, put it in our fog memory rather than hiding it
-		this.buildingsMemorizedInFog.push(utils.getElementFromId(element.id));
+	if (this.shouldMemorizeInFog(element)) {
+		// if it must be memorized in fog, put it in our fog memory rather than hiding it
+		this.elementsMemorizedInFog.push(utils.getElementFromId(element.id));
+		// TODO set alpha or something
 	} else {
 		this.hideElementModel(element);
 	}
@@ -717,12 +716,13 @@ gameSurface.showElementModel = function (element) {
 	scene.add(object);
 }
 
-gameSurface.hideElementModel = function (element) {
+gameSurface.hideElementModel = function (element, object) {
 	if (!element.modelVisible)
 		return;
 
 	element.modelVisible = false;
-	object = utils.getElementFromId(element.id).m;
+	if (object == undefined)
+		object = utils.getElementFromId(element.id).m;
 	if (element.f != gameData.FAMILIES.land) {
 		//update minimap
 		GUI.removeElementFromMinimap(element);
@@ -776,7 +776,7 @@ gameSurface.manageElementsVisibility = function () {
 	            	}
 	            }
 
-			} else if (element.f != gameData.FAMILIES.land) {
+			} else {
 				// enemy unit, add to the units to check
 				unitsToCheck.push(element);
 			}
@@ -791,22 +791,22 @@ gameSurface.manageElementsVisibility = function () {
 			this.hideElement(element);
 	}
 
-	for (index in this.buildingsMemorizedInFog) {
-		var element = this.buildingsMemorizedInFog[index];
+	for (index in this.elementsMemorizedInFog) {
+		var element = this.elementsMemorizedInFog[index];
 		if (visionMatrix[element.p.x] != undefined && visionMatrix[element.p.x][element.p.y]) {
 			// the building could now be visible
 			console.log("building to show");
-			if (gameData.gameElements.indexOf(this.buildingsMemorizedInFog[index]) == -1) {
+			if (utils.getElementFromId(element.id) == null) {
 				// but it has been destroyed, so we remove it for good
 				console.log("BOOOM IT DIED");
-				var object = this.buildingsMemorizedInFog[index].m;
-				this.removeBuildingForGood(element, object);
+				var object = this.elementsMemorizedInFog[index].m;
+				this.hideElementModel(element, object);
 			} else {
 				// otherwise we set it to visible
 				console.log("show it");
 				this.showElement(element);
 			}
-			this.buildingsMemorizedInFog.splice(index, 1);
+			this.elementsMemorizedInFog.splice(index, 1);
 		}
 	}
 
@@ -870,4 +870,8 @@ gameSurface.manageElementsVisibility = function () {
 
 				// controls.update( delta );
 				// renderer.render( scene, camera );
+}
+
+gameSurface.shouldMemorizeInFog = function(element) {
+	return (element.f == gameData.FAMILIES.land || element.f == gameData.FAMILIES.building);
 }
