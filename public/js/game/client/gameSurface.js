@@ -204,7 +204,7 @@ gameSurface.createScene = function () {
 	var fogGeometry = new THREE.PlaneGeometry(1000, 1000, gameContent.map.size.x, gameContent.map.size.y);
 	var fogTexture  = THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'fog.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
 	fogTexture.wrapT = fogTexture.wrapS = THREE.RepeatWrapping;
-	var fogMaterial = new THREE.MeshBasicMaterial({ map: fogTexture, transparent: true, opacity:.5 });
+	var fogMaterial = new THREE.MeshBasicMaterial({ map: fogTexture, transparent: true, opacity:.7 });
 	var planeSurface = new THREE.Mesh(fogGeometry, fogMaterial);
     planeSurface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
     planeSurface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
@@ -305,9 +305,11 @@ gameSurface.loadObject = function (key, elementFamily) {
 		for (var n = 0; n < gameContent.players.length; n++) {
 			var color = this.ARMIES_COLORS[n];
 			gameSurface.materials[key + color] = new THREE.MeshBasicMaterial({map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key.replace('.js', '') + color + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
+			gameSurface.materials["HIDDEN" + key + color] = new THREE.MeshBasicMaterial({color: 0x555555, map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key.replace('.js', '') + color + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
 		}
 	} else {
 		gameSurface.materials[key] = new THREE.MeshBasicMaterial({map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key.replace('.js', '.png'), new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
+		gameSurface.materials["HIDDEN" + key] = new THREE.MeshBasicMaterial({color: 0x555555, map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key.replace('.js', '.png'), new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
 	}
 }
 
@@ -406,11 +408,17 @@ gameSurface.addElement = function (element) {
 	var model = elementData.g;
 
 	var material;
+	var hiddenMaterial;
 	if (element.f == gameData.FAMILIES.land) {
 		material = this.materials[model];
+		hiddenMaterial = this.materials["HIDDEN" + model];
 	} else  {
 		material = this.materials[model + this.ARMIES_COLORS[element.o]];
+		hiddenMaterial = this.materials["HIDDEN" + model + this.ARMIES_COLORS[element.o]];
 	}
+
+	element.material = material;
+	element.hiddenMaterial = hiddenMaterial;
 
 	var object = new THREE.Mesh(this.geometries[model], material);
 	object.elementId = element.id;
@@ -694,7 +702,9 @@ gameSurface.showElement = function (element) {
 	if (this.shouldMemorizeInFog(element) && (index = gameSurface.elementsMemorizedInFog.indexOf(utils.getElementFromId(element.id))) > -1) {
 		// if it must be memorized in fog and it is in our fog memory, just remove it from the fog memory as it is now showing
 		this.elementsMemorizedInFog.splice(index, 1);
+		
 		// TODO set alpha or something
+		utils.getElementFromId(element.id).m.material = element.material;
 	} else {
 		this.showElementModel(element);
 	}
@@ -709,7 +719,9 @@ gameSurface.hideElement = function (element) {
 	if (this.shouldMemorizeInFog(element)) {
 		// if it must be memorized in fog, put it in our fog memory rather than hiding it
 		this.elementsMemorizedInFog.push(utils.getElementFromId(element.id));
+
 		// TODO set alpha or something
+		utils.getElementFromId(element.id).m.material = element.hiddenMaterial;
 	} else {
 		this.hideElementModel(element);
 	}
