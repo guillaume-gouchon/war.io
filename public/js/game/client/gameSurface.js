@@ -41,8 +41,8 @@ gameSurface.PLAYERS_COLORS = ['red', 'blue', 'green', 'yellow'];
 gameSurface.MOVEMENT_EXTRAPOLATION_ITERATION = 6;
 gameSurface.LAND_HEIGHT_SMOOTH_FACTOR = 65;
 
-gameSurface.FOG_OF_WAR_HEIGHT = .5;
-gameSurface.FOG_OF_WAR_UNCOVERED_HEIGHT = -1; // should be < -gameSurface.FOG_OF_WAR_HEIGHT
+gameSurface.FOG_OF_WAR_HEIGHT = 10;
+gameSurface.FOG_OF_WAR_UNCOVERED_HEIGHT = -20; // should be < -gameSurface.FOG_OF_WAR_HEIGHT
 
 gameSurface.DEEP_FOG_OF_WAR_HEIGHT = 18;
 gameSurface.DEEP_FOG_OF_WAR_UNCOVERED_HEIGHT = -19; // should be < -gameSurface.DEEP_FOG_OF_WAR_HEIGHT
@@ -208,7 +208,7 @@ gameSurface.createScene = function () {
 	var planeSurface = new THREE.Mesh(fogGeometry, fogMaterial);
     planeSurface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
     planeSurface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
-    planeSurface.position.z = this.FOG_OF_WAR_HEIGHT;
+    planeSurface.position.z = 1;
     planeSurface.overdraw = true;
     scene.add(planeSurface);
     gameSurface.fogOfWarSurface = planeSurface;
@@ -247,9 +247,10 @@ gameSurface.createScene = function () {
 		this.fogOfWarMatrix[x] = [];
 		this.deepFogOfWarMatrix[x] = [];
 		for ( var y = 0; y < gameContent.map.size.y; y++) {
-			this.fogOfWarMatrix[x][y] = false;
+			this.fogOfWarMatrix[x][y] = 0;
 			this.deepFogOfWarMatrix[x][y] = false;
 	}
+
 
 	//add order geometry
 	this.order = new THREE.Mesh(new THREE.TorusGeometry(5, 2, 2, 6), new THREE.LineBasicMaterial( { color: '#0f0', opacity: this.ORDER_OPACITY, transparent: true} ));
@@ -773,16 +774,19 @@ gameSurface.manageElementsVisibility = function () {
 				// pythagorean vision
 				var squareVision = vision*vision;
 				var x,y,squarY;
-				for(y=-vision; y<=vision; y++) {
+				for(var y=-vision; y<=vision; y++) {
 					var squareY = y*y;
-	   				 for(x=-vision; x<=vision; x++) {
+	   				 for(var x=-vision; x<=vision; x++) {
 	        			if(x*x+squareY < squareVision) {
-
-	        				// TODO link with fog of war matrixes
+	        				var val = 1;
+	        				var dist = Math.sqrt(x*x+squareY);
+	        				if (dist > vision * .8)
+	        					val = (vision-dist) / (vision * .8);
 
 	        				if (visionMatrix[unitX+x] == undefined)
 								visionMatrix[unitX+x] = [];
-	            			visionMatrix[unitX+x][unitY+y] = true;
+							if (!visionMatrix[unitX+x][unitY+y] || val > visionMatrix[unitX+x][unitY+y])
+	            				visionMatrix[unitX+x][unitY+y] = val;
 	            		}
 	            	}
 	            }
@@ -804,7 +808,7 @@ gameSurface.manageElementsVisibility = function () {
 
 	for (index in this.elementsMemorizedInFog) {
 		var element = this.elementsMemorizedInFog[index];
-		if (visionMatrix[element.p.x] != undefined && visionMatrix[element.p.x][element.p.y]) {
+		if (visionMatrix[element.p.x] != undefined && visionMatrix[element.p.x][element.p.y] > 0) {
 			// the building could now be visible
 			console.log("building to show");
 			if (utils.getElementFromId(element.id) == null) {
@@ -834,17 +838,19 @@ gameSurface.manageElementsVisibility = function () {
 	var i, l, z;
 	for (var x = 0; x < mapW; x++) {
 		for (var y = 0; y < mapH; y++) {
-			visible = (visionMatrix[x] != undefined && visionMatrix[x][y]);
+			visible = (visionMatrix[x] == undefined) ? 0 : visionMatrix[x][y];
 			if (visible != this.fogOfWarMatrix[x][y]) {
 				this.fogOfWarMatrix[x][y] = visible;
 				fogChanged = true;
-				z = (visible) ? this.FOG_OF_WAR_UNCOVERED_HEIGHT : 0;
+				z = (visible > 0) ? visible * this.FOG_OF_WAR_UNCOVERED_HEIGHT : 0;
+				if (this.fogOfWarVerticeIndexesMatrix[x][y].length == 0)
+					console.log("NO VERTICE AT " + x + "," + y);
 				for (i = 0, l=this.fogOfWarVerticeIndexesMatrix[x][y].length; i<l; i++) {
 					fogGeometry.vertices[this.fogOfWarVerticeIndexesMatrix[x][y][i]].z = z;
 				}
 				// fogGeometry.vertices[this.fogOfWarVerticeIndexesMatrix[x][y]].z = z;
 
-				if (visible && !this.deepFogOfWarMatrix[x][y]) {
+				if (visible > 0 && this.deepFogOfWarMatrix[x][y] == 0) {
 					this.deepFogOfWarMatrix[x][y] = true;
 					deepFogChanged = true;
 					/*for (i = 0, l=this.fogOfWarVerticeIndexesMatrix[x][y].length; i<l; i++) {
