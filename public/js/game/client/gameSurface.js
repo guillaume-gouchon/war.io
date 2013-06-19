@@ -41,8 +41,8 @@ gameSurface.PLAYERS_COLORS = ['red', 'blue', 'green', 'yellow'];
 gameSurface.MOVEMENT_EXTRAPOLATION_ITERATION = 6;
 gameSurface.LAND_HEIGHT_SMOOTH_FACTOR = 65;
 
-gameSurface.FOG_OF_WAR_HEIGHT = 6;
-gameSurface.FOG_OF_WAR_UNCOVERED_HEIGHT = -8; // should be < -gameSurface.FOG_OF_WAR_HEIGHT
+gameSurface.FOG_OF_WAR_HEIGHT = .5;
+gameSurface.FOG_OF_WAR_UNCOVERED_HEIGHT = -1; // should be < -gameSurface.FOG_OF_WAR_HEIGHT
 
 gameSurface.DEEP_FOG_OF_WAR_HEIGHT = 18;
 gameSurface.DEEP_FOG_OF_WAR_UNCOVERED_HEIGHT = -19; // should be < -gameSurface.DEEP_FOG_OF_WAR_HEIGHT
@@ -190,8 +190,9 @@ gameSurface.createScene = function () {
 
 	//generate the land
 	var landGeometry = new THREE.PlaneGeometry(2200, 2200, 64, 64);
-	var grassTexture  = THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'grass.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
+	var grassTexture  = THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'grass2.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
 	grassTexture.wrapT = grassTexture.wrapS = THREE.RepeatWrapping;
+	grassTexture.repeat.set(32,32);
 	var grassMaterial = new THREE.MeshBasicMaterial({ map: grassTexture });
 	var planeSurface = new THREE.Mesh(landGeometry, grassMaterial);
     planeSurface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
@@ -200,7 +201,7 @@ gameSurface.createScene = function () {
     scene.add(planeSurface);
 
     //generate the fog
-	var fogGeometry = new THREE.PlaneGeometry(1000, 1000, gameContent.map.size.x*5, gameContent.map.size.y*5);
+	var fogGeometry = new THREE.PlaneGeometry(1000, 1000, gameContent.map.size.x, gameContent.map.size.y);
 	var fogTexture  = THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'fog.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
 	fogTexture.wrapT = fogTexture.wrapS = THREE.RepeatWrapping;
 	var fogMaterial = new THREE.MeshBasicMaterial({ map: fogTexture, transparent: true, opacity:.5 });
@@ -222,7 +223,7 @@ gameSurface.createScene = function () {
     planeSurface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
     planeSurface.position.z = this.DEEP_FOG_OF_WAR_HEIGHT;
     planeSurface.overdraw = true;
-    scene.add(planeSurface);
+    //scene.add(planeSurface);
     gameSurface.deepFogOfWarSurface = planeSurface;
 
 
@@ -775,7 +776,7 @@ gameSurface.manageElementsVisibility = function () {
 				for(y=-vision; y<=vision; y++) {
 					var squareY = y*y;
 	   				 for(x=-vision; x<=vision; x++) {
-	        			if(x*x+squareY <= squareVision) {
+	        			if(x*x+squareY < squareVision) {
 
 	        				// TODO link with fog of war matrixes
 
@@ -846,9 +847,9 @@ gameSurface.manageElementsVisibility = function () {
 				if (visible && !this.deepFogOfWarMatrix[x][y]) {
 					this.deepFogOfWarMatrix[x][y] = true;
 					deepFogChanged = true;
-					for (i = 0, l=this.fogOfWarVerticeIndexesMatrix[x][y].length; i<l; i++) {
+					/*for (i = 0, l=this.fogOfWarVerticeIndexesMatrix[x][y].length; i<l; i++) {
 						deepFogGeometry.vertices[this.fogOfWarVerticeIndexesMatrix[x][y][i]].z = this.DEEP_FOG_OF_WAR_UNCOVERED_HEIGHT;
-					}
+					}*/
 					// deepFogGeometry.vertices[this.fogOfWarVerticeIndexesMatrix[x][y]].z = this.DEEP_FOG_OF_WAR_UNCOVERED_HEIGHT;
 				}
 			}
@@ -856,8 +857,8 @@ gameSurface.manageElementsVisibility = function () {
 	}
 	if (fogChanged)
 		fogGeometry.verticesNeedUpdate = true;
-	if (deepFogChanged)
-		deepFogGeometry.verticesNeedUpdate = true;
+	//if (deepFogChanged)
+	//	deepFogGeometry.verticesNeedUpdate = true;
 
 }
 
