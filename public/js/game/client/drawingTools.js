@@ -2,10 +2,10 @@
 *	Sets the position of an element.
 */
 gameSurface.setElementPosition = function (element, x, y) {
-	var position = this.convertGamePositionToScenePosition({x : x, y : y});
-	element.position.x = position.x;
-	element.position.y = position.y;
-	element.position.z = 0.5;
+	var scenePosition = this.convertGamePositionToScenePosition({x : x, y : y});
+	element.position.x = scenePosition.x;
+	element.position.y = scenePosition.y;
+	element.position.z = scenePosition.z;
 }
 
 
@@ -18,7 +18,7 @@ gameSurface.convertGamePositionToScenePosition = function (gamePosition) {
 	return {
 		x : gamePosition.x * this.PIXEL_BY_NODE,
 		y : gamePosition.y * this.PIXEL_BY_NODE,
-		z : 0
+		z : 0.5
 	}
 }
 
@@ -371,7 +371,7 @@ gameSurface.updateMoveExtrapolation = function () {
 	while (index --) {
 		var model = this.ex[index];
 		model.position.x += d.ex * this.PIXEL_BY_NODE / this.MOVEMENT_EXTRAPOLATION_ITERATION;
-		model.position.y += d.ey * this.PIXEL_BY_NODE / this.MOVEMENT_EXTRAPOLATION_ITERATION;
+		model.position.z += d.ey * this.PIXEL_BY_NODE / this.MOVEMENT_EXTRAPOLATION_ITERATION;
 			
 		model.et -= 1;
 

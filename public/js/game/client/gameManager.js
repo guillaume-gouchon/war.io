@@ -97,7 +97,6 @@ gameManager.initOfflineGame = function (gameInitData) {
 	this.waitingData = gameContent.game.gameElements;
 	gameSurface.init();
 	GUI.init();
-	input.initInputs();
 }
 
 
