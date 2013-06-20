@@ -227,18 +227,18 @@ gameSurface.createScene = function () {
     gameSurface.deepFogOfWarSurface = planeSurface;
 
 
-    // link game coordinates to fog of war vertice indexes
+    // link vertices of the fog meshes to the game map coordinates
+    // used to update quickly the mesh according to the visionmatrix
     this.fogOfWarVerticeIndexesMatrix = [];
     for ( var i = 0, l = fogGeometry.vertices.length; i < l; i ++ ) {
+    	// TODO use the world to game coordinates method when it works properly
     	var verticeGamePosition = {x:Math.round((fogGeometry.vertices[i].x / gameSurface.PIXEL_BY_NODE + gameContent.map.size.x/2)),
     		y:Math.round((fogGeometry.vertices[i].y / gameSurface.PIXEL_BY_NODE + gameContent.map.size.y/2))};
-		//var verticeGamePosition = this.convertScenePositionToGamePosition({x:fogGeometry.vertices[i].x, y:fogGeometry.vertices[i].y});
 		if (this.fogOfWarVerticeIndexesMatrix[verticeGamePosition.x] == undefined)
 			this.fogOfWarVerticeIndexesMatrix[verticeGamePosition.x] = [];
 		if (this.fogOfWarVerticeIndexesMatrix[verticeGamePosition.x][verticeGamePosition.y] == undefined)
 			this.fogOfWarVerticeIndexesMatrix[verticeGamePosition.x][verticeGamePosition.y] = [];
 		this.fogOfWarVerticeIndexesMatrix[verticeGamePosition.x][verticeGamePosition.y].push(i);
-		// this.fogOfWarVerticeIndexesMatrix[verticeGamePosition.x][verticeGamePosition.y] = i;
 	}
 
 	this.fogOfWarMatrix = [];
@@ -693,7 +693,10 @@ gameSurface.centerCameraOnElement = function (element) {
 	camera.position.y = position.y - this.CENTER_CAMERA_Y_OFFSET;
 }
 
-
+/**
+*	Show an element if it is not currently visible.
+*	Manages fog memory for elements concerned
+*/
 gameSurface.showElement = function (element) {
 	if (element.visible)
 		return;
@@ -711,6 +714,10 @@ gameSurface.showElement = function (element) {
 	}
 }
 
+/**
+*	Hides an element if it is currently visible.
+*	Manages fog memory for elements concerned
+*/
 gameSurface.hideElement = function (element) {
 	if (!element.visible)
 		return;
@@ -728,6 +735,9 @@ gameSurface.hideElement = function (element) {
 	}
 }
 
+/**
+*	Shows an element model if it is not currently visible.
+*/
 gameSurface.showElementModel = function (element) {
 	if (element.modelVisible)
 		return;
@@ -741,6 +751,9 @@ gameSurface.showElementModel = function (element) {
 	scene.add(object);
 }
 
+/**
+*	Hides an element model if it is currently visible.
+*/
 gameSurface.hideElementModel = function (element, object) {
 	if (!element.modelVisible)
 		return;
@@ -755,6 +768,10 @@ gameSurface.hideElementModel = function (element, object) {
 	scene.remove(object);
 }
 
+/**
+*	Called after each update.
+*	Updates the rendered fog of war and shows/hides elements where it is necessary.
+*/
 gameSurface.manageElementsVisibility = function () {
 	var mapW = gameContent.map.size.x;
 	var mapH = gameContent.map.size.y;
@@ -770,26 +787,18 @@ gameSurface.manageElementsVisibility = function () {
 				var elementData = gameData.ELEMENTS[element.f][element.r][element.t];
 				var vision = elementData.vision;
 
-				// manhattan vision
-				/*for (x = Math.max(0, unitX-vision), maxX = Math.min(mapW, unitX+vision); x<maxX; x++) {
-					for (y = Math.max(0, unitY-vision), maxY = Math.min(mapH, unitY+vision); y<maxY; y++) {
-						if (visionMatrix[x] == undefined)
-							visionMatrix[x] = [];
-						visionMatrix[x][y] = true;
-					}
-				}*/
-
 				// pythagorean vision
 				var squareVision = vision*vision;
-				var x,y,squarY;
+				var x,y,squareY,val,squareDist;
 				for(var y=-vision; y<=vision; y++) {
-					var squareY = y*y;
+					squareY = y*y;
 	   				 for(var x=-vision; x<=vision; x++) {
-	        			if(x*x+squareY < squareVision) {
-	        				var val = 1;
-	        				var dist = Math.sqrt(x*x+squareY);
+	        			if((squareDist = x*x+squareY) <= squareVision) {
+	        				var dist = Math.sqrt(squareDist);
 	        				if (dist > vision * .8)
 	        					val = (vision-dist) / (vision * .8);
+	        				else
+	        					val = 1;
 
 	        				if (visionMatrix[unitX+x] == undefined)
 								visionMatrix[unitX+x] = [];
