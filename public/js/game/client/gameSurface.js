@@ -702,7 +702,6 @@ gameSurface.hideElementModel = function (element, object) {
 	if (element.f != gameData.FAMILIES.land) {
 		//update minimap
 		GUI.removeElementFromMinimap(element);
->>>>>>> 31454cc861bb1dcb0fcdb9b818cdc7589b5cba9f
 	}
 }
 
