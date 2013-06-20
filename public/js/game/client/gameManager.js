@@ -11,7 +11,7 @@ gameManager.musicEnabled = false;
 
 
 try {
-	gameManager.socket = io.connect('http://warnode.com');
+	gameManager.socket = io.connect();
 
 	//send Player ID
 	gameManager.socket.on('askPID', function () {
@@ -126,7 +126,6 @@ gameManager.connectToServer = function (gameInitData) {
 		gameManager.waitingData = data.initElements;
 		gameSurface.init();
 		GUI.init();
-		input.initInputs();
 	});
 
 	//the server sent the game data

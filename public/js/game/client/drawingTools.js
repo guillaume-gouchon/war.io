@@ -370,8 +370,8 @@ gameSurface.updateMoveExtrapolation = function () {
 	var index = this.ex.length;
 	while (index --) {
 		var model = this.ex[index];
-		model.position.x += d.ex * this.PIXEL_BY_NODE / this.MOVEMENT_EXTRAPOLATION_ITERATION;
-		model.position.z += d.ey * this.PIXEL_BY_NODE / this.MOVEMENT_EXTRAPOLATION_ITERATION;
+		model.position.x += model.ex * this.PIXEL_BY_NODE / this.MOVEMENT_EXTRAPOLATION_ITERATION;
+		model.position.z += model.ey * this.PIXEL_BY_NODE / this.MOVEMENT_EXTRAPOLATION_ITERATION;
 			
 		model.et -= 1;
 
