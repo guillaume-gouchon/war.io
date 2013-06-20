@@ -29,7 +29,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 	// zoom
 	this.zoomSpeed = 1.2;
 	this.ZOOM_MAX = 30;
-	this.ZOOM_MIN = 140;
+	this.ZOOM_MIN = 110;
 
 	this.PAN_LIMITS = [-200, -200, gameContent.map.size.x * gameSurface.PIXEL_BY_NODE + 200, gameContent.map.size.y * gameSurface.PIXEL_BY_NODE + 200];
 
@@ -638,7 +638,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 		
 		if (isKeyboard) {
 		
-			this.isKeyboardScrolling = (value == 0 ? false : true);
+			_this.isKeyboardScrolling = (value == 0 ? false : true);
 		
 		}
 
