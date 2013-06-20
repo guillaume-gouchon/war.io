@@ -36,6 +36,11 @@ gameSurface.PLAYERS_COLORS = ['red', 'blue', 'green', 'yellow'];
 gameSurface.MOVEMENT_EXTRAPOLATION_ITERATION = 6;
 gameSurface.LAND_HEIGHT_SMOOTH_FACTOR = 65;
 
+gameSurface.FOG_OF_WAR_HEIGHT = 10;
+gameSurface.FOG_OF_WAR_UNCOVERED_HEIGHT = -20; // should be < -gameSurface.FOG_OF_WAR_HEIGHT
+
+gameSurface.DEEP_FOG_OF_WAR_HEIGHT = 18;
+gameSurface.DEEP_FOG_OF_WAR_UNCOVERED_HEIGHT = -19; // should be < -gameSurface.DEEP_FOG_OF_WAR_HEIGHT
 
 /**
 *	VARIABLES
@@ -176,8 +181,9 @@ gameSurface.createScene = function () {
 
 	//generate the land
 	var landGeometry = new THREE.PlaneGeometry(2200, 2200, 64, 64);
-	var grassTexture  = THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'grass.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
+	var grassTexture  = THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'grass2.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
 	grassTexture.wrapT = grassTexture.wrapS = THREE.RepeatWrapping;
+	grassTexture.repeat.set(32,32);
 	var grassMaterial = new THREE.MeshBasicMaterial({ map: grassTexture });
 	var planeSurface = new THREE.Mesh(landGeometry, grassMaterial);
     planeSurface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
@@ -189,22 +195,20 @@ gameSurface.createScene = function () {
 	var fogGeometry = new THREE.PlaneGeometry(1000, 1000, gameContent.map.size.x, gameContent.map.size.y);
 	var fogTexture  = THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'fog.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
 	fogTexture.wrapT = fogTexture.wrapS = THREE.RepeatWrapping;
-	var fogMaterial = new THREE.MeshBasicMaterial({ map: fogTexture, transparent: true });
-	fogMaterial.opacity = 0.5;
+	var fogMaterial = new THREE.MeshBasicMaterial({ map: fogTexture, transparent: true, opacity:.7 });
 	var planeSurface = new THREE.Mesh(fogGeometry, fogMaterial);
     planeSurface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
     planeSurface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
-    planeSurface.position.z = 6;
+    planeSurface.position.z = 1;
     planeSurface.overdraw = true;
     scene.add(planeSurface);
     gameSurface.fogOfWarSurface = planeSurface;
 
     //generate the deep fog
 	var fogGeometry = new THREE.PlaneGeometry(1000, 1000, gameContent.map.size.x, gameContent.map.size.y);
-	var fogTexture  = THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'fog.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
-	fogTexture.wrapT = fogTexture.wrapS = THREE.RepeatWrapping;
-	var fogMaterial = new THREE.MeshBasicMaterial({ map: fogTexture });
-	fogMaterial.opacity = 1;
+	//var fogTexture  = THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'fog.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
+	//fogTexture.wrapT = fogTexture.wrapS = THREE.RepeatWrapping;
+	var fogMaterial = new THREE.MeshBasicMaterial({ map: fogTexture, transparent:true, opacity:.75 });
 	var planeSurface = new THREE.Mesh(fogGeometry, fogMaterial);
     planeSurface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
     planeSurface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
@@ -233,9 +237,10 @@ gameSurface.createScene = function () {
 		this.fogOfWarMatrix[x] = [];
 		this.deepFogOfWarMatrix[x] = [];
 		for ( var y = 0; y < gameContent.map.size.y; y++) {
-			this.fogOfWarMatrix[x][y] = false;
+			this.fogOfWarMatrix[x][y] = 0;
 			this.deepFogOfWarMatrix[x][y] = false;
 	}
+
 
 	//add order geometry
 	this.order = new THREE.Mesh(new THREE.TorusGeometry(5, 2, 2, 6), new THREE.LineBasicMaterial( { color: '#0f0', opacity: this.ORDER_OPACITY, transparent: true} ));
@@ -290,9 +295,11 @@ gameSurface.loadObject = function (key, elementFamily) {
 		for (var n = 0; n < gameContent.players.length; n++) {
 			var color = this.ARMIES_COLORS[n];
 			gameSurface.materials[key + color] = new THREE.MeshBasicMaterial({map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key.replace('.js', '') + color + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
+			gameSurface.materials["HIDDEN" + key + color] = new THREE.MeshBasicMaterial({color: 0x555555, map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key.replace('.js', '') + color + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
 		}
 	} else {
 		gameSurface.materials[key] = new THREE.MeshBasicMaterial({map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key.replace('.js', '.png'), new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
+		gameSurface.materials["HIDDEN" + key] = new THREE.MeshBasicMaterial({color: 0x555555, map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key.replace('.js', '.png'), new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
 	}
 }
 
@@ -345,11 +352,17 @@ gameSurface.addElement = function (element) {
 	var model = elementData.g;
 
 	var material;
+	var hiddenMaterial;
 	if (element.f == gameData.FAMILIES.land) {
 		material = this.materials[model];
+		hiddenMaterial = this.materials["HIDDEN" + model];
 	} else  {
 		material = this.materials[model + this.ARMIES_COLORS[element.o]];
+		hiddenMaterial = this.materials["HIDDEN" + model + this.ARMIES_COLORS[element.o]];
 	}
+
+	element.material = material;
+	element.hiddenMaterial = hiddenMaterial;
 
 	var object = new THREE.Mesh(this.geometries[model], material);
 	object.elementId = element.id;
@@ -633,37 +646,63 @@ gameSurface.centerCameraOnElement = function (element) {
 
 
 gameSurface.showElement = function (element) {
-	if (!element.visible) {
-		element.visible = true;
-		if (element.f == gameData.FAMILIES.building && (index = gameSurface.buildingsMemorizedInFog.indexOf(utils.getElementFromId(element.id))) > -1) {
-			// if it is a building and it is in our fog memory, just remove it from the fog memory as it is now showing
-			gameSurface.buildingsMemorizedInFog.splice(index, 1);
-		} else {
-			var object = utils.getElementFromId(element.id).m;
-			object.geometry.opacity = 0.5;
-			if (element.f != gameData.FAMILIES.land) {
-				//update minimap
-				GUI.addElementOnMinimap(element);
-			}
-			scene.add(object);
-		}
+	if (element.visible)
+		return;
+
+	element.visible = true;
+
+	if (this.shouldMemorizeInFog(element) && (index = gameSurface.elementsMemorizedInFog.indexOf(utils.getElementFromId(element.id))) > -1) {
+		// if it must be memorized in fog and it is in our fog memory, just remove it from the fog memory as it is now showing
+		this.elementsMemorizedInFog.splice(index, 1);
+		
+		// TODO set alpha or something
+		utils.getElementFromId(element.id).m.material = element.material;
+	} else {
+		this.showElementModel(element);
 	}
 }
 
 gameSurface.hideElement = function (element) {
-	if (element.visible) {
-		element.visible = false;
-		if (element.f == gameData.FAMILIES.building) {
-			// if it is a building, put it in our fog memory rather than hiding it
-			gameSurface.buildingsMemorizedInFog.push(utils.getElementFromId(element.id));
-		} else {
-			object = utils.getElementFromId(element.id).m;
-			if (element.f != gameData.FAMILIES.land) {
-				//update minimap
-				GUI.removeElementFromMinimap(element);
-			}
-			scene.remove(object);
-		}
+	if (!element.visible)
+		return;
+
+	element.visible = false;
+
+	if (this.shouldMemorizeInFog(element)) {
+		// if it must be memorized in fog, put it in our fog memory rather than hiding it
+		this.elementsMemorizedInFog.push(utils.getElementFromId(element.id));
+
+		// TODO set alpha or something
+		utils.getElementFromId(element.id).m.material = element.hiddenMaterial;
+	} else {
+		this.hideElementModel(element);
+	}
+}
+
+gameSurface.showElementModel = function (element) {
+	if (element.modelVisible)
+		return;
+
+	element.modelVisible = true;
+	var object = utils.getElementFromId(element.id).m;
+	if (element.f != gameData.FAMILIES.land) {
+		//update minimap
+		GUI.addElementOnMinimap(element);
+	}
+	scene.add(object);
+}
+
+gameSurface.hideElementModel = function (element, object) {
+	if (!element.modelVisible)
+		return;
+
+	element.modelVisible = false;
+	if (object == undefined)
+		object = utils.getElementFromId(element.id).m;
+	if (element.f != gameData.FAMILIES.land) {
+		//update minimap
+		GUI.removeElementFromMinimap(element);
+>>>>>>> 31454cc861bb1dcb0fcdb9b818cdc7589b5cba9f
 	}
 }
 
@@ -699,16 +738,19 @@ gameSurface.manageElementsVisibility = function () {
 				// pythagorean vision
 				var squareVision = vision*vision;
 				var x,y,squarY;
-				for(y=-vision; y<=vision; y++) {
+				for(var y=-vision; y<=vision; y++) {
 					var squareY = y*y;
-	   				 for(x=-vision; x<=vision; x++) {
-	        			if(x*x+squareY <= squareVision) {
-
-	        				// TODO link with fog of war matrixes
+	   				 for(var x=-vision; x<=vision; x++) {
+	        			if(x*x+squareY < squareVision) {
+	        				var val = 1;
+	        				var dist = Math.sqrt(x*x+squareY);
+	        				if (dist > vision * .8)
+	        					val = (vision-dist) / (vision * .8);
 
 	        				if (visionMatrix[unitX+x] == undefined)
 								visionMatrix[unitX+x] = [];
-	            			visionMatrix[unitX+x][unitY+y] = true;
+							if (!visionMatrix[unitX+x][unitY+y] || val > visionMatrix[unitX+x][unitY+y])
+	            				visionMatrix[unitX+x][unitY+y] = val;
 	            		}
 	            	}
 	            }
@@ -728,9 +770,10 @@ gameSurface.manageElementsVisibility = function () {
 			this.hideElement(element);
 	}
 
-	for (index in this.buildingsMemorizedInFog) {
-		var element = this.buildingsMemorizedInFog[index];
-		if (visionMatrix[element.p.x] != undefined && visionMatrix[element.p.x][element.p.y]) {
+
+	for (index in this.elementsMemorizedInFog) {
+		var element = this.elementsMemorizedInFog[index];
+		if (visionMatrix[element.p.x] != undefined && visionMatrix[element.p.x][element.p.y] > 0) {
 			// the building could now be visible
 			console.log("building to show");
 			if (gameData.gameElements.indexOf(this.buildingsMemorizedInFog[index]) == -1) {
@@ -756,29 +799,32 @@ gameSurface.manageElementsVisibility = function () {
 	var i, l, z;
 	for (var x = 0; x < mapW; x++) {
 		for (var y = 0; y < mapH; y++) {
-			visible = (visionMatrix[x] != undefined && visionMatrix[x][y]);
+			visible = (visionMatrix[x] == undefined) ? 0 : visionMatrix[x][y];
 			if (visible != this.fogOfWarMatrix[x][y]) {
 				this.fogOfWarMatrix[x][y] = visible;
 				fogChanged = true;
-				z = (visible) ? -7 : 0;
+				z = (visible > 0) ? visible * this.FOG_OF_WAR_UNCOVERED_HEIGHT : 0;
+				if (this.fogOfWarVerticeIndexesMatrix[x][y].length == 0)
+					console.log("NO VERTICE AT " + x + "," + y);
 				for (i = 0, l=this.fogOfWarVerticeIndexesMatrix[x][y].length; i<l; i++) {
 					fogGeometry.vertices[this.fogOfWarVerticeIndexesMatrix[x][y][i]].z = z;
 				}
 
-				if (visible && !this.deepFogOfWarMatrix[x][y]) {
+				if (visible > 0 && this.deepFogOfWarMatrix[x][y] == 0) {
 					this.deepFogOfWarMatrix[x][y] = true;
 					deepFogChanged = true;
-					for (i = 0, l=this.fogOfWarVerticeIndexesMatrix[x][y].length; i<l; i++) {
-						deepFogGeometry.vertices[this.fogOfWarVerticeIndexesMatrix[x][y][i]].z = -30;
-					}
+					/*for (i = 0, l=this.fogOfWarVerticeIndexesMatrix[x][y].length; i<l; i++) {
+						deepFogGeometry.vertices[this.fogOfWarVerticeIndexesMatrix[x][y][i]].z = this.DEEP_FOG_OF_WAR_UNCOVERED_HEIGHT;
+					}*/
+					// deepFogGeometry.vertices[this.fogOfWarVerticeIndexesMatrix[x][y]].z = this.DEEP_FOG_OF_WAR_UNCOVERED_HEIGHT;
 				}
 			}
 		}
 	}
 	if (fogChanged)
 		fogGeometry.verticesNeedUpdate = true;
-	if (deepFogChanged)
-		deepFogGeometry.verticesNeedUpdate = true;
+	//if (deepFogChanged)
+	//	deepFogGeometry.verticesNeedUpdate = true;
 
 }
 
