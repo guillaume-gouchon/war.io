@@ -200,7 +200,6 @@ gameSurface.createScene = function () {
     planeSurface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
     planeSurface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
     planeSurface.position.z = 1;
-    planeSurface.overdraw = true;
     scene.add(planeSurface);
     gameSurface.fogOfWarSurface = planeSurface;
 
@@ -208,13 +207,12 @@ gameSurface.createScene = function () {
 	var fogGeometry = new THREE.PlaneGeometry(1000, 1000, gameContent.map.size.x, gameContent.map.size.y);
 	//var fogTexture  = THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'fog.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
 	//fogTexture.wrapT = fogTexture.wrapS = THREE.RepeatWrapping;
-	var fogMaterial = new THREE.MeshBasicMaterial({ map: fogTexture, transparent:true, opacity:.9 });
+	var fogMaterial = new THREE.MeshBasicMaterial({ map: fogTexture });
 	var planeSurface = new THREE.Mesh(fogGeometry, fogMaterial);
     planeSurface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
     planeSurface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
-    planeSurface.position.z = 1;
-    planeSurface.overdraw = true;
-    //scene.add(planeSurface);
+    planeSurface.position.z = 2;
+    scene.add(planeSurface);
     gameSurface.deepFogOfWarSurface = planeSurface;
 
 
@@ -428,7 +426,7 @@ gameSurface.addElement = function (element) {
 	//this.addLifeBar(element);
 
 	// fogs
-	if (element.f == gameData.FAMILIES.land || rank.isAlly(gameContent.players, gameContent.myArmy, element)) {
+	if (rank.isAlly(gameContent.players, gameContent.myArmy, element)) {
 		this.showElement(element);
 	}
 
@@ -821,7 +819,6 @@ gameSurface.manageElementsVisibility = function () {
 					for (i = 0, l=this.fogOfWarVerticeIndexesMatrix[x][y].length; i<l; i++) {
 						deepFogGeometry.vertices[this.fogOfWarVerticeIndexesMatrix[x][y][i]].z = z;
 					}
-					// deepFogGeometry.vertices[this.fogOfWarVerticeIndexesMatrix[x][y]].z = this.DEEP_FOG_OF_WAR_UNCOVERED_HEIGHT;
 				}
 			}
 		}
