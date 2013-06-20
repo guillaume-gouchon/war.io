@@ -293,8 +293,6 @@ GUI.initMinimap = function () {
 		var x = (GUI.MINIMAP_SIZE - window.innerWidth + e.clientX) / GUI.MINIMAP_SIZE * gameContent.map.size.x * gameSurface.PIXEL_BY_NODE;
 		var y = (window.innerHeight - e.clientY) / GUI.MINIMAP_SIZE * gameContent.map.size.y * gameSurface.PIXEL_BY_NODE;
 		if (e.which == 1) {
-			camera.position.x = x;
-			camera.position.y = y;
 		} else if (e.which == 3 && gameContent.selected.length > 0
 			&& rank.isAlly(gameContent.players, gameContent.myArmy, utils.getElementFromId(gameContent.selected[0]))
 			&& utils.getElementFromId(gameContent.selected[0]).f == gameData.FAMILIES.unit
@@ -312,7 +310,7 @@ GUI.initMinimap = function () {
 */
 GUI.updateMinimap = function () {
 	$('#minimapLocation').css('left', -8 + (this.MINIMAP_SIZE) * camera.position.x / (gameContent.map.size.x * gameSurface.PIXEL_BY_NODE));
-	$('#minimapLocation').css('top', -8 + (this.MINIMAP_SIZE) * (1 - camera.position.y / (gameContent.map.size.y * gameSurface.PIXEL_BY_NODE)));
+	$('#minimapLocation').css('top', -8 + (this.MINIMAP_SIZE) * (1 - camera.position.z / (gameContent.map.size.y * gameSurface.PIXEL_BY_NODE)));
 }
 
 
