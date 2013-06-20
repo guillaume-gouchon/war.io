@@ -69,7 +69,7 @@ gameSurface.building = null;
 gameSurface.fogOfWarSurface = null;
 gameSurface.deepFogOfWarSurface = null;
 gameSurface.clock = null;
-gameSurface.buildingsMemorizedInFog = [];
+gameSurface.elementsMemorizedInFog = [];
 gameSurface.fogOfWarMatrix = null;
 gameSurface.deepFogOfWarMatrix = null;
 gameSurface.fogOfWarVerticeIndexesMatrix = null;
@@ -92,7 +92,7 @@ gameSurface.init = function () {
 	controls = new THREE.TrackballControls(camera);
 
 	// init simple fog
-	//scene.fog = new THREE.Fog( 0xffffff, this.FOG_DENSITY, 600);
+	scene.fog = new THREE.Fog( 0xffffff, this.FOG_DENSITY, 600);
 
 	// init renderer
 	renderer = new THREE.WebGLRenderer();
@@ -106,7 +106,7 @@ gameSurface.init = function () {
 	this.loader = new THREE.JSONLoader();
 
 	// count the number of stuff to be loaded
-	gameSurface.stuffToBeLoaded += 4;
+	gameSurface.stuffToBeLoaded += 8;
 	for (var i in gameData.ELEMENTS) {
 		for (var j in gameData.ELEMENTS[i]) { 
 			for (var k in gameData.ELEMENTS[i][j]) {
@@ -191,7 +191,7 @@ gameSurface.createScene = function () {
     planeSurface.overdraw = true;
     scene.add(planeSurface);
 
-    //generate the fog
+    ///generate the fog
 	var fogGeometry = new THREE.PlaneGeometry(1000, 1000, gameContent.map.size.x, gameContent.map.size.y);
 	var fogTexture  = THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'fog.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
 	fogTexture.wrapT = fogTexture.wrapS = THREE.RepeatWrapping;
@@ -214,7 +214,7 @@ gameSurface.createScene = function () {
     planeSurface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
     planeSurface.position.z = 1;
     planeSurface.overdraw = true;
-    scene.add(planeSurface);
+    //scene.add(planeSurface);
     gameSurface.deepFogOfWarSurface = planeSurface;
 
 
@@ -230,6 +230,7 @@ gameSurface.createScene = function () {
 		if (this.fogOfWarVerticeIndexesMatrix[verticeGamePosition.x][verticeGamePosition.y] == undefined)
 			this.fogOfWarVerticeIndexesMatrix[verticeGamePosition.x][verticeGamePosition.y] = [];
 		this.fogOfWarVerticeIndexesMatrix[verticeGamePosition.x][verticeGamePosition.y].push(i);
+		// this.fogOfWarVerticeIndexesMatrix[verticeGamePosition.x][verticeGamePosition.y] = i;
 	}
 
 	this.fogOfWarMatrix = [];
@@ -716,6 +717,7 @@ gameSurface.hideElementModel = function (element, object) {
 		//update minimap
 		GUI.removeElementFromMinimap(element);
 	}
+	scene.remove(object);
 }
 
 /**
@@ -758,7 +760,7 @@ gameSurface.manageElementsVisibility = function () {
 	            	}
 	            }
 
-			} else if (element.f != gameData.FAMILIES.land) {
+			} else {
 				// enemy unit, add to the units to check
 				unitsToCheck.push(element);
 			}
@@ -779,17 +781,17 @@ gameSurface.manageElementsVisibility = function () {
 		if (visionMatrix[element.p.x] != undefined && visionMatrix[element.p.x][element.p.y] > 0) {
 			// the building could now be visible
 			console.log("building to show");
-			if (gameData.gameElements.indexOf(this.buildingsMemorizedInFog[index]) == -1) {
+			if (utils.getElementFromId(element.id) == null) {
 				// but it has been destroyed, so we remove it for good
 				console.log("BOOOM IT DIED");
-				var object = this.buildingsMemorizedInFog[index].m;
-				this.removeBuildingForGood(element, object);
+				var object = this.elementsMemorizedInFog[index].m;
+				this.hideElementModel(element, object);
 			} else {
 				// otherwise we set it to visible
 				console.log("show it");
 				this.showElement(element);
 			}
-			this.buildingsMemorizedInFog.splice(index, 1);
+			this.elementsMemorizedInFog.splice(index, 1);
 		}
 	}
 
