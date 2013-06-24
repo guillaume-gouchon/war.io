@@ -147,9 +147,11 @@ $('a', 'footer').bind(inputEvents, function () {
 			element = $('#credits');
 			break;
 		case 2:
+			return false;
 			element = $('#share');
 			break;
 		case 3:
+			return false;
 			element = $('#tutorial');
 			break;
 		case 4:
@@ -264,18 +266,18 @@ function updateGamesList(games) {
 	}
 }
 
-$(document).ready(function () {
-	$('#tutorial').removeClass('hide');
+// $(document).ready(function () {
+// 	$('#tutorial').removeClass('hide');
 
-	$('ul', '#tutorial').roundabout({
-		easing: 'easeOutQuad',
-		enableDrag: true,
-		dropEasing: 'easeOutBounce',
-		responsive: true
-	}).roundabout("stopAutoplay");
+// 	$('ul', '#tutorial').roundabout({
+// 		easing: 'easeOutQuad',
+// 		enableDrag: true,
+// 		dropEasing: 'easeOutBounce',
+// 		responsive: true
+// 	}).roundabout("stopAutoplay");
 
-	$('div', '#tutorial li').each(function () {
-		$(this).css('top', (300 - $(this).height()) / 2);
-	});
+// 	$('div', '#tutorial li').each(function () {
+// 		$(this).css('top', (300 - $(this).height()) / 2);
+// 	});
 
-});
+// });

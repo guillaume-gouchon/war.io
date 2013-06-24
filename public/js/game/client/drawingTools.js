@@ -98,7 +98,7 @@ gameSurface.updateLifeBar = function (lifeBar, element, elementData) {
 gameSurface.updateOrderPosition = function () {
 	if (gameContent.selected.length > 0) {
 		var element = utils.getElementFromId(gameContent.selected[0]);
-	 	if (element.mt != null && element.mt.x != null || element.rp != null || element.a != null) {
+	 	if (element != null && element.mt != null && element.mt.x != null || element.rp != null || element.a != null) {
 			var position;
 			if (element.a != null) {
 				position = element.a.p;
@@ -158,18 +158,20 @@ gameSurface.de2ra = function(degree) {
 */
 gameSurface.selectElement = function (elementId) {
 	var element = utils.getElementFromId(elementId);
-	var model = element.m;
-	var elementData = gameData.ELEMENTS[element.f][element.r][element.t];
-	var color;
-	if (rank.isEnemy(gameContent.players, gameContent.myArmy, element)) {
-		color = this.SELECTION_ENEMY_COLOR;
-	} else if (rank.isAlly(gameContent.players, gameContent.myArmy, element)) {
-		color = this.SELECTION_ALLY_COLOR;
-	} else {
-		color = this.SELECTION_NEUTRAL_COLOR;
-	}
+	if (element != null) {
+		var model = element.m;
+		var elementData = gameData.ELEMENTS[element.f][element.r][element.t];
+		var color;
+		if (rank.isEnemy(gameContent.players, gameContent.myArmy, element)) {
+			color = this.SELECTION_ENEMY_COLOR;
+		} else if (rank.isAlly(gameContent.players, gameContent.myArmy, element)) {
+			color = this.SELECTION_ALLY_COLOR;
+		} else {
+			color = this.SELECTION_NEUTRAL_COLOR;
+		}
 
-	model.add(this.drawSelectionCircle(elementData.shape.length / 2 * this.PIXEL_BY_NODE / 2, color));
+		model.add(this.drawSelectionCircle(elementData.shape.length / 2 * this.PIXEL_BY_NODE / 2, color));
+	}
 }
 
 

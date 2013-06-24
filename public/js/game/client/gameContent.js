@@ -92,13 +92,6 @@ gameContent.update = function (data) {
 	for (var i in data.removed) {
 		var element = data.removed[i];
 		if (utils.getElementFromId(element.id) != null) {
-
-			// remove from selected elements
-			var index = this.selected.indexOf(element.id);
-			if (index >= 0) {
-				this.selected.splice(index, 1);
-			}
-
 			gameSurface.removeElement(element);
 		}
 	}
