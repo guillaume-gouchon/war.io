@@ -17,7 +17,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 	this.screen = { width: 0, height: 0, offsetLeft: 0, offsetTop: 0 };
 	this.radius = ( this.screen.width + this.screen.height ) / 4;
 
-	this.rotateSpeed = 0.8;
+	this.rotateSpeed = 0.3;
 	this.panSpeed = 0.8;
 
 	// game window scrolling
@@ -29,7 +29,11 @@ THREE.TrackballControls = function ( object, domElement ) {
 	// zoom
 	this.zoomSpeed = 1.2;
 	this.ZOOM_MAX = 30;
-	this.ZOOM_MIN = 110;
+	this.ZOOM_MIN = 130;
+
+	// rotation
+	this.WHEEL_ROTATION_SPEED = 40;
+	this.ANGLE_ROTATION_MIN = 0.005;
 
 	this.PAN_LIMITS = [-200, -200, gameContent.map.size.x * gameSurface.PIXEL_BY_NODE + 200, gameContent.map.size.y * gameSurface.PIXEL_BY_NODE + 200];
 
@@ -67,6 +71,11 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 	_panStart = new THREE.Vector2(),
 	_panEnd = new THREE.Vector2();
+
+	_oldEye = null;
+	_oldUp = null;
+	_oldTarget = null;
+	_oldRotateStart = null;
 
 	// shortcuts
 	this.KEYBOARD_SHORTCUTS = [81, 87, 69, 82, 65, 83, 68, 70];
@@ -149,7 +158,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 		var angle = Math.acos( _rotateStart.dot( _rotateEnd ) / _rotateStart.length() / _rotateEnd.length() );
 
-		if ( angle ) {
+		if ( angle > _this.ANGLE_ROTATION_MIN) {
 
 			var axis = ( new THREE.Vector3() ).crossVectors( _rotateStart, _rotateEnd ).normalize(),
 				quaternion = new THREE.Quaternion();
@@ -160,11 +169,12 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 			quaternion.setFromAxisAngle( axis, -angle );
 
-
+			// fixes the zooming issue when rotating
+			var eyeHeight = _eye.z;
 			_eye.applyQuaternion( quaternion );
-			_this.object.up.applyQuaternion( quaternion );
+			_eye.multiplyScalar( eyeHeight / _eye.z );
 
-			_rotateEnd.applyQuaternion( quaternion );
+			_this.object.up.applyQuaternion( quaternion );
 
 			if ( _this.staticMoving ) {
 
@@ -189,9 +199,11 @@ THREE.TrackballControls = function ( object, domElement ) {
 			_touchZoomDistanceStart = _touchZoomDistanceEnd;
 
 			// zoom limits
-			if (_eye.z * factor > _this.ZOOM_MIN || _eye.z * factor < _this.ZOOM_MAX) { return; }
+			if (_eye.z * factor < _this.ZOOM_MIN && _eye.z * factor > _this.ZOOM_MAX) {
 
-			_eye.multiplyScalar( factor );
+				_eye.multiplyScalar( factor );
+
+			}
 
 		} else {
 
@@ -234,7 +246,17 @@ THREE.TrackballControls = function ( object, domElement ) {
 			pan.add( _eye.clone().multiply( new THREE.Vector3(1, 1, 0) ).setLength( - _this.scroll[1] ) );
 
 			_this.object.position.add( pan );
-			_this.target.add( pan );
+
+			if (_this.reachLimits()) {
+
+				_this.object.position.sub( pan );
+
+			} else {
+
+				_this.target.add( pan );
+
+			}
+
 			
 			if ( _this.staticMoving ) {
 
@@ -252,8 +274,11 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 	this.update = function () {
 
-
 		_eye.subVectors( _this.object.position, _this.target );
+		_oldEye = _eye.clone();
+		_oldUp = _this.object.up.clone();
+		_oldTarget = _this.target.clone();
+		_oldRotateStart = _rotateStart.clone();
 
 		if ( !_this.noRotate ) {
 
@@ -280,11 +305,23 @@ THREE.TrackballControls = function ( object, domElement ) {
 		}
 
 		_this.object.position.addVectors( _this.target, _eye );
+
+		if (_this.reachLimits()) {
+
+			_this.object.position.subVectors( _this.target, _eye );
+
+			// reset
+			_eye = _oldEye;
+			_this.target = _oldTarget;
+			_this.object.up = _oldUp;
+			_rotateStart = _oldRotateStart;
+
+			_this.object.position.addVectors( _this.target, _oldEye );
+
+		}
+
 		_this.object.lookAt( _this.target );
-
-
-		 // _this.object.position.x = Math.min(Math.max(_this.object.position.x, _this.PAN_LIMITS[0]), _this.PAN_LIMITS[2]);
-		 // _this.object.position.z = Math.min(Math.max(_this.object.position.z, _this.PAN_LIMITS[1]), _this.PAN_LIMITS[3]);
+		
 
 		if ( lastPosition.distanceToSquared( _this.object.position ) > 0 ) {
 
@@ -314,6 +351,16 @@ THREE.TrackballControls = function ( object, domElement ) {
 		lastPosition.copy( _this.object.position );
 
 	};
+
+
+	this.reachLimits = function () {
+		if (_this.object.position.x < _this.PAN_LIMITS[0] || _this.object.position.y < _this.PAN_LIMITS[1]
+		 || _this.object.position.x > _this.PAN_LIMITS[2] || _this.object.position.y > _this.PAN_LIMITS[3]) {
+			return true;
+		}
+
+		return false;
+	}
 
 	// listeners
 
@@ -534,7 +581,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 			// shift key + wheel = rotation
 			_rotateStart = _this.getMouseProjectionOnBall( event.clientX, event.clientY );
-			_rotateEnd = _this.getMouseProjectionOnBall( event.clientX + delta * 20, event.clientY );
+			_rotateEnd = _this.getMouseProjectionOnBall( event.clientX + delta * _this.WHEEL_ROTATION_SPEED, event.clientY );
 		
 		} else {
 

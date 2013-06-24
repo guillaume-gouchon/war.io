@@ -86,7 +86,7 @@ gameSurface.init = function () {
 	scene = new THREE.Scene();
 
 	// init camera
-	camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, this.NEAR, this.FAR);
+	camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, this.NEAR, this.FAR);
 
 	// init camera controls / input
 	controls = new THREE.TrackballControls(camera);
@@ -96,7 +96,7 @@ gameSurface.init = function () {
 
 	// init renderer
 	renderer = new THREE.WebGLRenderer();
-	renderer.setSize(window.innerWidth - 5, window.innerHeight - 5);
+	renderer.setSize(window.innerWidth, window.innerHeight);
 	document.body.appendChild(renderer.domElement);
 
 	// init variables
@@ -106,12 +106,12 @@ gameSurface.init = function () {
 	this.loader = new THREE.JSONLoader();
 
 	// count the number of stuff to be loaded
-	gameSurface.stuffToBeLoaded += 8;
+	gameSurface.stuffToBeLoaded += 11;
 	for (var i in gameData.ELEMENTS) {
 		for (var j in gameData.ELEMENTS[i]) { 
 			for (var k in gameData.ELEMENTS[i][j]) {
 				// geometry + 1 texture
-				gameSurface.stuffToBeLoaded += 2;
+				gameSurface.stuffToBeLoaded += 3;
 				// additional textures for players colors
 				if (i != gameData.FAMILIES.land) {
 					gameSurface.stuffToBeLoaded += gameContent.players.length - 1;
@@ -337,7 +337,7 @@ gameSurface.updateLoadingCounter = function () {
 gameSurface.onWindowResize = function() {
 	camera.aspect = window.innerWidth / window.innerHeight;
 	camera.updateProjectionMatrix();
-	renderer.setSize( window.innerWidth - 5, window.innerHeight - 5);
+	renderer.setSize( window.innerWidth, window.innerHeight );
 
 	controls.handleResize();
 }
