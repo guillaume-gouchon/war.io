@@ -577,9 +577,11 @@ gameSurface.removeElement = function (element) {
 	var shouldMemorizeInFog = this.shouldMemorizeInFog(element);
 	if (!shouldMemorizeInFog) {
 		// if it is a regular element, just hide it, it will be removed
+		console.log('chibron')
 		gameSurface.hideElement(element);
 	} else if (element.visible) {
 		// if it is kept inside the fog but it is visible right now, remove the model right away
+		console.log('zob')
 		gameSurface.hideElementModel(element);
 	}
 
@@ -597,6 +599,7 @@ gameSurface.removeElement = function (element) {
 	}
 	
 	delete gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id];
+	console.log('bite');
 	console.log(gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id])
 }
 
