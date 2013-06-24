@@ -576,9 +576,11 @@ gameSurface.removeElement = function (element) {
 
 	var shouldMemorizeInFog = this.shouldMemorizeInFog(element);
 	if (!shouldMemorizeInFog) {
+				console.log('bite en bois');
 		// if it is a regular element, just hide it, it will be removed
 		gameSurface.hideElement(element);
-	} else if (element.m.visible) {
+	} else if (element.visible) {
+		console.log('chibron');
 		// if it is kept inside the fog but it is visible right now, remove the model right away
 		gameSurface.hideElementModel(element);
 	}
