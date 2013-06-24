@@ -579,7 +579,6 @@ console.log(element);
 		// if it is a regular element, just hide it, it will be removed
 		gameSurface.hideElement(element);
 	} else if (element.visible) {
-		console.log('chibron');
 		// if it is kept inside the fog but it is visible right now, remove the model right away
 		gameSurface.hideElementModel(element);
 	}
