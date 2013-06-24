@@ -596,7 +596,7 @@ gameSurface.removeElement = function (element) {
 		}
 	}
 	
-	gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id] = null;
+	delete gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id];
 }
 
 
@@ -730,7 +730,7 @@ gameSurface.manageElementsVisibility = function () {
 	for (var type in gameContent.gameElements) {
 		for (var id in gameContent.gameElements[type]) {
 			var element = gameContent.gameElements[type][id];
-			if (rank.isAlly(gameContent.players, gameContent.myArmy, element)) {
+			if (element.f != gameData.FAMILIES.land && rank.isAlly(gameContent.players, gameContent.myArmy, element)) {
 				// ally unit, show vision
 				var unitX = element.p.x;
 				var unitY = element.p.y;
