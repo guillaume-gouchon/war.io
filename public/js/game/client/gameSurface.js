@@ -573,10 +573,9 @@ gameSurface.removeElement = function (element) {
 	if (gameContent.selected.indexOf(element.id) >= 0) {
 		gameContent.selected.splice(gameContent.selected.indexOf(element.id), 1);
 	}
-
+console.log(element);
 	var shouldMemorizeInFog = this.shouldMemorizeInFog(element);
 	if (!shouldMemorizeInFog) {
-				console.log('bite en bois');
 		// if it is a regular element, just hide it, it will be removed
 		gameSurface.hideElement(element);
 	} else if (element.visible) {
