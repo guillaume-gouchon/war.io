@@ -569,11 +569,12 @@ gameSurface.updateElement = function (element) {
 */
 gameSurface.removeElement = function (element) {
 
+	element = utils.getElementFromId(element.id);
+
 	// remove from the selected elements if it was
 	if (gameContent.selected.indexOf(element.id) >= 0) {
 		gameContent.selected.splice(gameContent.selected.indexOf(element.id), 1);
 	}
-console.log(element);
 	var shouldMemorizeInFog = this.shouldMemorizeInFog(element);
 	if (!shouldMemorizeInFog) {
 		// if it is a regular element, just hide it, it will be removed

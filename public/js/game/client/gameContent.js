@@ -82,24 +82,24 @@ gameContent.update = function (data) {
 
 	// add new elements
 	for (var i in data.added) {
-		var element = utils.getElementFromId(data.added[i].id);
-		if (element == null) {
+		var element = data.added[i];
+		if (utils.getElementFromId(element.id) == null) {
 			gameSurface.addElement(element);
 		}
 	}
 
 	// remove some elements
 	for (var i in data.removed) {
-		var element = utils.getElementFromId(data.removed[i].id);
-		if (element != null) {
+		var element = data.removed[i];
+		if (utils.getElementFromId(element.id) != null) {
 			gameSurface.removeElement(element);
 		}
 	}
 
 	// update some modified elements
 	for (var i in data.modified) {
-		var element = utils.getElementFromId(data.modified[i].id);
-		if (element != null) {
+		var element = data.modified[i];
+		if (utils.getElementFromId(element.id) != null) {
 			gameSurface.updateElement(element);
 		}
 	}
