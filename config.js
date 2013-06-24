@@ -1,5 +1,5 @@
 exports.server = {
-    port : 6969,
+    port : 80,
     enableCaching : true,
     ageCache : 31557600
 };
