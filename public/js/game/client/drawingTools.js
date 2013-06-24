@@ -98,7 +98,8 @@ gameSurface.updateLifeBar = function (lifeBar, element, elementData) {
 gameSurface.updateOrderPosition = function () {
 	if (gameContent.selected.length > 0) {
 		var element = utils.getElementFromId(gameContent.selected[0]);
-	 	if (element != null && element.mt != null && element.mt.x != null || element.rp != null || element.a != null) {
+		if (element == null) { return; }
+	 	if (element.mt != null && element.mt.x != null || element.rp != null || element.a != null) {
 			var position;
 			if (element.a != null) {
 				position = element.a.p;

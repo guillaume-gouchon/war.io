@@ -597,6 +597,7 @@ gameSurface.removeElement = function (element) {
 	}
 	
 	delete gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id];
+	console.log(gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id])
 }
 
 
