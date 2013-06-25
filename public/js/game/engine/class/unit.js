@@ -8,6 +8,7 @@ gameData.Unit = function (unit, x, y, owner) {
 	this.o = owner;  // owner's id
 
 	this.p = {x : x, y : y};// position
+	this.fl = 0;// animation flag
 
 	// game-related data
 	this.mt = {x : null, y : null};// move destination
@@ -19,9 +20,12 @@ gameData.Unit = function (unit, x, y, owner) {
 
 	// fixes the circular structure issue with JSON.stringify
 	this.toJSON = function () {
-		var action = null;
+		var action = null, patrol = null;
 		if (this.a != null) {
 			action = tools.clone(this.a);
+		}
+		if (this.pa != null) {
+			patrol = tools.clone(this.pa);
 		}
 		return {
 			id: this.id,
@@ -29,11 +33,12 @@ gameData.Unit = function (unit, x, y, owner) {
 			t: this.t,
 			r: this.r,
 			o: this.o,
-			p: this.p,
+			p: { x : this.p.x, y : this.p.y},
+			fl: this.fl,
 			mt: this.mt,
 			fr: this.fr,
 			ga: this.ga,
-			pa: this.pa,
+			pa: patrol,
 			l: this.l,
 			a: action
 		}

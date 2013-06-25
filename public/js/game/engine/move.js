@@ -67,6 +67,7 @@ move.moveElement = function (game, element) {
       		// if element has arrived to its destination, updates its order
       		if(element.mt.x == element.p.x && element.mt.y == element.p.y) {
       			element.mt = {x : null, y : null};
+            element.fl = gameData.ELEMENTS_FLAGS.nothing;
       		}
       	}
     }

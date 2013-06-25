@@ -9,4 +9,8 @@ gameData.Terrain = function (land, x, y) {
 
 	//game-related data
 	this.ra = land.ra; //resource amount
+
+	this.toJSON = function () {
+		return this;
+	}
 }

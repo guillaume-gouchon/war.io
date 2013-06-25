@@ -415,16 +415,24 @@ gameSurface.addElement = function (element) {
 		object.scale.y = 2;
 		object.rotation.x = this.de2ra(90);
 	}
-	gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id] = element;
 
-	element.m = object;
-	if (element.f != gameData.FAMILIES.land)
+	// adds new element in the logic
+	if (gameManager.isOfflineGame) {
+		gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id] = element.toJSON();
+		gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id].m = object;
+	} else {
+	 	gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id] = element;
+		element.m = object;
+	}
+
+	if (element.f != gameData.FAMILIES.land) {
 		// add life bar on top
-		this.addLifeBar(element);
+		this.addLifeBar(utils.getElementFromId(element.id));
+	}
 
 	// fogs
 	if (rank.isAlly(gameContent.players, gameContent.myArmy, element)) {
-		this.showElement(element);
+		this.showElement(utils.getElementFromId(element.id));
 	}
 
 	// building in construction
@@ -467,7 +475,7 @@ gameSurface.updateElement = function (element) {
 		}
 	}
 
-	if (gameManager.isOfflineGame || element.f == gameData.FAMILIES.building) {
+	if (element.f == gameData.FAMILIES.building) {
 		this.setElementPosition(object, element.p.x, element.p.y);	
 	}
 	
@@ -526,8 +534,8 @@ gameSurface.updateElement = function (element) {
 		}
 	}
 
-	element.m = object;
-	gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id] = element;
+	gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id] = element.toJSON();
+	gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id].m = object;
 }
 
 
@@ -704,6 +712,10 @@ gameSurface.manageElementsVisibility = function () {
 				var unitY = element.p.y;
 				var elementData = gameData.ELEMENTS[element.f][element.r][element.t];
 				var vision = elementData.vision;
+
+				if (element.f == gameData.FAMILIES.building && element.cp < 100) {
+					vision = 2;
+				}
 
 				// pythagorean vision
 				var squareVision = vision*vision;

@@ -129,6 +129,7 @@ gameSurface.updateOrderPosition = function () {
 	if (gameContent.selected.length > 0) {
 		var element = utils.getElementFromId(gameContent.selected[0]);
 		if (element == null) { return; }
+
 	 	if (element.mt != null && element.mt.x != null || element.rp != null || element.a != null) {
 			var position;
 			if (element.a != null) {
@@ -136,6 +137,7 @@ gameSurface.updateOrderPosition = function () {
 			} else  {
 				position = (element.rp != null ? element.rp : element.mt);
 			}
+
 			this.setElementPosition(this.order, position.x, position.y);
 			this.order.rotation.z += gameSurface.ORDER_ROTATION_SPEED;
 			if (this.order.scale.x >= gameSurface.ORDER_SIZE_MAX) {

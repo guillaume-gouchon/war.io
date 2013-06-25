@@ -41,6 +41,20 @@ gameData.PLAYER_STATUSES = {
 
 
 /**
+*	Used for elements animations.
+*/
+gameData.ELEMENTS_FLAGS = {
+	nothing : 0,
+	moving: 1,
+	attacking : 2,
+	mining : 3,
+	//damaged : 4,
+	dying : 5,
+	building : 6
+}
+
+
+/**
 * 	Global variable to get a unique id for any game element.
 */
 gameData.unitId = 0;

@@ -9,6 +9,7 @@ gameData.Building = function (building, x, y, owner, isBuilt) {
 
 	//drawing-related data
 	this.p = {x : x, y : y};
+	this.fl = 0;// animation flag
 	
 	//game-related data
 	this.cp = (isBuilt ? 100 : 0);// construction progress
@@ -18,4 +19,7 @@ gameData.Building = function (building, x, y, owner, isBuilt) {
 	this.fr = 0;// frags
 	this.l = building.l;// life
 
+	this.toJSON = function () {
+		return this;
+	}
 }

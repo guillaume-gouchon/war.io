@@ -58,6 +58,8 @@ fightLogic.applyDamage = function (game, damage, target, fragOwner) {
 		//check if dead
 		if(target.l <= 0) {	
 
+			target.fl = gameData.ELEMENTS_FLAGS.dying;
+
 			if (fragOwner != null) {
 				fragOwner.fr = fragOwner.fr + 1;
 				fragOwner.a = null;

@@ -66,7 +66,7 @@ gameContent.init = function (data) {
 
 			// center camera on town hall
 			if (element.f == gameData.FAMILIES.building && element.o == this.myArmy) {
-				gameSurface.centerCameraOnElement(element);
+				gameSurface.centerCameraOnElement(utils.getElementFromId(element.id));
 			}
 
 		}

@@ -4,7 +4,7 @@ var gameLogic = {};
 /**
 *	Number of time the game is being updated by second.
 */
-gameLogic.FREQUENCY = 5;
+gameLogic.FREQUENCY = 3;
 
 
 /**
@@ -17,7 +17,7 @@ gameLogic.update = function (game) {
 	game.added = [];
 	game.removed = [];
 
-	//resolve players orders
+	// resolve players orders
 	for (var i in game.orders) {
 		order.dispatchReceivedOrder(game, game.orders[i][0], game.orders[i][1]);
 	}
@@ -29,7 +29,7 @@ gameLogic.update = function (game) {
 		}
 	}
 
-	//units
+	// units
 	for(var n in game.gameElements.unit) {
 		var element  = game.gameElements.unit[n];
 		this.resolveActions(game, element);
@@ -37,12 +37,12 @@ gameLogic.update = function (game) {
 		this.protectAround(game, element);
 	}
 
-	//buildings
+	// buildings
 	for (var n in game.gameElements.building) {
 		var element  = game.gameElements.building[n];
 
 		if (game.players[element.o].s != gameData.PLAYER_STATUSES.surrender) {
-			//player is still alive
+			// player is still alive
 			game.players[element.o].s = gameData.PLAYER_STATUSES.ig;
 		}
 		
@@ -99,6 +99,7 @@ gameLogic.addNewBuildings = function (game) {
 gameLogic.updateMoves = function (game, element) {
 	if(element.mt != null && element.mt.x != null) {
 		move.moveElement(game, element);
+		element.fl = gameData.ELEMENTS_FLAGS.moving;
 		tools.addUniqueElementToArray(game.modified, element);
 	}
 }
@@ -116,7 +117,8 @@ gameLogic.resolveActions = function (game, element) {
 		if (distance <= 1) {
 			//stop moving
 			element.mt = {x : null, y : null};
-			
+			element.fl = gameData.ELEMENTS_FLAGS.nothing;
+
 			if (elementData.isBuilder && element.a.f == gameData.FAMILIES.building
 				&& rank.isAlly(game.players, element.o, element.a)) {
 				if(element.a.cp < 100) {
