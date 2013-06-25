@@ -61,11 +61,13 @@ gameSurface.drawSelectionCircle = function(radius, color) {
 */
 gameSurface.drawLifeBar = function (element) {
 	var elementData = gameData.ELEMENTS[element.f][element.r][element.t];
-	var lifeBar = new THREE.Mesh(new THREE.CubeGeometry(this.BARS_DEPTH, this.BARS_HEIGHT, 1), new THREE.MeshBasicMaterial({color: 0xffffff}));
-	lifeBar.id = 'life';
-	lifeBar.position.x = 0;
+
+	var spriteMaterial = this.materials["billboardBar"].clone();
+	var lifeBar = new THREE.Sprite(spriteMaterial);
 	lifeBar.position.y = elementData.height;
-	lifeBar.rotation.y = this.de2ra(90);
+	lifeBar.scale.set(1, 1, 0);
+	lifeBar.id = 'life';
+
 	this.updateLifeBar(lifeBar, element, elementData);
 	return lifeBar;
 }
@@ -77,7 +79,6 @@ gameSurface.drawLifeBar = function (element) {
 gameSurface.addLifeBar = function (element) {
 	var lifeBar = this.drawLifeBar(element);
 	var model = element.m;
-	lifeBar.rotation.y = - model.rotation.y + this.de2ra(90);
 	model.add(lifeBar);
 }
 
@@ -87,8 +88,37 @@ gameSurface.addLifeBar = function (element) {
 */
 gameSurface.updateLifeBar = function (lifeBar, element, elementData) {
 	var lifeRatio = element.l / elementData.l;
-	lifeBar.scale.z = elementData.shape.length / 3 * this.PIXEL_BY_NODE * element.l / elementData.l;
+	lifeBar.scale.x = elementData.lifeBarWidth * lifeRatio;
 	lifeBar.material.color.setHex(this.getLifeBarColor(lifeRatio));
+}
+
+gameSurface.updateProgressBar = function (object, element, elementData) {
+	// update progress bar
+	var progressBar = null;
+	for (var i in object.children) {
+		if (object.children[i].id == 'prog') {
+			progressBar = object.children[i];
+			break;
+		}
+	}
+	if (element.q.length > 0 && element.qp > 0) {
+		if (progressBar == null) {
+			var spriteMaterial = this.materials["billboardBar"].clone();
+			var progressBar = new THREE.Sprite(spriteMaterial);
+			progressBar.scale.set(1, .6, 0);
+			progressBar.position.y = elementData.height-.5;
+			progressBar.id = 'prog';
+			object.add(progressBar);
+		}
+		progressBar.scale.x = elementData.lifeBarWidth * element.qp / 100;
+	} else {
+		// population limit reached message
+		if (element.qp >= 99 && gameContent.players[gameContent.myArmy].pop.current == gameContent.players[gameContent.myArmy].pop.max) {
+			this.showMessage(this.MESSAGES.popLimitReached);
+		} else if (progressBar != null) {
+			object.remove(progressBar);
+		}
+	}
 }
 
 
