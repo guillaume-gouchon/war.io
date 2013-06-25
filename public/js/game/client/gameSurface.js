@@ -283,6 +283,7 @@ gameSurface.init3DModels = function () {
 			}
 		}
 	}
+	gameSurface.materials["billboardBar"] = new THREE.SpriteMaterial({color: 0xFFFFFF, useScreenCoordinates:false, map:THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + "fog2.png")});
 }
 
 
@@ -351,20 +352,16 @@ gameSurface.addElement = function (element) {
 	var elementData = gameData.ELEMENTS[element.f][element.r][element.t];
 	var model = elementData.g;
 
-	var material;
-	var hiddenMaterial;
 	if (element.f == gameData.FAMILIES.land) {
-		material = this.materials[model];
-		hiddenMaterial = this.materials["HIDDEN" + model];
+		element.material = this.materials[model];
+		element.hiddenMaterial = this.materials["HIDDEN" + model];
 	} else  {
-		material = this.materials[model + this.ARMIES_COLORS[element.o]];
-		hiddenMaterial = this.materials["HIDDEN" + model + this.ARMIES_COLORS[element.o]];
+		element.material = this.materials[model + this.ARMIES_COLORS[element.o]];
+		if (element.f == gameData.FAMILIES.building)
+			element.hiddenMaterial = this.materials["HIDDEN" + model + this.ARMIES_COLORS[element.o]];
 	}
 
-	element.material = material;
-	element.hiddenMaterial = hiddenMaterial;
-
-	var object = new THREE.Mesh(this.geometries[model], material);
+	var object = new THREE.Mesh(this.geometries[model], element.material);
 	object.elementId = element.id;
 	this.setElementPosition(object, element.p.x, element.p.y);
 	if (model == 'tree.js') {
@@ -418,12 +415,12 @@ gameSurface.addElement = function (element) {
 		object.scale.y = 2;
 		object.rotation.x = this.de2ra(90);
 	}
+	gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id] = element;
 
 	element.m = object;
-	gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id] = element;
-	
-	// add life bar on top
-	//this.addLifeBar(element);
+	if (element.f != gameData.FAMILIES.land)
+		// add life bar on top
+		this.addLifeBar(element);
 
 	// fogs
 	if (rank.isAlly(gameContent.players, gameContent.myArmy, element)) {
@@ -482,38 +479,8 @@ gameSurface.updateElement = function (element) {
 			// update construction progress
 			object.position.z = (100 - element.cp) / 100 * this.BUILDING_INIT_Z;
 
-		} else if (element.q.length > 0) {
-
-			// update progress bar
-			var progressBar = null;
-			for (var i in object.children) {
-				if (object.children[i].id == 'prog') {
-					progressBar = object.children[i];
-					break;
-				}
-			}
-			if (progressBar == null) {
-				var progress = new THREE.Mesh(new THREE.CubeGeometry(this.BARS_DEPTH, this.BARS_HEIGHT, 1), new THREE.MeshBasicMaterial({color: 0xffffff}));
-				progress.id = 'prog';
-				progress.position.x = elementData.shape.length / 3 * this.PIXEL_BY_NODE / 2;
-				progress.position.y = elementData.height + 1;
-				progress.rotation.y = this.de2ra(90);
-				object.add(progress);
-			} else {
-				progressBar.scale.x = element.qp / 100 * elementData.shape.length / 3 * this.PIXEL_BY_NODE;
-				progressBar.position.x = elementData.shape.length / 3 * this.PIXEL_BY_NODE / 2 * (1 - element.qp / 100);
-				
-				// population limit reached message
-				if (element.qp >= 99 && gameContent.players[gameContent.myArmy].pop.current == gameContent.players[gameContent.myArmy].pop.max) {
-					this.showMessage(this.MESSAGES.popLimitReached);
-				}
-			}
 		} else {
-			for (var i in object.children) {
-				if (object.children[i].id == 'prog') {
-					object.remove(object.children[i]);
-				}
-			}
+			this.updateProgressBar(object, element, elementData);
 		}
 	}
 
