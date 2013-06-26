@@ -62,12 +62,21 @@ gameContent.init = function (data) {
 	for (var i in data) {
 		for (var j in data[i]) {
 			var element = data[i][j];
-			gameSurface.addElement(element);
 
-			// center camera on town hall
-			if (element.f == gameData.FAMILIES.building && element.o == this.myArmy) {
-				gameSurface.centerCameraOnElement(utils.getElementFromId(element.id));
-			}
+			if (element.sta) {// static elements
+
+				this.grid[element.p.x][element.p.y] = 1;
+				//TODO : generate terrain
+
+			} else {// dynamic elements
+
+				gameSurface.addElement(element);	
+				// center camera on town hall
+				if (element.f == gameData.FAMILIES.building && element.o == this.myArmy) {
+					gameSurface.centerCameraOnElement(utils.getElementFromId(element.id));
+				}
+
+			}		
 
 		}
 	}

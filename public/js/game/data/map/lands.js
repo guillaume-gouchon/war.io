@@ -19,5 +19,12 @@ gameData.ELEMENTS[gameData.FAMILIES.land].push(
 		ra : 3000,
 		g : 'goldmine.js',
 		image : 'gold-mine.png'
+	},
+	{	
+		name : 'Water',
+		t : 2,
+		shape : [[1]],
+		canMoveIn : false,
+		sta : true
 	}
 ]);

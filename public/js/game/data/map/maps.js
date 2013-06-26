@@ -69,7 +69,8 @@ gameData.VEGETATION_TYPES = {
 		zones : [
 			{t : gameData.ZONES.nothing, factor : 20},
 			{t : gameData.ZONES.forest, factor : 12},
-			{t : gameData.ZONES.goldmine, factor : 1}
+			{t : gameData.ZONES.goldmine, factor : 1},
+			{t : gameData.ZONES.water, factor : 1}
 		]
 	}
 }

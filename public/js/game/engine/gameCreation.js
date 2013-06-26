@@ -112,11 +112,11 @@ gameCreation.populateZone = function (game, map, from, to, zoneType) {
 		case gameData.ZONES.forest :
 			this.createForest(game, from, to);
 			break;
-		case gameData.ZONES.stonemine:
-			//this.createStoneMine(game, from, to);
-			break;
 		case gameData.ZONES.goldmine:
 			this.createGoldMine(game, map, from, to);
+			break;
+		case gameData.ZONES.water:
+			this.createWaterZone(game, map, from, to);
 			break;
 	}
 }
@@ -147,6 +147,20 @@ gameCreation.createGoldMine = function (game, map, from, to) {
 	var element = gameData.ELEMENTS[gameData.FAMILIES.land][0][1];
 	var position = this.getRandomPositionInZoneForElement(element, from, to);
 	this.addGameElement(game, new gameData.Terrain(gameData.ELEMENTS[gameData.FAMILIES.land][0][1], position.x, position.y));
+}
+
+
+/**
+*	Create a water zone.
+*	@param from : top left-handed corner
+*	@param to : bottom right-handed corner
+*/
+gameCreation.createWaterZone = function (game, map, from, to) {
+	for(var i = from.x; i < to.x; i++) {
+		for(var j = from.y; j < to.y; j++) {
+			this.addGameElement(game, new gameData.Terrain(gameData.ELEMENTS[gameData.FAMILIES.land][0][2], i, j));
+		}
+	}
 }
 
 

@@ -111,11 +111,13 @@ gameSurface.init = function () {
 	for (var i in gameData.ELEMENTS) {
 		for (var j in gameData.ELEMENTS[i]) { 
 			for (var k in gameData.ELEMENTS[i][j]) {
-				// geometry + 1 texture
-				gameSurface.stuffToBeLoaded += 3;
-				// additional textures for players colors
-				if (i != gameData.FAMILIES.land) {
-					gameSurface.stuffToBeLoaded += gameContent.players.length - 1;
+				if (gameData.ELEMENTS[i][j][k].g != null) {
+					// geometry + 1 texture
+					gameSurface.stuffToBeLoaded += 3;
+					// additional textures for players colors
+					if (i != gameData.FAMILIES.land) {
+						gameSurface.stuffToBeLoaded += gameContent.players.length - 1;
+					}
 				}
 			}
 		}
@@ -330,9 +332,11 @@ gameSurface.init3DModels = function () {
 		for (var j in gameData.ELEMENTS[i]) { 
 			for (var k in gameData.ELEMENTS[i][j]) {
 				var elementData = gameData.ELEMENTS[i][j][k];
-				if (this.geometries[elementData.g] == null) {
-					this.geometries[elementData.g] = {};
-					this.loadObject(elementData.g, i);	
+				if (elementData.g != null) {
+					if (this.geometries[elementData.g] == null) {
+						this.geometries[elementData.g] = {};
+						this.loadObject(elementData.g, i);	
+					}	
 				}
 			}
 		}
