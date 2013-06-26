@@ -466,7 +466,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 		} else if (_state === STATE.SELECTION) {
 
 			// left click = selection
-			userInput.doSelect( event.clientX, event.clientY, event.ctrlKey  );
+			userInput.doSelect( event.clientX, event.clientY, event.ctrlKey, event.shiftKey );
 
 		} else if (_state === STATE.ACTION) {
 

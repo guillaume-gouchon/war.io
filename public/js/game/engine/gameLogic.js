@@ -207,7 +207,7 @@ gameLogic.checkGameOver = function (game) {
 *	Aggressive AI.
 */
 gameLogic.protectAround = function (game, element) {
-	if ((element.mt == null || element.mt.x == null) && element.a == null && element.pa == null
+	if ((element.mt == null || element.mt.x == null) && element.a == null && element.pa.length == 0
 		&& !gameData.ELEMENTS[element.f][element.r][element.t].isBuilder 
 		&& (element.f == gameData.FAMILIES.unit || element.cp >= 100)) {
 		AI.searchForNewEnemy(game, element);

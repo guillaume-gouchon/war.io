@@ -119,11 +119,12 @@ production.gatherResources = function (game, builder, resource) {
 		//the builder is full of resources, get back resources
 		var closestTownHall = tools.getNearestStuff(game, builder, gameData.FAMILIES.building, gameData.ELEMENTS[gameData.FAMILIES.building][game.players[builder.o].r][0].t, gameData.RANKS.me, true);
 		builder.a = closestTownHall;
+		builder.pa = [resource];
 	} 
 
 	if (resource.ra == 0) {
 		//the resource is now empty, searching a new resource of the same type
-		AI.searchForNewResources(game, builder, builder, gameData.ELEMENTS[builder.pa.f][builder.pa.r][builder.pa.t].resourceType);
+		AI.searchForNewResources(game, builder, gameData.ELEMENTS[resource.f][resource.r][resource.t].resourceType);
 
 		//remove resource
 		gameCreation.removeGameElement(game, resource);
@@ -139,12 +140,12 @@ production.getBackResources = function (game, builder) {
 	game.players[builder.o].re[builder.ga.t] += builder.ga.amount;
 	stats.updateField(game, builder.o, 'resources', builder.ga.amount);
 	builder.ga = null;
-	if(builder.pa != null) {
-		if(builder.pa.ra == 0) {
+	if(builder.pa.length > 0 && builder.pa[0].f == gameData.FAMILIES.land) {
+		if(builder.pa[0].ra == 0) {
 			//gather closest resource if this one is finished
-			AI.searchForNewResources(game, builder, builder.pa, gameData.ELEMENTS[builder.pa.f][builder.pa.r][builder.pa.t].resourceType);
+			AI.searchForNewResources(game, builder, builder.pa[0], gameData.ELEMENTS[builder.pa[0].f][builder.pa[0].r][builder.pa[0].t].resourceType);
 		} else {
-			builder.a = builder.pa;
+			builder.a = builder.pa[0];
 		}
 	}
 }

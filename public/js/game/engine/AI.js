@@ -4,14 +4,14 @@ var AI = {};
 /**
 *	Search for new resources to gather.
 */
-AI.searchForNewResources = function (game, builder, fromWhere, resourceType) {
+AI.searchForNewResources = function (game, builder, resourceType) {
 	var nearestResource = tools.getNearestStuff(game, builder, gameData.FAMILIES.land, resourceType);
 	if(nearestResource != null) {
 		builder.a = nearestResource;
-		builder.pa = nearestResource;
+		builder.pa = [nearestResource];
 	} else {
 		builder.a = null;
-		builder.pa = null;
+		builder.pa = [];
 	}
 }
 

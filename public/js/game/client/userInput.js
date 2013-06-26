@@ -15,7 +15,7 @@ userInput.DOUBLE_CLICK_RADIUS_SIZE = 15;
 userInput.isChatWindowOpen = false;
 
 
-userInput.doSelect = function (x, y, isCtrlKey) {
+userInput.doSelect = function (x, y, isCtrlKey, isShiftKey) {
 
 	// the user clicked on a toolbar's button
 	if (GUI.toolbar.length > 0 && x < GUI.BUTTONS_SIZE + 10 && x > 10
@@ -29,7 +29,7 @@ userInput.doSelect = function (x, y, isCtrlKey) {
 	// the user is building something
 	else if (gameContent.building != null) {
 
-		this.tryBuildHere();
+		this.tryBuildHere(isShiftKey);
 		return false;
 
 	} 
@@ -327,15 +327,18 @@ userInput.updateMouseIcon = function (mouseX, mouseY) {
 /**
 *	The user wants to build his construction at the current position.
 */
-userInput.tryBuildHere = function () {
+userInput.tryBuildHere = function (isShiftKey) {
 	if(gameContent.building.canBeBuiltHere) {
 		soundManager.playSound(soundManager.SOUNDS_LIST.hammer);
 		// let's start the construction
 		gameManager.sendOrderToEngine(order.TYPES.buildThatHere,
 							 [gameContent.selected, gameContent.building, 
 							  gameContent.building.p.x, 
-							  gameContent.building.p.y]);
-		this.leaveConstructionMode();
+							  gameContent.building.p.y, isShiftKey]);
+		if (!isShiftKey) {
+			this.leaveConstructionMode();
+		}
+		
 	} else {
 		// cannot be built here !
 	}
@@ -358,6 +361,7 @@ userInput.dispatchUnitAction = function (x, y, isShiftKey) {
 				y : parseInt(elementUnder.point.y / gameSurface.PIXEL_BY_NODE)
 			}
 		}
+
 		this.sendOrder(destination.x, destination.y, isShiftKey);
 	}
 }

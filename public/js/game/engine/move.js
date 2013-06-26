@@ -54,7 +54,7 @@ move.moveElement = function (game, element) {
 
   			// update new position
   			element.p.x = path[0].x;
-            element.p.y = path[0].y;
+        element.p.y = path[0].y;
   			for (var i in shape) {
   				for (var j in shape[i]) {
   					if (shape[i][j] > 0) {
@@ -66,8 +66,12 @@ move.moveElement = function (game, element) {
 
       		// if element has arrived to its destination, updates its order
       		if(element.mt.x == element.p.x && element.mt.y == element.p.y) {
-      			element.mt = {x : null, y : null};
-            element.fl = gameData.ELEMENTS_FLAGS.nothing;
+            if (element.pa.length > 0) {
+              order.getNextElementOrder(element);
+            } else {
+              element.mt = {x : null, y : null};
+              element.fl = gameData.ELEMENTS_FLAGS.nothing;
+            }
       		}
       	}
     }
