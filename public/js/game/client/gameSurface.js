@@ -66,6 +66,7 @@ gameSurface.basicCubeGeometry = null;
 gameSurface.building = null;
 
 //fogs of war
+gameSurface.groundSurface = null;
 gameSurface.fogOfWarSurface = null;
 gameSurface.deepFogOfWarSurface = null;
 gameSurface.clock = null;
@@ -92,7 +93,7 @@ gameSurface.init = function () {
 	controls = new THREE.TrackballControls(camera);
 
 	// init simple fog
-	scene.fog = new THREE.Fog( 0xffffff, this.FOG_DENSITY, 600);
+	scene.fog = new THREE.Fog( 0xffffff, this.FOG_DENSITY, 1200);
 
 	// init renderer
 	renderer = new THREE.WebGLRenderer();
@@ -106,7 +107,7 @@ gameSurface.init = function () {
 	this.loader = new THREE.JSONLoader();
 
 	// count the number of stuff to be loaded
-	gameSurface.stuffToBeLoaded += 11;
+	gameSurface.stuffToBeLoaded += 10;
 	for (var i in gameData.ELEMENTS) {
 		for (var j in gameData.ELEMENTS[i]) { 
 			for (var k in gameData.ELEMENTS[i][j]) {
@@ -154,7 +155,9 @@ gameSurface.init = function () {
 	render();
 }
 
-
+var grassFogTexture;
+var grassTexture;
+var dataColor;
 /**
 *	Creates the scene.
 */
@@ -182,19 +185,69 @@ gameSurface.createScene = function () {
 	scene.add(skybox);
 
 	//generate the land
-	var landGeometry = new THREE.PlaneGeometry(2200, 2200, 64, 64);
+	var rwidth = gameContent.map.size.x, rheight = gameContent.map.size.y, rsize = rwidth * rheight;
+	dataColor = new Uint8Array(rsize * 3);
+	for ( var i = 0; i < rsize; i++ ) {
+        dataColor[i * 3] = 0;
+        dataColor[i * 3 + 1] = 0;
+        dataColor[i * 3 + 2] = 0;
+    }
+
+
 	var grassTexture  = THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'grass2.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
 	grassTexture.wrapT = grassTexture.wrapS = THREE.RepeatWrapping;
 	grassTexture.repeat.set(32,32);
-	var grassMaterial = new THREE.MeshBasicMaterial({ map: grassTexture });
+
+
+    grassFogTexture = new THREE.DataTexture( dataColor, rwidth, rheight, THREE.RGBFormat );
+        grassFogTexture.needsUpdate = true;
+
+	var attributes = {fogMap:{type: 'f', value: []}};
+	var uniforms = {
+    	tDiffuse: {type: "t", value:grassFogTexture},
+    	tGrass: {type: "t", value:grassTexture},
+    	textRepeat: {type: 'f', value: 16}
+    };
+	var grassMaterial = new THREE.ShaderMaterial({
+		transparent:true,
+        uniforms: uniforms,
+        attributes: attributes,
+        vertexShader: [
+            "// These have global scope",
+            "varying vec2 vUv;",
+
+            "void main() {",
+              "vUv = vec2(uv.y, (1.0-uv.x));",
+              "gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);",
+            "}",
+        ].join("\n"),
+        fragmentShader: [
+            "uniform sampler2D tDiffuse;",
+            "uniform sampler2D tGrass;",
+            "varying vec2 vUv;",
+            "varying vec2 vUv2;",
+            "uniform float textRepeat;",
+
+            "void main() {",
+            	"vec2 uv = vUv;",
+                "vec4 texel = texture2D( tDiffuse, uv ) * texture2D( tGrass, uv * textRepeat );",
+               "gl_FragColor = vec4(texel.rgb, 1.0);  // adjust the alpha",
+              //"gl_FragColor = vec4(vUv.x, vUv.y, 0.0, 1.0);  // adjust the alpha",
+            "}",
+        ].join("\n"),
+    });
+	//var grassMaterial = new THREE.MeshBasicMaterial({ map: grassTexture });
+	// var landGeometry = new THREE.PlaneGeometry(2200, 2200, 64, 64);
+	var landGeometry = new THREE.PlaneGeometry(1000, 1000, gameContent.map.size.x, gameContent.map.size.y);
 	var planeSurface = new THREE.Mesh(landGeometry, grassMaterial);
     planeSurface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
     planeSurface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
     planeSurface.overdraw = true;
     scene.add(planeSurface);
+    gameSurface.groundSurface = planeSurface;
 
     ///generate the fog
-	var fogGeometry = new THREE.PlaneGeometry(1000, 1000, gameContent.map.size.x, gameContent.map.size.y);
+	/*var fogGeometry = new THREE.PlaneGeometry(1000, 1000, gameContent.map.size.x, gameContent.map.size.y);
 	var fogTexture  = THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'fog.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
 	fogTexture.wrapT = fogTexture.wrapS = THREE.RepeatWrapping;
 	var fogMaterial = new THREE.MeshBasicMaterial({ map: fogTexture, transparent: true, opacity:.7 });
@@ -202,7 +255,7 @@ gameSurface.createScene = function () {
     planeSurface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
     planeSurface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
     planeSurface.position.z = 1;
-    scene.add(planeSurface);
+    //scene.add(planeSurface);
     gameSurface.fogOfWarSurface = planeSurface;
 
     //generate the deep fog
@@ -214,7 +267,7 @@ gameSurface.createScene = function () {
     planeSurface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
     planeSurface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
     planeSurface.position.z = 2;
-    scene.add(planeSurface);
+    //scene.add(planeSurface);
     gameSurface.deepFogOfWarSurface = planeSurface;
 
 
@@ -230,8 +283,9 @@ gameSurface.createScene = function () {
 		if (this.fogOfWarVerticeIndexesMatrix[verticeGamePosition.x][verticeGamePosition.y] == undefined)
 			this.fogOfWarVerticeIndexesMatrix[verticeGamePosition.x][verticeGamePosition.y] = [];
 		this.fogOfWarVerticeIndexesMatrix[verticeGamePosition.x][verticeGamePosition.y].push(i);
+		attributes.fogMap[i] = 0;
 		// this.fogOfWarVerticeIndexesMatrix[verticeGamePosition.x][verticeGamePosition.y] = i;
-	}
+	}*/
 
 	this.fogOfWarMatrix = [];
 	this.deepFogOfWarMatrix = [];
@@ -729,8 +783,8 @@ gameSurface.manageElementsVisibility = function () {
 	   				 for(var x=-vision; x<=vision; x++) {
 	        			if((squareDist = x*x+squareY) <= squareVision) {
 	        				var dist = Math.sqrt(squareDist);
-	        				if (dist > vision * .8)
-	        					val = (vision-dist) / (vision * .8);
+	        				if (dist > vision * .6)
+	        					val = (vision-dist) / (vision * .4);
 	        				else
 	        					val = 1;
 
@@ -777,40 +831,47 @@ gameSurface.manageElementsVisibility = function () {
 		}
 	}
 
-	var fogGeometry = gameSurface.fogOfWarSurface.geometry;
-	var deepFogGeometry = gameSurface.deepFogOfWarSurface.geometry;
+	//var fogGeometry = gameSurface.fogOfWarSurface.geometry;
+	//var deepFogGeometry = gameSurface.deepFogOfWarSurface.geometry;
 
 	var visible;
 	var fogChanged = false;
 	var deepFogChanged = false;
 	var i, l, z;
+	rsize = mapW * mapH;
+	var xy = 0;
 	for (var x = 0; x < mapW; x++) {
-		for (var y = 0; y < mapH; y++) {
-			visible = (visionMatrix[x] == undefined) ? 0 : visionMatrix[x][y];
+		for (var y = 0; y < mapH; y++, xy++) {
+			visible = (visionMatrix[x] === undefined) ? 0 : (visionMatrix[x][y] == undefined) ? 0 : visionMatrix[x][y];
 			if (visible != this.fogOfWarMatrix[x][y]) {
-				this.fogOfWarMatrix[x][y] = visible;
-				fogChanged = true;
-				z = (visible > 0) ? visible * this.FOG_OF_WAR_UNCOVERED_HEIGHT : 0;
+				/*z = (visible > 0) ? visible * this.FOG_OF_WAR_UNCOVERED_HEIGHT : 0;
 				if (this.fogOfWarVerticeIndexesMatrix[x][y].length == 0)
 					console.log("NO VERTICE AT " + x + "," + y);
 				for (i = 0, l=this.fogOfWarVerticeIndexesMatrix[x][y].length; i<l; i++) {
 					fogGeometry.vertices[this.fogOfWarVerticeIndexesMatrix[x][y][i]].z = z;
-				}
+				}*/
+				this.fogOfWarMatrix[x][y] = visible;
 
 				if (visible > this.deepFogOfWarMatrix[x][y]) {
 					this.deepFogOfWarMatrix[x][y] = visible;
-					deepFogChanged = true;
+					/*deepFogChanged = true;
 					for (i = 0, l=this.fogOfWarVerticeIndexesMatrix[x][y].length; i<l; i++) {
 						deepFogGeometry.vertices[this.fogOfWarVerticeIndexesMatrix[x][y][i]].z = z;
-					}
+					}*/
+				} else if (this.deepFogOfWarMatrix[x][y] != 0 && visible == 0) {
+					visible = .1;
 				}
+				fogChanged = true;
+				dataColor[xy*3] = dataColor[xy*3+1] = dataColor[xy*3+2] = Math.round(visible*255);
 			}
 		}
 	}
-	if (fogChanged)
-		fogGeometry.verticesNeedUpdate = true;
-	if (deepFogChanged)
-		deepFogGeometry.verticesNeedUpdate = true;
+	if (fogChanged) {
+	//	fogGeometry.verticesNeedUpdate = true;
+		grassFogTexture.needsUpdate = true;
+	}
+	//if (deepFogChanged)
+	//	deepFogGeometry.verticesNeedUpdate = true;
 
 }
 }
