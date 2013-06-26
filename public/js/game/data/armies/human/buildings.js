@@ -17,7 +17,7 @@ gameData.ELEMENTS[gameData.FAMILIES.building].push(
 		height: 21,
 		buttonId : 10,
 		vision : 15,
-		lifeBarWidth: 50,
+		lifeBarWidth: 50
 	},
 	{
 		name : 'House',
@@ -36,7 +36,7 @@ gameData.ELEMENTS[gameData.FAMILIES.building].push(
 		height: 12,
 		buttonId : 11,
 		vision : 15,
-		lifeBarWidth: 40,
+		lifeBarWidth: 40
 	},
 	{
 		name : 'Casern',
@@ -55,7 +55,7 @@ gameData.ELEMENTS[gameData.FAMILIES.building].push(
 		height: 18,
 		buttonId : 12,
 		vision : 15,
-		lifeBarWidth: 40,
+		lifeBarWidth: 40
 	},
 	{
 		name : 'Defense Tower',
@@ -78,6 +78,6 @@ gameData.ELEMENTS[gameData.FAMILIES.building].push(
 		attack : 6, 
 		weaponType : fightLogic.WEAPON_TYPES.piercing,
 		range : 20,
-		lifeBarWidth: 30,
+		lifeBarWidth: 30
 	}
 ]);

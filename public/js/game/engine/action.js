@@ -22,9 +22,13 @@ action.doTheBuild = function (game, element, building) {
 			production.repairBuilding(game, building);
 			element.fl = gameData.ELEMENTS_FLAGS.building;
 		} else {
-			// building construction is over
-			element.a = null;
-			element.fl = gameData.ELEMENTS_FLAGS.nothing;
+			// building construction / repairing is over
+			if (element.pa.length > 0) {
+				order.getNextElementOrder(element);
+			} else {
+				element.a = null;
+				element.fl = gameData.ELEMENTS_FLAGS.nothing;
+			}
 		}
 
 	}

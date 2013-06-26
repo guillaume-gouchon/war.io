@@ -15,7 +15,7 @@ userInput.DOUBLE_CLICK_RADIUS_SIZE = 15;
 userInput.isChatWindowOpen = false;
 
 
-userInput.doSelect = function (x, y) {
+userInput.doSelect = function (x, y, isCtrlKey, isShiftKey) {
 
 	// the user clicked on a toolbar's button
 	if (GUI.toolbar.length > 0 && x < GUI.BUTTONS_SIZE + 10 && x > 10
@@ -29,7 +29,7 @@ userInput.doSelect = function (x, y) {
 	// the user is building something
 	else if (gameContent.building != null) {
 
-		this.tryBuildHere();
+		this.tryBuildHere(isShiftKey);
 		return false;
 
 	} 
@@ -44,10 +44,12 @@ userInput.doSelect = function (x, y) {
 
 		this.leaveConstructionMode();
 
-		//reset selected array
-		gameSurface.unselectAll();
-		gameContent.selected = [];
-
+		if (!isCtrlKey) {
+			//reset selected array
+			gameSurface.unselectAll();
+			gameContent.selected = [];	
+		}
+		
 		//reset the selection rectangle
 		gameContent.selectionRectangle = [];
 		gameSurface.updateSelectionRectangle(-1, -1, -1, -1);
@@ -59,17 +61,34 @@ userInput.doSelect = function (x, y) {
 		if (intersect != null) {
 
 			if (intersect.object.elementId != null) {
-				gameContent.selected.push(intersect.object.elementId);
-				gameSurface.selectElement(intersect.object.elementId);
+				if (isCtrlKey && gameContent.selected.indexOf(intersect.object.elementId) > -1) {
+					gameContent.selected.splice(gameContent.selected.indexOf(intersect.object.elementId), 1);
+					gameSurface.unselectElement(intersect.object.elementId);
+				} else {
+					gameContent.selected.push(intersect.object.elementId);
+					gameSurface.selectElement(intersect.object.elementId);
+				}
 			}
 		}
+
+		if (gameContent.selected.length > 1) {
+			for (var i in gameContent.selected) {
+				var sId = '' + gameContent.selected[i];
+				if (parseInt(sId.charAt(1)) == gameData.FAMILIES.land) {
+					gameSurface.unselectElement(gameContent.selected[i]);
+					gameContent.selected.splice(i, 1);
+					break; 
+				}
+			}
+		}
+
 	  	return true;
 
 	}
 }
 
 
-userInput.doAction = function (x, y) {
+userInput.doAction = function (x, y, isShiftKey) {
 
 	if (x > window.innerWidth - GUI.MINIMAP_SIZE && y > window.innerHeight - GUI.MINIMAP_SIZE) { return false; }
 
@@ -80,7 +99,7 @@ userInput.doAction = function (x, y) {
 		var selected = utils.getElementFromId(gameContent.selected[0]);
 		if (rank.isAlly(gameContent.players, gameContent.myArmy, selected)
 			&& (selected.f == gameData.FAMILIES.unit || selected.f == gameData.FAMILIES.building)) {
-			this.dispatchUnitAction(x, y);
+			this.dispatchUnitAction(x, y, isShiftKey);
 		}
 	}
 
@@ -308,15 +327,18 @@ userInput.updateMouseIcon = function (mouseX, mouseY) {
 /**
 *	The user wants to build his construction at the current position.
 */
-userInput.tryBuildHere = function () {
+userInput.tryBuildHere = function (isShiftKey) {
 	if(gameContent.building.canBeBuiltHere) {
 		soundManager.playSound(soundManager.SOUNDS_LIST.hammer);
 		// let's start the construction
 		gameManager.sendOrderToEngine(order.TYPES.buildThatHere,
 							 [gameContent.selected, gameContent.building, 
 							  gameContent.building.p.x, 
-							  gameContent.building.p.y]);
-		this.leaveConstructionMode();
+							  gameContent.building.p.y, isShiftKey]);
+		if (!isShiftKey) {
+			this.leaveConstructionMode();
+		}
+		
 	} else {
 		// cannot be built here !
 	}
@@ -326,7 +348,7 @@ userInput.tryBuildHere = function () {
 /**
 *	Dispatches the action according to the order.
 */
-userInput.dispatchUnitAction = function (x, y) {
+userInput.dispatchUnitAction = function (x, y, isShiftKey) {
 	var destination;
 	var elementUnder = gameSurface.getFirstIntersectObject(x, y);
 	if (elementUnder != null) {
@@ -339,7 +361,8 @@ userInput.dispatchUnitAction = function (x, y) {
 				y : parseInt(elementUnder.point.y / gameSurface.PIXEL_BY_NODE)
 			}
 		}
-		this.sendOrder(destination.x, destination.y);
+
+		this.sendOrder(destination.x, destination.y, isShiftKey);
 	}
 }
 
@@ -347,10 +370,10 @@ userInput.dispatchUnitAction = function (x, y) {
 /**
 *	Send order to the engine.
 */
-userInput.sendOrder = function (x, y) {
+userInput.sendOrder = function (x, y, isMultipleOrders) {
 	if (x >= 0 && y >= 0
 		&& x < gameContent.map.size.x && y < gameContent.map.size.y) {
-		gameManager.sendOrderToEngine(order.TYPES.action, [gameContent.selected, x, y]);
+		gameManager.sendOrderToEngine(order.TYPES.action, [gameContent.selected, x, y, isMultipleOrders]);
 	}
 }
 
@@ -359,14 +382,17 @@ userInput.sendOrder = function (x, y) {
 * 	The user is drawing a selection rectangle to select some elements.
 * 	@param (x, y) : current coordinates of the mouse
 */
-userInput.drawSelectionRectangle = function (x, y) {
+userInput.drawSelectionRectangle = function (x, y, isCtrlKey) {
 	if(gameContent.selectionRectangle.length > 0) {
 
 			// unselect the previous selected elements
-			gameSurface.unselectAll();
-			gameContent.selected = [];
+			if (!isCtrlKey) {
+				gameSurface.unselectAll();
+				gameContent.selected = [];
+			}
 
-			var unitSelected = false;
+			var nonLandsSelected = false;
+
 
 			gameSurface.updateSelectionRectangle(gameContent.selectionRectangle[0], gameContent.selectionRectangle[1], x, y);
 
@@ -384,24 +410,43 @@ userInput.drawSelectionRectangle = function (x, y) {
 					if (gameContent.grid[i][j] > 0) {
 						var element = utils.getElementFromId(gameContent.grid[i][j]);
 						if(rank.isAlly(gameContent.players, gameContent.myArmy, element)) {
-					  		// select the elements
-					  		gameContent.selected.push(element.id);
-				  	  		gameSurface.selectElement(element.id);
 
-				  	  		if(element.f == gameData.FAMILIES.unit) {
-					  			unitSelected = true;
-					  		}
+							if (!isCtrlKey || gameContent.selected.indexOf(element.id) == -1) {
+						  		// select the elements
+						  		gameContent.selected.push(element.id);
+					  	  		gameSurface.selectElement(element.id);
+					  	  		nonLandsSelected = true;
+				  	  		}
+
 					  	}
 					}
 				}
 			}
 
 			// unselect the buildings if one or more units are selected
-			if(unitSelected) {
+			for (var i in gameContent.selected) {
+				var sId = '' + gameContent.selected[i];
+				if (sId.charAt(1) == gameData.FAMILIES.unit) {
+					
+					var len = gameContent.selected.length;
+					while(len--) {
+						var element = utils.getElementFromId(gameContent.selected[len]);
+						if(element.f == gameData.FAMILIES.building) {
+							gameContent.selected.splice(len, 1);
+					  		gameSurface.unselectElement(element.id);
+						}
+					}
+
+					break;
+				}
+			}
+
+			// unselect the lands if one or more elements are selected
+			if (nonLandsSelected) {
 				var len = gameContent.selected.length;
 				while(len--) {
 					var element = utils.getElementFromId(gameContent.selected[len]);
-					if(element.f == gameData.FAMILIES.building) {
+					if(element.f == gameData.FAMILIES.land) {
 						gameContent.selected.splice(len, 1);
 				  		gameSurface.unselectElement(element.id);
 					}

@@ -466,12 +466,12 @@ THREE.TrackballControls = function ( object, domElement ) {
 		} else if (_state === STATE.SELECTION) {
 
 			// left click = selection
-			userInput.doSelect( event.clientX, event.clientY );
+			userInput.doSelect( event.clientX, event.clientY, event.ctrlKey, event.shiftKey );
 
 		} else if (_state === STATE.ACTION) {
 
 			// right click = action
-			userInput.doAction( event.clientX, event.clientY );
+			userInput.doAction( event.clientX, event.clientY, event.shiftKey );
 
 		}
 
@@ -503,7 +503,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 		} else if (_state === STATE.SELECTION) {
 
 			// draw selection rectangle
-			userInput.drawSelectionRectangle(event.clientX, event.clientY);
+			userInput.drawSelectionRectangle(event.clientX, event.clientY, event.ctrlKey );
 
 		} else {
 

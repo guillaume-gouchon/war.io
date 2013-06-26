@@ -18,10 +18,10 @@ order.TYPES = {
 order.dispatchReceivedOrder = function (game, type, params) {
 	switch (type) {
 		case 0 :
-			this.convertDestinationToOrder(game, params[0], params[1], params[2]);
+			this.convertDestinationToOrder(game, params[0], params[1], params[2], params[3]);
 			break;
 		case 1 :
-			this.buildThatHere(game, params[0], params[1], params[2], params[3]);
+			this.buildThatHere(game, params[0], params[1], params[2], params[3], params[4]);
 			break;
 		case 2 :
 			this.buy(game, params[0], params[1]);
@@ -32,7 +32,7 @@ order.dispatchReceivedOrder = function (game, type, params) {
 		case 4 :
 			this.receiveChatMessage(game, params[0], params[1]);
 			break;
-		case 5 :
+		case 5 :	
 			this.updateDiplomacy(game, params[0], params[1], params[2]);
 			break;
 		case 6 :
@@ -42,12 +42,12 @@ order.dispatchReceivedOrder = function (game, type, params) {
 }
 
 
-order.buildThatHere = function (game, buildersIds, building, x, y) {
+order.buildThatHere = function (game, buildersIds, building, x, y, isMultipleOrder) {
 	var builders = tools.getGameElementsFromIds(game, buildersIds);
 	var building = new gameData.Building(building, x, y, builders[0].o, false);
 	production.startConstruction(game, building);
 	//give order to builders
-	this.build(game, builders, building);
+	this.build(game, builders, building, isMultipleOrder);
 }
 
 
@@ -78,29 +78,38 @@ order.updateRallyingPoint = function (game, buildings, x, y) {
 order.attack = function (game, elements, target) {
 	for(var i in elements) {
 		var element = elements[i];
-		element.pa = null;
 		element.a = target;
+		element.pa = [];
 		tools.addUniqueElementToArray(game.modified, element);
 	}
 }
 
 
-order.build = function (game, builders, building) {
+order.build = function (game, builders, building, isMultipleOrder) {
 	for(var i in builders) {
 		var element = builders[i];
-		element.pa = null;
-		element.a = building;
+		if (isMultipleOrder && element.a != null && (element.pa.length == 0 || element.pa[0].f == gameData.FAMILIES.building || element.pa[0].x != null)) {
+			element.pa.push(building);
+		} else {
+			element.a = building;
+			element.pa = [];
+		}
 		tools.addUniqueElementToArray(game.modified, element);
 	}
 }
 
 
-order.move = function (game, units, x, y) {
+order.move = function (game, units, x, y, isMultipleOrder) {
 	for(var i in units) {
 		var element = units[i];
-		element.pa = null;
-		element.a = null;
-		element.mt = {x : x, y : y};
+		if (isMultipleOrder && element.mt != null && element.mt.x != null 
+			&& (element.pa.length == 0 || element.pa[0].f == gameData.FAMILIES.building || element.pa[0].x != null)) {
+			element.pa.push({x : x, y : y});
+		} else {
+			element.a = null;
+			element.pa = [];
+			element.mt = {x : x, y : y};
+		}
 		tools.addUniqueElementToArray(game.modified, element);
 	}
 }
@@ -110,7 +119,7 @@ order.gather = function (game, units, land) {
 	for(var i in units) {
 		var element = units[i];
 		element.a = land;
-		element.pa = land;
+		element.pa = [land];
 		tools.addUniqueElementToArray(game.modified, element);
 	}
 }
@@ -134,7 +143,7 @@ order.surrender = function (game, army) {
 /**
 *	Dispatches the user action to the correct order.
 */
-order.convertDestinationToOrder = function (game, elementsIds, x, y) {
+order.convertDestinationToOrder = function (game, elementsIds, x, y, isMultipleOrder) {
 	var elements = tools.getGameElementsFromIds(game, elementsIds);
 	if (elements.length == 0 || game.grid[x] == null || game.grid[x][y] == null) { return; }
 
@@ -164,10 +173,10 @@ order.convertDestinationToOrder = function (game, elementsIds, x, y) {
 						var e = elements[i];
 						if(gameData.ELEMENTS[e.f][e.r][e.t].isBuilder) {
 							//builders are sent to build / repair
-							order.build(game, [e], target[0]);
+							order.build(game, [e], target[0], isMultipleOrder);
 						} else {
 							//non-builders are given a move order
-							order.move(game, [e], x, y);
+							order.move(game, [e], x, y, isMultipleOrder);
 						}
 					}
 					return;
@@ -187,7 +196,7 @@ order.convertDestinationToOrder = function (game, elementsIds, x, y) {
 						e.a = target[0];
 					} else {
 						//non-builders are given a move order
-						order.move(game, [e], x, y);
+						order.move(game, [e], x, y, isMultipleOrder);
 					}
 				}
 				return;
@@ -195,7 +204,19 @@ order.convertDestinationToOrder = function (game, elementsIds, x, y) {
 		}
 
 		//if no target, just give a move order
-		order.move(game, elements, x, y);
+		order.move(game, elements, x, y, isMultipleOrder);
 	}
 	
+}
+
+
+order.getNextElementOrder = function (element) {
+	if (element.pa[0].x != null) {
+		console.log(element.pa[0]);
+		element.mt = element.pa[0];
+	} else {
+		console.log('new building');
+		element.a = element.pa[0];	
+	}
+	element.pa.splice(0, 1);
 }

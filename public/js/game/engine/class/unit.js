@@ -15,18 +15,19 @@ gameData.Unit = function (unit, x, y, owner) {
 	this.a = null;// action
 	this.fr = 0;// frags number
 	this.ga = null;// gathering amount
-	this.pa = null;// patrol action (second action)
+	this.pa = [];// patrol action (second action)
 	this.l = unit.l;// life
 
 	// fixes the circular structure issue with JSON.stringify
 	this.toJSON = function () {
-		var action = null, patrol = null;
+		var action = null, patrol = [];
 		if (this.a != null) {
 			action = tools.clone(this.a);
 		}
-		if (this.pa != null) {
-			patrol = tools.clone(this.pa);
+		for (var i in this.pa) {
+			patrol.push(tools.clone(this.pa[i]));
 		}
+		
 		return {
 			id: this.id,
 			f: this.f,

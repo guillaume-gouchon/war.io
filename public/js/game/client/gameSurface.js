@@ -476,12 +476,13 @@ gameSurface.addElement = function (element) {
 
 	// adds new element in the logic
 	if (gameManager.isOfflineGame) {
-		gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id] = element.toJSON();
-		gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id].m = object;
+		gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id] = element.toJSON();	
 	} else {
-	 	gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id] = element;
-		element.m = object;
+		gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id] = element;
 	}
+	
+	gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id].m = object;
+	 	
 
 	if (element.f != gameData.FAMILIES.land) {
 		// add life bar on top
@@ -598,7 +599,11 @@ gameSurface.updateElement = function (element) {
 
 	var visible = gameElement.visible;
 	var modelVisible = gameElement.modelVisible;
-	gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id] = element.toJSON();
+	if (gameManager.isOfflineGame) {
+		gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id] = element.toJSON();	
+	} else {
+		gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id] = element;	
+	}
 	gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id].m = object;
 	gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id].visible = visible;
 	gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id].modelVisible = modelVisible;
