@@ -475,7 +475,12 @@ gameSurface.addElement = function (element) {
 	}
 
 	// adds new element in the logic
-	gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id] = element.toJSON();
+	if (gameManager.isOfflineGame) {
+		gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id] = element.toJSON();	
+	} else {
+		gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id] = element;
+	}
+	
 	gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id].m = object;
 	 	
 
