@@ -475,13 +475,9 @@ gameSurface.addElement = function (element) {
 	}
 
 	// adds new element in the logic
-	if (gameManager.isOfflineGame) {
-		gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id] = element.toJSON();
-		gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id].m = object;
-	} else {
-	 	gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id] = element;
-		element.m = object;
-	}
+	gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id] = element.toJSON();
+	gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id].m = object;
+	 	
 
 	if (element.f != gameData.FAMILIES.land) {
 		// add life bar on top
