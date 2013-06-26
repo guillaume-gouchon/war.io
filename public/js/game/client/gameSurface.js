@@ -592,8 +592,16 @@ gameSurface.updateElement = function (element) {
 		}
 	}
 
+	// TODO this is not the right way to do it
+	// we should copy the attributes from element to gameElement
+	// otherwise we lose all the local-only attributes on each update
+
+	var visible = gameElement.visible;
+	var modelVisible = gameElement.modelVisible;
 	gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id] = element.toJSON();
 	gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id].m = object;
+	gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id].visible = visible;
+	gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id].m = modelVisible;
 }
 
 
@@ -783,7 +791,7 @@ gameSurface.manageElementsVisibility = function () {
 	   				 for(var x=-vision; x<=vision; x++) {
 	        			if((squareDist = x*x+squareY) <= squareVision) {
 	        				var dist = Math.sqrt(squareDist);
-	        				if (dist > vision * .6)
+	        				if (dist >= vision * .6)
 	        					val = (vision-dist) / (vision * .4);
 	        				else
 	        					val = 1;
