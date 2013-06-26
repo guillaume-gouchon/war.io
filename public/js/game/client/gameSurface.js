@@ -601,7 +601,7 @@ gameSurface.updateElement = function (element) {
 	gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id] = element.toJSON();
 	gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id].m = object;
 	gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id].visible = visible;
-	gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id].m = modelVisible;
+	gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id].modelVisible = modelVisible;
 }
 
 
