@@ -12,7 +12,7 @@ GUI.toolbar = [];
 *	CONSTANTS
 */
 GUI.IMAGES_PATH = 'img/GUI/';
-GUI.MINIMAP_SIZE = 140;
+GUI.MINIMAP_SIZE = 200;
 GUI.BUTTONS_SIZE = 80;
 GUI.TOOLBAR_BUTTONS = {
 	build : {buttonId : 1000, image : 'build.png', isEnabled : true, name: 'Build'},
