@@ -19,6 +19,8 @@ gameData.Building = function (building, x, y, owner, isBuilt) {
 	this.fr = 0;// frags
 	this.l = building.l;// life
 
+	this.a = null;// action
+
 	this.toJSON = function () {
 		return this;
 	}

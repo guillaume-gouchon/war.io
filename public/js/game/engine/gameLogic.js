@@ -47,7 +47,7 @@ gameLogic.update = function (game) {
 		}
 		
 		this.updateBuildings(game, element);
-		if (gameData.ELEMENTS[element.f][element.r][element.t].attack != null) {
+		if (tools.getElementData(element).attack != null) {
 			this.resolveActions(game, element);
 			this.protectAround(game, element);
 		}
@@ -97,8 +97,8 @@ gameLogic.addNewBuildings = function (game) {
 *	Updates moving units' positions.
 */
 gameLogic.updateMoves = function (game, element) {
-	if(element.mt != null && element.mt.x != null) {
-		move.moveElement(game, element);
+	if(element.a != null && element.a.moveTo != null) {
+		move.moveElement(game, element, element.a.moveTo);
 		element.fl = gameData.ELEMENTS_FLAGS.moving;
 		tools.addUniqueElementToArray(game.modified, element);
 	}
@@ -110,48 +110,70 @@ gameLogic.updateMoves = function (game, element) {
 *	and if close enough, resolve the action (build, fight...).
 */
 gameLogic.resolveActions = function (game, element) {
-	if (element.a != null) {
-		var elementData = gameData.ELEMENTS[element.f][element.r][element.t]
-		var distance = tools.getElementsDistance(element, element.a);
-		//is close enough ?
-		if (distance <= 1) {
-			//stop moving
-			element.mt = {x : null, y : null};
-			element.fl = gameData.ELEMENTS_FLAGS.nothing;
+	if (element.a != null && element.a.id != null) {
 
-			if (elementData.isBuilder && element.a.f == gameData.FAMILIES.building
-				&& rank.isAlly(game.players, element.o, element.a)) {
-				if(element.a.cp < 100) {
-					//build
-					action.doTheBuild(game, element, element.a);	
-				} else if(element.ga != null) {
-					//come back with some resources
-					production.getBackResources(game, element);
-				} else {
-					//repair
-					action.doTheBuild(game, element, element.a);
+		var target = tools.getElementById(game, element.a.id);
+
+		if (target != null) {
+
+			var elementData = tools.getElementData(element);
+			var distance = tools.getElementsDistance(element, target);
+
+			// is close enough ?
+			if (distance == 1) {
+
+				// stop moving
+				element.a.moveTo = null;
+				element.fl = gameData.ELEMENTS_FLAGS.nothing;
+
+				if (elementData.isBuilder && target.f == gameData.FAMILIES.building && rank.isAlly(game.players, element.o, target)) {
+
+					if(element.ga != null) {
+						
+						// come back with some resources
+						production.getBackResources(game, element);
+
+					} else {
+
+						// build / repair
+						action.doTheBuild(game, element, target);
+
+					}
+
+				} else if (elementData.isBuilder && target.f == gameData.FAMILIES.land) {
+
+					// gathering resources
+					action.doTheGathering(game, element, target);
+
+				} else if (rank.isEnemy(game.players, element.o, target)) {
+
+					// attack
+					action.doTheAttack(game, element, target);
+
 				}
-			} else if (elementData.isBuilder && element.a.f == gameData.FAMILIES.land) {
-				//gathering resources
-				action.doTheGathering(game, element, element.a);
-			} else if (rank.isEnemy(game.players, element.o, element.a)) {
-				//attack
-				action.doTheAttack(game, element, element.a);
-			}
-		} else if (distance <= elementData.range) {
-			if (rank.isEnemy(game.players, element.o, element.a)) {
-				//attack
-				action.doTheAttack(game, element, element.a);
 
-				//stop moving
-				element.mt = {x : null, y : null};
+			} else if (distance <= elementData.range) {
+
+				if (rank.isEnemy(game.players, element.o, target)) {
+					
+					// stop moving
+					element.a.moveTo = null;
+
+					// attack
+					action.doTheAttack(game, element, target);
+
+				}
+			} else {
+
+				// move closer in order to do the action
+				var closest = tools.getClosestPart(element, target);
+				element.a.moveTo = {x : closest.x, y : closest.y};
 			}
-		} else {
-			//move closer in order to do the action
-			var closest = tools.getClosestPart(element, element.a);
-			element.mt = {x : closest.x, y : closest.y};
+
+			tools.addUniqueElementToArray(game.modified, element);
+
 		}
-		tools.addUniqueElementToArray(game.modified, element);
+
 	}
 }
 
@@ -207,9 +229,11 @@ gameLogic.checkGameOver = function (game) {
 *	Aggressive AI.
 */
 gameLogic.protectAround = function (game, element) {
-	if ((element.mt == null || element.mt.x == null) && element.a == null && element.pa.length == 0
-		&& !gameData.ELEMENTS[element.f][element.r][element.t].isBuilder 
-		&& (element.f == gameData.FAMILIES.unit || element.cp >= 100)) {
+	var elementData = tools.getElementData(element);
+	if (element.a == null && !elementData.isBuilder && (element.f == gameData.FAMILIES.unit || element.cp >= 100 && elementData.attack != null)) {
+	
 		AI.searchForNewEnemy(game, element);
+	
 	}
+
 }

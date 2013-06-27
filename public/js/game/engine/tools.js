@@ -265,3 +265,19 @@ tools.searchInTiles = function (game, tiles, fromElement, family, type, rank) {
 	
 	return null;
 }
+
+
+/**
+*	Returns the game element with the chosen id.
+*/
+tools.getElementById = function (game, id) {
+	return game.gameElements[Object.keys(gameData.FAMILIES)[('' + id)[1]]][id];
+}
+
+
+/**
+*	Returns element data.
+*/
+tools.getElementData = function (element) {
+	return gameData.ELEMENTS[element.f][element.r][element.t];
+}
