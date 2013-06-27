@@ -86,7 +86,7 @@ gameManager.initOfflineGame = function (gameInitData) {
 	gameContent.players.push(new gameData.Player(0, 0, gameInitData.army));
 	gameContent.players[0].n = this.playerName;
 	for (var i = 1; i < this.offlineNbPlayers; i++) {
-		gameContent.players.push(new gameData.Player(0, i, 0));
+		gameContent.players.push(new gameData.Player(0, i, 0, true));
 		gameContent.players[i].n = 'AI';
 	}
   	gameContent.map = new gameData.Map(gameData.MAP_TYPES[gameInitData.mapType],
