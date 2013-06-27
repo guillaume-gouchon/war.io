@@ -66,14 +66,19 @@ gameSurface.basicCubeGeometry = null;
 gameSurface.building = null;
 
 //fogs of war
-gameSurface.groundSurface = null;
-gameSurface.fogOfWarSurface = null;
-gameSurface.deepFogOfWarSurface = null;
 gameSurface.clock = null;
 gameSurface.elementsMemorizedInFog = [];
 gameSurface.fogOfWarMatrix = null;
 gameSurface.deepFogOfWarMatrix = null;
-gameSurface.fogOfWarVerticeIndexesMatrix = null;
+
+gameSurface.fogOfWarGroundTexture;
+gameSurface.fogOfWarDataColor;
+
+gameSurface.mapTexture;
+gameSurface.mapDataColor;
+gameSurface.minimapCanvas;
+gameSurface.minimapContext;
+gameSurface.minimapData;
 
 
 /**
@@ -127,6 +132,19 @@ gameSurface.init = function () {
 	this.createScene();
 	this.init3DModels();
 
+	this.minimapCanvas = document.createElement("canvas");
+	this.minimapCanvas.width = gameContent.map.size.x;
+	this.minimapCanvas.style.width = GUI.MINIMAP_SIZE + "px";
+	this.minimapCanvas.height = gameContent.map.size.y;
+	this.minimapCanvas.style.height = GUI.MINIMAP_SIZE + "px";
+	this.minimapCanvas.style.position = 'absolute';
+	this.minimapCanvas.style.bottom = '0px';
+	this.minimapCanvas.style.right = '0px';
+	this.minimapCanvas.style.zIndex = 101;
+	this.minimapContext = this.minimapCanvas.getContext('2d');
+	document.body.appendChild(this.minimapCanvas);
+	this.minimapData = this.minimapContext.getImageData(0,0,this.minimapCanvas.width, this.minimapCanvas.height);
+
 	// add listeners
 	window.addEventListener('resize', this.onWindowResize, false);
 
@@ -146,6 +164,7 @@ gameSurface.init = function () {
 		// update GUI
 		if (gameSurface.iteration % (1 / GUI.UPDATE_FREQUENCY) == 0) {
 			GUI.update();
+			gameSurface.updateMinimap();
 		}
 
 		renderer.render(scene, camera);
@@ -155,9 +174,6 @@ gameSurface.init = function () {
 	render();
 }
 
-var grassFogTexture;
-var grassTexture;
-var dataColor;
 /**
 *	Creates the scene.
 */
@@ -186,12 +202,12 @@ gameSurface.createScene = function () {
 
 	//generate the land
 	var rwidth = gameContent.map.size.x, rheight = gameContent.map.size.y, rsize = rwidth * rheight;
-	dataColor = new Uint8Array(rsize * 3);
-	for ( var i = 0; i < rsize; i++ ) {
+	this.fogOfWarDataColor = new Uint8Array(rsize * 3);
+	/*for ( var i = 0; i < rsize; i++ ) {
         dataColor[i * 3] = 0;
         dataColor[i * 3 + 1] = 0;
         dataColor[i * 3 + 2] = 0;
-    }
+    }*/
 
 
 	var grassTexture  = THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'grass2.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
@@ -199,12 +215,12 @@ gameSurface.createScene = function () {
 	grassTexture.repeat.set(32,32);
 
 
-    grassFogTexture = new THREE.DataTexture( dataColor, rwidth, rheight, THREE.RGBFormat );
-        grassFogTexture.needsUpdate = true;
+    this.fogOfWarGroundTexture = new THREE.DataTexture( this.fogOfWarDataColor, rwidth, rheight, THREE.RGBFormat );
+    this.fogOfWarGroundTexture.needsUpdate = true;
 
 	var attributes = {fogMap:{type: 'f', value: []}};
 	var uniforms = {
-    	tDiffuse: {type: "t", value:grassFogTexture},
+    	tFog: {type: "t", value: this.fogOfWarGroundTexture},
     	tGrass: {type: "t", value:grassTexture},
     	textRepeat: {type: 'f', value: 16}
     };
@@ -222,7 +238,7 @@ gameSurface.createScene = function () {
             "}",
         ].join("\n"),
         fragmentShader: [
-            "uniform sampler2D tDiffuse;",
+            "uniform sampler2D tFog;",
             "uniform sampler2D tGrass;",
             "varying vec2 vUv;",
             "varying vec2 vUv2;",
@@ -230,9 +246,8 @@ gameSurface.createScene = function () {
 
             "void main() {",
             	"vec2 uv = vUv;",
-                "vec4 texel = texture2D( tDiffuse, uv ) * texture2D( tGrass, uv * textRepeat );",
+                "vec4 texel = texture2D( tFog, uv ) * texture2D( tGrass, uv * textRepeat );",
                "gl_FragColor = vec4(texel.rgb, 1.0);  // adjust the alpha",
-              //"gl_FragColor = vec4(vUv.x, vUv.y, 0.0, 1.0);  // adjust the alpha",
             "}",
         ].join("\n"),
     });
@@ -244,48 +259,6 @@ gameSurface.createScene = function () {
     planeSurface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
     planeSurface.overdraw = true;
     scene.add(planeSurface);
-    gameSurface.groundSurface = planeSurface;
-
-    ///generate the fog
-	/*var fogGeometry = new THREE.PlaneGeometry(1000, 1000, gameContent.map.size.x, gameContent.map.size.y);
-	var fogTexture  = THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'fog.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
-	fogTexture.wrapT = fogTexture.wrapS = THREE.RepeatWrapping;
-	var fogMaterial = new THREE.MeshBasicMaterial({ map: fogTexture, transparent: true, opacity:.7 });
-	var planeSurface = new THREE.Mesh(fogGeometry, fogMaterial);
-    planeSurface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
-    planeSurface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
-    planeSurface.position.z = 1;
-    //scene.add(planeSurface);
-    gameSurface.fogOfWarSurface = planeSurface;
-
-    //generate the deep fog
-	var fogGeometry = new THREE.PlaneGeometry(1000, 1000, gameContent.map.size.x, gameContent.map.size.y);
-	//var fogTexture  = THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'fog.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
-	//fogTexture.wrapT = fogTexture.wrapS = THREE.RepeatWrapping;
-	var fogMaterial = new THREE.MeshBasicMaterial({ map: fogTexture });
-	var planeSurface = new THREE.Mesh(fogGeometry, fogMaterial);
-    planeSurface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
-    planeSurface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
-    planeSurface.position.z = 2;
-    //scene.add(planeSurface);
-    gameSurface.deepFogOfWarSurface = planeSurface;
-
-
-    // link vertices of the fog meshes to the game map coordinates
-    // used to update quickly the mesh according to the visionmatrix
-    this.fogOfWarVerticeIndexesMatrix = [];
-    for ( var i = 0, l = fogGeometry.vertices.length; i < l; i ++ ) {
-    	// TODO use the world to game coordinates method when it works properly
-    	var verticeGamePosition = {x:Math.round((fogGeometry.vertices[i].x / gameSurface.PIXEL_BY_NODE + gameContent.map.size.x/2)),
-    		y:Math.round((fogGeometry.vertices[i].y / gameSurface.PIXEL_BY_NODE + gameContent.map.size.y/2))};
-		if (this.fogOfWarVerticeIndexesMatrix[verticeGamePosition.x] == undefined)
-			this.fogOfWarVerticeIndexesMatrix[verticeGamePosition.x] = [];
-		if (this.fogOfWarVerticeIndexesMatrix[verticeGamePosition.x][verticeGamePosition.y] == undefined)
-			this.fogOfWarVerticeIndexesMatrix[verticeGamePosition.x][verticeGamePosition.y] = [];
-		this.fogOfWarVerticeIndexesMatrix[verticeGamePosition.x][verticeGamePosition.y].push(i);
-		attributes.fogMap[i] = 0;
-		// this.fogOfWarVerticeIndexesMatrix[verticeGamePosition.x][verticeGamePosition.y] = i;
-	}*/
 
 	this.fogOfWarMatrix = [];
 	this.deepFogOfWarMatrix = [];
@@ -320,7 +293,7 @@ gameSurface.createScene = function () {
 		}
 	}
 	this.building.visible = false;
-	scene.add(this.building);	
+	scene.add(this.building);
 }
 
 
@@ -668,8 +641,6 @@ gameSurface.getFirstIntersectObject = function (x, y) {
 	this.projector.unprojectVector( vector, camera );
 	var raycaster = new THREE.Raycaster( camera.position, vector.sub( camera.position ).normalize() );
 	var intersects = raycaster.intersectObjects(scene.children);
-	while (intersects[0] != undefined && (intersects[0] == gameSurface.fogOfWarSurface || intersects[0] == gameSurface.deepFogOfWarSurface))
-		intersects.unshift();
 	if ( intersects.length > 0 ) {
 		return intersects[0];	
 	}
@@ -791,6 +762,9 @@ gameSurface.manageElementsVisibility = function () {
 				// pythagorean vision
 				var squareVision = vision*vision;
 				var x,y,squareY,val,squareDist;
+				// calculate the fog coefficient around the current unit
+				// the position is fully discovered if it is less than 0.6*unitVision away
+				// it fades towards fully undiscovered if it is farther
 				for(var y=-vision; y<=vision; y++) {
 					squareY = y*y;
 	   				 for(var x=-vision; x<=vision; x++) {
@@ -844,51 +818,99 @@ gameSurface.manageElementsVisibility = function () {
 		}
 	}
 
-	//var fogGeometry = gameSurface.fogOfWarSurface.geometry;
-	//var deepFogGeometry = gameSurface.deepFogOfWarSurface.geometry;
 
 	var visible;
 	var fogChanged = false;
-	var deepFogChanged = false;
-	var i, l, z;
-	rsize = mapW * mapH;
-	var xy = 0;
+	// r,g,b positions in the texture data matrix. increase each by 3 to get the next pixel
+	var xy0 = 0, xy1 = 1, xy2 = 2;
 	for (var x = 0; x < mapW; x++) {
-		for (var y = 0; y < mapH; y++, xy++) {
+		for (var y = 0; y < mapH; y++, xy0+=3, xy1+=3, xy2+=3) {
 			visible = (visionMatrix[x] === undefined) ? 0 : (visionMatrix[x][y] == undefined) ? 0 : visionMatrix[x][y];
 			if (visible != this.fogOfWarMatrix[x][y]) {
-				/*z = (visible > 0) ? visible * this.FOG_OF_WAR_UNCOVERED_HEIGHT : 0;
-				if (this.fogOfWarVerticeIndexesMatrix[x][y].length == 0)
-					console.log("NO VERTICE AT " + x + "," + y);
-				for (i = 0, l=this.fogOfWarVerticeIndexesMatrix[x][y].length; i<l; i++) {
-					fogGeometry.vertices[this.fogOfWarVerticeIndexesMatrix[x][y][i]].z = z;
-				}*/
 				this.fogOfWarMatrix[x][y] = visible;
 
 				if (visible > this.deepFogOfWarMatrix[x][y]) {
 					this.deepFogOfWarMatrix[x][y] = visible;
-					/*deepFogChanged = true;
-					for (i = 0, l=this.fogOfWarVerticeIndexesMatrix[x][y].length; i<l; i++) {
-						deepFogGeometry.vertices[this.fogOfWarVerticeIndexesMatrix[x][y][i]].z = z;
-					}*/
 				} else if (this.deepFogOfWarMatrix[x][y] != 0 && visible == 0) {
 					visible = .1;
 				}
 				fogChanged = true;
-				dataColor[xy*3] = dataColor[xy*3+1] = dataColor[xy*3+2] = Math.round(visible*255);
+				this.fogOfWarDataColor[xy0] = this.fogOfWarDataColor[xy1] = this.fogOfWarDataColor[xy2] = Math.round(visible*255);
 			}
 		}
 	}
 	if (fogChanged) {
-	//	fogGeometry.verticesNeedUpdate = true;
-		grassFogTexture.needsUpdate = true;
+		this.fogOfWarGroundTexture.needsUpdate = true;
 	}
-	//if (deepFogChanged)
-	//	deepFogGeometry.verticesNeedUpdate = true;
 
 }
 }
 
 gameSurface.shouldMemorizeInFog = function(element) {
 	return (element.f == gameData.FAMILIES.land || element.f == gameData.FAMILIES.building);
+}
+
+
+gameSurface.updateMinimap = function() {
+	/*this.minimapContext.fillStyle = "#ccc";
+	this.minimapContext.fillRect(0, 0, GUI.MINIMAP_SIZE, GUI.MINIMAP_SIZE);
+	this.minimapContext.fillStyle = "#000";
+	for (var type in gameContent.gameElements) {
+		for (var id in gameContent.gameElements[type]) {
+			var element = gameContent.gameElements[type][id];
+			if (element.f != gameData.FAMILIES.land) {
+				this.minimapContext.fillRect(element.p.x,element.p.y,1,1);
+			}
+		}
+	}*/
+
+	var xy = 0, r,g,b,a,vision;
+	for (var y = gameContent.map.size.y-1, maxY=0; y >= maxY; y--) {
+		for (var x = 0, maxX=gameContent.map.size.x; x < maxX; x++, xy += 4) {
+			if (this.deepFogOfWarMatrix[x][y] == 0) {
+				r=g=b=0;
+			} else if (this.fogOfWarMatrix[x][y] == 0) {
+				this.minimapData.data[xy + 3] = 128;
+				continue;
+			} else {
+				var id = gameContent.grid[x][y];
+				if (id > 0) {
+					var element = utils.getElementFromId(id);
+					if (element.modelVisible) {
+						if (element.f == gameData.FAMILIES.land) {
+							var color = gameData.ELEMENTS[element.f][element.r][element.t].minimapColor;
+							r=color.r;
+							g=color.g;
+							b=color.b;
+						} else if (rank.isAlly(gameContent.players, gameContent.myArmy, element)) {
+							r=b=0;
+							g=255;
+						} else {
+							r=255;
+							g=b=0;
+						}
+						if (this.fogOfWarMatrix[x][y] == 0) {
+							r/=3;
+							g/=3;
+							b/=3;
+						}
+					}/* else {
+						r = 2;
+						g = 4;
+						b = 2;
+					}*/
+				} else {
+					var val = Math.max(.1,this.fogOfWarMatrix[x][y]);
+					r=val*20;
+					g=val*40;
+					b=val*20;
+				}
+			}
+		    this.minimapData.data[xy + 0] = r;
+		    this.minimapData.data[xy + 1] = g;
+		    this.minimapData.data[xy + 2] = b;
+		    this.minimapData.data[xy + 3] = 255;
+		}
+	}
+	this.minimapContext.putImageData(this.minimapData, 0, 0);
 }
