@@ -132,7 +132,7 @@ gameSurface.updateOrderPosition = function () {
 
 	 	if (element.a != null && element.a.moveTo != null || element.rp != null) {
 			var position;
-			if (element.a.id != null) {
+			if (element.a != null && element.a.id != null) {
 				position = utils.getElementFromId(element.a.id).p;
 			} else  {
 				position = (element.rp != null ? element.rp : element.a.moveTo);
