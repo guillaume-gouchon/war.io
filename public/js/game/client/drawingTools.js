@@ -130,12 +130,12 @@ gameSurface.updateOrderPosition = function () {
 		var element = utils.getElementFromId(gameContent.selected[0]);
 		if (element == null) { return; }
 
-	 	if (element.mt != null && element.mt.x != null || element.rp != null || element.a != null) {
+	 	if (element.a != null && element.a.moveTo != null || element.rp != null) {
 			var position;
-			if (element.a != null) {
-				position = element.a.p;
+			if (element.a.id != null) {
+				position = utils.getElementFromId(element.a.id).p;
 			} else  {
-				position = (element.rp != null ? element.rp : element.mt);
+				position = (element.rp != null ? element.rp : element.a.moveTo);
 			}
 
 			this.setElementPosition(this.order, position.x, position.y);

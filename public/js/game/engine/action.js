@@ -4,6 +4,14 @@ var action = {};
 /**
 *	CONSTANTS
 */
+
+action.ACTION_TYPES = {
+	move : 0,
+	attack : 1,
+	gather : 2,
+	patrol : 3,
+	build : 4
+}
 action.BUILD_ACTION_SPEED = 3;
 action.ATTACK_SPEED_CONSTANT = 5;
 
@@ -13,22 +21,24 @@ action.ATTACK_SPEED_CONSTANT = 5;
 */
 action.doTheBuild = function (game, element, building) {
 	if(game.iterate % this.BUILD_ACTION_SPEED == 0) {
+
 		if(building.cp < 100) {
+
 			// building still in construction
 			production.updateConstruction(game, building);
 			element.fl = gameData.ELEMENTS_FLAGS.building;
-		} else if (building.l < gameData.ELEMENTS[building.f][building.r][building.t].l) {
-			// building damaged
+
+		} else if (building.l < tools.getElementData(building).l) {
+
+			// building damaged = repair it
 			production.repairBuilding(game, building);
 			element.fl = gameData.ELEMENTS_FLAGS.building;
+
 		} else {
+
 			// building construction / repairing is over
-			if (element.pa.length > 0) {
-				order.getNextElementOrder(element);
-			} else {
-				element.a = null;
-				element.fl = gameData.ELEMENTS_FLAGS.nothing;
-			}
+			order.goToElementNextOrder(element);
+
 		}
 
 	}
@@ -39,7 +49,7 @@ action.doTheBuild = function (game, element, building) {
 *	Basic attack action.
 */
 action.doTheAttack = function (game, element, target) {
-	if(game.iterate % (this.ATTACK_SPEED_CONSTANT - gameData.ELEMENTS[element.f][element.r][element.t].attackSpeed) == 0) {
+	if(game.iterate % (this.ATTACK_SPEED_CONSTANT - tools.getElementData(element).attackSpeed) == 0) {
 		fightLogic.attack(game, element, target);
 		element.fl = gameData.ELEMENTS_FLAGS.attacking;
 	}
@@ -50,7 +60,7 @@ action.doTheAttack = function (game, element, target) {
 *	Basic gathering action.
 */
 action.doTheGathering = function (game, element, resource) {
-	if(game.iterate % gameData.ELEMENTS[element.f][element.r][element.t].gatheringSpeed == 0) {
+	if(game.iterate % tools.getElementData(element).gatheringSpeed == 0) {
 		production.gatherResources(game, element, resource);
 		element.fl = gameData.ELEMENTS_FLAGS.mining;
 	}

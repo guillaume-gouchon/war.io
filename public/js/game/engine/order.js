@@ -43,11 +43,14 @@ order.dispatchReceivedOrder = function (game, type, params) {
 
 
 order.buildThatHere = function (game, buildersIds, building, x, y, isMultipleOrder) {
+
 	var builders = tools.getGameElementsFromIds(game, buildersIds);
 	var building = new gameData.Building(building, x, y, builders[0].o, false);
 	production.startConstruction(game, building);
+
 	//give order to builders
 	this.build(game, builders, building, isMultipleOrder);
+
 }
 
 
@@ -78,7 +81,7 @@ order.updateRallyingPoint = function (game, buildings, x, y) {
 order.attack = function (game, elements, target) {
 	for(var i in elements) {
 		var element = elements[i];
-		element.a = target;
+		element.a = new gameData.Order(action.ACTION_TYPES.attack, null, target.id);
 		element.pa = [];
 		tools.addUniqueElementToArray(game.modified, element);
 	}
@@ -88,10 +91,10 @@ order.attack = function (game, elements, target) {
 order.build = function (game, builders, building, isMultipleOrder) {
 	for(var i in builders) {
 		var element = builders[i];
-		if (isMultipleOrder && element.a != null && (element.pa.length == 0 || element.pa[0].f == gameData.FAMILIES.building || element.pa[0].x != null)) {
-			element.pa.push(building);
+		if (isMultipleOrder && element.a != null && element.a.type != action.ACTION_TYPES.gather) {
+			element.pa.push(new gameData.Order(action.ACTION_TYPES.build, null, building.id));
 		} else {
-			element.a = building;
+			element.a = new gameData.Order(action.ACTION_TYPES.build, null, building.id);
 			element.pa = [];
 		}
 		tools.addUniqueElementToArray(game.modified, element);
@@ -102,24 +105,27 @@ order.build = function (game, builders, building, isMultipleOrder) {
 order.move = function (game, units, x, y, isMultipleOrder) {
 	for(var i in units) {
 		var element = units[i];
-		if (isMultipleOrder && element.mt != null && element.mt.x != null 
-			&& (element.pa.length == 0 || element.pa[0].f == gameData.FAMILIES.building || element.pa[0].x != null)) {
-			element.pa.push({x : x, y : y});
+
+		if (isMultipleOrder && element.a != null && element.a.type != action.ACTION_TYPES.gather) {
+			element.pa.push(new gameData.Order(action.ACTION_TYPES.move, {x: x, y: y}, null));
 		} else {
-			element.a = null;
+			element.a = new gameData.Order(action.ACTION_TYPES.move, {x: x, y: y}, null);
 			element.pa = [];
-			element.mt = {x : x, y : y};
 		}
 		tools.addUniqueElementToArray(game.modified, element);
 	}
 }
 
 
-order.gather = function (game, units, land) {
+order.gather = function (game, units, land, isMultipleOrder) {
 	for(var i in units) {
 		var element = units[i];
-		element.a = land;
-		element.pa = [land];
+		if (isMultipleOrder && element.a != null && element.a.type != action.ACTION_TYPES.gather) {
+			element.pa.push(new gameData.Order(action.ACTION_TYPES.gather, null, land.id));
+		} else {
+			element.a = new gameData.Order(action.ACTION_TYPES.gather, null, land.id);
+			element.pa = [element.a];
+		}
 		tools.addUniqueElementToArray(game.modified, element);
 	}
 }
@@ -154,48 +160,47 @@ order.convertDestinationToOrder = function (game, elementsIds, x, y, isMultipleO
 	}
 
 	if(elements[0].f == gameData.FAMILIES.building) {
-		//buildings are selected
+		// buildings are selected
 		this.updateRallyingPoint(game, elements, x, y);
 	} else {
-		//units are selected
+		// units are selected
 		if (target != null && target.length > 0) {
-			//something is under the click
+			// something is under the click
 			if (target[0].f == gameData.FAMILIES.unit) {
 				if (!rank.isAlly(game.players, elements[0].o, target[0])) {
-					//enemy unit
+					// enemy unit
 					this.attack(game, elements, target[0]);
 					return;
 				}
 			} else if (target[0].f == gameData.FAMILIES.building) {
 				if (rank.isAlly(game.players, elements[0].o, target[0])) {
-					//friend building
+					// friend building
 					for(var i in elements) {
 						var e = elements[i];
-						if(gameData.ELEMENTS[e.f][e.r][e.t].isBuilder) {
-							//builders are sent to build / repair
+						if(tools.getElementData(e).isBuilder) {
+							// builders are sent to build / repair
 							order.build(game, [e], target[0], isMultipleOrder);
 						} else {
-							//non-builders are given a move order
+							// non-builders are given a move order
 							order.move(game, [e], x, y, isMultipleOrder);
 						}
 					}
 					return;
 				} else {
-					//enemy building
+					// enemy building
 					order.attack(game, elements, target[0]);
 					return;
 				}
 			} else if (target[0].f == gameData.FAMILIES.land 
 						&& gameData.ELEMENTS[target[0].f][0][target[0].t].resourceType >= 0) {
-				//resource land element
+				// resource land element
 				for(var i in elements) {
 					var e = elements[i];
-					if(gameData.ELEMENTS[e.f][e.r][e.t].isBuilder) {
-						//builders are sent to gather resources
-						order.gather(game, [e], target[0]);
-						e.a = target[0];
+					if(tools.getElementData(e).isBuilder) {
+						// builders are sent to gather resources
+						order.gather(game, [e], target[0], isMultipleOrder);
 					} else {
-						//non-builders are given a move order
+						// non-builders are given a move order
 						order.move(game, [e], x, y, isMultipleOrder);
 					}
 				}
@@ -203,20 +208,29 @@ order.convertDestinationToOrder = function (game, elementsIds, x, y, isMultipleO
 			}
 		}
 
-		//if no target, just give a move order
+		// if no target, just give a move order
 		order.move(game, elements, x, y, isMultipleOrder);
 	}
 	
 }
 
 
-order.getNextElementOrder = function (element) {
-	if (element.pa[0].x != null) {
-		console.log(element.pa[0]);
-		element.mt = element.pa[0];
+order.goToElementNextOrder = function (element) {
+
+	if (element.pa.length > 0) {
+
+		if (element.a != null && element.a.type == action.ACTION_TYPES.gather) {
+			return;
+		}
+
+		element.a = element.pa[0];
+		element.pa.splice(0, 1);
+
 	} else {
-		console.log('new building');
-		element.a = element.pa[0];	
+
+		element.a = null;
+		element.fl = gameData.ELEMENTS_FLAGS.nothing;
+	
 	}
-	element.pa.splice(0, 1);
+
 }
