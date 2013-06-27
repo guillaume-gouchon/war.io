@@ -13,10 +13,13 @@ production.REPAIRING_SPEED = 5;
 *	The user has chosen where to build this structure.
 */
 production.startConstruction = function (game, building) {
-	var buildingData = gameData.ELEMENTS[building.f][building.r][building.t];
+	var buildingData = tools.getElementData(building);
+
 	if (this.canBuyIt(game.players, building.o, buildingData)) {
+
 		this.paysForElement(game, building.o, buildingData);
 		game.newBuildings.push(building);
+
 	}
 }
 
@@ -25,13 +28,20 @@ production.startConstruction = function (game, building) {
 *	A builder has done a build action on this building, its progress is updated.
 */
 production.updateConstruction = function (game, building) {
-	building.cp += 100 / gameData.ELEMENTS[building.f][building.r][building.t].timeConstruction;
-	building.l += parseInt(gameData.ELEMENTS[building.f][building.r][building.t].l / gameData.ELEMENTS[building.f][building.r][building.t].timeConstruction);
-	building.l = Math.min(gameData.ELEMENTS[building.f][building.r][building.t].l, building.l);
+	var buildingData = tools.getElementData(building);
+
+	building.cp += 100 / buildingData.timeConstruction;
+	building.l += parseInt(buildingData.l / buildingData.timeConstruction);
+	building.l = Math.min(buildingData.l, building.l);
+	
 	if(building.cp >= 100) {
+
 		this.finishConstruction(game, building);
+
 	}
+
 	tools.addUniqueElementToArray(game.modified, building);
+
 }
 
 
@@ -39,18 +49,21 @@ production.updateConstruction = function (game, building) {
 *	The user cancels the construction of a building.
 */
 production.cancelConstruction = function (game, building) {
+
 	if (building != null && building.cp < 95) {
 		this.sellsElement(game, building.o, gameData.ELEMENTS[building.f][building.r][building.t]);
 		this.removeBuilding(game, building);
 		for (var i in game.gameElements.unit) {
-			if (game.gameElements.unit[i].a == building) {
-				game.gameElements.unit[i].a = null;
+			if (game.gameElements.unit[i].a != null && game.gameElements.unit[i].a.id == building.id) {
+				order.goToElementNextOrder(game.gameElements.unit[i]);
 			}
 		}
 
 		game.cancelBuildings.push(building);
 		delete game.gameElements.building[building.id];
+
 	}
+
 }
 
 
@@ -58,15 +71,19 @@ production.cancelConstruction = function (game, building) {
 *	A building has just been finished to construct.
 */
 production.finishConstruction = function (game, building) {
-	building.cp = 100;
-	building.l = gameData.ELEMENTS[building.f][building.r][building.t].l;
 
-	//udpates player's max population
-	if(gameData.ELEMENTS[building.f][building.r][building.t].pop > 0) {
-		game.players[building.o].pop.max += gameData.ELEMENTS[building.f][building.r][building.t].pop;
+	var buildingData = tools.getElementData(building);
+
+	building.cp = 100;
+	building.l = buildingData.l;
+
+	//updates player's max population
+	if(buildingData.pop > 0) {
+		game.players[building.o].pop.max += buildingData.pop;
 	}
 
 	stats.updateField(game, building.o, 'buildingsCreated', 1);
+
 }
 
 
@@ -74,15 +91,20 @@ production.finishConstruction = function (game, building) {
 *	A builder is repairing the building.
 */
 production.repairBuilding = function (game, building) {
+
 	var playerResources = game.players[building.o].re;
-	if (playerResources[gameData.RESOURCES.wood.id] > 0
-		&& playerResources[gameData.RESOURCES.gold.id] > 0) {
+
+	if (playerResources[gameData.RESOURCES.wood.id] > 0 && playerResources[gameData.RESOURCES.gold.id] > 0) {
+
 		playerResources[gameData.RESOURCES.gold.id]--;
 		playerResources[gameData.RESOURCES.wood.id]--;
 		building.l += this.REPAIRING_SPEED;
-		building.l = Math.min(building.l, gameData.ELEMENTS[building.f][building.r][building.t].l);
+		building.l = Math.min(building.l, tools.getElementData(building).l);
+
 		tools.addUniqueElementToArray(game.modified, building);
+
 	}
+
 }
 
 
@@ -90,12 +112,19 @@ production.repairBuilding = function (game, building) {
 *	A building has been destroyed / cancelled
 */
 production.removeBuilding = function (game, building) {
-	if(gameData.ELEMENTS[building.f][building.r][building.t].pop > 0 && building.cp == 100) {
-		game.players[building.o].pop.max -= gameData.ELEMENTS[building.f][building.r][building.t].pop;
+
+	var buildingData = tools.getElementData(building);
+
+	if(buildingData.pop > 0 && building.cp == 100) {
+
+		game.players[building.o].pop.max -= buildingData.pop;
+
 	}
 
 	if (building.murderer != null) {
+
 		stats.updateField(game, building.murderer, 'buildingsDestroyed', 1);
+
 	}
 }
 
@@ -104,32 +133,43 @@ production.removeBuilding = function (game, building) {
 *	A builder is gathering resources.
 */
 production.gatherResources = function (game, builder, resource) {
-	//reset resources if different from previous one
-	if (builder.ga == null || builder.ga.t != gameData.ELEMENTS[resource.f][resource.r][resource.t].resourceType) {
-		builder.ga = {t : gameData.ELEMENTS[resource.f][resource.r][resource.t].resourceType, amount : 0};
+
+	var resourceData = tools.getElementData(resource);
+	var builderData = tools.getElementData(builder);
+
+	// reset resources if different from previous one
+	if (builder.ga == null || builder.ga.t != resourceData.resourceType) {
+
+		builder.ga = {t : resourceData.resourceType, amount : 0};
+
 	}
 
-	var amount = Math.min(gameData.ELEMENTS[builder.f][builder.r][builder.t].maxGathering - builder.ga.amount, this.RESOURCE_AMOUNT_PER_GATHERING_ACTION, resource.ra);
+	var amount = Math.min(builderData.maxGathering - builder.ga.amount, this.RESOURCE_AMOUNT_PER_GATHERING_ACTION, resource.ra);
 	builder.ga.amount += amount;
 	resource.ra -= amount;
 
 	tools.addUniqueElementToArray(game.modified, resource);
 
-	if (builder.ga.amount == gameData.ELEMENTS[builder.f][builder.r][builder.t].maxGathering) {
-		//the builder is full of resources, get back resources
+	if (builder.ga.amount == builderData.maxGathering) {
+
+		// the builder is full of resources, get resources back
 		var closestTownHall = tools.getNearestStuff(game, builder, gameData.FAMILIES.building, gameData.ELEMENTS[gameData.FAMILIES.building][game.players[builder.o].r][0].t, gameData.RANKS.me, true);
-		builder.a = closestTownHall;
-		builder.pa = [resource];
-	} 
+		builder.a = new gameData.Order(action.ACTION_TYPES.gather, null, closestTownHall.id);
+		builder.pa = [new gameData.Order(action.ACTION_TYPES.gather, null, resource.id)];
+
+	}
 
 	if (resource.ra == 0) {
-		//the resource is now empty, searching a new resource of the same type
-		AI.searchForNewResources(game, builder, gameData.ELEMENTS[resource.f][resource.r][resource.t].resourceType);
 
-		//remove resource
+		// remove resource
 		gameCreation.removeGameElement(game, resource);
 		delete game.gameElements.land[resource.id];
+
+		// the resource is now empty, searching a new resource of the same type
+		AI.searchForNewResources(game, builder, resourceData.resourceType);
+
 	}
+
 }
 
 
@@ -137,17 +177,32 @@ production.gatherResources = function (game, builder, resource) {
 *	A builder is coming back to a building with some resources.
 */
 production.getBackResources = function (game, builder) {
+
+	var resourceType = builder.ga.t;
+
 	game.players[builder.o].re[builder.ga.t] += builder.ga.amount;
 	stats.updateField(game, builder.o, 'resources', builder.ga.amount);
 	builder.ga = null;
-	if(builder.pa.length > 0 && builder.pa[0].f == gameData.FAMILIES.land) {
-		if(builder.pa[0].ra == 0) {
-			//gather closest resource if this one is finished
-			AI.searchForNewResources(game, builder, builder.pa[0], gameData.ELEMENTS[builder.pa[0].f][builder.pa[0].r][builder.pa[0].t].resourceType);
+
+	if(builder.pa.length > 0 && builder.pa[0].type == action.ACTION_TYPES.gather) {
+
+		var resource = tools.getElementById(game, builder.pa[0].id);
+
+		if(resource == null || resource.ra <= 0) {
+
+			// gather closest resource if this one is finished
+			AI.searchForNewResources(game, builder, resourceType);
+
 		} else {
+
+			// go back to resource
 			builder.a = builder.pa[0];
+
 		}
 	}
+
+	builder.pa = [];
+
 }
 
 

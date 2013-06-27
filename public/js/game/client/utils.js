@@ -49,6 +49,5 @@ utils.canBeBuiltHere = function (building) {
 *	Returns the game element from a chosen id.
 */
 utils.getElementFromId = function (id) {
-	var sId = '' + id;
-	return gameContent.gameElements[Object.keys(gameData.FAMILIES)[sId.charAt(1)]][id];
+	return gameContent.gameElements[Object.keys(gameData.FAMILIES)[('' + id)[1]]][id];
 }

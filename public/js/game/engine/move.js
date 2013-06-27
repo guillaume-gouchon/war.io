@@ -12,9 +12,9 @@ move.ASTAR_MAX_RADIUS_SEARCH = 10;
 /**
 *	Moves an element one step closer to its destination.
 */
-move.moveElement = function (game, element) {
-    if (game.iterate % gameData.ELEMENTS[element.f][element.r][element.t].speed == 0) {
-      	var destination = element.mt;
+move.moveElement = function (game, element, destination) {
+  var elementData = tools.getElementData(element);
+    if (game.iterate % elementData.speed == 0) {
 
         // if destination forbids movement, search neighbors for a new one
       	var counter = 0;
@@ -24,7 +24,7 @@ move.moveElement = function (game, element) {
       	    for(var i in endNeighbors){
                 if(endNeighbors[i].c == 0) {// if this tile is free, let's go there !
                     destination = endNeighbors[i];
-                    element.mt = {x : destination.x, y : destination.y};
+                    element.a.moveTo = {x : destination.x, y : destination.y};
                     break grosBoucle;
                 }
       	    }
@@ -32,7 +32,7 @@ move.moveElement = function (game, element) {
       	}
 
         if (destination.c > 0) {// if destination is unreachable for now, stop the movement
-            element.mt = {x : null, y : null};
+            element.a.moveTo = null;
             return;
         }
       	
@@ -42,7 +42,7 @@ move.moveElement = function (game, element) {
       	if(path.length > 0) {
 
   			// remove old position
-            var shape = gameData.ELEMENTS[element.f][element.r][element.t].shape;
+            var shape = elementData.shape;
   			for (var i in shape) {
   				for (var j in shape[i]) {
   					if (shape[i][j] > 0) {
@@ -65,12 +65,23 @@ move.moveElement = function (game, element) {
   			}
 
       		// if element has arrived to its destination, updates its order
-      		if(element.mt.x == element.p.x && element.mt.y == element.p.y) {
-            if (element.pa.length > 0) {
-              order.getNextElementOrder(element);
+      		if(element.a.moveTo.x == element.p.x && element.a.moveTo.y == element.p.y) {
+            
+            if (element.a.type == action.ACTION_TYPES.move) {
+
+              element.a = null;
+              
+              if (element.pa.length > 0) {
+            
+                order.goToElementNextOrder(element);
+            
+              }
+              
             } else {
-              element.mt = {x : null, y : null};
+
+              element.a.moveTo = null;
               element.fl = gameData.ELEMENTS_FLAGS.nothing;
+
             }
       		}
       	}
