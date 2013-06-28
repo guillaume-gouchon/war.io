@@ -11,14 +11,22 @@ order.TYPES = {
 	cancelConstruction : 3,
 	chat : 4,
 	diplomacy : 5,
-	surrender : 6
+	surrender : 6,
+	stop : 7,
+	hold : 8
+}
+
+order.SPECIAL_ORDERS = {
+	normal : 0,
+	attack : 1,
+	patrol : 2
 }
 
 
 order.dispatchReceivedOrder = function (game, type, params) {
 	switch (type) {
 		case 0 :
-			this.convertDestinationToOrder(game, params[0], params[1], params[2], params[3]);
+			this.convertDestinationToOrder(game, params[0], params[1], params[2], params[3], params[4]);
 			break;
 		case 1 :
 			this.buildThatHere(game, params[0], params[1], params[2], params[3], params[4]);
@@ -37,6 +45,12 @@ order.dispatchReceivedOrder = function (game, type, params) {
 			break;
 		case 6 :
 			this.surrender(game, params[0]);
+			break;
+		case 7 :
+			this.stopUnits(game, params[0]);
+			break;
+		case 8 :
+			this.holdUnits(game, params[0]);
 			break;
 	}
 }
@@ -102,14 +116,14 @@ order.build = function (game, builders, building, isMultipleOrder) {
 }
 
 
-order.move = function (game, units, x, y, isMultipleOrder) {
+order.move = function (game, units, x, y, isMultipleOrder, specialOrder) {
 	for(var i in units) {
 		var element = units[i];
 
 		if (isMultipleOrder && element.a != null && element.a.type != action.ACTION_TYPES.gather) {
-			element.pa.push(new gameData.Order(action.ACTION_TYPES.move, {x: x, y: y}, null));
+			element.pa.push(new gameData.Order(action.ACTION_TYPES.move, {x: x, y: y}, null, specialOrder));
 		} else {
-			element.a = new gameData.Order(action.ACTION_TYPES.move, {x: x, y: y}, null);
+			element.a = new gameData.Order(action.ACTION_TYPES.move, {x: x, y: y}, null, specialOrder);
 			element.pa = [];
 		}
 		tools.addUniqueElementToArray(game.modified, element);
@@ -118,12 +132,13 @@ order.move = function (game, units, x, y, isMultipleOrder) {
 
 
 order.gather = function (game, units, land, isMultipleOrder) {
+	var landData = tools.getElementData(land);
 	for(var i in units) {
 		var element = units[i];
 		if (isMultipleOrder && element.a != null && element.a.type != action.ACTION_TYPES.gather) {
-			element.pa.push(new gameData.Order(action.ACTION_TYPES.gather, null, land.id));
+			element.pa.push(new gameData.Order(action.ACTION_TYPES.gather, null, land.id, landData.resourceType));
 		} else {
-			element.a = new gameData.Order(action.ACTION_TYPES.gather, null, land.id);
+			element.a = new gameData.Order(action.ACTION_TYPES.gather, null, land.id, landData.resourceType);
 			element.pa = [element.a];
 		}
 		tools.addUniqueElementToArray(game.modified, element);
@@ -149,7 +164,7 @@ order.surrender = function (game, army) {
 /**
 *	Dispatches the user action to the correct order.
 */
-order.convertDestinationToOrder = function (game, elementsIds, x, y, isMultipleOrder) {
+order.convertDestinationToOrder = function (game, elementsIds, x, y, isMultipleOrder, specialOrder) {
 	var elements = tools.getGameElementsFromIds(game, elementsIds);
 	if (elements.length == 0 || game.grid[x] == null || game.grid[x][y] == null) { return; }
 
@@ -182,7 +197,7 @@ order.convertDestinationToOrder = function (game, elementsIds, x, y, isMultipleO
 							order.build(game, [e], target[0], isMultipleOrder);
 						} else {
 							// non-builders are given a move order
-							order.move(game, [e], x, y, isMultipleOrder);
+							order.move(game, [e], x, y, isMultipleOrder, specialOrder);
 						}
 					}
 					return;
@@ -201,7 +216,7 @@ order.convertDestinationToOrder = function (game, elementsIds, x, y, isMultipleO
 						order.gather(game, [e], target[0], isMultipleOrder);
 					} else {
 						// non-builders are given a move order
-						order.move(game, [e], x, y, isMultipleOrder);
+						order.move(game, [e], x, y, isMultipleOrder, specialOrder);
 					}
 				}
 				return;
@@ -209,18 +224,24 @@ order.convertDestinationToOrder = function (game, elementsIds, x, y, isMultipleO
 		}
 
 		// if no target, just give a move order
-		order.move(game, elements, x, y, isMultipleOrder);
+		order.move(game, elements, x, y, isMultipleOrder, specialOrder);
 	}
 	
 }
 
 
-order.goToElementNextOrder = function (element) {
+order.goToElementNextOrder = function (game, element) {
 
 	if (element.pa.length > 0) {
 
 		if (element.a != null && element.a.type == action.ACTION_TYPES.gather) {
 			return;
+		} else if (element.a != null && element.a.type == action.ACTION_TYPES.build) {
+			var target = tools.getElementById(game, element.a.id);
+			var targetData = tools.getElementData(target);
+			if (target.cp < 100 || target.l < targetData.l) {
+				return;
+			}
 		}
 
 		element.a = element.pa[0];
@@ -231,6 +252,40 @@ order.goToElementNextOrder = function (element) {
 		element.a = null;
 		element.fl = gameData.ELEMENTS_FLAGS.nothing;
 	
+	}
+
+}
+
+order.stopUnits = function (game, elementsIds) {
+
+	var elements = tools.getGameElementsFromIds(game, elementsIds);
+
+	for(var i in elements) {
+
+		var element = elements[i];
+		if (element.f == gameData.FAMILIES.unit) {
+			element.a = null;
+			element.pa = [];
+			tools.addUniqueElementToArray(game.modified, element);
+		}
+
+	}
+
+}
+
+order.holdUnits = function (game, elementsIds) {
+
+	var elements = tools.getGameElementsFromIds(game, elementsIds);
+
+	for(var i in elements) {
+
+		var element = elements[i];
+		if (element.f == gameData.FAMILIES.unit) {
+			element.a = new gameData.Order(action.ACTION_TYPES.hold, null, null);
+			element.pa = [];
+			tools.addUniqueElementToArray(game.modified, element);
+		}
+		
 	}
 
 }

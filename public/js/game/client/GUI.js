@@ -299,7 +299,7 @@ GUI.initMinimap = function () {
 		|| utils.getElementFromId(gameContent.selected[0]).f == gameData.FAMILIES.building) {
 			x = parseInt(x / gameSurface.PIXEL_BY_NODE);
 			y = parseInt(y / gameSurface.PIXEL_BY_NODE);
-			userInput.sendOrder(x, y);
+//			userInput.sendOrder(x, y);
 		}
 	});
 }

@@ -55,7 +55,7 @@ production.cancelConstruction = function (game, building) {
 		this.removeBuilding(game, building);
 		for (var i in game.gameElements.unit) {
 			if (game.gameElements.unit[i].a != null && game.gameElements.unit[i].a.id == building.id) {
-				order.goToElementNextOrder(game.gameElements.unit[i]);
+				order.goToElementNextOrder(game, game.gameElements.unit[i]);
 			}
 		}
 
@@ -154,8 +154,8 @@ production.gatherResources = function (game, builder, resource) {
 
 		// the builder is full of resources, get resources back
 		var closestTownHall = tools.getNearestStuff(game, builder, gameData.FAMILIES.building, gameData.ELEMENTS[gameData.FAMILIES.building][game.players[builder.o].r][0].t, gameData.RANKS.me, true);
-		builder.a = new gameData.Order(action.ACTION_TYPES.gather, null, closestTownHall.id);
-		builder.pa = [new gameData.Order(action.ACTION_TYPES.gather, null, resource.id)];
+		builder.a = new gameData.Order(action.ACTION_TYPES.gather, null, closestTownHall.id, resourceData.resourceType);
+		builder.pa = [new gameData.Order(action.ACTION_TYPES.gather, null, resource.id, resourceData.resourceType)];
 
 	}
 

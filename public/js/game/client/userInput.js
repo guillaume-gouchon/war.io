@@ -88,7 +88,7 @@ userInput.doSelect = function (x, y, isCtrlKey, isShiftKey) {
 }
 
 
-userInput.doAction = function (x, y, isShiftKey) {
+userInput.doAction = function (x, y, isShiftKey, specialOrder) {
 
 	if (x > window.innerWidth - GUI.MINIMAP_SIZE && y > window.innerHeight - GUI.MINIMAP_SIZE) { return false; }
 
@@ -99,7 +99,7 @@ userInput.doAction = function (x, y, isShiftKey) {
 		var selected = utils.getElementFromId(gameContent.selected[0]);
 		if (rank.isAlly(gameContent.players, gameContent.myArmy, selected)
 			&& (selected.f == gameData.FAMILIES.unit || selected.f == gameData.FAMILIES.building)) {
-			this.dispatchUnitAction(x, y, isShiftKey);
+			this.dispatchUnitAction(x, y, isShiftKey, specialOrder);
 		}
 	}
 
@@ -142,7 +142,7 @@ userInput.pressToolbarShortcut = function (i) {
 }
 
 
-userInput.onEnterKey = function () {
+userInput.pressEnterKey = function () {
 
 	if (this.isChatWindowOpen) {
 
@@ -188,6 +188,12 @@ userInput.onEnterKey = function () {
 
 	this.isChatWindowOpen = !this.isChatWindowOpen;
 
+}
+
+userInput.pressSpaceKey = function () {
+	if (gameContent.selected.length > 0) {
+		//gameSurface.centerCameraOnElement(utils.getElementFromId(gameContent.selected[0]));
+	}
 }
 
 
@@ -348,7 +354,7 @@ userInput.tryBuildHere = function (isShiftKey) {
 /**
 *	Dispatches the action according to the order.
 */
-userInput.dispatchUnitAction = function (x, y, isShiftKey) {
+userInput.dispatchUnitAction = function (x, y, isShiftKey, specialOrder) {
 	var destination;
 	var elementUnder = gameSurface.getFirstIntersectObject(x, y);
 	if (elementUnder != null) {
@@ -362,18 +368,10 @@ userInput.dispatchUnitAction = function (x, y, isShiftKey) {
 			}
 		}
 
-		this.sendOrder(destination.x, destination.y, isShiftKey);
-	}
-}
+		if (destination.x >= 0 && destination.y >= 0 && destination.x < gameContent.map.size.x && destination.y < gameContent.map.size.y) {
+			gameManager.sendOrderToEngine(order.TYPES.action, [gameContent.selected, destination.x, destination.y, isShiftKey, specialOrder]);
+		}
 
-
-/**
-*	Send order to the engine.
-*/
-userInput.sendOrder = function (x, y, isMultipleOrders) {
-	if (x >= 0 && y >= 0
-		&& x < gameContent.map.size.x && y < gameContent.map.size.y) {
-		gameManager.sendOrderToEngine(order.TYPES.action, [gameContent.selected, x, y, isMultipleOrders]);
 	}
 }
 
@@ -463,4 +461,32 @@ userInput.drawSelectionRectangle = function (x, y, isCtrlKey) {
 userInput.removeSelectionRectangle = function () {
 	gameContent.selectionRectangle = [];
 	gameSurface.updateSelectionRectangle(-1, -1, -1, -1);
+}
+
+
+userInput.pressStopKey = function () {
+	if (gameContent.selected.length > 0) {
+		gameManager.sendOrderToEngine(order.TYPES.stop, [gameContent.selected]);
+	}
+}
+
+
+userInput.pressHoldKey = function () {
+	if (gameContent.selected.length > 0) {
+		gameManager.sendOrderToEngine(order.TYPES.hold, [gameContent.selected]);
+	}
+}
+
+
+userInput.enterPatrolMode = function () {
+	if (gameContent.selected.length > 0) {
+		controls.clickMode = controls.MODES.patrol;
+	}
+}
+
+
+userInput.enterAttackMode = function () {
+	if (gameContent.selected.length > 0) {
+		controls.clickMode = controls.MODES.attack;	
+	}
 }

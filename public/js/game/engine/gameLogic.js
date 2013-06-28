@@ -163,15 +163,29 @@ gameLogic.resolveActions = function (game, element) {
 					action.doTheAttack(game, element, target);
 
 				}
+				
 			} else {
 
 				// move closer in order to do the action
 				var closest = tools.getClosestPart(element, target);
 				element.a.moveTo = {x : closest.x, y : closest.y};
+
 			}
 
 			tools.addUniqueElementToArray(game.modified, element);
 
+		} else {// the target does not exist anymore
+
+			if (element.a.type == action.ACTION_TYPES.gather) {
+
+				// find a new resource
+				AI.searchForNewResources(game, element, element.a.info);
+
+			} else if (element.a.type == action.ACTION_TYPES.move || element.a.type == action.ACTION_TYPES.patrol) {
+
+				order.goToElementNextOrder(game, element);
+
+			}
 		}
 
 	}
@@ -230,7 +244,8 @@ gameLogic.checkGameOver = function (game) {
 */
 gameLogic.protectAround = function (game, element) {
 	var elementData = tools.getElementData(element);
-	if (element.a == null && !elementData.isBuilder && (element.f == gameData.FAMILIES.unit || element.cp >= 100 && elementData.attack != null)) {
+	if ((element.a == null || element.a.type == action.ACTION_TYPES.move && element.a.info == order.SPECIAL_ORDERS.attack)
+		&& !elementData.isBuilder && (element.f == gameData.FAMILIES.unit || element.cp >= 100 && elementData.attack != null)) {
 	
 		AI.searchForNewEnemy(game, element);
 	

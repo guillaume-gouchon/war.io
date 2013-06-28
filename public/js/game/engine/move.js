@@ -73,7 +73,7 @@ move.moveElement = function (game, element, destination) {
               
               if (element.pa.length > 0) {
             
-                order.goToElementNextOrder(element);
+                order.goToElementNextOrder(game, element);
             
               }
               
