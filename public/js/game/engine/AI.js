@@ -8,7 +8,7 @@ AI.searchForNewResources = function (game, builder, resourceType) {
 
 	var nearestResource = tools.getNearestStuff(game, builder, gameData.FAMILIES.land, resourceType);
 	if(nearestResource != null) {
-		builder.a = new gameData.Order(action.ACTION_TYPES.gather, null, nearestResource.id);
+		builder.a = new gameData.Order(action.ACTION_TYPES.gather, null, nearestResource.id, resourceType);
 	} else {
 		builder.a = null;
 	}
@@ -23,13 +23,13 @@ AI.searchForNewEnemy = function (game, unit) {
 
 	// units have the priority
 	var nearestEnemy = tools.getNearestStuff(game, unit, gameData.FAMILIES.unit, null, gameData.RANKS.enemy);
+	
 	if (nearestEnemy == null) {
 		nearestEnemy = tools.getNearestStuff(game, unit, gameData.FAMILIES.building, null, gameData.RANKS.enemy);
 	}
+
 	if(nearestEnemy != null) {
 		unit.a = new gameData.Order(action.ACTION_TYPES.attack, null, nearestEnemy.id);
-	} else {
-		unit.a = null;
 	}
 
 }

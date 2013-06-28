@@ -20,6 +20,14 @@ THREE.TrackballControls = function ( object, domElement ) {
 	this.rotateSpeed = 0.5;
 	this.panSpeed = 0.8;
 
+	// click mode
+	this.MODES = {
+		normal : order.SPECIAL_ORDERS.normal,
+		attack : order.SPECIAL_ORDERS.attack,
+		patrol : order.SPECIAL_ORDERS.patrol
+	};
+	this.clickMode = this.MODES.normal;
+
 	// game window scrolling
 	this.scroll = [0, 0];
 	this.MAP_SCROLL_SPEED = 6;
@@ -29,7 +37,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 	// zoom
 	this.zoomSpeed = 1.2;
 	this.ZOOM_MAX = 30;
-	this.ZOOM_MIN = 130;
+	this.ZOOM_MIN = 230;
 
 	// rotation
 	this.WHEEL_ROTATION_SPEED = 40;
@@ -370,13 +378,18 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 		_prevState = _state;
 
-		if ( _state !== STATE.NONE ) {
+		/*if ( _state !== STATE.NONE ) {
 			return;
-		}
+		}*/
 
 		switch(event.keyCode) {
-			case 13 :
-				userInput.onEnterKey();
+			case 8 :// back key
+				return true;
+			case 13 :// enter key
+				userInput.pressEnterKey();
+				return true;
+			case 32 :// space key
+				userInput.pressSpaceKey();
 				return true;
 			case 38 :
 				updateScrolling(1, 1, true);
@@ -393,6 +406,47 @@ THREE.TrackballControls = function ( object, domElement ) {
 			case 37 :
 				updateScrolling(0, 1, true);
 				return false;
+				break;
+			case 83 :// S
+				userInput.pressStopKey();
+				return true;
+				break;
+			case 72 :// H
+				userInput.pressHoldKey();
+				return true;
+				break;
+			case 80 :// P
+				userInput.enterPatrolMode();
+				return true;
+				break;
+			case 65 :// A
+				userInput.enterAttackMode();
+				return true;
+				break;
+			case 49 :
+				event.preventDefault();
+				userInput.pressHotKey(0, event.ctrlKey);
+				return true;
+				break;
+			case 50 :
+				event.preventDefault();
+				userInput.pressHotKey(1, event.ctrlKey);
+				return true;
+				break;
+			case 51 :
+				event.preventDefault();
+				userInput.pressHotKey(2, event.ctrlKey);
+				return true;
+				break;
+			case 52 :
+				event.preventDefault();
+				userInput.pressHotKey(3, event.ctrlKey);
+				return true;
+				break;
+			case 53 :
+				event.preventDefault();
+				userInput.pressHotKey(4, event.ctrlKey);
+				return true;
 				break;
 		}
 
@@ -465,13 +519,34 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 		} else if (_state === STATE.SELECTION) {
 
-			// left click = selection
-			userInput.doSelect( event.clientX, event.clientY, event.ctrlKey, event.shiftKey );
+			if (_this.clickMode != _this.MODES.normal) {
+
+				// do special action
+				userInput.doAction( event.clientX, event.clientY, event.shiftKey, _this.clickMode );
+
+				// leave special click mode
+				_this.clickMode = _this.MODES.normal;
+				
+			} else {
+
+				// left click = selection
+				userInput.doSelect( event.clientX, event.clientY, event.ctrlKey, event.shiftKey );
+
+			}
 
 		} else if (_state === STATE.ACTION) {
 
-			// right click = action
-			userInput.doAction( event.clientX, event.clientY, event.shiftKey );
+			if (_this.clickMode != _this.MODES.normal) {
+
+				// leave special click mode
+				_this.clickMode = _this.MODES.normal;
+
+			} else {
+
+				// right click = action
+				userInput.doAction( event.clientX, event.clientY, event.shiftKey, _this.clickMode );
+
+			}
 
 		}
 

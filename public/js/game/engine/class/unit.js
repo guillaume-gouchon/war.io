@@ -19,6 +19,10 @@ gameData.Unit = function (unit, x, y, owner) {
 
 	// fixes the circular structure issue with JSON.stringify
 	this.toJSON = function () {
+		var action = null;
+		if (this.a != null) {
+			action = this.a.toJSON();
+		}
 		return {
 			id: this.id,
 			f: this.f,
@@ -31,7 +35,7 @@ gameData.Unit = function (unit, x, y, owner) {
 			ga: this.ga,
 			pa: this.pa,
 			l: this.l,
-			a: this.a
+			a: action
 		}
 	}
 
