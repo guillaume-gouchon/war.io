@@ -33,6 +33,7 @@ gameSurface.BUILDING_STRUCTURE_SIZE = 5;
 gameSurface.BUILDING_INIT_Z = - 1.5 * gameSurface.PIXEL_BY_NODE;
 gameSurface.ARMIES_COLORS = ['_red', '_blu', '_gre', '_yel'];
 gameSurface.PLAYERS_COLORS = ['red', 'blue', 'green', 'yellow'];
+gameSurface.PLAYERS_COLORS_RGB = [{r:255,g:0,b:0}, {r:50,g:50,b:255}, {r:25,g:255,b:0}, {r:255,g:255,b:0}];
 gameSurface.MOVEMENT_EXTRAPOLATION_ITERATION = 6;
 gameSurface.LAND_HEIGHT_SMOOTH_FACTOR = 65;
 
@@ -133,6 +134,7 @@ gameSurface.init = function () {
 	this.init3DModels();
 
 	this.minimapCanvas = document.createElement("canvas");
+
 	this.minimapCanvas.width = gameContent.map.size.x;
 	this.minimapCanvas.style.width = GUI.MINIMAP_SIZE + "px";
 	this.minimapCanvas.height = gameContent.map.size.y;
@@ -253,7 +255,7 @@ gameSurface.createScene = function () {
     });
 	//var grassMaterial = new THREE.MeshBasicMaterial({ map: grassTexture });
 	// var landGeometry = new THREE.PlaneGeometry(2200, 2200, 64, 64);
-	var landGeometry = new THREE.PlaneGeometry(1000, 1000, gameContent.map.size.x, gameContent.map.size.y);
+	var landGeometry = new THREE.PlaneGeometry(1000, 1000);
 	var planeSurface = new THREE.Mesh(landGeometry, grassMaterial);
     planeSurface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
     planeSurface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
@@ -268,7 +270,36 @@ gameSurface.createScene = function () {
 		for ( var y = 0; y < gameContent.map.size.y; y++) {
 			this.fogOfWarMatrix[x][y] = 0;
 			this.deepFogOfWarMatrix[x][y] = 0;
+		}
 	}
+
+
+	var planeSize = 2000;
+	var geometry = new THREE.PlaneGeometry(2000, 2000, 50,50);
+	for (var i=0, l=geometry.faces.length; i<l; i++) {
+		var centroid = geometry.faces[i].centroid;
+		if (Math.abs(centroid.x)<500 && Math.abs(centroid.y)<500) {
+			geometry.faces.splice(i, 1);
+			l--;
+			i--;
+		}
+	}
+	for (var i=0, l=geometry.vertices.length; i<l; i++) {
+		var vertice = geometry.vertices[i];
+		//if (Math.abs(vertice.x)<500 && Math.abs(vertice.y)<500) {
+		//} else {
+			vertice.setZ(-Math.max(0,(Math.max(Math.abs(vertice.x), Math.abs(vertice.y))-500)/500 * 50));
+		//}
+	}
+	geometry.elementsNeedUpdate = true;
+	geometry.verticesNeedUpdate = true;
+	geometry.computeCentroids();
+	geometry.computeFaceNormals();
+	var surface = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({color:0x666666}));
+    surface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
+    surface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
+    surface.position.z = -.01;
+    scene.add(surface);
 
 
 	//add order geometry
@@ -844,7 +875,6 @@ gameSurface.manageElementsVisibility = function () {
 	}
 
 }
-}
 
 gameSurface.shouldMemorizeInFog = function(element) {
 	return (element.f == gameData.FAMILIES.land || element.f == gameData.FAMILIES.building);
@@ -852,17 +882,6 @@ gameSurface.shouldMemorizeInFog = function(element) {
 
 
 gameSurface.updateMinimap = function() {
-	/*this.minimapContext.fillStyle = "#ccc";
-	this.minimapContext.fillRect(0, 0, GUI.MINIMAP_SIZE, GUI.MINIMAP_SIZE);
-	this.minimapContext.fillStyle = "#000";
-	for (var type in gameContent.gameElements) {
-		for (var id in gameContent.gameElements[type]) {
-			var element = gameContent.gameElements[type][id];
-			if (element.f != gameData.FAMILIES.land) {
-				this.minimapContext.fillRect(element.p.x,element.p.y,1,1);
-			}
-		}
-	}*/
 
 	var xy = 0, r,g,b,a,vision;
 	for (var y = gameContent.map.size.y-1, maxY=0; y >= maxY; y--) {
@@ -883,11 +902,12 @@ gameSurface.updateMinimap = function() {
 							g=color.g;
 							b=color.b;
 						} else if (rank.isAlly(gameContent.players, gameContent.myArmy, element)) {
-							r=b=0;
-							g=255;
+							r=g=b=255;
 						} else {
-							r=255;
-							g=b=0;
+							var color = gameSurface.PLAYERS_COLORS_RGB[element.o];
+							r=color.r;
+							g=color.g;
+							b=color.b;
 						}
 						if (this.fogOfWarMatrix[x][y] == 0) {
 							r/=3;

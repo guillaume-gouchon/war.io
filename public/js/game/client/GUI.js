@@ -31,7 +31,7 @@ GUI.MOUSE_ICONS = {
 	arrowRight : 'e-resize',
 	arrowLeft : 'w-resize'
 }
-GUI.UPDATE_FREQUENCY = 0.2;
+GUI.UPDATE_FREQUENCY = 0.5;
 
 
 /**

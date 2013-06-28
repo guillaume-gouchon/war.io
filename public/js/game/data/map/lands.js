@@ -20,7 +20,7 @@ gameData.ELEMENTS[gameData.FAMILIES.land].push(
 		ra : 3000,
 		g : 'goldmine.js',
 		image : 'gold-mine.png',
-		minimapColor : {r:253,g:208,b:23},
+		minimapColor : {r:237,g:226,b:117},
 	},
 	{	
 		name : 'Water',
