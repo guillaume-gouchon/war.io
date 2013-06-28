@@ -56,6 +56,7 @@ gameData.Game = function () {
 	*/
 	this.update = function () {
 		this.iterate = (this.iterate > 100 ? 0 : this.iterate + 1);
-		return gameLogic.update(this);
+		var result = gameLogic.update(this);
+		return result;
 	}
 }

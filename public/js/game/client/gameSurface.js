@@ -26,7 +26,7 @@ gameSurface.CAN_BUILD_CUBE_COLOR = 0x00ff00;
 gameSurface.CANNOT_BUILD_CUBE_COLOR = 0xff0000;
 gameSurface.BUILD_CUBE_OPACITY = 0.5;
 
-gameSurface.CENTER_CAMERA_Y_OFFSET = 15 * gameSurface.PIXEL_BY_NODE;
+gameSurface.CENTER_CAMERA_Y_OFFSET = 20 * gameSurface.PIXEL_BY_NODE;
 gameSurface.BARS_HEIGHT = 0.5;
 gameSurface.BARS_DEPTH = 0.2;
 gameSurface.BUILDING_STRUCTURE_SIZE = 5;
@@ -156,13 +156,13 @@ gameSurface.init = function () {
 		controls.update();
 
 		gameSurface.updateMoveExtrapolation();
-		gameSurface.updateOrderPosition();
 
 		// animations
 		TWEEN.update();
 
 		// update GUI
 		if (gameSurface.iteration % (1 / GUI.UPDATE_FREQUENCY) == 0) {
+			gameSurface.updateOrderPosition();
 			GUI.update();
 			gameSurface.updateMinimap();
 		}
@@ -493,6 +493,7 @@ gameSurface.addElement = function (element) {
 *	Updates an existing game element.
 */
 gameSurface.updateElement = function (element) {
+
 	var gameElement = utils.getElementFromId(element.id);
 	var object = gameElement.m;
 
@@ -573,7 +574,7 @@ gameSurface.updateElement = function (element) {
 	var visible = gameElement.visible;
 	var modelVisible = gameElement.modelVisible;
 	if (gameManager.isOfflineGame) {
-		gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id] = element.toJSON();	
+		gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id] = element.toJSON();
 	} else {
 		gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id] = element;	
 	}
@@ -652,10 +653,11 @@ gameSurface.getFirstIntersectObject = function (x, y) {
 *	Centers game window on element.
 */
 gameSurface.centerCameraOnElement = function (element) {
+	controls.reset();
 	var position = this.convertGamePositionToScenePosition(element.p);
 	camera.position.x = position.x;
 	camera.position.y = position.y - this.CENTER_CAMERA_Y_OFFSET;
-	camera.position.z = controls.ZOOM_MIN;
+	camera.position.z = controls.ZOOM_MIN;	
 	controls.target.x = element.m.position.x;
 	controls.target.y = element.m.position.y;
 	controls.target.z = element.m.position.z;

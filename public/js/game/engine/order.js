@@ -125,6 +125,9 @@ order.move = function (game, units, x, y, isMultipleOrder, specialOrder) {
 		} else {
 			element.a = new gameData.Order(action.ACTION_TYPES.move, {x: x, y: y}, null, specialOrder);
 			element.pa = [];
+			if (specialOrder == order.SPECIAL_ORDERS.patrol) {// patrol
+				element.pa.push(new gameData.Order(action.ACTION_TYPES.move, {x: element.p.x, y: element.p.y}, null, 2));
+			}
 		}
 		tools.addUniqueElementToArray(game.modified, element);
 	}
@@ -242,6 +245,10 @@ order.goToElementNextOrder = function (game, element) {
 			if (target.cp < 100 || target.l < targetData.l) {
 				return;
 			}
+		} else if (element.pa[0].type == action.ACTION_TYPES.move && element.pa[0].info == order.SPECIAL_ORDERS.patrol && element.pa.length == 1) {
+			// patrol
+			element.pa.push(new gameData.Order(action.ACTION_TYPES.move, {x: element.p.x, y: element.p.y}, null, order.SPECIAL_ORDERS.patrol));
+			element.pa.push(new gameData.Order(action.ACTION_TYPES.move, {x: element.pa[0].moveTo.x, y: element.pa[0].moveTo.y}, null, order.SPECIAL_ORDERS.patrol));
 		}
 
 		element.a = element.pa[0];

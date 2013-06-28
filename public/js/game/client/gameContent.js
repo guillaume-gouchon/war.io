@@ -87,7 +87,7 @@ gameContent.init = function (data) {
 /**
 *	Updates the game content with the changes the engine sent us.	
 */
-gameContent.update = function (data) {
+gameContent.update = function (data) {	
 
 	// add new elements
 	for (var i in data.added) {

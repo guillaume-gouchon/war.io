@@ -281,7 +281,6 @@ THREE.TrackballControls = function ( object, domElement ) {
 	};
 
 	this.update = function () {
-		console.log(_this.clickMode)
 
 		_eye.subVectors( _this.object.position, _this.target );
 		_oldEye = _eye.clone();
@@ -422,6 +421,31 @@ THREE.TrackballControls = function ( object, domElement ) {
 				break;
 			case 65 :// A
 				userInput.enterAttackMode();
+				return true;
+				break;
+			case 49 :
+				event.preventDefault();
+				userInput.pressHotKey(0, event.ctrlKey);
+				return true;
+				break;
+			case 50 :
+				event.preventDefault();
+				userInput.pressHotKey(1, event.ctrlKey);
+				return true;
+				break;
+			case 51 :
+				event.preventDefault();
+				userInput.pressHotKey(2, event.ctrlKey);
+				return true;
+				break;
+			case 52 :
+				event.preventDefault();
+				userInput.pressHotKey(3, event.ctrlKey);
+				return true;
+				break;
+			case 53 :
+				event.preventDefault();
+				userInput.pressHotKey(4, event.ctrlKey);
 				return true;
 				break;
 		}

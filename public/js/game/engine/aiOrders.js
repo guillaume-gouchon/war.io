@@ -4,11 +4,11 @@ var aiOrders = {};
  *      Updates the orders that the AI gives to its units
  */
 aiOrders.update = function(game, player) {
-    var player = game.players[0];
-    var playerID = player.o;
-    this.buildHouses(game, player, playerID);
-    this.harvest(game, playerID);
-    this.trainHarvesters(game, playerID);
+    // var player = game.players[0];
+    // var playerID = player.o;
+    // this.buildHouses(game, player, playerID);
+    // this.harvest(game, playerID);
+    // this.trainHarvesters(game, playerID);
 };
 
 

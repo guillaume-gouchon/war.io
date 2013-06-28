@@ -128,14 +128,25 @@ gameSurface.updateProgressBar = function (object, element, elementData) {
 gameSurface.updateOrderPosition = function () {
 	if (gameContent.selected.length > 0) {
 		var element = utils.getElementFromId(gameContent.selected[0]);
-		if (element == null) { return; }
+		if (element == null) { 
+			this.order.visible = false;
+			return; 
+		}
 
-	 	if (element.a != null && element.a.moveTo != null || element.rp != null) {
-			var position;
-			if (element.a != null && element.a.id != null) {
-				position = utils.getElementFromId(element.a.id).p;
-			} else  {
-				position = (element.rp != null ? element.rp : element.a.moveTo);
+	 	if (element.a != null && (element.a.moveTo != null || element.a.id != null) || element.rp != null) {
+			var position = null;
+			if (element.rp != null) {
+				position = element.rp;
+			} else if (element.a.moveTo != null) {
+				position = element.a.moveTo;
+			} else {
+				var target = utils.getElementFromId(element.a.id);
+				if (target != null) {
+					position = target.p;
+				} else {
+					this.order.visible = false;
+					return;
+				}
 			}
 
 			this.setElementPosition(this.order, position.x, position.y);

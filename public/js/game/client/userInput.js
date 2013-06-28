@@ -13,6 +13,7 @@ userInput.DOUBLE_CLICK_RADIUS_SIZE = 15;
 *	VARIABLES
 */
 userInput.isChatWindowOpen = false;
+userInput.hotKeysContent = [[], [], [], [], []];
 
 
 userInput.doSelect = function (x, y, isCtrlKey, isShiftKey) {
@@ -192,7 +193,7 @@ userInput.pressEnterKey = function () {
 
 userInput.pressSpaceKey = function () {
 	if (gameContent.selected.length > 0) {
-		//gameSurface.centerCameraOnElement(utils.getElementFromId(gameContent.selected[0]));
+		gameSurface.centerCameraOnElement(utils.getElementFromId(gameContent.selected[0]));
 	}
 }
 
@@ -489,4 +490,42 @@ userInput.enterAttackMode = function () {
 	if (gameContent.selected.length > 0) {
 		controls.clickMode = controls.MODES.attack;	
 	}
+}
+
+
+userInput.pressHotKey = function (index, isCtrlKey) {
+
+	if (isCtrlKey) {
+
+		this.hotKeysContent[index] = [];
+		for (var i in gameContent.selected) {
+			this.hotKeysContent[index].push(gameContent.selected[i]);	
+		}
+		
+
+	} else {
+
+		var n = this.hotKeysContent[index].length;
+		if (n == 0) { return; }
+
+		while (n--) {
+			if (utils.getElementFromId(this.hotKeysContent[index][n]) == null) {
+				this.hotKeysContent[index].splice(n, 1);
+			}
+		}
+
+		if (gameContent.selected.length == this.hotKeysContent[index].length 
+			&& this.hotKeysContent[index].indexOf(gameContent.selected[0]) > -1) {
+			gameSurface.centerCameraOnElement(utils.getElementFromId(gameContent.selected[0]));
+		}
+
+		gameSurface.unselectAll();
+		gameContent.selected = [];
+		for (var i in this.hotKeysContent[index]) {
+			gameContent.selected.push(this.hotKeysContent[index][i]);
+			gameSurface.selectElement(this.hotKeysContent[index][i]);
+		}
+
+	}
+
 }

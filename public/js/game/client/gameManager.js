@@ -176,7 +176,7 @@ gameManager.updatePlayerName = function (newName) {
 
 gameManager.sendOrderToEngine = function (type, params) {
 	if (this.isOfflineGame) {
-		order.dispatchReceivedOrder(gameContent.game, type, params);
+		gameContent.game.orders.push([type, params])
 	} else {
 		//send order to external server
 		gameManager.socket.emit('order', [type, params]);

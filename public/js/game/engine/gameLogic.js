@@ -28,10 +28,11 @@ gameLogic.update = function (game) {
 			game.players[n].s = gameData.PLAYER_STATUSES.defeat;
 		}
 
-                // AI plays
-                if (game.players[n].ai){
-                    aiOrders.update(game, game.players[n]);
-                }
+        // AI plays
+        if (game.players[n].ai){
+            aiOrders.update(game, game.players[n]);
+        }
+
 	}
 
 	// units
@@ -69,7 +70,7 @@ gameLogic.update = function (game) {
 		chatMessages.push(game.chat[i]);
 	}
 	game.chat = [];
-	
+
 	return {
 		modified : game.modified,
 		added: game.added,
