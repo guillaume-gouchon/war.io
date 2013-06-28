@@ -27,6 +27,11 @@ gameLogic.update = function (game) {
 		if (game.players[n].s != gameData.PLAYER_STATUSES.surrender) {
 			game.players[n].s = gameData.PLAYER_STATUSES.defeat;
 		}
+
+                // AI plays
+                if (game.players[n].ai){
+                    aiOrders.update(game, game.players[n]);
+                }
 	}
 
 	// units
