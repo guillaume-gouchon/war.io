@@ -2,9 +2,14 @@
 *	The different races available.
 */
 gameData.RACES = {
-	human : {
+	tomatoes : {
 		id: 0,
-		name : 'The Human Alliance',
+		name : 'Tomatoes',
+		image : 'human.png'
+	},
+	lemons : {
+		id: 1,
+		name : 'Lemons',
 		image : 'human.png'
 	}
 }
