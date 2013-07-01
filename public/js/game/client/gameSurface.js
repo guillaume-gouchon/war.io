@@ -217,7 +217,7 @@ gameSurface.createScene = function () {
 
 	var grassTexture  = THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'grass2.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
 	grassTexture.wrapT = grassTexture.wrapS = THREE.RepeatWrapping;
-	grassTexture.repeat.set(32,32);
+	grassTexture.repeat.set(16,16);
 
 
     this.fogOfWarGroundTexture = new THREE.DataTexture( this.fogOfWarDataColor, rwidth, rheight, THREE.RGBFormat );
@@ -238,7 +238,7 @@ gameSurface.createScene = function () {
             "varying vec2 vUv;",
 
             "void main() {",
-              "vUv = vec2(uv.y, (1.0-uv.x));",
+              "vUv = vec2(uv.x, (1.0-uv.y));",
               "gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);",
             "}",
         ].join("\n"),
@@ -360,11 +360,11 @@ gameSurface.loadObject = function (key, elementFamily) {
 	if (elementFamily != gameData.FAMILIES.land) {
 		for (var n = 0; n < gameContent.players.length; n++) {
 			var color = this.ARMIES_COLORS[n];
-			gameSurface.materials[key + color] = new THREE.MeshBasicMaterial({map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key.replace('.js', '') + color + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
+			gameSurface.materials[key + color] = new THREE.MeshLambertMaterial({map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key.replace('.js', '') + color + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
 			gameSurface.materials["HIDDEN" + key + color] = new THREE.MeshBasicMaterial({color: 0x555555, map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key.replace('.js', '') + color + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
 		}
 	} else {
-		gameSurface.materials[key] = new THREE.MeshBasicMaterial({map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key.replace('.js', '.png'), new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
+		gameSurface.materials[key] = new THREE.MeshLambertMaterial({map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key.replace('.js', '.png'), new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
 		gameSurface.materials["HIDDEN" + key] = new THREE.MeshBasicMaterial({color: 0x555555, map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key.replace('.js', '.png'), new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
 	}
 }
@@ -843,10 +843,10 @@ gameSurface.manageElementsVisibility = function () {
 		var element = this.elementsMemorizedInFog[index];
 		if (visionMatrix[element.p.x] != undefined && visionMatrix[element.p.x][element.p.y] > 0) {
 			// the building could now be visible
-			console.log("building to show");
+			//console.log("building to show");
 			if (utils.getElementFromId(element.id) == null) {
 				// but it has been destroyed, so we remove it for good
-				console.log("BOOOM IT DIED");
+				//console.log("BOOOM IT DIED");
 				var object = this.elementsMemorizedInFog[index].m;
 				this.hideElementModel(element, object);
 			} else {
@@ -863,8 +863,8 @@ gameSurface.manageElementsVisibility = function () {
 	var fogChanged = false;
 	// r,g,b positions in the texture data matrix. increase each by 3 to get the next pixel
 	var xy0 = 0, xy1 = 1, xy2 = 2;
-	for (var x = 0; x < mapW; x++) {
-		for (var y = 0; y < mapH; y++, xy0+=3, xy1+=3, xy2+=3) {
+	for (var y = 0; y < mapH; y++) {
+		for (var x = 0; x < mapW; x++, xy0+=3, xy1+=3, xy2+=3) {
 			visible = (visionMatrix[x] === undefined) ? 0 : (visionMatrix[x][y] == undefined) ? 0 : visionMatrix[x][y];
 			if (visible != this.fogOfWarMatrix[x][y]) {
 				this.fogOfWarMatrix[x][y] = visible;

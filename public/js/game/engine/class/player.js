@@ -12,13 +12,13 @@ gameData.Player = function (playerId, owner, race, isAI) {
 
 	this.pop = {max : 0, current : 0};// player's population info
 
-        this.ai = false;
+    this.ai = false;
 
-        if (typeof isAI != 'undefined') {// check if the player is an AI
-            if (isAI) {
-                this.ai = true;
-            }
+    if (typeof isAI != 'undefined') {// check if the player is an AI
+        if (isAI) {
+            this.ai = true;
         }
+    }
 
 	// initializes player's population
 	for(var i in gameData.BASECAMPS[this.r].buildings) {
