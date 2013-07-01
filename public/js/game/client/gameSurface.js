@@ -836,10 +836,10 @@ gameSurface.manageElementsVisibility = function () {
 		var element = this.elementsMemorizedInFog[index];
 		if (visionMatrix[element.p.x] != undefined && visionMatrix[element.p.x][element.p.y] > 0) {
 			// the building could now be visible
-			console.log("building to show");
+			//console.log("building to show");
 			if (utils.getElementFromId(element.id) == null) {
 				// but it has been destroyed, so we remove it for good
-				console.log("BOOOM IT DIED");
+				//console.log("BOOOM IT DIED");
 				var object = this.elementsMemorizedInFog[index].m;
 				this.hideElementModel(element, object);
 			} else {

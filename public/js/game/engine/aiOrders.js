@@ -4,7 +4,7 @@ var aiOrders = {};
  *      Updates the orders that the AI gives to its units
  */
 aiOrders.update = function(game, player) {
-    var player = game.players[0];
+    //var player = game.players[0];
     var playerID = player.o;
     this.buildHouses(game, player, playerID);
     this.harvest(game, player, playerID);
@@ -12,7 +12,8 @@ aiOrders.update = function(game, player) {
     this.trainSoldiers(game, player, playerID);
     this.buildRax(game, player, playerID);
     this.finishBuildings(game, playerID);
-    //this.buildTownHall(game, player, playerID);
+    this.buildTownHall(game, player, playerID);
+    this.shoudIAttack(game, playerID);
 };
 
 
@@ -66,10 +67,10 @@ aiOrders.buildRax = function(game, player, playerID) {
 
 /**
  *      Build Town Hall
- *      TODO: Doesn't work...
  */
 aiOrders.buildTownHall = function(game, player, playerID) {
-    if (player.pop.current > player.pop.max - 8) {
+    var townHall = gameData.ELEMENTS[gameData.FAMILIES.building][0][0];
+    if (player.re[0] > townHall.needs[0].value && player.re[1] > townHall.needs[1].value && player.pop.current > 30) {
         var worker = null;
         var n = 0;
         for (var n in game.gameElements.unit) {
@@ -83,20 +84,24 @@ aiOrders.buildTownHall = function(game, player, playerID) {
         }
         var pos = worker.p;
         var i = 0;
-        for (var i = 0; i < 10; i++) {
-            order.move(game, [worker], parseInt(Math.random() * game.grid[0].length - 1), parseInt(Math.random() * game.grid.length - 1), false);
-            var tilesAround = tools.getFreeTilesAroundElements(game, worker);
-            for (var n in tilesAround) {
-                pos = tilesAround[n];
-                var neighbors = tools.getNeighbors(game.grid, pos.x, pos.y);
-                for (var j in neighbors) {
-                    pos = neighbors[j];
-                    if (this.canBeBuiltHere(game, pos, gameData.ELEMENTS[gameData.FAMILIES.building][worker.t][0])) {
-                        order.buildThatHere(game, [worker.id], gameData.ELEMENTS[gameData.FAMILIES.building][worker.t][0], pos.x, pos.y, false); 
-                        return;
+        try {
+            for (var i = 0; i < 10; i++) {
+                pos = worker.p;
+                order.move(game, [worker], parseInt(Math.random() * game.grid[0].length - 1), parseInt(Math.random() * game.grid.length - 1), true);
+                var tilesAround = tools.getFreeTilesAroundElements(game, worker);
+                for (var n in tilesAround) {
+                    var neighbors = tools.getNeighbors(game.grid, pos.x, pos.y);
+                    for (var j in neighbors) {
+                        pos = neighbors[j];
+                        if (this.canBeBuiltHere(game, pos, townHall)) {
+                            order.buildThatHere(game, [worker.id], townHall, pos.x, pos.y, true); 
+                        }
                     }
                 }
             }
+        }
+        catch(err) {
+            return; //??!!! :'(
         }
     }
 };
@@ -122,25 +127,25 @@ aiOrders.buildHouses = function(game, player, playerID) {
         }
         var pos = worker.p;
         var i = 0;
-        for (var i = 0; i < 10; i++) {
-            order.move(game, [worker], parseInt(Math.random() * game.grid[0].length - 1), parseInt(Math.random() * game.grid.length - 1), false);
-            var tilesAround = tools.getFreeTilesAroundElements(game, worker);
-            for (var n in tilesAround) {
-                pos = tilesAround[n];
-                var neighbors = tools.getNeighbors(game.grid, pos.x, pos.y);
-                for (var j in neighbors) {
-                    pos = neighbors[j];
-                    if (this.canBeBuiltHere(game, pos, house)) {
-                        try {
+        try {
+            for (var i = 0; i < 10; i++) {
+                order.move(game, [worker], parseInt(Math.random() * game.grid[0].length - 1), parseInt(Math.random() * game.grid.length - 1), false);
+                var tilesAround = tools.getFreeTilesAroundElements(game, worker);
+                for (var n in tilesAround) {
+                    pos = tilesAround[n];
+                    var neighbors = tools.getNeighbors(game.grid, pos.x, pos.y);
+                    for (var j in neighbors) {
+                        pos = neighbors[j];
+                        if (this.canBeBuiltHere(game, pos, house)) {
                             order.buildThatHere(game, [worker.id], house, pos.x, pos.y, false); 
                             return;
-                        }
-                        catch(err) {
-                            return; // ?!?? :-(
                         }
                     }
                 }
             }
+        }
+        catch(err) {
+            return; // ?!?? :-(
         }
     }
 };
@@ -205,7 +210,7 @@ aiOrders.trainSoldiers = function(game, player, playerID) {
         if (building.o == playerID) {
             if (gameData.ELEMENTS[building.f][building.r][building.t].name == 'Casern') {
                 if (building.q.length < 2) { // Don't queue soldiers, it's useless
-                    if (player.re[1] < 12) { // Train Bowman
+                    if (player.re[1] < 200) { // Train Bowman
                         order.buy(game, [building.id], gameData.ELEMENTS[gameData.FAMILIES.unit][0][3]);
                     }
                     else { // Train Knight
@@ -298,3 +303,32 @@ aiOrders.isHarvestingOrIdleWorker = function(unit, playerID) {
     }
     return false;
 }
+
+
+/**     Is there anything that I could attack?
+ *
+ */
+aiOrders.shoudIAttack = function(game, playerID) {
+    var soldiers = [];
+    var i = 0;
+    for (var i in game.gameElements.unit) {
+        var unit = game.gameElements.unit[i];
+        if (unit.o == playerID && !gameData.ELEMENTS[unit.f][unit.r][unit.t].isBuilder) {
+            soldiers.push(unit);
+        }
+    }
+    //for (var s in soldiers) {
+        //AI.searchForNewEnemy(soldiers[s]);
+    //}
+    if (soldiers.length > 10) { // BANZAIIIIII!
+        for (var n in game.gameElements.building) {
+            var building = game.gameElements.building[n];
+            if (building.o != playerID) { // You'll die first
+                console.log('KOWABOONGA!');
+                order.attack(game, soldiers, building);
+                return;
+            }
+        }
+    }
+};
+
