@@ -4,11 +4,11 @@ var aiOrders = {};
  *      Updates the orders that the AI gives to its units
  */
 aiOrders.update = function(game, player) {
-    // var player = game.players[0];
-    // var playerID = player.o;
-    // this.buildHouses(game, player, playerID);
-    // this.harvest(game, playerID);
-    // this.trainHarvesters(game, playerID);
+    var player = game.players[0];
+    var playerID = player.o;
+    this.buildHouses(game, player, playerID);
+    this.harvest(game, playerID);
+    this.trainHarvesters(game, playerID);
 };
 
 
@@ -103,10 +103,10 @@ aiOrders.harvest = function(game, playerID) {
 */
 aiOrders.canBeBuiltHere = function (game, position, building) {
     building.p = position;
-    var point1 = tools.getPartPosition(building, 0, 0);
+    var point1 = tools.getPartPosition(building, -1, -1);
     var point2 = {
-        x : point1.x + building.shape[0].length - 1,
-        y : point1.y + building.shape.length - 1
+        x : point1.x + building.shape[0].length ,
+        y : point1.y + building.shape.length,
     };
 
     for (var i = point1.x; i <= point2.x; i++) {
