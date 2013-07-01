@@ -66,8 +66,8 @@ gameManager.initGame = function (gameInitData) {
 *	Starts the game.
 */
 gameManager.startGame = function () {
-	$('#gui').removeClass('hide');
-	$('#introScreen').remove();
+	$('#game').removeClass('hide');
+	$('#loadingScreen').remove();
 
 	gameContent.init(this.waitingData);
 

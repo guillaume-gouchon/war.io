@@ -51,6 +51,7 @@ gameSurface.geometries = null;
 gameSurface.materials = null;
 gameSurface.isKeyboardScrolling = false;
 gameSurface.stuffToBeLoaded = 0;
+gameSurface.totalStuffToBeLoaded = 0;
 gameSurface.ex = [];
 gameSurface.orderFactor = -1;
 
@@ -128,6 +129,8 @@ gameSurface.init = function () {
 			}
 		}
 	}
+
+	gameSurface.totalStuffToBeLoaded = gameSurface.stuffToBeLoaded;
 
 	// init scene
 	this.createScene();
@@ -383,6 +386,10 @@ gameSurface.geometryLoaded = function (key) {
 */
 gameSurface.updateLoadingCounter = function () {
 	this.stuffToBeLoaded --;
+	
+	// UI
+	updateLoadingProgress(parseInt(100 * (this.totalStuffToBeLoaded - this.stuffToBeLoaded) / this.totalStuffToBeLoaded));
+
 	if(this.stuffToBeLoaded == 0) {
 		if (gameManager.isOfflineGame) {
 			gameManager.startGame();

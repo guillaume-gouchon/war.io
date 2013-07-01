@@ -1,0 +1,418 @@
+canvas {
+	background-color: #000;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+#endGame {
+    opacity: 0.8;
+    text-align: center;
+}
+
+.victory {
+    color : #0d0;
+}
+
+.defeat {
+    color : #d00;
+}
+
+#returnHome {
+    position: absolute;
+    bottom: 30px;
+    width: 100%;
+    text-align: center;
+}
+
+#returnHome a {
+    font-size: 2.2em;
+}
+
+#resources {
+    position: absolute;
+    top: 2px;
+    left: 124px;
+    width: 210px;
+    height: 60px;
+    text-align: center;
+}
+
+#resources div {
+    display: inline-block;
+    width: 50%;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    line-height: 60px;
+}
+
+#resources div div {
+    width: auto;
+}
+
+#messages {
+  position: absolute;
+  top: 80px;
+  left: 20px;
+}
+
+#messages div div {
+  font-size: 1.2em;
+  color: #111;
+  margin-bottom: 5px;
+  padding: 10px;
+  opacity: 0.7;
+  float: left;
+}
+
+.fadeOut {
+  opacity: 0!important;
+}
+
+#toolbar {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    display: inline-block;
+}
+
+#toolbar .toolbarButton {
+    height: 80px;
+    width: 80px;
+    font-size: 22px;
+    font-weight: bold;
+    color: #fff;
+}
+
+#toolbar .toolbarButton div {
+    text-align: center;
+}
+
+.disabled {
+    opacity: 0.5;
+}
+
+.sprite {
+  background: url('../img/GUI/sprite.png') no-repeat top left;
+}
+
+.spriteBefore:before {
+  float: left;
+  content: "";
+  background: url('../img/GUI/sprite.png') no-repeat top left;
+  margin-right: 5px;
+}
+
+
+#population {
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 120px;
+    height: 60px;
+    text-align: center;
+}
+
+#population div {
+    display: inline-block;
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    line-height: 60px;
+    vertical-align: middle;
+}
+
+#chat {
+  position: absolute;
+  font-size: 1.2em;
+  color: #ddd;
+  background: #000;
+  opacity: 0.8;
+  padding: 10px 10px 0px 10px;
+  border-radius: 5px;
+}
+
+#endGameStats {
+    position: relative;
+    top: 250px;
+    left: 30px;
+}
+
+#endGameStats table tr th, #endGameStats table tr td {
+    text-align: center;
+}
+
+.red {
+    background: #C41616;
+}
+
+.blue {
+    background: #9E9EF0;
+}
+
+.green {
+    background: #70CC83;
+}
+
+.yellow {
+    background: #EDC71C;
+}
+
+.black {
+    background: #000;
+}
+
+.white {
+    background: #eee;
+}
+
+#info {
+    position: absolute;
+    bottom: 6px;
+    height: 70px;
+    width: 350px;
+    text-align: center;
+}
+
+#firstHalfInfo {
+    display: inline-block;
+    width: 200px;
+}
+
+#firstHalfInfo div {
+    display: inline-block;
+    width: 130px;
+}
+
+#secondHalInfo {
+    display: inline-block;
+    width: 150px;
+}
+
+#firstHalfInfo #portrait {
+    display: inline-block;
+    height: 35px;
+    width: 40px;
+    vertical-align: top;
+    margin-top: 15px;
+    margin-left: 20px;
+}
+
+#name {
+    margin-top: 15px;
+    font-size: 0.9em;
+    line-height: 20px;
+}
+
+#life {
+    font-weight: bold;
+    font-size: 0.9em;
+    line-height: 20px;
+}
+
+#frags {
+  position: absolute;
+  left: -14px;
+  bottom: 4px;
+  font-size: 0.5em;
+}
+
+#stats {
+    display: inline-block;
+    width: 130px;
+    padding-right: 10px;
+}
+
+#stats div {
+    line-height: 20px;
+}
+
+#stats div img {
+    display: inline-block;
+    height: 20px;
+    width: 20px;
+    vertical-align: middle;
+}
+
+#stats div div {
+    display: inline-block;
+    font-size: 0.7em;
+    font-weight: bold;
+    margin-left: 10px;
+}
+
+.stat {
+    display: inline-block;
+    width: 48%;
+}
+
+.queue {
+    display: inline-block;
+    width: 15%;
+}
+
+.queue #queueProgress {
+    position: absolute;
+    top: 39px;
+    left: 188px;
+    color: rgb(224, 188, 25);
+    font-weight: bold;
+    font-size: 0.9em;
+}
+
+#toolbar .price {
+    position: absolute;
+    bottom: 0px;
+    left: 80px;
+    width: 50px;
+    line-height: 15px;
+    font-size: 0.5em;
+}
+
+#toolbar .price img {
+    display: inline-block;
+    height: 15px;
+    width: 15px;
+    margin-top: 0px;
+    margin-right: 3px;
+}
+
+#minimap {
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    height: 140px;
+    width: 140px;
+    opacity: 0.7;
+    border-radius: 10px;
+    color: #d55;
+}
+
+#minimapLocation {
+    position: absolute;
+}
+
+.minimapPointBuilding {
+  position: absolute;
+  height: 8px;
+  width: 8px;
+  border-radius: 8px;
+}
+
+.minimapPointUnit {
+  position: absolute;
+  height: 4px;
+  width: 4px;
+  border-radius: 4px;
+}
+
+#diplomacy {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  color: #111;
+}
+
+.smallButton {
+    display: inline-block;
+    font-size: 15px;
+    text-align: center;
+    padding: 4px;
+    -webkit-box-shadow:0px 0px 6px 3px rgba(0, 0, 0, 0.6);
+    box-shadow:0px 0px 6px 3px rgba(0, 0, 0, 0.6);
+    margin-right: 10px;
+    border-radius: 3px;
+}
+
+#diplomacy .customRadio {
+  opacity: 0.2;
+}
+
+#diplomacy .checked {
+  background: #eee;
+  opacity: 0.6!important;
+}
+
+#diplomacy .customRadio:hover {
+    background: #ccc;
+}
+
+#selectionRectangle {
+  position: absolute;
+  border: 2px solid #5f5;
+  opacity: 0.8;
+}
+
+
+
+/**
+*  SPRITES
+*/
+#population .spriteBefore:before {
+  margin-top: 14px; margin-right: 11px;
+}
+#resources .spriteBefore:before {
+  margin-top: 14px; margin-right: 7px;
+}
+.bigButton .spriteBefore:before {
+  margin-top: 19px; margin-right: 27px;
+}
+.toolbarButton .sprite {
+  position: relative;
+  top: 15px;
+  left: 15px;
+}
+.queue .sprite {
+  position: relative;
+  top: 6px;
+}
+
+/**
+* TO UPDATE WHEN "sprite.png" IS UPDATED
+*/
+.toolbarButton.sprite-boxNormal:hover {
+  background-position: -1003px 0; width: 80px; height: 80px;
+}
+
+.sprite-attack:before{ background-position: 0 0; width: 20px; height: 20px; } 
+.sprite-attackSpeed:before{ background-position: -30px 0; width: 20px; height: 20px; } 
+.sprite-bgInfo{ background-position: -60px 0; width: 350px; height: 70px; } 
+.sprite-bgMinimap{ background-position: -420px 0; width: 140px; height: 140px; } 
+.sprite-bgPop{ background-position: -570px 0; width: 118px; height: 59px; } 
+.sprite-bgResources{ background-position: -698px 0; width: 210px; height: 60px; } 
+.sprite-bowman{ background-position: -918px 0; width: 50px; height: 50px; } 
+.sprite-bowman15{ background-position: -978px 0; width: 15px; height: 15px; } 
+.sprite-boxNormal{ background-position: -1093px 0; width: 80px; height: 80px; } 
+.sprite-boxSelect{ background-position: -1183px 0; width: 80px; height: 80px; } 
+.sprite-build{ background-position: -1273px 0; width: 50px; height: 50px; } 
+.sprite-cancel{ background-position: -1333px 0; width: 50px; height: 50px; } 
+.sprite-casern{ background-position: -1393px 0; width: 50px; height: 50px; } 
+.sprite-castle{ background-position: -1453px 0; width: 50px; height: 50px; } 
+.sprite-defense{ background-position: -1513px 0; width: 20px; height: 20px; } 
+.sprite-forest{ background-position: -1543px 0; width: 50px; height: 50px; } 
+.sprite-gold-mine{ background-position: -1603px 0; width: 50px; height: 50px; } 
+.sprite-gold:before{ background-position: -1663px 0; width: 28px; height: 28px; } 
+.sprite-gold15:before{ background-position: -1701px 0; width: 15px; height: 15px; } 
+.sprite-house{ background-position: -1726px 0; width: 50px; height: 50px; } 
+.sprite-human:before{ background-position: -1786px 0; width: 30px; height: 22px; } 
+.sprite-knight{ background-position: -1826px 0; width: 50px; height: 50px; } 
+.sprite-knight15{ background-position: -1886px 0; width: 15px; height: 15px; } 
+.sprite-minimapLocation{ background-position: -1911px 0; width: 16px; height: 16px; } 
+.sprite-music:before{ background-position: -1937px 0; width: 15px; height: 15px; } 
+.sprite-peon{ background-position: -1962px 0; width: 50px; height: 50px; } 
+.sprite-peon15{ background-position: 0 -150px; width: 15px; height: 15px; } 
+.sprite-playerName:before{ background-position: -25px -150px; width: 30px; height: 30px; } 
+.sprite-pop20:before{ background-position: -65px -150px; width: 20px; height: 20px; } 
+.sprite-population:before{ background-position: -95px -150px; width: 28px; height: 28px; } 
+.sprite-range:before{ background-position: -133px -150px; width: 20px; height: 20px; } 
+.sprite-stone:before{ background-position: -163px -150px; width: 40px; height: 40px; } 
+.sprite-swordsman{ background-position: -213px -150px; width: 50px; height: 50px; } 
+.sprite-swordsman15{ background-position: -273px -150px; width: 15px; height: 15px; } 
+.sprite-tower{ background-position: -298px -150px; width: 50px; height: 50px; } 
+.sprite-wood:before{ background-position: -358px -150px; width: 28px; height: 28px; } 
+.sprite-wood15:before{ background-position: -396px -150px; width: 15px; height: 15px; } 

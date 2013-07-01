@@ -11,12 +11,12 @@
 	    <meta charset="utf-8">
 	    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<meta name="viewport" content="maximum-scale=1.0, user-scalable=no" />
-        <meta name="author" content="Guillaume Gouchon">
+        <meta name="author" content="Team Awesome">
 		<meta name="description" content="Online Multiplayer Real-Time Strategy Game">
         <meta name="keywords" content="HTML5, browser, socketIO, webSockets, RTS, free, realtime, strategy, game, warcraft, starcraft, node.js, three.js, webGL" />
         
         <meta property="og:title" content="WarNode | Online Multiplayer RTS Game"/>
-        <meta property="og:image" content="http://warnode.com/img/7.png"/>
+        <meta property="og:image" content="http://www.warnode.com/img/logo.png"/>
         <meta property="og:type" content="game"/>
 
         <link rel="shortcut icon" href="img/favicon.png">
@@ -26,255 +26,166 @@
 
 	    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
 	    <link href="css/style.css" rel="stylesheet">
+	    <link href="css/gui.css" rel="stylesheet">
 	</head>
 
 	<body>
 
-	  <div id="introScreen" class="fullScreen blackBackground">
+		<div id="website">
 
-	  	<ul class="cb-slideshow" >
-			<li><span></span></li>
-			<li><span></span></li>
-			<li><span></span></li>
-			<li><span></span></li>
-			<li><span></span></li>
-		</ul>
+		  	<header>
+		  		<div id="playerName" class="spriteBefore sprite-playerName">
+		  			<input type="text"/>
+		  		</div>
+			  	<div id="armies"></div>
+		  		<div id="music" class="spriteBefore sprite-music" >Off</div>
+		  	</header>
 
-	  	<header>
-	  		<div id="playerName" class="spriteBefore sprite-playerName">
-	  			<input type="text"/>
-	  		</div>
-	  		<div id="music" class="spriteBefore sprite-music" >Off</div>
-		  	<div id="factions"></div>
-	  	</header>
+		  	<div id="mainButtons">
+		  		<div><button id="createGameButton" href="#newGame" data-toggle="modal">Create Game</button></div>
+		  		<div><button id="joinGameButton" type="button">Join Game</button></div>
+				<div><button id="tutorialButton" type="button">Tutorial</button></div>
+		  	</div>
 
-	  	<div id="mainTitle" class="fullScreenTitle easeTransition" >Welcome to WarNode !</div>
-	  	<div id="subTitle" class="fullScreenTitle easeTransition hide" ></div>
+		  	<div id="newGame" class="modal hide fade" tabindex="-1" role="dialog">
+		  		<div class="modal-header">
+		  			<h3>New Game</h3>
+	  			</div>
+		  		<form>
+				  <fieldset>
+				    <legend>Players</legend>
+				    <label>Number of players
+				    	<input type="number" class="input-mini" value="4" min="2" max="6">
+					</label>
+				    <div id="players"></div>
+				    <legend>Map configuration</legend>
+				    <label>Size of the map<select id="mapSize" class="span2"></select></label>
+				    <label>Amount of initial resources<select id="initialResources" class="span2"></select></label>
+				    <div class="modal-footer">
+				    	<button class="cancelButton" type="button">Cancel</button>
+				    	<button id="confirmGameCreation" type="button">Create !</button>
+				    </div>
+				  </fieldset>
+				</form>
+		  	</div>
 
-	  	<div id="loadingTitle" class="fullScreenTitle easeTransition hide" >
-	  		<span id="loadingLabel">Waiting for Opponents</span><span class="one">.</span><span class="two">.</span><span class="three">.</span>​
+		  	<div id="joinGame" class="fullScreen hide">
+		  		<table id="lstGames" class="table table-hover"></table>
+			  	<button type="button">Cancel</button>
+		  	</div>
+
+		  	<div id="about" class="modal hide fade" tabindex="-1" role="dialog">
+		  		<div class="modal-header">
+		  			<h3>About WarNode</h3>
+	  			</div>
+	  			<div class="modal-body">
+			  		<p>WarNode is a free Multiplayer Real-Time Strategy Game.</p>
+			  		<p>...</p>
+		  		</div>
+		  	</div>
+
+		  	<div id="credits" class="modal hide fade" tabindex="-1" role="dialog">
+		  		<div class="modal-header"><h3>Credits</h3></div>
+		  		<div class="modal-body">
+			  		<p>...</p>
+		  		</div>
+		  	</div>
+		  	
+		  	<footer>
+	  			<span>Share on</span> 
+	  			<a href="http://www.facebook.com/share.php?u=http://www.warnode.com" target="_blank"><img src="img/fb_icon.png" alt="facebook logo"/></a>
+	  			<a id="twButton" href="https://twitter.com/share?url=http://www.warnode.com&text=Best 3D RTS Game in HTML5 ! " target="_blank"><img src="img/tw_icon.png" alt="twitter logo"/></a>
+		  		-<a id="aboutButton" href="#about" data-toggle="modal">About</a>
+		  		-<a id="creditsButton" href="#credits" data-toggle="modal">Credits</a>
+		  	</footer>
+		</div>
+
+
+
+	  	<div id="game" class="hide">
+		  	<div id="gui" class="fullScreen" onmousedown="return false">
+			  	<div id="resources" class="sprite sprite-bgResources" ></div>
+			  	<div id="toolbar" ></div>
+			  	<div id="population" class="sprite sprite-bgPop" ><div class="spriteBefore sprite-population"></div></div>
+			  	<div id="info" class="sprite sprite-bgInfo hide" >
+			  		<div id="firstHalfInfo">
+		  				<div id="portrait"></div>
+			  			<div>
+			  				<div id="name"></div>
+			  				<div id="life"></div>
+			  				<div id="frags"></div>
+			  			</div>	  			
+			  		</div>
+			  		<div id="stats"></div>
+			  	</div>
+			  	<div id="messages" ></div>
+		  		<div id="diplomacy"></div>
+
+		  		<div id="selectionRectangle"></div>
+		  	</div>
+
+			<div id="chat" class="hide">
+				<input class="input-xxlarge" type="text" placeholder="chat..."/>
+				<p>ENABLE SOUND&nbsp;&nbsp;&nbsp;/soundon&nbsp;&nbsp;&nbsp;OR&nbsp;&nbsp;&nbsp;olivier !</p>
+				<p>DISABLE SOUND&nbsp;&nbsp;&nbsp;/soundoff&nbsp;&nbsp;&nbsp;OR&nbsp;&nbsp;&nbsp;paranormalement</p>
+				<p>QUIT&nbsp;&nbsp;&nbsp;/surrender</p>
+			</div>
+
+			<div id="endGame" class="fullScreen blackBackground hide" >
+				<div id="endGameMessage" class="fullScreenTitle easeTransition"></div>
+				<div id="endGameStats">
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<th class="black"></th>
+								<th colspan="4" class="black">Units</th>
+								<th colspan="3" class="black">Economy</th>
+							</tr>
+			  			<tr>
+			  				<th class="black">Player</th>
+				  			<th class="black">Units killed</th>
+				  			<th class="black">Units lost</th>
+				  			<th class="black">Buildings destroyed</th>
+				  			<th class="black">Units created</th>
+				  			<th class="black">Resources</th>
+				  			<th class="black">Builders created</th>
+				  			<th class="black">Buildings created</th>
+				  		</tr>
+			  		</thead>
+			  		<tbody id="tableBody" ></tbody>
+					</table>
+				</div>
+				<div id="returnHome"><a href="">Return Home</a></div>
+			</div>
+		</div>
+
+		<div id="loadingScreen" class="fullScreen easeTransition hide" >
+			<div id="loadingLabel">
+		  		<span id="labelLoading"></span>
+		  		<span class="one">.</span>
+		  		<span class="two">.</span>
+		  		<span class="three">.</span>​
+		  	</div>
+	  		<div id="loadingProgress" class="progress progress-success">
+				<div class="bar" style="width: 0%"></div>
+			</div>
 	  	</div>
 
-	  	<div id="gameManagerButtons" class="bigButtonsChooser easeTransition">
-	  		<div id="createGameButton" class="bigButton">Create Game</div>
-	  		<div id="joinGameButton" class="bigButton">Join Game</div>
-			<div id="soloGameButton" class="bigButton">Solo Game</div>
-	  	</div>
+	  	<div id="errorWebGL" class="modal hide fade" tabindex="-1" role="dialog" >
+			<div class="modal-header">
+				<h3>Oops !</h3>
+			</div> 
+			<div class="modal-body">
+				<p>Your browser does not support WebGL.</p>
+				<p>Try <a class="redLink" href="http://google.com/chrome" target="_blank">Google Chrome</a> or <a class="redLink" href="http://get.webgl.org" target="_blank">follow this link</a> to know more about it !</p>
+			</div>
+		</div>
 
-	  	<div id="setupNewGame" class="bigButtonsChooser easeTransition hide" >
-	  		<p>
-		  		<div class="bigButton customRadio checked" data-name="nbPlayers" data-value="2">2 players</div>
-		  		<div class="bigButton customRadio" data-name="nbPlayers" data-value="3">3 players</div>
-		  		<div class="bigButton customRadio" data-name="nbPlayers" data-value="4">4 players</div>
-		  	</p>
-		  	<p>
-		  		<div class="backButton bigButton">Back</div>
-		  		<div id="confirmGameCreation" class="bigButton">Create Game !</div>
-		  	</p>
-	  	</div>
+		<div id="imagesPreload" class="hide"></div>
 
-	  	<div id="joinGame" class="bigButtonsChooser easeTransition hide" >
-	  		<div id="lstGames"></div>
-		  	<div class="backButton bigButton">Back</div>
-	  	</div>
-
-	  	<div id="errorWebGL" class="hide" >
-  			<p>Your browser does not support WebGL.</p> 
-  			<p>Try <a href="http://google.com/chrome" target="_blank">Google Chrome</a> or <a href="http://get.webgl.org" target="_blank">follow this link</a> to know more about it !</p>
-  		</div>
-
-	  	<div id="about" class="popup easeTransition" >
-	  		<h1>About WarNode</h1>
-	  		<p>WarNode is a free Multiplayer Real-Time Strategy Game.</p>
-	  		<p>In this game, you will confront real players and you surely need to use all your
-	  		tactical skills to claim the victory...</p>
-	  		<hr/>
-	  		<p>This project has been developed in 7 weeks using Three.js on client-side and Node.js on server-side.</p>
-	  	</div>
-
-	  	<div id="credits" class="popup easeTransition" >
-	  		<h1>Credits</h1>
-	  		<p>Game and Music by 
-	  			<a href="http://www.linkedin.com/profile/view?id=144913212" target="_blank">Guillaume Gouchon</a>.
-	  		</p>
-	  		<p>Check out my 
-	  			<a href="http://giggsapps.blogspot.co.uk/" target="_blank">Blog</a> 
-	  			to discover some other cool stuff !</p>
- 	  		<hr/>
-	  		<p>Game icons by game-icons.net</p>
-	  		<p>GUI backgrounds by StumpyStrust</p>
-	  		<p>3D models by Captainmarlowe, Stasma, and apm-designs</p>
-	  		<p>Special thanks to R. Bertrand for his server-side skills</p>
-	  	</div>
-
-	  	<div id="share" class="popup easeTransition">
-	  		<h1>Share it !</h1>
-	  		<!-- <span class='st_facebook_large' displayText='Facebook'></span>
-			<span class='st_twitter_large' displayText='Tweet'></span>
-			<span class='st_googleplus_large' displayText='Google +'></span>
-			<span class='st_linkedin_large' displayText='LinkedIn'></span>
-			<span class='st_email_large' displayText='Email'></span> -->
-	  	</div>
-
-	  	<div id="tutorial" class="popup easeTransition hide">
-	  		<!-- <ul>
-			   	<li>
-				   	<div>
-						<p>WarNode is a multiplayer game working nicely on Chrome, Safari, Chromium and Chrome for Android.</p>
-						<p><img src="img/browsers.png" alt="Compatible Browsers"/></p>
-						<p>You will need WebGL enabled.</p>
-						<p>Follow <a href="http://get.webgl.org" target="_blank">this link</a> to know more about it.</p>
-				   	</div>
-			   </li>
-			   <li>
-			   		<div>
-						<p>Change your name, choose your army and manage the sound here :</a></p>
-						<p><img src="img/help10.png" alt="Main Screen"/></p>
-						<p>You are then ready for battle.</p>
-						<p>Create a game or join an available one.</p>
-						<p>You can even play solo in Offline Mode !</p>
-				   	</div>
-			   </li>
-			   <li>
-			   		<div>
-						<p>Use your villagers to gather gold in the mine and to chop trees.</p>
-						<p><img src="img/help20.png" alt="Base Camp"/></p>
-						<p>It will give you resources to build structures and hire troops.</p>
-				   	</div>
-			   </li>
-			   <li>
-				   	<div>
-				   		<p>Here is your population and resources counters :</p>
-						<p><img src="img/help21.png" alt="Resources"/></p>
-						<p>When your max population is reached, you will not be able to hire more units.</p>
-						<p>Build houses to increase it.</p>
-					</div>
-			   </li>
-			   <li>
-			   		<div>
-						<p>Select a game element with a left-click (simple touch).</p>
-						<p>You can then give orders with a right-click (long touch).</p>
-						<p>You can draw selection rectangles by clicking (long touch) and releasing (dragging).</p>
-						<p><img src="img/help30.png" alt="Selection Rectangle"/></p>
-				   	</div>
-			   </li>
-			   <li>
-			   		<div>
-						<p>Here are the selected elements information :</p>
-						<p><img src="img/help31.png" alt="Game Element Information"/></p>
-						<p>It displays the current life points, attack, defense, attack speed, and range characteristics.</p>
-				   	</div>
-			   </li>
-			   <li>
-			   		<div>
-						<p>Villagers can create buildings; use this button to do so :</p>
-						<p><img src="img/help32.png" alt="Build button"/></p>
-						<p>Choose then which building and where to build it (drag it on touchscreen devices).</p>
-				   	</div>
-			   </li>
-			   <li>
-			   		<div>
-						<p>Build a casern to hire units.</p>
-						<p><img src="img/help40.png" alt="Casern"/></p>
-						<p>Then destroy all your enemies' buildings to win !</p>
-				   	</div>
-			   </li>
-			</ul> -->
-	  	</div>
-
-	  	<div id="devNotes" class="popup easeTransition">
-	  		<h1>Upcoming Features</h1>
-	  		<ul>
-	  			<li>New Lands Elements</li>
-		  		<li>Fogs of War</li>
-		  		<li>AI Opponent</li>
-		  		<li>New Musics / New Game Sounds</li>
-		  		<li>New Faction ?</li>
-	  		</ul>
-	  	</div>
-
-	  	<div id="rejoin" class="popup easeTransition">
-	  		<h1>You were in a Game.</h1>
-	  		<h3>Do you want to rejoin it ?</h3>
-	  	</div>
-
-	  	<div id="igPlayersList" class="hide"></div>
-	  	
-	  	<footer>
-	  		<a data-id="3" href="#">How to Play ?</a>
-	  		<a data-id="4" href="#">Dev Notes</a>
-	  		<a id="linkAbout" data-id="0" href="#" >About WarNode</a>
-	  		<a data-id="1" href="#">Credits</a>
-	  		<a data-id="2" href="#">Invite your Friends !</a>
-	  	</footer>
-	  </div>
-
-	  <div id="gui" class="fullScreen hide" onmousedown="return false">
-	  	<div id="resources" class="sprite sprite-bgResources" ></div>
-	  	<div id="toolbar" ></div>
-	  	<div id="population" class="sprite sprite-bgPop" ><div class="spriteBefore sprite-population"></div></div>
-	  	<div id="info" class="sprite sprite-bgInfo hide" >
-	  		<div id="firstHalfInfo">
-  				<div id="portrait"></div>
-	  			<div>
-	  				<div id="name"></div>
-	  				<div id="life"></div>
-	  				<div id="frags"></div>
-	  			</div>	  			
-	  		</div>
-	  		<div id="stats"></div>
-	  	</div>
-	  	<div id="messages" ></div>
-	  	<div id="minimap" class="sprite sprite-bgMinimap" >
-	  		<div id="minimapLocation" class="sprite sprite-minimapLocation"></div>
-	  	</div>
-  		<div id="diplomacy"></div>
-
-  		<div id="selectionRectangle"></div>
-	  </div>
-
-
-	<div id="chat" class="hide">
-		<input class="input-xxlarge" type="text" placeholder="chat..."/>
-		<p>ENABLE SOUND&nbsp;&nbsp;&nbsp;/soundon&nbsp;&nbsp;&nbsp;OR&nbsp;&nbsp;&nbsp;olivier !</p>
-		<p>DISABLE SOUND&nbsp;&nbsp;&nbsp;/soundoff&nbsp;&nbsp;&nbsp;OR&nbsp;&nbsp;&nbsp;paranormalement</p>
-		<p>QUIT&nbsp;&nbsp;&nbsp;/surrender</p>
-	</div>
-
-	  <div id="endGame" class="fullScreen blackBackground hide" >
-	  	<div id="endGameMessage" class="fullScreenTitle easeTransition"></div>
-	  	<div id="endGameStats">
-	  		<table class="table table-bordered">
-	  			<thead>
-	  				<tr>
-	  					<th class="black"></th>
-	  					<th colspan="4" class="black">Units</th>
-	  					<th colspan="3" class="black">Economy</th>
-	  				</tr>
-		  			<tr>
-		  				<th class="black">Player</th>
-			  			<th class="black">Units killed</th>
-			  			<th class="black">Units lost</th>
-			  			<th class="black">Buildings destroyed</th>
-			  			<th class="black">Units created</th>
-			  			<th class="black">Resources</th>
-			  			<th class="black">Builders created</th>
-			  			<th class="black">Buildings created</th>
-			  		</tr>
-		  		</thead>
-		  		<tbody id="tableBody" ></tbody>
-	  		</table>
-	  	</div>
-	  	<div id="returnHome"><a href="">Return Home</a></div>
-	  </div>
-
-	  	<div id="imagesPreload" class="hide"></div>
-
-	  	<div id="musicTags">
-	  		<!-- MUSIC -->
-		  	<audio controls preload></audio>
-		  	<!-- GAME SOUNDS -->
-			<audio controls preload></audio>
+	  	<div id="musicTags" class="hide">
+	  		<audio controls preload></audio><!-- MUSIC -->
+		  	<audio controls preload></audio><!-- GAME SOUNDS -->
 		</div>
 
 	</body>
@@ -314,9 +225,9 @@
 	<script type="text/javascript" src="js/game/data/map/maps.js"></script>
 
 	<!-- CLIENT -->
-	<script src="js/three.js"></script>
+	<script src="js/game/three.js"></script>
+	<script src="js/game/tween.js"></script>
 	<script type="text/javascript" src="js/game/client/controls.js"></script>
-	<script src="js/tween.js"></script>
 	<script type="text/javascript" src="js/game/client/userInput.js"></script>
 	<script type="text/javascript" src="js/game/client/GUI.js"></script>
 	<script type="text/javascript" src="js/game/client/gameSurface.js"></script>
@@ -326,11 +237,9 @@
 	<script type="text/javascript" src="js/game/client/gameManager.js"></script>
 	<script type="text/javascript" src="js/game/client/soundManager.js"></script>
 
-	<!-- SCRIPTS -->
+	<!-- WEBSITE -->
 	<script src="http://code.jquery.com/jquery-latest.js"></script>
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/index.js"></script>
-
-	<!-- TOUCHSCREEN GESTURES -->
-	<script type="text/javascript" src="js/hammer.js"></script>
 
 </html>

@@ -1,12 +1,4 @@
-//switch between touch and mouse events
-var inputEvents;
-if ('ontouchstart' in window || window.DocumentTouch && document instanceof DocumentTouch) {
-	inputEvents = 'touchstart';
-} else {
-	inputEvents = 'click';
-}
-
-//adds / update player's name
+// handle player's name
 $('input', '#playerName').val(gameManager.getPlayerName());
 $('input', '#playerName').change(function () {
 	gameManager.updatePlayerName($(this).val());
@@ -20,34 +12,58 @@ $('input', '#playerName').keydown(function (e) {
 	}
 });
 
-//init the sound manager
+// center main buttons
+centerElement($('#mainButtons'));
+
+// init the sound manager
 soundManager.init();
 
-//init music button
+// init music button
 if(utils.readCookie('rts_music_enabled') == 'true') {
 	gameManager.musicEnabled = true;
 	$('#music').addClass('musicEnabled').html('On');
 	soundManager.playMusic();
 }
+$('#music').click(function () {
+	gameManager.musicEnabled = !gameManager.musicEnabled;
+	if(!gameManager.musicEnabled) {
+		$('#music').removeClass('musicEnabled').html('Off');
+		soundManager.stopMusic();
+	} else {
+		$('#music').addClass('musicEnabled').html('On');
+		soundManager.playMusic();
+	}
+	utils.createCookie('rts_music_enabled', gameManager.musicEnabled);
+});
 
-//adds armies buttons
-initArmyChooser();
-$('div', '#factions').first().addClass('checked');
+// init armies buttons
+initArmyButtons();
+$('input', '#armies').first().attr('checked', 'checked');
 
+// init map configurations
+initMapSizes();
+initMapInitialResources();
 
-$('#mainTitle').addClass('moveToLeft');
-
-//check if webGL is supported
+// check if webGL is supported
 if (!isWebGLEnabled()) {
 	// Browser has no idea what WebGL is. Suggest they
 	// get a new browser by presenting the user with link to
 	// http://get.webgl.org
-	$('#errorWebGL').fadeIn().removeClass('hide');
-} else {
-	//buttons entrance
-	$('#gameManagerButtons').addClass('moveToTopHalf');
+	$('#errorWebGL').modal('show');
 }
 
+// preload necessary image files
+preloadImages();
+
+// cancel buttons
+$('.cancelButton').click(function () {
+	$('.modal').modal('hide');
+});
+
+// create new game button
+$('#createGameButton').click(function () {
+	soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
+});
 
 var gameInitData = {
 	mapType: 'random',
@@ -56,29 +72,36 @@ var gameInitData = {
 	initialResources: 'standard'
 };
 
-//solo mode
-$('#soloGameButton').click(function () {
+// tutorial button
+$('#tutorialButton').click(function () {
 	soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
 	$(this).unbind('click');
+	showLoadingScreen('Loading');
 	hideWelcomeScreen();
-	$('#loadingLabel').html('Loading');
-	$('#loadingTitle').removeClass('hide').addClass('moveToLeft');
-	gameInitData.army = $('.checked', '#factions').attr('data-army');
+	var tutorialInitData = {
+		mapType: 'random',
+		mapSize: 'small',
+		vegetation: 'standard',
+		initialResources: 'standard'
+	}
+	tutorialInitData.army = $('input[name="armies"]', '#armies').val();
 	gameManager.isOfflineGame = true;
-	setTimeout(function () {
-		gameManager.initGame(gameInitData);
-	}, 600);
+	startGame();
+	gameManager.initGame(tutorialInitData);
 });
 
-//create game
-$('#createGameButton').click(function () {
-	soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
-	hideWelcomeScreen();
-	$('#setupNewGame').removeClass('hide').addClass('moveToTop');
-	$('#subTitle').html('How many players ?').removeClass('hide').addClass('moveToLeft');
-});
 
-//confirm game creation
+
+
+
+
+
+
+
+
+
+
+// confirm game creation
 $('#confirmGameCreation').click(function () {
 	soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
 	$(this).unbind('click');
@@ -92,7 +115,7 @@ $('#confirmGameCreation').click(function () {
 	}, 600);
 });
 
-//join game
+// join game
 $('#joinGameButton').click(function () {
 	soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
 	$('#lstGames').html('');
@@ -104,7 +127,7 @@ $('#joinGameButton').click(function () {
 	gameManager.socket.on('joinListUpdate', function (data) {
 		updateGamesList(data);
 
-		//confirm join game
+		// confirm join game
 		$('.joinableGame', '#lstGames').click(function () {
 			soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
 			$('#subTitle').addClass('hide');
@@ -119,7 +142,7 @@ $('#joinGameButton').click(function () {
 	});
 });
 
-//back home buttons
+// back home buttons
 $('.backButton', '#setupNewGame').click(function () {
 	soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
 	$('#subTitle').addClass('hide').removeClass('moveToLeft');
@@ -133,84 +156,30 @@ $('.backButton', '#joinGame').click(function () {
 	showWelcomeScreen();
 });
 
-//footer links
-$('a', 'footer').bind(inputEvents, function () {
-	
-	closePopups();
-
-	var element;
-	switch (parseInt($(this).attr('data-id'))) {
-		case 0:
-			element = $('#about');
-			break;
-		case 1:
-			element = $('#credits');
-			break;
-		case 2:
-			return false;
-			element = $('#share');
-			break;
-		case 3:
-			return false;
-			element = $('#tutorial');
-			break;
-		case 4:
-			element = $('#devNotes');
-			break;
-	}
-
-	//animation
-	element.css('top', (window.innerHeight - element.height()) / 2);
-	element.css('left', (window.innerWidth - element.width()) / 2);
-
-	return false;
-});
-
-//hide popups
-$('#introScreen').bind(inputEvents, function () {
-    closePopups();	
-});
-
-$(".popup").not('#tutorial').click(function (e) {
-    e.stopPropagation();
-});
-
-//custom radio buttons
-$('.customRadio').bind(inputEvents, function () {
-	$('.customRadio[data-name="' + $(this).attr('data-name') + '"]').removeClass('checked');
-	$(this).addClass('checked');
-});
-
-//music button
-$('#music').click(function () {
-	gameManager.musicEnabled = !gameManager.musicEnabled;
-	if(!gameManager.musicEnabled) {
-		$('#music').removeClass('musicEnabled').html('Off');
-		soundManager.stopMusic();
-	} else {
-		$('#music').addClass('musicEnabled').html('On');
-		soundManager.playMusic();
-	}
-	utils.createCookie('rts_music_enabled', gameManager.musicEnabled);
-});
-
-//preload necessary image files
-preloadImages();
-
-
-function closePopups() {
-	$('.popup').css('top', -1200);
-}
-
-function initArmyChooser () {
+function initArmyButtons () {
 	for (var i in gameData.RACES) {
 		var army = gameData.RACES[i];
-		$('#factions').append(createArmyBox(army));
+		$('#armies').append('<label class="radio">'
+			+ '<input type="radio" name="armies" value="' + army.id + '"/>'
+			+ army.name
+	  		+ '</label>');
 	}
 }
 
-function createArmyBox (army) {
-	return '<div class="customRadio smallButton spriteBefore sprite-' + army.image.replace('.png', '') + '" data-army="' + army.id + '">' + army.name + '</div>';
+function initMapSizes () {
+	for (var i in gameData.MAP_SIZES) {
+		var mapSize = gameData.MAP_SIZES[i];
+		$('#mapSize').append('<option value="' + i + '" ' + (i == 'medium' ? 'selected' : '') + '>'
+			+ mapSize.name + '</option>');
+	}
+}
+
+function initMapInitialResources () {
+	for (var i in gameData.INITIAL_RESOURCES) {
+		var mapSize = gameData.INITIAL_RESOURCES[i];
+		$('#initialResources').append('<option value="' + i + '" ' + (i == 'standard' ? 'selected' : '') + '>'
+			+ mapSize.name + '</option>');
+	}
 }
 
 function preloadImages() {
@@ -239,18 +208,24 @@ function isWebGLEnabled() {
 	}
 }
 
+function centerElement(element) {
+	element.css('top', (window.innerHeight - element.height()) / 2);
+	element.css('left', (window.innerWidth - element.width()) / 2);
+}
+
+
+function startGame() {
+	$('#website').remove();
+}
+
+
 function showWelcomeScreen() {
-	$('#mainTitle').removeClass('hideToLeft');
-	$('#gameManagerButtons').addClass('moveToTopHalf');
-	$('header').fadeIn();
+	$('#mainButtons').fadeIn();
 	$('footer').fadeIn();
 }
 
 function hideWelcomeScreen() {
-	closePopups();
-	$('#mainTitle').addClass('hideToLeft');
-	$('#gameManagerButtons').removeClass('moveToTopHalf');
-	$('header').fadeOut();
+	$('#mainButtons').fadeOut();
 	$('footer').fadeOut();
 }
 
@@ -266,18 +241,12 @@ function updateGamesList(games) {
 	}
 }
 
-// $(document).ready(function () {
-// 	$('#tutorial').removeClass('hide');
+function showLoadingScreen(text) {
+	$('#labelLoading', '#loadingScreen').html(text);
+	$('#loadingScreen').removeClass('hide');
+	$('#loadingProgress').css('left', (window.innerWidth - $('#loadingProgress').width()) / 2);
+}
 
-// 	$('ul', '#tutorial').roundabout({
-// 		easing: 'easeOutQuad',
-// 		enableDrag: true,
-// 		dropEasing: 'easeOutBounce',
-// 		responsive: true
-// 	}).roundabout("stopAutoplay");
-
-// 	$('div', '#tutorial li').each(function () {
-// 		$(this).css('top', (300 - $(this).height()) / 2);
-// 	});
-
-// });
+function updateLoadingProgress(progress) {
+	$('.bar', '#loadingProgress').css('width', progress + '%');
+}

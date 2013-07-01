@@ -92,10 +92,10 @@ gameCreation.createRandomMap = function (game, map, players) {
 	for(var i = 0; i < nX; i++) {
 		for(var j = 0; j < nY; j++) {
 			if(zones[i][j] < 0) {
-				this.populateZone(game, map, {x : i * this.ZONE_SIZE + 1, y : j * this.ZONE_SIZE + 1}, {x : (i + 1) * this.ZONE_SIZE - 1, y : (j + 1) * this.ZONE_SIZE - 1}, 
+				this.populateZone(game, map, {x : i * this.ZONE_SIZE, y : j * this.ZONE_SIZE}, {x : (i + 1) * this.ZONE_SIZE, y : (j + 1) * this.ZONE_SIZE}, 
 							  availableZones[parseInt(Math.random() * availableZones.length)]);
 			} else {
-				this.populateZone(game, map, {x : i * this.ZONE_SIZE + 1, y : j * this.ZONE_SIZE + 1}, {x : (i + 1) * this.ZONE_SIZE - 1, y : (j + 1) * this.ZONE_SIZE - 1}, 
+				this.populateZone(game, map, {x : i * this.ZONE_SIZE, y : j * this.ZONE_SIZE}, {x : (i + 1) * this.ZONE_SIZE, y : (j + 1) * this.ZONE_SIZE}, 
 							  zones[i][j]);
 			}
 		}
