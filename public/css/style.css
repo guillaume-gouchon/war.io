@@ -55,13 +55,21 @@ button {
     -webkit-box-shadow:0px 0px 10px 3px rgba(100, 100, 100, 0.6);
     box-shadow: 0px 0px 10px 3px rgba(100, 100, 100, 0.6);
     border-radius: 3px;
-    background: #111;
+    background: #3b423c; /* Old browsers */
+    background: -moz-radial-gradient(center, ellipse cover, #3b423c 1%, #000000 100%); /* FF3.6+ */
+    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(1%,#3b423c), color-stop(100%,#000000)); /* Chrome,Safari4+ */
+    background: -webkit-radial-gradient(center, ellipse cover, #3b423c 1%,#000000 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-radial-gradient(center, ellipse cover, #3b423c 1%,#000000 100%); /* Opera 12+ */
+    background: -ms-radial-gradient(center, ellipse cover, #3b423c 1%,#000000 100%); /* IE10+ */
+    background: radial-gradient(ellipse at center, #3b423c 1%,#000000 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3b423c', endColorstr='#000000',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+    
     color: #ccc;
 }
 
 button:hover {
-    background-color: #eee;
-    color : #333;
+    background: #ddd;
+    color : #222;
 }
 
 a {
@@ -94,15 +102,22 @@ a:hover {
 *   HEADER
 **/
 header {
+    background: #3b423c; /* Old browsers */
+    background: -moz-radial-gradient(center, ellipse cover, #3b423c 1%, #000000 100%); /* FF3.6+ */
+    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(1%,#3b423c), color-stop(100%,#000000)); /* Chrome,Safari4+ */
+    background: -webkit-radial-gradient(center, ellipse cover, #3b423c 1%,#000000 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-radial-gradient(center, ellipse cover, #3b423c 1%,#000000 100%); /* Opera 12+ */
+    background: -ms-radial-gradient(center, ellipse cover, #3b423c 1%,#000000 100%); /* IE10+ */
+    background: radial-gradient(ellipse at center, #3b423c 1%,#000000 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3b423c', endColorstr='#000000',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
     position: absolute;
     top: 8px;
     left : 8px;
     padding: 10px;
-    background: #111;
-    -webkit-box-shadow: 2px 2px 10px 3px rgba(150, 150, 150, 0.6);
-    box-shadow: 2px 2px 10px 3px rgba(150, 150, 150, 0.6);
-    -moz-box-shadow: 2px 2px 10px 3px rgba(150, 150, 150, 0.6);
-    -o-box-shadow: 2px 2px 10px 3px rgba(150, 150, 10, 0.6);
+    -webkit-box-shadow: 2px 2px 10px 2px rgba(150, 150, 150, 0.6);
+    box-shadow: 2px 2px 10px 2px rgba(150, 150, 150, 0.6);
+    -moz-box-shadow: 2px 2px 10px 2px rgba(150, 150, 150, 0.6);
+    -o-box-shadow: 2px 2px 10px 2px rgba(150, 150, 10, 0.6);
     font-weight: bold;
     color: #eee;
     text-transform: uppercase;
@@ -193,6 +208,9 @@ footer span {
 /**
 *   NEW GAME SCREEN
 */
+#newGame {
+    background: #111;
+}
 #newGame select {
     margin-left: 20px;
 }
@@ -234,9 +252,9 @@ footer span {
     color: #fff;
 }
 .nav-tabs>li>a, .nav-tabs>li>a:hover {
+    background: none;
     color : #333;
     border: none;
-    background: none;
 }
 .nav-tabs>li>a:hover {
     color: #aaa;
@@ -278,7 +296,14 @@ footer span {
 *   POPUPS
 */
 .modal {
-    background-color: #111;
+    background: #3b423c; /* Old browsers */
+    background: -moz-radial-gradient(center, ellipse cover, #3b423c 1%, #000000 100%); /* FF3.6+ */
+    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(1%,#3b423c), color-stop(100%,#000000)); /* Chrome,Safari4+ */
+    background: -webkit-radial-gradient(center, ellipse cover, #3b423c 1%,#000000 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-radial-gradient(center, ellipse cover, #3b423c 1%,#000000 100%); /* Opera 12+ */
+    background: -ms-radial-gradient(center, ellipse cover, #3b423c 1%,#000000 100%); /* IE10+ */
+    background: radial-gradient(ellipse at center, #3b423c 1%,#000000 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3b423c', endColorstr='#000000',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
     padding: 15px;
     -webkit-box-shadow: 0px 0px 5px 2px rgba(150, 150, 150, 0.7);
     box-shadow: 0px 0px 5px 2px rgba(150, 150,150, 0.7);
@@ -293,7 +318,7 @@ footer span {
     font-size: 1.2em;
 }
 .modal-footer {
-    background: #111;
+    background: none;
     padding-bottom: 0px;
     border-top: 1px solid #eee;
     box-shadow: none;
@@ -306,15 +331,22 @@ footer span {
 
 
 /**
-*  ABOUT
+*  ABOUT, CREDITS 
 */
 #about p {
     text-align: center;
     border-bottom: 1px solid #eee;
     padding-bottom: 10px;
 }
-#about img {
+#about img, #credits img {
     padding: 3px 8px 3px 8px;
+}
+#credits p {
+    margin-left: 20%;
+    line-height: 50px;
+}
+#credits .name {
+    margin-right: 10px;
 }
 
 
@@ -322,6 +354,7 @@ footer span {
 *   JOIN GAME
 */
 #joinGame {
+    background: #111;
     text-align: center;
 }
 
