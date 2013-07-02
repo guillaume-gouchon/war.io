@@ -73,6 +73,7 @@ $('.cancelButton').click(function () {
 // create new game button
 $('#createGameButton').click(function () {
 	soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
+	$('#newGame').modal('show');
 });
 
 // tutorial button
@@ -110,41 +111,12 @@ $('#confirmGameCreation').click(function () {
 	removeWebsiteDom();
 });
 
-
-
-
-
-
-
-
-
-
-
-
-// join game
+// get joinable games list
 $('#joinGameButton').click(function () {
 	soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
-	$('#lstGames').html('');
-	$('#joinGame').removeClass('hide').addClass('moveToTop');
-	$('#subTitle').html('Join a Game').removeClass('hide').addClass('moveToLeft');
-	gameManager.socket.emit('enter', null);
-
-	gameManager.socket.on('joinListUpdate', function (data) {
-		updateGamesList(data);
-
-		// confirm join game
-		$('.joinableGame', '#lstGames').click(function () {
-			soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
-			$('#subTitle').addClass('hide');
-			$('#loadingTitle').removeClass('hide').addClass('moveToLeft');
-			$('#joinGame').removeClass('moveToTop');
-			gameInitData.army = $('.checked', '#factions').attr('data-army');
-			gameInitData.gameId = $(this).attr('data-id');
-			setTimeout(function () {
-				gameManager.initGame(gameInitData);
-			}, 600);
-		});
-	});
+	$('#joinGame').modal('show');
+	$('tbody', '#lstGames').html('');
+	gameManager.enterSalon();
 });
 
 function initArmyButtons () {
@@ -207,20 +179,26 @@ function removeWebsiteDom() {
 }
 
 function updateGamesList(games) {
-	$('#lstGames').html('');
-	for (var i in games) {
-		var game = games[i];
-		$('#lstGames').append('<div class="joinableGame bigButton" data-id="' + game.id + '">' + game.name + '<span>' + game.currentPlayers + ' / ' + game.maxPlayers + '</span></div>')
-	}
-
-	if (games.length == 0) {
-		$('#lstGames').append('<div id="noGames">No games available yet... create one !</div>');	
+	$('tbody', '#lstGames').html('');
+	if (games.length > 0) {
+		$('.noResult', '#joinGame').addClass('hide');
+		$('table', '#joinGame').removeClass('hide');
+		for (var i in games) {
+			var game = games[i];
+			$('tbody', '#lstGames').append('<tr data-id="' + game.id + '">' 
+				+ '<td>'+ game.creatorName + '</td><td>' + game.mapSize + '</td>'
+				+ '<td>'+ game.initialResources + '</td><td>' + game.objectives + '</td>'
+				+ '<td>' + game.players + '</td></tr>');
+		}
+	} else {
+		$('.noResult', '#joinGame').removeClass('hide');
+		$('table', '#joinGame').addClass('hide');
 	}
 }
 
 function showLoadingScreen(text) {
 	$('#labelLoading', '#loadingScreen').html(text);
-	$('#loadingScreen').removeClass('hideI');
+	$('#loadingScreen').removeClass('hide');
 	$('#loadingProgress').css('left', (window.innerWidth - $('#loadingProgress').width()) / 2);
 }
 
@@ -239,7 +217,6 @@ function addPlayer() {
 }
 
 function updatePlayers(nbPlayers) {
-	console.log($('.player', '#players'))
 	for (var i = 0; i < 7; i++) {
 		if (i <= nbPlayers) {
 			$('.player:nth-child(' + i + ')', '#players').removeClass('hideI');

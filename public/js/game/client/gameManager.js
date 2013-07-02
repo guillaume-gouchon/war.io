@@ -66,8 +66,10 @@ gameManager.initGame = function (gameInitData) {
 *	Starts the game.
 */
 gameManager.startGame = function () {
-	$('#game').removeClass('hide');
-	$('#loadingScreen').remove();
+	setTimeout(function () {
+		$('#game').removeClass('hide');
+		$('#loadingScreen').remove();
+	}, 500);
 
 	gameContent.init(this.waitingData);
 
@@ -75,8 +77,7 @@ gameManager.startGame = function () {
 		this.offlineLoop = setInterval(function(){
 			gameContent.update(gameContent.game.update());
 		}, 1000 / 8);
-	}	
-
+	}
 }
 
 
@@ -250,3 +251,24 @@ gameManager.readyToPlay = function () {
 	this.socket.emit('ready', this.playerId);
 }
 
+
+gameManager.enterSalon = function () {
+	gameManager.socket.emit('enter', null);
+
+	gameManager.socket.on('joinListUpdate', function (data) {
+		updateGamesList(data);
+
+		// confirm join game
+		$('tbody tr', '#lstGames').click(function () {
+			soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
+			$(this).unbind('click');
+			$('.modal').modal('hide');
+			showLoadingScreen('Loading');
+			var gameInitData = {};
+			gameInitData.gameId = $(this).attr('data-id');
+			gameInitData.army = $('.checked', '#armies').attr('data-army');
+			gameManager.initGame(gameInitData);
+			removeWebsiteDom();
+		});
+	});
+}

@@ -1,8 +1,5 @@
 /* TEAM */
-  Guillaume Gouchon
-  Thomas Cadiou
-  Romain Bertrand
-  Didier Brissaud
+  Team Awesome
 
 /* SITE */
   Standards: HTML5, Three.js, WebGL

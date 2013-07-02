@@ -81,6 +81,14 @@ a:hover {
     display: none!important;
 }
 
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
 
 /**
 *   HEADER
@@ -265,6 +273,63 @@ footer span {
     background-color: #000;
 }
 
+
+/**
+*   POPUPS
+*/
+.modal {
+    background-color: #111;
+    padding: 15px;
+    -webkit-box-shadow: 0px 0px 5px 2px rgba(150, 150, 150, 0.7);
+    box-shadow: 0px 0px 5px 2px rgba(150, 150,150, 0.7);
+    color : #ddd;
+    opacity: 0.9;
+}
+.modal h3 {
+    text-align: center;
+    font-size: 2.2em;
+}
+.modal p {
+    font-size: 1.2em;
+}
+.modal-footer {
+    background: #111;
+    padding-bottom: 0px;
+    border-top: 1px solid #eee;
+    box-shadow: none;
+}
+
+.modal button {
+    font-size: 1.2em;
+    padding: 5px 10px 5px 10px;
+}
+
+
+/**
+*  ABOUT
+*/
+#about p {
+    text-align: center;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+}
+#about img {
+    padding: 3px 8px 3px 8px;
+}
+
+
+/**
+*   JOIN GAME
+*/
+#joinGame {
+    text-align: center;
+}
+
+#joinGame .noResult {
+    font-size: 1.2em;
+}
+
+
 /**
 *   LOADING SCREEN
 */
@@ -301,65 +366,4 @@ footer span {
 #loadingProgress {
     width: 60%;
     margin-top: 70px;
-}
-
-
-/**
-*   POPUPS
-*/
-.modal {
-    background-color: #111;
-    padding: 15px;
-    -webkit-box-shadow: 0px 0px 5px 2px rgba(150, 150, 150, 0.7);
-    box-shadow: 0px 0px 5px 2px rgba(150, 150,150, 0.7);
-    color : #ddd;
-    opacity: 0.9;
-}
-.modal h3 {
-    text-align: center;
-    font-size: 2.2em;
-}
-.modal p {
-    font-size: 1.2em;
-}
-.modal-footer {
-    background: #111;
-    padding-bottom: 0px;
-    border-top: 1px solid #111;
-    box-shadow: none;   
-}
-
-.modal button {
-    font-size: 1.2em;
-    padding: 5px 10px 5px 10px;
-}
-
-
-
-#lstGames .joinableGame span {
-  font-size: 0.7em;
-  opacity: 0.8;
-  margin-left: 40px;
-}
-
-#noGames {
-  color: #111;
-  font-size: 1.5em;
-}
-
-#lstGames .backButton {
-  margin-top: 60px;
-}
-
-#igPlayersList {
-  position: absolute;
-  top: 250px;
-  width: 100%;
-  text-align: center;
-  font-size: 2.0em;
-}
-
-#igPlayersList div {
-  line-height: 40px;
-  opacity: 0.7;
 }
