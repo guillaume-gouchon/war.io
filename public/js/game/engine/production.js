@@ -157,6 +157,10 @@ production.gatherResources = function (game, builder, resource) {
 		if (closestTownHall != null) { // Yes, it happens...
  			builder.a = new gameData.Order(action.ACTION_TYPES.gather, null, closestTownHall.id, resourceData.resourceType);
 			builder.pa = [new gameData.Order(action.ACTION_TYPES.gather, null, resource.id, resourceData.resourceType)];
+		}
+		else {
+			builder.a = null;
+			builder.pa = [];
 		}	
 	}
 
