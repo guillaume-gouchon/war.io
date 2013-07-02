@@ -15,7 +15,8 @@ tools.getPositionsDistance = function (position1, position2) {
 tools.getElementsDistance = function (element1, element2) {
 	var min = 10000;
 	if(element2 != null) {
-		var shape = gameData.ELEMENTS[element2.f][element2.r][element2.t].shape;
+		var elementData = tools.getElementData(element2);
+		var shape = elementData.shape;
 		for(var i in shape) {
 			for(var j in shape[i]) {
 				var distance = this.getPositionsDistance(element1.p, this.getPartPosition(element2, i, j));
@@ -39,7 +40,8 @@ tools.getElementsDistance = function (element1, element2) {
 tools.getClosestPart = function (element1, element2) {
 	var min = 10000;
 	var closest;
-	var shape = gameData.ELEMENTS[element2.f][element2.r][element2.t].shape;
+	var elementData = tools.getElementData(element2);
+	var shape = elementData.shape;
 	for(var i in shape) {
 		for(var j in shape[i]) {
 			var distance = this.getPositionsDistance(element1.p, this.getPartPosition(element2, i, j));
@@ -63,7 +65,8 @@ tools.getClosestPart = function (element1, element2) {
 tools.getPartPosition = function (element, i, j) {
 	var shape = null;
 	if(element.shape == null) {
-		shape = gameData.ELEMENTS[element.f][element.r][element.t].shape;
+		var elementData = tools.getElementData(element);
+		shape = elementData.shape;
 	} else {
 		shape = element.shape;
 	}
@@ -79,7 +82,8 @@ tools.getPartPosition = function (element, i, j) {
 */
 tools.getFreeTilesAroundElements = function (game, element) {
 	var array = [];
-	var shape = gameData.ELEMENTS[element.f][element.r][element.t].shape;
+	var elementData = tools.getElementData(element);
+	var shape = elementData.shape;
 	for(var i in shape) {
 		for(var j in shape[i]) {
 			if(shape[i][j] > 0) {
@@ -192,11 +196,12 @@ tools.getNearestStuff = function (game, fromElement, family, type, rank, noLimit
 	if (!noLimit) {// search within the limit of the element's vision
 
 		var distance = 0;
+		var elementData = tools.getElementData(fromElement);
 
 		do {
 			distance ++;
 			nearestStuff = tools.searchInTiles(game, this.getTilesAround(game.grid, fromElement.p, distance, false), fromElement, family, type, rank);
-		} while (nearestStuff == null && distance < gameData.ELEMENTS[fromElement.f][fromElement.r][fromElement.t].vision);
+		} while (nearestStuff == null && distance < elementData.vision);
 	
 	} else {// search anywhere
 
@@ -279,5 +284,14 @@ tools.getElementById = function (game, id) {
 *	Returns element data.
 */
 tools.getElementData = function (element) {
-	return gameData.ELEMENTS[element.f][element.r][element.t];
+	var list = gameData.ELEMENTS[element.f][element.r]; 
+	return list[Object.keys(list)[element.t]];
+}
+
+/**
+*	Returns element data.
+*/
+tools.getElementDataFrom = function (family, race, type) {
+	var list = gameData.ELEMENTS[family][race]; 
+	return list[Object.keys(list)[type]];
 }

@@ -76,14 +76,14 @@ GUI.updateToolbar = function () {
 				// building is not finished yet, show cancel button
 				this.toolbar = [GUI.TOOLBAR_BUTTONS.cancel];
 			} else {
-				this.toolbar = production.getWhatCanBeBought(gameContent.players, selected.o, gameData.ELEMENTS[gameData.FAMILIES.building][selected.r][selected.t].buttons);
+				this.toolbar = production.getWhatCanBeBought(gameContent.players, selected.o, tools.getElementDataFrom(gameData.FAMILIES.building, selected.r, selected.t).buttons);
 			}
 		} else if (selected.f == gameData.FAMILIES.unit) {
 			// unit(s) are selected
 			if(this.showBuildings) {
 				this.toolbar = this.getBuildingButtons(selected);
 			} else {
-				this.toolbar = gameData.ELEMENTS[gameData.FAMILIES.unit][selected.r][selected.t].buttons;
+				this.toolbar = tools.getElementDataFrom(gameData.FAMILIES.unit, selected.r, selected.t).buttons;
 			}
 		}
 	} else {
@@ -220,7 +220,7 @@ GUI.initInfobar = function () {
 GUI.updateInfo = function () {
 	if (gameContent.selected.length > 0) {
 		var element = utils.getElementFromId(gameContent.selected[0]);
-		var elementData = gameData.ELEMENTS[element.f][element.r][element.t];
+		var elementData = tools.getElementData(element);
 		$('#name').html(elementData.name);
 		$('#portrait').attr('class', 'sprite sprite-' + elementData.image.replace('.png', ''));
 		if (elementData.attack != null) {
@@ -247,7 +247,7 @@ GUI.updateInfo = function () {
 
 				for (var i in element.q) {
 					var e = element.q[i];
-					var inConstruction = gameData.ELEMENTS[gameData.FAMILIES.unit][element.r][e];
+					var inConstruction = tools.getElementDataFrom(gameData.FAMILIES.unit, element.r, e);
 					if (i == 0) {
 						GUI.addQueue(inConstruction.image, parseInt(element.qp) + '%', inConstruction.name);	
 					} else {

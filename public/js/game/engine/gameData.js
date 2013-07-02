@@ -15,6 +15,7 @@ gameData.FAMILIES = {
 *	Big array containing all the elements data.
 */
 gameData.ELEMENTS = [[], [] ,[]];
+gameData.BASECAMPS = [];
 
 
 /**

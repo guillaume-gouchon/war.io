@@ -1,6 +1,5 @@
-gameData.ELEMENTS[gameData.FAMILIES.unit].push(
-[
-	{
+gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.tomatoes.id] = {
+	builder : {
 		name : 'Builder',
 		r : 0,
 		t : 0,
@@ -27,7 +26,7 @@ gameData.ELEMENTS[gameData.FAMILIES.unit].push(
 		vision : 12,
 		lifeBarWidth: 8
 	},
-	{
+	footman : {
 		name : 'Footman',
 		r : 0,
 		t : 1,
@@ -52,7 +51,7 @@ gameData.ELEMENTS[gameData.FAMILIES.unit].push(
 		vision : 12,
 		lifeBarWidth: 8
 	},
-	{
+	knight : {
 		name : 'Knight',
 		r : 0,
 		t : 2,
@@ -77,7 +76,7 @@ gameData.ELEMENTS[gameData.FAMILIES.unit].push(
 		vision : 12,
 		lifeBarWidth: 8
 	},
-	{
+	bowman : {
 		name : 'Bowman',
 		r : 0,
 		t : 3,
@@ -102,4 +101,4 @@ gameData.ELEMENTS[gameData.FAMILIES.unit].push(
 		vision : 12,
 		lifeBarWidth: 8
 	}
-]);
+};

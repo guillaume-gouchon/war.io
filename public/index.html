@@ -51,22 +51,42 @@
 		  		<div class="modal-header">
 		  			<h3>New Game</h3>
 	  			</div>
-		  		<form>
-				  <fieldset>
-				    <legend>Players</legend>
-				    <label>Number of players
-				    	<input type="number" class="input-mini" value="4" min="2" max="6">
-					</label>
-				    <div id="players"></div>
-				    <legend>Map configuration</legend>
-				    <label>Size of the map<select id="mapSize" class="span2"></select></label>
-				    <label>Amount of initial resources<select id="initialResources" class="span2"></select></label>
-				    <div class="modal-footer">
-				    	<button class="cancelButton" type="button">Cancel</button>
-				    	<button id="confirmGameCreation" type="button">Create !</button>
-				    </div>
-				  </fieldset>
-				</form>
+	  			<div class="modal-body">
+	  				<ul id="tabs" class="nav nav-tabs">
+			          <li class="active"><a href="#tabPlayers" data-toggle="tab">Players</a></li>
+			          <li><a href="#tabMap" data-toggle="tab">Map</a></li>
+			          <li><a href="#tabVictory" data-toggle="tab">Objectives</a></li>
+			        </ul>
+			        <div id="myTabContent" class="tab-content">
+						<div id="tabPlayers" class="tab-pane fade in active">
+							<span id="nbPlayersLabel">Number of players</span>
+					    	<select id="nbPlayers" class="span1">
+					    		<option value="2">2</option>
+					    		<option value="3">3</option>
+					    		<option value="4" selected>4</option>
+					    		<option value="5">5</option>
+					    		<option value="6">6</option>
+					    	</select>
+						    <div id="players"></div>
+						</div>
+						<div id="tabMap" class="tab-pane fade">
+						    <p><span>Size of the map</span>
+						    <select id="mapSize" class="span2"></select></p>
+						    <p><span>Initial amount of resources</span>
+						    <select id="initialResources" class="span2"></select></p>
+						</div>
+						<div id="tabVictory" class="tab-pane fade">
+						    <p><span>Victory condition 1</span>
+						    <select id="vc1" class="span2"></select></p>
+						    <p><span>Victory condition 2</span>
+						    <select id="vc2" class="span2"></select></p>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+			    	<button class="cancelButton" type="button">Cancel</button>
+			    	<button id="confirmGameCreation" type="button">Create !</button>
+			    </div>
 		  	</div>
 
 		  	<div id="joinGame" class="fullScreen hide">

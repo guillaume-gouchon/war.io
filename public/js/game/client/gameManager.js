@@ -89,10 +89,10 @@ gameManager.initOfflineGame = function (gameInitData) {
 		gameContent.players.push(new gameData.Player(0, i, 0, true));
 		gameContent.players[i].n = 'AI';
 	}
-  	gameContent.map = new gameData.Map(gameData.MAP_TYPES[gameInitData.mapType],
-                    gameData.MAP_SIZES[gameInitData.mapSize],
-                    gameData.VEGETATION_TYPES[gameInitData.vegetation],
-                    gameData.INITIAL_RESOURCES[gameInitData.initialResources]);
+  	gameContent.map = new gameData.Map(gameData.MAP_TYPES[Object.keys(gameData.MAP_TYPES)[gameInitData.mapType]],
+                    gameData.MAP_SIZES[Object.keys(gameData.MAP_SIZES)[gameInitData.mapSize]],
+                    gameData.VEGETATION_TYPES[Object.keys(gameData.VEGETATION_TYPES)[gameInitData.vegetation]],
+                    gameData.INITIAL_RESOURCES[Object.keys(gameData.INITIAL_RESOURCES)[gameInitData.initialResources]]);
 	gameContent.game = gameCreation.createNewGame(gameContent.map, gameContent.players);
 	this.waitingData = gameContent.game.gameElements;
 	gameSurface.init();

@@ -131,7 +131,7 @@ gameCreation.createForest = function (game, from, to) {
 	for(var i = from.x; i < to.x; i++) {
 		for(var j = from.y; j < to.y; j++) {
 			if(Math.random() < this.PROBABILITY_TREE) {
-				this.addGameElement(game, new gameData.Terrain(gameData.ELEMENTS[gameData.FAMILIES.land][0][0], i, j));
+				this.addGameElement(game, new gameData.Terrain(gameData.ELEMENTS[gameData.FAMILIES.land][0].tree, i, j));
 			}
 		}
 	}
@@ -144,9 +144,9 @@ gameCreation.createForest = function (game, from, to) {
 *	@param to : bottom right-handed corner
 */
 gameCreation.createGoldMine = function (game, map, from, to) {
-	var element = gameData.ELEMENTS[gameData.FAMILIES.land][0][1];
-	var position = this.getRandomPositionInZoneForElement(element, from, to);
-	this.addGameElement(game, new gameData.Terrain(gameData.ELEMENTS[gameData.FAMILIES.land][0][1], position.x, position.y));
+	var elementData = gameData.ELEMENTS[gameData.FAMILIES.land][0].goldmine;
+	var position = this.getRandomPositionInZoneForElement(elementData, from, to);
+	this.addGameElement(game, new gameData.Terrain(elementData, position.x, position.y));
 }
 
 
@@ -158,7 +158,7 @@ gameCreation.createGoldMine = function (game, map, from, to) {
 gameCreation.createWaterZone = function (game, map, from, to) {
 	for(var i = from.x; i < to.x; i++) {
 		for(var j = from.y; j < to.y; j++) {
-			this.addGameElement(game, new gameData.Terrain(gameData.ELEMENTS[gameData.FAMILIES.land][0][2], i, j));
+			this.addGameElement(game, new gameData.Terrain(gameData.ELEMENTS[gameData.FAMILIES.land][0].water, i, j));
 		}
 	}
 }
@@ -179,7 +179,8 @@ gameCreation.getRandomPositionInZoneForElement = function (element, from, to) {
 * 	Adds a game element on the map.
 */
 gameCreation.addGameElement = function (game, element) {
-	var shape = gameData.ELEMENTS[element.f][element.r][element.t].shape;
+	var elementData = tools.getElementData(element);
+	var shape = elementData.shape;
 	game.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id] = element;
 	for(var i in shape) {
 		var row = shape[i];
@@ -200,7 +201,8 @@ gameCreation.addGameElement = function (game, element) {
 * Removes a game element on the map.
 */
 gameCreation.removeGameElement = function (game, element) {
-	var shape = gameData.ELEMENTS[element.f][element.r][element.t].shape;
+	var elementData = tools.getElementData(element);
+	var shape = elementData.shape;
 	for(var i in shape) {
 		var row = shape[i];
 		for(var j in row) {

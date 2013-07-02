@@ -51,7 +51,8 @@ production.updateConstruction = function (game, building) {
 production.cancelConstruction = function (game, building) {
 
 	if (building != null && building.cp < 95) {
-		this.sellsElement(game, building.o, gameData.ELEMENTS[building.f][building.r][building.t]);
+		var buildingData = tools.getElementData(building);
+		this.sellsElement(game, building.o, buildingData);
 		this.removeBuilding(game, building);
 		for (var i in game.gameElements.unit) {
 			if (game.gameElements.unit[i].a != null && game.gameElements.unit[i].a.id == building.id) {
@@ -152,8 +153,10 @@ production.gatherResources = function (game, builder, resource) {
 
 	if (builder.ga.amount == builderData.maxGathering) {
 
+
+
 		// the builder is full of resources, get resources back
-		var closestTownHall = tools.getNearestStuff(game, builder, gameData.FAMILIES.building, gameData.ELEMENTS[gameData.FAMILIES.building][game.players[builder.o].r][0].t, gameData.RANKS.me, true);
+		var closestTownHall = tools.getNearestStuff(game, builder, gameData.FAMILIES.building, gameData.ELEMENTS[gameData.FAMILIES.building][builder.r].townhall.t, gameData.RANKS.me, true);
 		builder.a = new gameData.Order(action.ACTION_TYPES.gather, null, closestTownHall.id, resourceData.resourceType);
 		builder.pa = [new gameData.Order(action.ACTION_TYPES.gather, null, resource.id, resourceData.resourceType)];
 
@@ -229,7 +232,8 @@ production.buyElement = function (game, buildings, elementData) {
 *	Update the queue and the progression of what the building is creating.
 */
 production.updateQueueProgress = function (game, building) {
-	building.qp += 100 / (gameLogic.FREQUENCY * gameData.ELEMENTS[gameData.FAMILIES.unit][building.r][building.q[0]].timeConstruction);
+	var unitData = tools.getElementDataFrom(gameData.FAMILIES.unit, building.r, building.q[0]);
+	building.qp += 100 / (gameLogic.FREQUENCY * unitData.timeConstruction);
 	if(building.qp >= 100) {
 		var canGoToNext = true;
 		//if(building.q[0].f == gameData.FAMILIES.unit) {
@@ -255,22 +259,22 @@ production.updateQueueProgress = function (game, building) {
 *	The unit just pops up from the factory if there is place and population is not exceeding.
 */
 production.createNewUnit = function (game, unitType, factory) {
-	var unit = gameData.ELEMENTS[gameData.FAMILIES.unit][factory.r][unitType];
+	var unitData = tools.getElementDataFrom(gameData.FAMILIES.unit, factory.r, unitType);
 	var possiblePositions = tools.getFreeTilesAroundElements(game, factory);
 	var playerPopulation = game.players[factory.o].pop;
-	if(possiblePositions.length > 0 && playerPopulation.current + unit.pop <= playerPopulation.max) {
+	if(possiblePositions.length > 0 && playerPopulation.current + unitData.pop <= playerPopulation.max) {
 		
-		if (unit.isBuilder) {
+		if (unitData.isBuilder) {
 			stats.updateField(game, factory.o, 'buildersCreated', 1);
 		} else {
 			stats.updateField(game, factory.o, 'unitsCreated', 1);
 		}
 
 		var position = possiblePositions[possiblePositions.length - 1];
-		unit = new gameData.Unit(unit, position.x, position.y, factory.o);
+		var unit = new gameData.Unit(unitData, position.x, position.y, factory.o);
 
 		//updates population
-		game.players[factory.o].pop.current += gameData.ELEMENTS[unit.f][unit.r][unit.t].pop;
+		game.players[factory.o].pop.current += unitData.pop;
 
 		gameCreation.addGameElement(game, unit);
 
@@ -290,8 +294,9 @@ production.createNewUnit = function (game, unitType, factory) {
 * 	A unit has just been killed / cancelled
 */
 production.removeUnit = function (game, unit) {
-	if(gameData.ELEMENTS[unit.f][unit.r][unit.t].pop > 0) {
-		game.players[unit.o].pop.current -= gameData.ELEMENTS[unit.f][unit.r][unit.t].pop;
+	var elementData = tools.getElementData(unit);
+	if(elementData.pop > 0) {
+		game.players[unit.o].pop.current -= elementData.pop;
 	}
 
 	if (unit.murderer != null) {

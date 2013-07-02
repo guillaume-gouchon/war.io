@@ -1,6 +1,6 @@
 gameData.ELEMENTS[gameData.FAMILIES.land].push(
-[
-	{
+{
+	tree : {
 		name : 'Tree',
 		t : 0,
 		shape : [[1]],
@@ -11,7 +11,7 @@ gameData.ELEMENTS[gameData.FAMILIES.land].push(
 		image : 'forest.png',
 		minimapColor : {r:52,g:114,b:53},
 	},
-	{	
+	goldmine : {	
 		name : 'Gold Mine',
 		t : 1,
 		shape : [[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1]],
@@ -22,7 +22,7 @@ gameData.ELEMENTS[gameData.FAMILIES.land].push(
 		image : 'gold-mine.png',
 		minimapColor : {r:237,g:226,b:117},
 	},
-	{	
+	water : {	
 		name : 'Water',
 		t : 2,
 		shape : [[1]],
@@ -30,4 +30,4 @@ gameData.ELEMENTS[gameData.FAMILIES.land].push(
 		sta : true,
 		minimapColor : {r:43,g:56,b:86},
 	}
-]);
+});

@@ -83,7 +83,8 @@ order.cancelConstruction = function (game, buildingId) {
 order.updateRallyingPoint = function (game, buildings, x, y) {
 	for (var i in buildings) {
 		var building = buildings[i];
-		var buttons = gameData.ELEMENTS[building.f][building.r][building.t].buttons;
+		var buildingData = tools.getElementData(building);
+		var buttons = buildingData.buttons;
 		if(buttons.length > 0) {
 			building.rp = {x: x, y: y};
 		}
@@ -183,6 +184,8 @@ order.convertDestinationToOrder = function (game, elementsIds, x, y, isMultipleO
 	} else {
 		// units are selected
 		if (target != null && target.length > 0) {
+			var targetData = tools.getElementData(target[0]);
+
 			// something is under the click
 			if (target[0].f == gameData.FAMILIES.unit) {
 				if (!rank.isAlly(game.players, elements[0].o, target[0])) {
@@ -210,7 +213,7 @@ order.convertDestinationToOrder = function (game, elementsIds, x, y, isMultipleO
 					return;
 				}
 			} else if (target[0].f == gameData.FAMILIES.land 
-						&& gameData.ELEMENTS[target[0].f][0][target[0].t].resourceType >= 0) {
+						&& targetData.resourceType >= 0) {
 				// resource land element
 				for(var i in elements) {
 					var e = elements[i];

@@ -27,7 +27,7 @@ aiOrders.update = function(game, player) {
  *      Build Rax
  */
 aiOrders.buildRax = function(game, player, playerID) {
-    var rax = gameData.ELEMENTS[gameData.FAMILIES.building][0][2];
+    var rax = gameData.ELEMENTS[gameData.FAMILIES.building][player.r].casern;
     if (player.re[0] > rax.needs[0].value && player.re[1] > rax.needs[1].value) {
         var worker = null;
         var n = 0;
@@ -69,7 +69,7 @@ aiOrders.buildRax = function(game, player, playerID) {
  *      Build Town Hall
  */
 aiOrders.buildTownHall = function(game, player, playerID) {
-    var townHall = gameData.ELEMENTS[gameData.FAMILIES.building][0][0];
+    var townHall = gameData.ELEMENTS[gameData.FAMILIES.building][player.r].townhall;
     if (player.re[0] > townHall.needs[0].value && player.re[1] > townHall.needs[1].value && player.pop.current > 30) {
         var worker = null;
         var n = 0;
@@ -111,7 +111,7 @@ aiOrders.buildTownHall = function(game, player, playerID) {
  *      Build Houses
  */
 aiOrders.buildHouses = function(game, player, playerID) {
-    var house = gameData.ELEMENTS[gameData.FAMILIES.building][0][1];
+    var house = gameData.ELEMENTS[gameData.FAMILIES.building][player.r].house;
     if (player.re[0] > house.needs[0].value && player.pop.current > player.pop.max - 8) {
         var worker = null;
         var n = 0;
@@ -190,12 +190,10 @@ aiOrders.finishBuildings = function(game, playerID) {
 aiOrders.trainHarvesters = function(game, playerID) {
     for (var n in game.gameElements.building) {
         var building = game.gameElements.building[n];
-        if (building.o == playerID) {
-            if (gameData.ELEMENTS[building.f][building.r][building.t].name == 'Town Hall') {
+        if (building.o == playerID && building.t == gameData.ELEMENTS[building.f][building.r].townhall.t) {
                 if (building.q.length < 2) { // Don't queue worker, it's useless
-                    order.buy(game, [building.id], gameData.ELEMENTS[gameData.FAMILIES.unit][0][0]);
+                    order.buy(game, [building.id], gameData.ELEMENTS[gameData.FAMILIES.unit][building.r].builder);
                 }
-            }
         }
     }
 };
@@ -207,15 +205,13 @@ aiOrders.trainHarvesters = function(game, playerID) {
 aiOrders.trainSoldiers = function(game, player, playerID) {
     for (var n in game.gameElements.building) {
         var building = game.gameElements.building[n];
-        if (building.o == playerID) {
-            if (gameData.ELEMENTS[building.f][building.r][building.t].name == 'Casern') {
-                if (building.q.length < 2) { // Don't queue soldiers, it's useless
-                    if (player.re[1] < 200) { // Train Bowman
-                        order.buy(game, [building.id], gameData.ELEMENTS[gameData.FAMILIES.unit][0][3]);
-                    }
-                    else { // Train Knight
-                        order.buy(game, [building.id], gameData.ELEMENTS[gameData.FAMILIES.unit][0][2]);
-                    }
+        if (building.o == playerID && building.t == gameData.ELEMENTS[gameData.FAMILIES.building][building.r].casern.t) {
+            if (building.q.length < 2) { // Don't queue soldiers, it's useless
+                if (player.re[1] < 200) { // Train Bowman
+                    order.buy(game, [building.id], gameData.ELEMENTS[gameData.FAMILIES.unit][building.r].bowman);
+                }
+                else { // Train Knight
+                    order.buy(game, [building.id], gameData.ELEMENTS[gameData.FAMILIES.unit][building.r].knight);
                 }
             }
         }
@@ -287,7 +283,8 @@ aiOrders.canBeBuiltHere = function (game, position, building) {
  *  Is the unit an idle worker?
  */
 aiOrders.isIdleWorker = function(unit, playerID) {
-    if (unit.o == playerID && gameData.ELEMENTS[unit.f][unit.r][unit.t].isBuilder && unit.a == null && unit.pa.length == 0 && (unit.mt == null || unit.mt.x == null)) {
+    var unitData = tools.getElementData(unit);
+    if (unit.o == playerID && unitData.isBuilder && unit.a == null && unit.pa.length == 0) {
         return true;
     }
     return false;
@@ -298,7 +295,8 @@ aiOrders.isIdleWorker = function(unit, playerID) {
  *  Is the unit harvesting or an idle worker?
  */
 aiOrders.isHarvestingOrIdleWorker = function(unit, playerID) {
-    if (unit.o == playerID && gameData.ELEMENTS[unit.f][unit.r][unit.t].isBuilder && (unit.a == null || unit.a.type != 4)) {
+    var unitData = tools.getElementData(unit);
+    if (unit.o == playerID && unitData.isBuilder && (unit.a == null || unit.a.type != 4)) {
         return true;
     }
     return false;
@@ -313,7 +311,8 @@ aiOrders.shoudIAttack = function(game, playerID) {
     var i = 0;
     for (var i in game.gameElements.unit) {
         var unit = game.gameElements.unit[i];
-        if (unit.o == playerID && !gameData.ELEMENTS[unit.f][unit.r][unit.t].isBuilder) {
+        var unitData = tools.getElementData(unit);
+        if (unit.o == playerID && !unitData.isBuilder) {
             soldiers.push(unit);
         }
     }

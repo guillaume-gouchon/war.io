@@ -1,19 +1,16 @@
 /**
 *	Lists the buildings and the units a player is getting when starting a new game
 */
-gameData.BASECAMPS = [
+gameData.BASECAMPS[gameData.RACES.tomatoes.id] = {
+		buildings : [gameData.ELEMENTS[gameData.FAMILIES.building][gameData.RACES.tomatoes.id].townhall],
+		units : [gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.tomatoes.id].builder, 
+				gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.tomatoes.id].builder,
+				gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.tomatoes.id].builder]
+}
 
-	{
-		buildings : [gameData.ELEMENTS[gameData.FAMILIES.building][gameData.RACES.tomatoes.id][0]],
-		units : [gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.tomatoes.id][0], 
-				gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.tomatoes.id][0],
-				gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.tomatoes.id][0]]
-	}
-	// {
-	// 	buildings : [gameData.ELEMENTS[gameData.FAMILIES.building][gameData.RACES.lemons.id][0]],
-	// 	units : [gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.lemons.id][0], 
-	// 			gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.lemons.id][0],
-	// 			gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.lemons.id][0]]
-	// }
-
-]
+gameData.BASECAMPS[gameData.RACES.lemons.id] = {
+		buildings : [gameData.ELEMENTS[gameData.FAMILIES.building][gameData.RACES.lemons.id].townhall],
+		units : [gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.lemons.id].builder, 
+				gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.lemons.id].builder,
+				gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.lemons.id].builder]
+}

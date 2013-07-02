@@ -50,8 +50,8 @@ gameSurface.iteration = 0;
 gameSurface.geometries = null;
 gameSurface.materials = null;
 gameSurface.isKeyboardScrolling = false;
-gameSurface.stuffToBeLoaded = 0;
-gameSurface.totalStuffToBeLoaded = 0;
+gameSurface.stuffLoaded = 0;
+gameSurface.totalStuffToLoad = 0;
 gameSurface.ex = [];
 gameSurface.orderFactor = -1;
 
@@ -114,23 +114,23 @@ gameSurface.init = function () {
 	this.loader = new THREE.JSONLoader();
 
 	// count the number of stuff to be loaded
-	gameSurface.stuffToBeLoaded += 10;
-	for (var i in gameData.ELEMENTS) {
-		for (var j in gameData.ELEMENTS[i]) { 
-			for (var k in gameData.ELEMENTS[i][j]) {
-				if (gameData.ELEMENTS[i][j][k].g != null) {
-					// geometry + 1 texture
-					gameSurface.stuffToBeLoaded += 3;
-					// additional textures for players colors
-					if (i != gameData.FAMILIES.land) {
-						gameSurface.stuffToBeLoaded += gameContent.players.length - 1;
-					}
-				}
-			}
+	this.totalStuffToLoad += 2;// grass + skybox
+	var races = [];
+	for (var i in gameContent.players) {
+
+		var factor = 2;
+		var r = parseInt(gameContent.players[i].r);
+		if (races.indexOf(r) == -1) { 
+			races.push(r);
+			factor = 3;
 		}
+
+		this.totalStuffToLoad += Object.keys(gameData.ELEMENTS[gameData.FAMILIES.unit][r]).length * factor;
+		this.totalStuffToLoad += Object.keys(gameData.ELEMENTS[gameData.FAMILIES.building][r]).length * factor;
+
 	}
 
-	gameSurface.totalStuffToBeLoaded = gameSurface.stuffToBeLoaded;
+	this.totalStuffToLoad += (Object.keys(gameData.ELEMENTS[gameData.FAMILIES.land][0]).length - 1) * 3;// water
 
 	// init scene
 	this.createScene();
@@ -335,17 +335,33 @@ gameSurface.createScene = function () {
 *	Loads all the 3D models needed.
 */
 gameSurface.init3DModels = function () {
-	for (var i in gameData.ELEMENTS) {
-		for (var j in gameData.ELEMENTS[i]) { 
-			for (var k in gameData.ELEMENTS[i][j]) {
-				var elementData = gameData.ELEMENTS[i][j][k];
-				if (elementData.g != null) {
-					if (this.geometries[elementData.g] == null) {
-						this.geometries[elementData.g] = {};
-						this.loadObject(elementData.g, i);	
-					}	
-				}
+	for (var i in gameContent.players) {
+
+		// load buildings
+		for (var j in gameData.ELEMENTS[gameData.FAMILIES.building][gameContent.players[i].r]) {
+			var elementData = gameData.ELEMENTS[gameData.FAMILIES.building][gameContent.players[i].r][j];
+			if (elementData.g != null && this.geometries[elementData.g] == null) {
+					this.geometries[elementData.g] = {};
+					this.loadObject(elementData.g, gameData.FAMILIES.building, elementData.r);	
 			}
+		}
+
+		// load units
+		for (var j in gameData.ELEMENTS[gameData.FAMILIES.unit][gameContent.players[i].r]) {
+			var elementData = gameData.ELEMENTS[gameData.FAMILIES.unit][gameContent.players[i].r][j];
+			if (elementData.g != null && this.geometries[elementData.g] == null) {
+					this.geometries[elementData.g] = {};
+					this.loadObject(elementData.g, gameData.FAMILIES.unit, elementData.r);	
+			}
+		}
+	}
+
+	// load lands
+	for (var i in gameData.ELEMENTS[gameData.FAMILIES.land][0]) {
+		var elementData = gameData.ELEMENTS[gameData.FAMILIES.land][0][i];
+		if (elementData.g != null && this.geometries[elementData.g] == null) {
+				this.geometries[elementData.g] = {};
+				this.loadObject(elementData.g, gameData.FAMILIES.land, 0);	
 		}
 	}
 	gameSurface.materials["billboardBar"] = new THREE.SpriteMaterial({color: 0xFFFFFF, useScreenCoordinates:false, map:THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + "fog2.png")});
@@ -355,13 +371,15 @@ gameSurface.init3DModels = function () {
 /**
 *	Loads a geometry.
 */
-gameSurface.loadObject = function (key, elementFamily) {
+gameSurface.loadObject = function (key, family, race) {
 	this.loader.load(this.MODELS_PATH + key, this.geometryLoaded(key));
-	if (elementFamily != gameData.FAMILIES.land) {
+	if (family != gameData.FAMILIES.land) {
 		for (var n = 0; n < gameContent.players.length; n++) {
-			var color = this.ARMIES_COLORS[n];
-			gameSurface.materials[key + color] = new THREE.MeshLambertMaterial({map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key.replace('.js', '') + color + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
-			gameSurface.materials["HIDDEN" + key + color] = new THREE.MeshBasicMaterial({color: 0x555555, map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key.replace('.js', '') + color + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
+			if (gameContent.players[n].r == race) {
+				var color = this.ARMIES_COLORS[n];
+				gameSurface.materials[key + color] = new THREE.MeshLambertMaterial({map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key.replace('.js', '') + color + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
+				gameSurface.materials["HIDDEN" + key + color] = new THREE.MeshBasicMaterial({color: 0x555555, map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key.replace('.js', '') + color + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
+			}
 		}
 	} else {
 		gameSurface.materials[key] = new THREE.MeshLambertMaterial({map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key.replace('.js', '.png'), new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
@@ -385,12 +403,12 @@ gameSurface.geometryLoaded = function (key) {
 *	Updates the loading counter and starts the game if everything is loaded.
 */
 gameSurface.updateLoadingCounter = function () {
-	this.stuffToBeLoaded --;
+	this.stuffLoaded ++;
 	
 	// UI
-	updateLoadingProgress(parseInt(100 * (this.totalStuffToBeLoaded - this.stuffToBeLoaded) / this.totalStuffToBeLoaded));
+	updateLoadingProgress(parseInt(100 * this.stuffLoaded / this.totalStuffToLoad));
 
-	if(this.stuffToBeLoaded == 0) {
+	if(this.stuffLoaded >= this.totalStuffToLoad) {
 		if (gameManager.isOfflineGame) {
 			gameManager.startGame();
 		} else {
@@ -418,7 +436,7 @@ gameSurface.onWindowResize = function() {
 *	It creates the game element's 3D model and adds it to the scene.
 */
 gameSurface.addElement = function (element) {
-	var elementData = gameData.ELEMENTS[element.f][element.r][element.t];
+	var elementData = tools.getElementData(element);
 	var model = elementData.g;
 
 	if (element.f == gameData.FAMILIES.land) {
@@ -550,7 +568,7 @@ gameSurface.updateElement = function (element) {
 		this.setElementPosition(object, element.p.x, element.p.y);	
 	}
 	
-	var elementData = gameData.ELEMENTS[element.f][element.r][element.t];
+	var elementData = tools.getElementData(element);
 
 	if (element.f == gameData.FAMILIES.building && rank.isAlly(gameContent.players, gameContent.myArmy, element)) {
 		if (element.cp < 100) {
@@ -585,7 +603,7 @@ gameSurface.updateElement = function (element) {
 	}
 
 	// remove old positions from grid
-    var shape = gameData.ELEMENTS[element.f][element.r][element.t].shape;
+    var shape = elementData.shape;
 	for (var i in shape) {
 		for (var j in shape[i]) {
 			if (shape[i][j] > 0) {
@@ -643,7 +661,8 @@ gameSurface.removeElement = function (element) {
 	}
 
 	// remove element from the grid
-	var shape = gameData.ELEMENTS[element.f][element.r][element.t].shape;
+	var elementData = tools.getElementData(element);
+	var shape = elementData.shape;
 	for(var i in shape) {
 		var row = shape[i];
 		for(var j in row) {
@@ -792,7 +811,7 @@ gameSurface.manageElementsVisibility = function () {
 				// ally unit, show vision
 				var unitX = element.p.x;
 				var unitY = element.p.y;
-				var elementData = gameData.ELEMENTS[element.f][element.r][element.t];
+				var elementData = tools.getElementData(element);
 				var vision = elementData.vision;
 
 				if (element.f == gameData.FAMILIES.building && element.cp < 100) {
@@ -906,7 +925,8 @@ gameSurface.updateMinimap = function() {
 					var element = utils.getElementFromId(id);
 					if (element.modelVisible) {
 						if (element.f == gameData.FAMILIES.land) {
-							var color = gameData.ELEMENTS[element.f][element.r][element.t].minimapColor;
+							var elementData = tools.getElementData(element);
+							var color = elementData.minimapColor;
 							r=color.r;
 							g=color.g;
 							b=color.b;

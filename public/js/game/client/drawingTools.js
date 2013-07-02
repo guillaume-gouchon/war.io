@@ -60,7 +60,7 @@ gameSurface.drawSelectionCircle = function(radius, color) {
 *	Draws a life bar on top of an element.
 */
 gameSurface.drawLifeBar = function (element) {
-	var elementData = gameData.ELEMENTS[element.f][element.r][element.t];
+	var elementData = tools.getElementData(element);
 
 	var spriteMaterial = this.materials["billboardBar"].clone();
 	var lifeBar = new THREE.Sprite(spriteMaterial);
@@ -204,7 +204,7 @@ gameSurface.selectElement = function (elementId) {
 	var element = utils.getElementFromId(elementId);
 	if (element != null) {
 		var model = element.m;
-		var elementData = gameData.ELEMENTS[element.f][element.r][element.t];
+		var elementData = tools.getElementData(element);
 		var color;
 		if (rank.isEnemy(gameContent.players, gameContent.myArmy, element)) {
 			color = this.SELECTION_ENEMY_COLOR;

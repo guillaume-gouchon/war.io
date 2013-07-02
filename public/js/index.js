@@ -38,11 +38,20 @@ $('#music').click(function () {
 
 // init armies buttons
 initArmyButtons();
-$('input', '#armies').first().attr('checked', 'checked');
+$('div', '#armies').first().addClass('checked');
 
 // init map configurations
 initMapSizes();
 initMapInitialResources();
+
+
+// init players choosers
+for (var i = 0; i < 6; i++) {
+	addPlayer();
+}
+$('#nbPlayers').change(function () {
+	updatePlayers($(this).val());
+});
 
 // check if webGL is supported
 if (!isWebGLEnabled()) {
@@ -57,6 +66,7 @@ preloadImages();
 
 // cancel buttons
 $('.cancelButton').click(function () {
+	soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
 	$('.modal').modal('hide');
 });
 
@@ -65,61 +75,56 @@ $('#createGameButton').click(function () {
 	soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
 });
 
-var gameInitData = {
-	mapType: 'random',
-	mapSize: 'small',
-	vegetation: 'standard',
-	initialResources: 'standard'
-};
-
 // tutorial button
 $('#tutorialButton').click(function () {
 	soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
 	$(this).unbind('click');
 	showLoadingScreen('Loading');
-	hideWelcomeScreen();
 	var tutorialInitData = {
-		mapType: 'random',
-		mapSize: 'small',
-		vegetation: 'standard',
-		initialResources: 'standard'
+		mapType: gameData.MAP_TYPES.random.id,
+		mapSize: gameData.MAP_SIZES.small.id,
+		vegetation: gameData.VEGETATION_TYPES.standard.id,
+		initialResources: gameData.INITIAL_RESOURCES.standard.id
 	}
-	tutorialInitData.army = $('input[name="armies"]', '#armies').val();
+	tutorialInitData.army = $('.checked', '#armies').attr('data-army');
 	gameManager.isOfflineGame = true;
-	startGame();
 	gameManager.initGame(tutorialInitData);
+	removeWebsiteDom();
 });
 
-
-
-
-
-
-
-
-
-
-
-
-// confirm game creation
+// create game !
 $('#confirmGameCreation').click(function () {
 	soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
 	$(this).unbind('click');
-	$('#subTitle').addClass('hide');
-	$('#loadingTitle').removeClass('hide').addClass('moveToLeft');
-	$('#setupNewGame').removeClass('moveToTop');
-	gameInitData.army = $('.checked', '#factions').attr('data-army');
-	gameInitData.nbPlayers = $('.checked', '#setupNewGame').attr('data-value');
-	setTimeout(function () {
-		gameManager.initGame(gameInitData);
-	}, 600);
+	$('.modal').modal('hide');
+	showLoadingScreen('Loading');
+	var gameInitData = {
+		mapType: gameData.MAP_TYPES.random.id,
+		mapSize: $('#mapSize').val(),
+		vegetation: gameData.VEGETATION_TYPES.standard.id,
+		initialResources: $('#initialResources').val()
+	};
+	gameInitData.army = $('.checked', '#armies').attr('data-army');
+	gameInitData.nbPlayers = $('#nbPlayers').val();
+	gameManager.initGame(gameInitData);
+	removeWebsiteDom();
 });
+
+
+
+
+
+
+
+
+
+
+
 
 // join game
 $('#joinGameButton').click(function () {
 	soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
 	$('#lstGames').html('');
-	hideWelcomeScreen();
 	$('#joinGame').removeClass('hide').addClass('moveToTop');
 	$('#subTitle').html('Join a Game').removeClass('hide').addClass('moveToLeft');
 	gameManager.socket.emit('enter', null);
@@ -142,27 +147,10 @@ $('#joinGameButton').click(function () {
 	});
 });
 
-// back home buttons
-$('.backButton', '#setupNewGame').click(function () {
-	soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
-	$('#subTitle').addClass('hide').removeClass('moveToLeft');
-	$('#setupNewGame').addClass('hide').removeClass('moveToTop');
-	showWelcomeScreen();
-});
-$('.backButton', '#joinGame').click(function () {
-	soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
-	$('#subTitle').addClass('hide').removeClass('moveToLeft');
-	$('#joinGame').addClass('hide').removeClass('moveToTop');
-	showWelcomeScreen();
-});
-
 function initArmyButtons () {
 	for (var i in gameData.RACES) {
 		var army = gameData.RACES[i];
-		$('#armies').append('<label class="radio">'
-			+ '<input type="radio" name="armies" value="' + army.id + '"/>'
-			+ army.name
-	  		+ '</label>');
+		$('#armies').append('<div class="customRadio" data-name="armies" data-army="' + army.id + '">' + army.name + '</div>');
 	}
 }
 
@@ -214,19 +202,8 @@ function centerElement(element) {
 }
 
 
-function startGame() {
+function removeWebsiteDom() {
 	$('#website').remove();
-}
-
-
-function showWelcomeScreen() {
-	$('#mainButtons').fadeIn();
-	$('footer').fadeIn();
-}
-
-function hideWelcomeScreen() {
-	$('#mainButtons').fadeOut();
-	$('footer').fadeOut();
 }
 
 function updateGamesList(games) {
@@ -243,10 +220,37 @@ function updateGamesList(games) {
 
 function showLoadingScreen(text) {
 	$('#labelLoading', '#loadingScreen').html(text);
-	$('#loadingScreen').removeClass('hide');
+	$('#loadingScreen').removeClass('hideI');
 	$('#loadingProgress').css('left', (window.innerWidth - $('#loadingProgress').width()) / 2);
 }
 
 function updateLoadingProgress(progress) {
 	$('.bar', '#loadingProgress').css('width', progress + '%');
 }
+
+function addPlayer() {
+	var i = $('.player', '#players').length;
+	if (i > 0) {
+		$('#players').append('<div class="player ' + (i > 3 ? 'hideI' : '') + '">Player ' + (i+1) + '<div class="customRadio checked" data-name="player' + i + '" data-value ="0">Human</div>'
+		 + '<div class="customRadio" data-name="player' + i + '" data-value ="0">IA</div></div>');
+	} else {
+		$('#players').append('<div class="player">Player 1<div class="checked">Me</div></div>');
+	}
+}
+
+function updatePlayers(nbPlayers) {
+	console.log($('.player', '#players'))
+	for (var i = 0; i < 7; i++) {
+		if (i <= nbPlayers) {
+			$('.player:nth-child(' + i + ')', '#players').removeClass('hideI');
+		} else {
+			$('.player:nth-child(' + i + ')', '#players').addClass('hideI');
+		}
+	}
+}
+
+//custom radio buttons
+$('.customRadio').click(function () {
+	$('.customRadio[data-name="' + $(this).attr('data-name') + '"]').removeClass('checked');
+	$(this).addClass('checked');
+});
