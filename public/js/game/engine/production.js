@@ -153,13 +153,16 @@ production.gatherResources = function (game, builder, resource) {
 
 	if (builder.ga.amount == builderData.maxGathering) {
 
-
-
 		// the builder is full of resources, get resources back
 		var closestTownHall = tools.getNearestStuff(game, builder, gameData.FAMILIES.building, gameData.ELEMENTS[gameData.FAMILIES.building][builder.r].townhall.t, gameData.RANKS.me, true);
-		builder.a = new gameData.Order(action.ACTION_TYPES.gather, null, closestTownHall.id, resourceData.resourceType);
-		builder.pa = [new gameData.Order(action.ACTION_TYPES.gather, null, resource.id, resourceData.resourceType)];
-
+		if (closestTownHall != null) { // Yes, it happens...
+ 			builder.a = new gameData.Order(action.ACTION_TYPES.gather, null, closestTownHall.id, resourceData.resourceType);
+			builder.pa = [new gameData.Order(action.ACTION_TYPES.gather, null, resource.id, resourceData.resourceType)];
+		}
+		else {
+			builder.a = null;
+			builder.pa = [];
+		}	
 	}
 
 	if (resource.ra == 0) {

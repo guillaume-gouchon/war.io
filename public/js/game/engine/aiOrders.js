@@ -265,7 +265,7 @@ aiOrders.canBeBuiltHere = function (game, position, building) {
     var point1 = tools.getPartPosition(building, -1, -1);
     var point2 = {
         x : point1.x + building.shape[0].length ,
-        y : point1.y + building.shape.length,
+        y : point1.y + building.shape.length
     };
 
     for (var i = point1.x; i <= point2.x; i++) {
@@ -316,16 +316,45 @@ aiOrders.shoudIAttack = function(game, playerID) {
             soldiers.push(unit);
         }
     }
-    //for (var s in soldiers) {
-        //AI.searchForNewEnemy(soldiers[s]);
-    //}
     if (soldiers.length > 10) { // BANZAIIIIII!
+        //First, finish off all units
+        for (var n in game.gameElements.unit) {
+            var unit = game.gameElements.unit[n];
+            if (unit.o != playerID && !gameData.ELEMENTS[unit.f][unit.r][unit.t].isBuilder) { // First, focus attacking units
+                try {
+                    order.attack(game, soldiers, unit);
+                    return;
+                }
+                catch(err) {
+                    console.log('Attack failed. Error: ' + err);
+                }
+            }
+        }
+
+        for (var n in game.gameElements.unit) {
+            var unit = game.gameElements.unit[n];
+            if (unit.o != playerID && !gameData.ELEMENTS[unit.f][unit.r][unit.t].isBuilder) { // Then, focus the builders
+                try {
+                    order.attack(game, soldiers, unit);
+                    return;
+                }
+                catch(err) {
+                    console.log('Attack failed. Error: ' + err);
+                }
+            }
+        }
+
+        // Then the buildings
         for (var n in game.gameElements.building) {
             var building = game.gameElements.building[n];
             if (building.o != playerID) { // You'll die first
-                console.log('KOWABOONGA!');
-                order.attack(game, soldiers, building);
-                return;
+                try {
+                    order.attack(game, soldiers, building);
+                    return;
+                }
+                catch(err) {
+                    console.log('Attack failed. Error: ' + err);
+                }
             }
         }
     }

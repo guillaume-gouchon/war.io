@@ -9,7 +9,7 @@ gameData.ELEMENTS[gameData.FAMILIES.land].push(
 		ra : 75,
 		g : 'tree.js',
 		image : 'forest.png',
-		minimapColor : {r:52,g:114,b:53},
+		minimapColor : {r:52,g:114,b:53}
 	},
 	goldmine : {	
 		name : 'Gold Mine',
@@ -20,7 +20,7 @@ gameData.ELEMENTS[gameData.FAMILIES.land].push(
 		ra : 3000,
 		g : 'goldmine.js',
 		image : 'gold-mine.png',
-		minimapColor : {r:237,g:226,b:117},
+		minimapColor : {r:237,g:226,b:117}
 	},
 	water : {	
 		name : 'Water',
@@ -28,6 +28,6 @@ gameData.ELEMENTS[gameData.FAMILIES.land].push(
 		shape : [[1]],
 		canMoveIn : false,
 		sta : true,
-		minimapColor : {r:43,g:56,b:86},
+		minimapColor : {r:43,g:56,b:86}
 	}
 });

@@ -6,7 +6,7 @@ var gameManager = {};
 */
 gameManager.isOfflineGame = false;
 gameManager.offlineLoop = null;
-gameManager.offlineNbPlayers = 2;
+gameManager.offlineNbPlayers = 3;
 gameManager.musicEnabled = false;
 
 
@@ -87,7 +87,7 @@ gameManager.initOfflineGame = function (gameInitData) {
 	gameContent.players[0].n = this.playerName;
 	for (var i = 1; i < this.offlineNbPlayers; i++) {
 		gameContent.players.push(new gameData.Player(0, i, 0, true));
-		gameContent.players[i].n = 'AI';
+		gameContent.players[i].n = 'AI' + i;
 	}
   	gameContent.map = new gameData.Map(gameData.MAP_TYPES[Object.keys(gameData.MAP_TYPES)[gameInitData.mapType]],
                     gameData.MAP_SIZES[Object.keys(gameData.MAP_SIZES)[gameInitData.mapSize]],

@@ -187,8 +187,13 @@ gameCreation.addGameElement = function (game, element) {
 		for(var j in row) {
 			var part = row[j];
 			if(part > 0) {
-				var position = tools.getPartPosition(element, i, j);
-				game.grid[position.x][position.y].c = element.id;
+				try {
+					var position = tools.getPartPosition(element, i, j);
+					game.grid[position.x][position.y].c = element.id;
+				}
+				catch(err) {
+					console.log('Element Creation impossible. Error: ' + err);
+				}
 			}
 		}
 	}
