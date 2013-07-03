@@ -320,7 +320,8 @@ aiOrders.shoudIAttack = function(game, playerID) {
         //First, finish off all units
         for (var n in game.gameElements.unit) {
             var unit = game.gameElements.unit[n];
-            if (unit.o != playerID && !gameData.ELEMENTS[unit.f][unit.r][unit.t].isBuilder) { // First, focus attacking units
+            var unitData = tools.getElementData(unit);
+            if (unit.o != playerID && !unitData.isBuilder) { // First, focus attacking units
                 try {
                     order.attack(game, soldiers, unit);
                     return;
@@ -333,7 +334,8 @@ aiOrders.shoudIAttack = function(game, playerID) {
 
         for (var n in game.gameElements.unit) {
             var unit = game.gameElements.unit[n];
-            if (unit.o != playerID && !gameData.ELEMENTS[unit.f][unit.r][unit.t].isBuilder) { // Then, focus the builders
+            var unitData = tools.getElementData(unit);
+            if (unit.o != playerID && !unitData.isBuilder) { // Then, focus the builders
                 try {
                     order.attack(game, soldiers, unit);
                     return;
