@@ -128,11 +128,13 @@ gameContent.update = function (data) {
 	// update players
 	this.players = data.players;
 
-	// check for victory / defeat
-	if (this.players[this.myArmy].s == gameData.PLAYER_STATUSES.victory
+	// check for victory / defeat (Offline game only)
+	if (gameManager.isOfflineGame && this.players[this.myArmy].s == gameData.PLAYER_STATUSES.victory
 		|| this.players[this.myArmy].s == gameData.PLAYER_STATUSES.defeat
 		|| this.players[this.myArmy].s == gameData.PLAYER_STATUSES.surrender) {
-		gameManager.endGame(this.players[this.myArmy].s);
+		// show the stats and stop the game
+		gameManager.showStats(this.players[this.myArmy].s, gameContent.game.stats);
+		clearInterval(gameManager.offlineGameLoop);
 	}
 
 	// show chat messages

@@ -34,7 +34,7 @@ gameSurface.BUILDING_INIT_Z = - 1.5 * gameSurface.PIXEL_BY_NODE;
 gameSurface.ARMIES_COLORS = ['_red', '_blu', '_gre', '_yel'];
 gameSurface.PLAYERS_COLORS = ['red', 'blue', 'green', 'yellow'];
 gameSurface.PLAYERS_COLORS_RGB = [{r:255,g:0,b:0}, {r:50,g:50,b:255}, {r:25,g:255,b:0}, {r:255,g:255,b:0}];
-gameSurface.MOVEMENT_EXTRAPOLATION_ITERATION = 6;
+gameSurface.MOVEMENT_EXTRAPOLATION_ITERATION = 8;
 gameSurface.LAND_HEIGHT_SMOOTH_FACTOR = 65;
 
 gameSurface.FOG_OF_WAR_HEIGHT = 10;
@@ -258,7 +258,7 @@ gameSurface.createScene = function () {
     });
 	//var grassMaterial = new THREE.MeshBasicMaterial({ map: grassTexture });
 	// var landGeometry = new THREE.PlaneGeometry(2200, 2200, 64, 64);
-	var landGeometry = new THREE.PlaneGeometry(1000, 1000);
+	var landGeometry = new THREE.PlaneGeometry(gameContent.map.size.x * this.PIXEL_BY_NODE, gameContent.map.size.y * this.PIXEL_BY_NODE);
 	var planeSurface = new THREE.Mesh(landGeometry, grassMaterial);
     planeSurface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
     planeSurface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
@@ -400,21 +400,11 @@ gameSurface.geometryLoaded = function (key) {
 
 
 /**
-*	Updates the loading counter and starts the game if everything is loaded.
+*	Updates the loading counter and notifies the client about the progression.
 */
 gameSurface.updateLoadingCounter = function () {
 	this.stuffLoaded ++;
-	
-	// UI
-	updateLoadingProgress(parseInt(100 * this.stuffLoaded / this.totalStuffToLoad));
-
-	if(this.stuffLoaded >= this.totalStuffToLoad) {
-		if (gameManager.isOfflineGame) {
-			gameManager.startGame();
-		} else {
-			gameManager.readyToPlay();	
-		}
-	}
+	gameManager.updateLoadingProgress(parseInt(100 * this.stuffLoaded / this.totalStuffToLoad));
 }
 
 

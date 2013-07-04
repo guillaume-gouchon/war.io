@@ -2,61 +2,125 @@ var gameManager = {};
 
 
 /**
-*	Offline purpose variables.
+*	VARIABLES
 */
 gameManager.isOfflineGame = false;
-gameManager.offlineLoop = null;
-gameManager.offlineNbPlayers = 3;
+gameManager.offlineGameLoop = null;
 gameManager.musicEnabled = false;
 
 
+// connect to server
 try {
-	gameManager.socket = io.connect();
-
-	//send Player ID
-	gameManager.socket.on('askPID', function () {
-		gameManager.playerId = gameManager.getPlayerId();
-		gameManager.playerName = gameManager.getPlayerName();
-		gameManager.socket.emit('PID', gameManager.playerId);
-	});
-
-	//the player is asked if he wants to rejoin a game
-	gameManager.socket.on('askRejoin', function (game) {
-		$('#rejoin').append('<div class="bigButton" data-id="' + game.id + '">' + game.name + '</div>');
-		$('#rejoin').css('top', (window.innerHeight - $('#rejoin').height()) / 2);
-		$('#rejoin').css('left', (window.innerWidth - $('#rejoin').width()) / 2);
-		$('.bigButton', '#rejoin').click(function () {
-			gameManager.connectToServer(null);
-			gameManager.socket.emit('rejoinResponse', gameManager.playerId);
-			hideWelcomeScreen();
-			$('#loadingTitle').removeClass('hide').addClass('moveToLeft');
-			$('#rejoin').addClass('hide');
-		});
-	});
-
-	//the game has started
-	gameManager.socket.on('go', function () {
-		gameManager.startGame();
-	});
-
+	socketManager.connect();
 } catch (e) {
 }
 
 
 /**
-*	The user wants to play the game.
+*	Returns player unique id from cookie or create it if it does not exist.
 */
-gameManager.initGame = function (gameInitData) {
-	if (gameContent.game == null) {//avoids to run the game twice
-		gameManager.playerId = gameManager.getPlayerId();
-		gameManager.playerName = gameManager.getPlayerName();
-		if(this.isOfflineGame) {
-			this.initOfflineGame(gameInitData);
-		} else {
-			try {
-				this.connectToServer(gameInitData);
-			} catch (e) {
-			}
+gameManager.getPlayerId = function () {
+	var playerId = utils.readCookie('rts_player_id');
+	if (playerId == null) {
+		var uniqueId = new Date().getTime() + Math.random();
+		utils.createCookie('rts_player_id', uniqueId);
+		playerId = uniqueId;
+	}
+
+	return playerId;
+}
+
+
+/**
+*	Returns player unique id from cookie or create it if it does not exist.
+*/
+gameManager.getPlayerName = function () {
+	var playerName = utils.readCookie('rts_player_name');
+	if (playerName == null) {
+		return 	gameData.getRandomName();
+	} else {
+		return playerName;
+	}
+}
+
+
+/**
+*	Updates player's name and updates the cookie.
+*/
+gameManager.updatePlayerName = function (newName) {
+	utils.createCookie('rts_player_name', newName);
+	this.playerName = newName;
+}
+
+
+/**
+*	Send an order to the game engine.
+*/
+gameManager.sendOrderToEngine = function (type, params) {
+	if (this.isOfflineGame) {
+		gameContent.game.orders.push([type, params]);
+	} else {
+		socketManager.sendOrder(gameContent.game.id, type, params);
+	}
+}
+
+
+/**
+*	Creates game object from game information.
+*/
+gameManager.createGameObject = function (playerId, playerName, armyId, mapType, mapSize, initialResources, vegetation,  nbPlayers, nbIAPlayers) {
+	return {
+		playerId: playerId,
+		playerName: playerName,
+		armyId: armyId,
+		mapType: mapType,
+		mapSize: mapSize,
+		initialResources: initialResources,
+		vegetation: vegetation,
+		nbPlayers: nbPlayers,
+		nbIAPlayers: nbIAPlayers
+	};
+}
+
+
+/**
+*	The user starts a solo game against AI players.
+*/
+gameManager.startOfflineGame = function (game) {
+	this.isOfflineGame = true;
+
+	gameContent.myArmy = game.armyId;
+	gameContent.players = [];
+	gameContent.players.push(new gameData.Player(0, 0, game.armyId, false));
+	gameContent.players[0].n = game.playerName;
+	for (var i = 1; i < game.nbPlayers; i++) {
+		gameContent.players.push(new gameData.Player(0, i, 0, true));
+		gameContent.players[i].n = gameData.getRandomName();
+	}
+	gameContent.map = new gameData.Map(gameData.MAP_TYPES[Object.keys(gameData.MAP_TYPES)[game.mapType]],
+		gameData.MAP_SIZES[Object.keys(gameData.MAP_SIZES)[game.mapSize]],
+		gameData.VEGETATION_TYPES[Object.keys(gameData.VEGETATION_TYPES)[game.vegetation]],
+		gameData.INITIAL_RESOURCES[Object.keys(gameData.INITIAL_RESOURCES)[game.initialResources]]);
+	gameContent.game = gameCreation.createNewGame(gameContent.map, gameContent.players);
+	this.waitingData = gameContent.game.gameElements;
+	gameSurface.init();
+	GUI.init();
+}
+
+
+/**
+*	Updates my loading bar and notifies the server in online games.
+*/
+gameManager.updateLoadingProgress = function (progress) {
+	$('.bar', '#loadingProgress').css('width', progress + '%');
+	
+	if (this.isOfflineGame) {
+		if (progress >= 100) {
+			this.startGame();
+		}
+	} else {
+		if (progress >= 100 || Math.random() < 0.2) {// limits the number of sockets sent
+			socketManager.updateLoadingProgress(progress);
 		}
 	}
 }
@@ -66,7 +130,9 @@ gameManager.initGame = function (gameInitData) {
 *	Starts the game.
 */
 gameManager.startGame = function () {
+
 	setTimeout(function () {
+		// switch screen
 		$('#game').removeClass('hide');
 		$('#loadingScreen').remove();
 	}, 500);
@@ -74,141 +140,108 @@ gameManager.startGame = function () {
 	gameContent.init(this.waitingData);
 
 	if (this.isOfflineGame) {
-		this.offlineLoop = setInterval(function(){
+		this.offlineGameLoop = setInterval(function(){
 			gameContent.update(gameContent.game.update());
-		}, 1000 / 8);
+		}, 1000 / gameLogic.OFFLINE_FREQUENCY);
+
 	}
 }
 
 
-gameManager.initOfflineGame = function (gameInitData) {
-	gameContent.myArmy = 0;
-	gameContent.players = [];
-	gameContent.players.push(new gameData.Player(0, 0, gameInitData.army));
-	gameContent.players[0].n = this.playerName;
-	for (var i = 1; i < this.offlineNbPlayers; i++) {
-		gameContent.players.push(new gameData.Player(0, i, 0, true));
-		gameContent.players[i].n = 'AI' + i;
+/**
+*	Updates salon.
+*/
+gameManager.updateJoinableGamesList = function (data) {
+
+	$('tbody', '#lstGames').html('');
+	if (data.games.length > 0) {
+		$('.noResult', '#joinGame').addClass('hide');
+		$('table', '#joinGame').removeClass('hide');
+		for (var i in data.games) {
+			var game = data.games[i];
+			$('tbody', '#lstGames').append('<tr data-id="' + game.id + '">' 
+				+ '<td>'+ game.creatorName + '</td><td>' + game.mapSize + '</td>'
+				+ '<td>'+ game.initialResources + '</td><td>' + game.objectives + '</td>'
+				+ '<td>' + game.players + '</td></tr>');
+		}
+	} else {
+		$('.noResult', '#joinGame').removeClass('hide');
+		$('table', '#joinGame').addClass('hide');
 	}
-  	gameContent.map = new gameData.Map(gameData.MAP_TYPES[Object.keys(gameData.MAP_TYPES)[gameInitData.mapType]],
-                    gameData.MAP_SIZES[Object.keys(gameData.MAP_SIZES)[gameInitData.mapSize]],
-                    gameData.VEGETATION_TYPES[Object.keys(gameData.VEGETATION_TYPES)[gameInitData.vegetation]],
-                    gameData.INITIAL_RESOURCES[Object.keys(gameData.INITIAL_RESOURCES)[gameInitData.initialResources]]);
-	gameContent.game = gameCreation.createNewGame(gameContent.map, gameContent.players);
-	this.waitingData = gameContent.game.gameElements;
+
+	// confirm join game
+	$('tbody tr', '#lstGames').click(function () {
+		soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
+		$(this).unbind('click');
+		$('.modal').modal('hide');
+		showLoadingScreen('Loading');
+
+		var gameId = $(this).attr('data-id');
+		var armyId = $('.checked', '#armies').attr('data-army');
+
+		socketManager.joinGame(this.playerId, this.playerName, gameId, armyId);
+
+		removeWebsiteDom();
+	});
+
+}
+
+
+/**
+*	The game is full, let's start to load the assets.
+*/
+gameManager.initOnlineGame = function (data) {
+	gameContent.game.id = data.gameId;
+	gameContent.players = data.players;
+	gameContent.myArmy = data.myArmy;
+	gameContent.map = data.map;
+	this.waitingData = data.initElements;
 	gameSurface.init();
 	GUI.init();
 }
 
 
-gameManager.connectToServer = function (gameInitData) {
-	if (gameInitData != null) {
-		var userData = {
-			player: {
-				playerId: this.playerId,
-				army: gameInitData.army,
-				name: this.playerName
-			},
-			game: gameInitData
-		};
-		this.socket.emit('enter', userData);
-	}
-	
-	//a player has joined the game
-	this.socket.on('updateGamePlayers', function (data) {
-		gameManager.updatePlayersInGame(data);
-	});
-
-	//the server launched the game !
-	this.socket.on('gameStart', function (data) {
-		gameContent.players = data.players;
-		gameContent.myArmy = data.myArmy;
-		gameContent.map = data.map;
-		gameManager.waitingData = data.initElements;
-		gameSurface.init();
-		GUI.init();
-	});
-
-	//the server sent the game data
-	this.socket.on('gameData', function (data) {
-		gameContent.update(data);
-	});
-
-	//show the game's stats when game is over
-	this.socket.on('gameStats', function (data) {
-		gameManager.showStats(data);
-	});
-}
-
-gameManager.disconnect = function () {
-	this.socket.emit('goOffline', null);
-}
-
-
-gameManager.createPlayerId = function () {
-	var uniqId = new Date().getTime() + Math.random();
-	utils.createCookie('rts_player_id', uniqId);
-	return uniqId;
-}
-
-
-gameManager.getPlayerId = function () {
-	var playerId = utils.readCookie('rts_player_id');
-	if (playerId == null) {
-		playerId = this.createPlayerId();
-	}
-
-	return playerId;
-}
-
-gameManager.getPlayerName = function () {
-	var playerName = utils.readCookie('rts_player_name');
-	if (playerName == null) {
-		return 	'Lord Bobby ' + parseInt(1 + Math.random() * 8);
+/**
+*	Updates the loading bars of the players. If everybody is ready, starts the game.
+*/
+gameManager.updateLoadingQueue = function (data) {
+	var playersNeeded = data.nbPlayers - data.players.length;
+	if (playersNeeded > 0) {
+		$('#labelLoading').html('Waiting for ' + playersNeeded + ' more player' + (playersNeeded > 1 ? 's' : ''));
 	} else {
-		return playerName;
+		$('#labelLoading').html('Loading');
+	}
+
+	$('#igPlayersList').removeClass('hide').html('');
+	var readyToGo = true;
+	for (var i in data.players) {
+		var player = data.players[i];
+		if (player.progress < 100) { readyToGo = false;}
+		$('#igPlayersList').append('<div class="' + gameSurface.PLAYERS_COLORS[i] + '" data-id="' + data.players[i].pid + '">' + data.players[i].n + (gameContent.myArmy == null || data.players[i].ready == 1 ? '':' (Loading Game...)') + '</div>');
+	}
+
+	if (readyToGo) {
+		this.startGame();
 	}
 }
 
-gameManager.updatePlayerName = function (newName) {
-	utils.createCookie('rts_player_name', newName);
-	this.playerName = newName;
-}
 
-gameManager.sendOrderToEngine = function (type, params) {
-	if (this.isOfflineGame) {
-		gameContent.game.orders.push([type, params])
-	} else {
-		//send order to external server
-		gameManager.socket.emit('order', [type, params]);
-	}
-}
+/**
+*	Shows the game statistics.
+*/
+gameManager.showStats = function (playerStatus, stats) {
 
-
-gameManager.endGame = function (status) {
-	if (status == gameData.PLAYER_STATUSES.victory) {
+	// show victory / defeat message
+	if (playerStatus == gameData.PLAYER_STATUSES.victory) {
 		$('#endGameMessage').addClass('victory');
 		$('#endGameMessage').html('Victory !');
 	} else {
 		$('#endGameMessage').addClass('defeat');
 		$('#endGameMessage').html('Defeat...');
 	}
-	$('#endGame').fadeIn().removeClass('hide');
-	$('#endGameMessage').addClass('moveToLeft');
+	$('#endGame').removeClass('hide');
 
-	if (this.isOfflineGame) {
-		clearInterval(this.offlineLoop);
-		this.showStats(gameContent.game.stats);
-	} else {
-		this.disconnect();
-	}
-}
-
-
-/**
-*	Shows the end game statistics.
-*/
-gameManager.showStats = function (stats) {
+	// show stats
 	$('table', '#endGameStats').css('width', window.innerWidth - 60);
 	for (var i in stats) {
 		var statPlayer = stats[i];
@@ -223,52 +256,5 @@ gameManager.showStats = function (stats) {
 			statPlayer.buildersCreated + '</td><td>' +  
 			statPlayer.buildingsCreated + '</td></tr>');
 	}
-}
 
-
-/**
-*	Updates the players list.
-*/
-gameManager.updatePlayersInGame = function (data) {
-	var playersNeeded = data.playersMax - data.players.length;
-	if (playersNeeded > 0) {
-		$('#loadingLabel').html('Waiting for ' + playersNeeded + ' player' + (playersNeeded > 1 ? 's' : ''));
-	} else {
-		$('#loadingLabel').html('Loading');
-	}
-
-	$('#igPlayersList').removeClass('hide').html('');
-	for (var i in data.players) {
-		$('#igPlayersList').append('<div class="' + gameSurface.PLAYERS_COLORS[i] + '" data-id="' + data.players[i].pid + '">' + data.players[i].n + (gameContent.myArmy == null || data.players[i].ready == 1 ? '':' (Loading Game...)') + '</div>');
-	}
-}
-
-
-/**
-*	Tells the server that I am ready to play.
-*/
-gameManager.readyToPlay = function () {
-	this.socket.emit('ready', this.playerId);
-}
-
-
-gameManager.enterSalon = function () {
-	gameManager.socket.emit('enter', null);
-
-	gameManager.socket.on('joinListUpdate', function (data) {
-		updateGamesList(data);
-
-		// confirm join game
-		$('tbody tr', '#lstGames').click(function () {
-			soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
-			$(this).unbind('click');
-			$('.modal').modal('hide');
-			showLoadingScreen('Loading');
-			var gameInitData = {};
-			gameInitData.gameId = $(this).attr('data-id');
-			gameInitData.army = $('.checked', '#armies').attr('data-army');
-			gameManager.initGame(gameInitData);
-			removeWebsiteDom();
-		});
-	});
 }

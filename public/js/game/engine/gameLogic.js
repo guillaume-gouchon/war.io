@@ -4,7 +4,9 @@ var gameLogic = {};
 /**
 *	Number of time the game is being updated by second.
 */
-gameLogic.FREQUENCY = 3;
+gameLogic.FREQUENCY = 4;
+gameLogic.OFFLINE_FREQUENCY = 6;
+gameLogic.AI_FREQUENCY = 6;
 
 
 /**
@@ -24,12 +26,13 @@ gameLogic.update = function (game) {
 	game.orders = [];
 
 	for (var n in game.players) {
+		
 		if (game.players[n].s != gameData.PLAYER_STATUSES.surrender) {
 			game.players[n].s = gameData.PLAYER_STATUSES.defeat;
 		}
 
         // AI plays
-        if (game.players[n].ai){
+        if (game.players[n].ai && game.iterate % this.AI_FREQUENCY == 0) {
             aiOrders.update(game, game.players[n]);
         }
 

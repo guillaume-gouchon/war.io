@@ -7,9 +7,9 @@ var server = app.listen(config.server.port);
 console.log("WarNode Server is running !");
 
 //initializes Socket IO
-var io = require('socket.io').listen(server);
+app.io = require('socket.io').listen(server);
 //removes debug logs
-io.set('log level', 1);
+app.io.set('log level', 1);
 
 
 //config
@@ -43,40 +43,3 @@ app.get('/', function (req, res) {
   }
   res.sendfile(__dirname + '/public/index.html');
 });
-
-
-//init socket.io
-io.sockets.on('connection', function (socket) {
-
-  socket.emit('askPID', null);
-
-  socket.on('PID', function (data) {
-    app.gamesManager.checkIfPlayerIsIG(socket, data);
-  });
-
-  socket.on('rejoinResponse', function (data) {
-    app.gamesManager.rejoinGame(socket, data);    
-  });
-
-  socket.on('ready', function (data) {
-    app.gamesManager.playerIsReady(socket, data);    
-  });
-
-  socket.on('enter', function (data) {
-    if (data == null) {
-      app.gamesManager.addPlayerToGamesUpdates(socket);
-    } else {
-      app.gamesManager.addPlayer(socket, data);
-    }
-  });
-
-  socket.on('goOffline', function() {
-    app.gamesManager.playerDisconnected(socket);
-  });
-
-  socket.on('disconnect', function() {
-    app.gamesManager.playerDisconnected(socket);
-  });
-
-});
-

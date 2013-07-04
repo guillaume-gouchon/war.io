@@ -2,111 +2,228 @@ module.exports = function(app){
 
 	app.gamesManager = {};
 
-	//get game's data and game's engine 
+	// get game's engine and data 
 	eval(require('fs').readFileSync('./public/js/game/engine.js', 'utf8'));
 	eval(require('fs').readFileSync('./public/js/game/data.js', 'utf8'));
 
 
 	/**
-	*	List of current games.
-	*/
-	app.gamesManager.games = [];
-
-
-	/**
-	* List of players in waiting list.
-	*/
-	app.gamesManager.playersWaiting = {};
-
-
-	/**
-	*	Main Loop.
+	*	Main games loop.
 	*/
 	app.gamesManager.loop = null;
 
 
 	/**
-	*	A player has created / joined a game.
+	*	List of games.
 	*/
-	app.gamesManager.addPlayer = function (socket, data) {
-		if (data.game.gameId != null) {
-			//join game
-			for (var i in app.gamesManager.games) {
-				if (app.gamesManager.games[i].id == data.game.gameId) {
-					delete app.gamesManager.playersWaiting.id;
-					app.gamesManager.addPlayerToGame(socket, app.gamesManager.games[i], data.player);
-					break;
-				}
-			}
-		} else {
-			//create new game
-			app.gamesManager.createNewGame(data.game);
-			app.gamesManager.addPlayerToGame(socket, app.gamesManager.games[app.gamesManager.games.length - 1], data.player);
-		}	  
-	}
+	app.gamesManager.joinableGames = {};
+	app.gamesManager.runningGames = {};
+
+
+	/**
+	* 	List of players in the salon.
+	*/
+	app.gamesManager.playersWaiting = {};
+
+
+	// init socket.io
+	app.io.sockets.on('connection', function (socket) {
+
+		socket.emit('data', {type: gameData.TO_CLIENT_SOCKET.login});
+
+		socket.on(gameData.TO_SERVER_SOCKET.login, function (data) {
+			app.gamesManager.checkIfPlayerWasIG(socket, data);
+		});
+
+		socket.on(gameData.TO_SERVER_SOCKET.createNewGame, function (data) {
+			app.gamesManager.createNewGame(socket, data);
+		});
+
+		socket.on(gameData.TO_SERVER_SOCKET.enterSalon, function (data) {
+			app.gamesManager.enterSalon(socket);
+		});
+
+		socket.on(gameData.TO_SERVER_SOCKET.leaveSalon, function (data) {
+			app.gamesManager.leaveSalon(socket);
+		});
+
+		socket.on(gameData.TO_SERVER_SOCKET.joinGame, function (data) {
+			app.gamesManager.joinGame(socket, data);
+		});
+
+		socket.on(gameData.TO_SERVER_SOCKET.updateLoadingProgress, function (data) {
+			app.gamesManager.updateLoadingProgress(socket, data);
+		});
+
+		socket.on(gameData.TO_SERVER_SOCKET.sendOrder, function (data) {
+			app.gamesManager.sendOrder(socket, data);
+		});
+
+	});
 
 
 	/**
 	*	Creates a new game.
 	*/
-	app.gamesManager.createNewGame = function (gameInitialData) {
+	app.gamesManager.createNewGame = function (socket, data) {
+		
 		console.log(new Date() + ' | Creating new game'.info);
+		
 		var game = new gameData.Game();
 		game.id = gameData.createUniqueId();
-		game.sockets = [];
-		game.nbPlayers = gameInitialData.nbPlayers;
- 		game.map = new gameData.Map(gameData.MAP_TYPES[gameInitialData.mapType],
-	                    gameData.MAP_SIZES[gameInitialData.mapSize],
-	                    gameData.VEGETATION_TYPES[gameInitialData.vegetation],
-	                    gameData.INITIAL_RESOURCES[gameInitialData.initialResources]);
-		app.gamesManager.games.push(game);
+		game.sockets = [socket];
 
-		app.gamesManager.sendGameListUpdate();
-	}
+		// add creator
+		var player = new gameData.Player(data.playerId, 0, data.armyId, false);
+		player.n = data.playerName;
+		game.players = [player];
 
-
-	/**
-	*	Adds a player to an existing game.
-	*/
-	app.gamesManager.addPlayerToGame = function (socket, game, playerInitialData) {
-		console.log(new Date() + ' | Add player to game '.info + game.id);
-		var player = new gameData.Player(playerInitialData.playerId, game.players.length, playerInitialData.army);
-		player.n = playerInitialData.name;
-		game.players.push(player);
-		game.sockets.push(socket);
-
-		if (game.players.length == game.nbPlayers) {
-			//starts the game if it is full
-			app.gamesManager.startGame(game);
-		} else {
-			//send to the players that a new player has joined
-			for (var i in game.sockets) {
-				if (game.sockets[i] != null) {
-					game.sockets[i].emit('updateGamePlayers', 
-						{
-							players: game.players,
-							playersMax: game.nbPlayers
-						}
-					);
-				}
-			}
+		// add AI players
+		for (var i = 0; i < data.nbIAPlayers; i++) {
+			var player = new gameData.Player(Math.random(), (i + 1), 0, true);
+			player.n = gameData.getRandomName();
+			game.sockets.push(null);
 		}
 
-		app.gamesManager.sendGameListUpdate();
+		game.nbPlayers = data.nbPlayers;
+		game.map = new gameData.Map(gameData.MAP_TYPES[Object.keys(gameData.MAP_TYPES)[data.mapType]],
+			gameData.MAP_SIZES[Object.keys(gameData.MAP_SIZES)[data.mapSize]],
+			gameData.VEGETATION_TYPES[Object.keys(gameData.VEGETATION_TYPES)[data.vegetation]],
+			gameData.INITIAL_RESOURCES[Object.keys(gameData.INITIAL_RESOURCES)[data.initialResources]]);
+
+		app.gamesManager.joinableGames[game.id] = game;
+		app.gamesManager.notifyGamesListChanged();
+
 	}
 
 
 	/**
-	*	Sends a player the game info he needs to initializes the game.
+	*	A new player has entered the salon.
 	*/
-	app.gamesManager.sendGameInfo = function (socket, game, playerIndex) {
-		var gameInfo = {
-			map: game.map,
-			players: game.players,
-			myArmy: playerIndex,
-			initElements: game.gameElements 
+	app.gamesManager.enterSalon = function (socket) {
+
+		app.gamesManager.playersWaiting[socket.id] = socket;
+		app.gamesManager.notifyGamesListChanged(socket);
+
+		console.log(new Date() + ' | ' + Object.keys(app.gamesManager.playersWaiting).length + ' players in salon'.info);
+
+	}
+
+
+	/**
+	*	A new player has left the salon.
+	*/
+	app.gamesManager.leaveSalon = function (socket) {
+
+		delete app.gamesManager.playersWaiting[socket.id];
+
+		console.log(new Date() + ' | ' + Object.keys(app.gamesManager.playersWaiting).length + ' players in salon'.info);
+
+	}
+
+
+	/**
+	*	A player has joined a game.
+	*/
+	app.gamesManager.joinGame = function (socket, data) {
+
+		console.log(new Date() + ' | A player joined game '.info + data.gameId);
+
+		var game = app.gamesManager.joinableGames[data.gameId];
+		if (game == null) { return; }
+
+		app.gamesManager.leaveSalon(socket);
+
+    	// create player
+    	var player = new gameData.Player(data.playerId, game.players.length, data.armyId);
+    	player.n = data.playerName;
+
+    	game.players.push(player);
+    	game.sockets.push(socket);
+
+    	if (game.players.length == game.nbPlayers) {
+
+			// starts the game !
+			app.gamesManager.startGame(game);
+
+		} else {
+
+			// TODO : notify loading
+
+		}
+
+		app.gamesManager.notifyGamesListChanged();
+
+	}
+
+
+    /**
+    *	A player is loading the game.
+    */
+    app.gamesManager.updateLoadingProgress = function (socket, data) {
+
+    	
+
+    	
+    }
+
+
+    /**
+    *	A player sent an order.
+    */
+
+    app.gamesManager.sendOrder = function (socket, data) {
+
+    	var game = app.gamesManager.runningGames[data.gameId];
+
+    	if (game != null) {
+
+    		game.orders.push([data.type, data.params]);
+
+    	}  
+    	
+    }
+
+
+	/**
+	*	Sends the players the updated joinable games list.
+	*/
+	app.gamesManager.notifyGamesListChanged = function (socket) {
+
+		var availableGames = [];
+		for (var i in app.gamesManager.joinableGames) {
+			var game = app.gamesManager.joinableGames[i];
+			availableGames.push(
+			{
+				id: game.id,
+				creatorName: game.players[0].n,
+				mapSize: game.map.size.name,
+				initialResources: game.map.ir.name,
+				objectives: [],
+				players: game.players.length + ' / ' + game.nbPlayers
+			}
+			);
+		}
+
+		var data = {
+			type: gameData.TO_CLIENT_SOCKET.listJoinableGames,
+			games: availableGames
 		};
-		socket.emit('gameStart', gameInfo);
+
+		if (socket != null) {
+
+			// direct update to a new player who has entered the salon
+			socket.emit('data', data);
+
+		} else {
+
+			// send notifications to all the players in the salon
+			for (var i in app.gamesManager.playersWaiting) {
+				app.gamesManager.playersWaiting[i].emit('data', data);
+			}
+
+		}
+
 	}
 
 
@@ -114,9 +231,11 @@ module.exports = function(app){
 	*	Starts a game.
 	*/
 	app.gamesManager.startGame = function (game) {
-		console.log(new Date() + ' | Starts a game !'.success);
 
-		//update game
+		console.log(new Date() + ' | A game just started !'.success);
+
+		
+		// update game with some more info
 		var someMoreGameData = gameCreation.createNewGame(game.map, game.players);
 		game.players = someMoreGameData.players;
 		game.stats = someMoreGameData.stats;
@@ -124,42 +243,72 @@ module.exports = function(app){
 		game.gameElements = someMoreGameData.gameElements;
 		game.added = someMoreGameData.added;
 		game.orders = [];
-		game.hasStarted = true;
 
-		//send game info to the players
+		// move game from joinable to running
+		delete app.gamesManager.joinableGames[game.id];
+		app.gamesManager.runningGames[game.id] = game;
+
+		// send game info to the players
 		for (var i in game.players) {
 			if(game.sockets[i] != null) {
 				app.gamesManager.sendGameInfo(game.sockets[i], game, i);
-
-				//init the order socket
-				game.sockets[i].on('order', function (data) {
-					game.orders.push([data[0], data[1]]);
-				});
 			}
 		}
 
-		//start loop if it is stopped
+		// start the main games loop if it is stopped
 		if (app.gamesManager.loop == null) {
 			app.gamesManager.startLoop();
 		}
 
-		app.gamesManager.sendGameListUpdate();
+		app.gamesManager.notifyGamesListChanged();
+
 	}
 
 
 	/**
-	*	Starts update loop.
+	*	Sends a player the game info he needs to initializes the game.
+	*/
+	app.gamesManager.sendGameInfo = function (socket, game, playerIndex) {
+
+		var data = {
+			type: gameData.TO_CLIENT_SOCKET.gameStart,
+			gameId: game.id,
+			players: game.players,
+			myArmy: playerIndex,
+			map: game.map,
+			initElements: game.gameElements 
+		};
+
+		socket.emit('data', data);
+
+	}
+
+
+	/**
+	*	Starts main games loop.
 	*/
 	app.gamesManager.startLoop = function () {
+
+		console.log(new Date() + ' | Loop has started !'.success);
+
 		app.gamesManager.loop = setInterval(function () {
-			var i = app.gamesManager.games.length;
-			while (i --) {
-				if (app.gamesManager.games[i].hasStarted && app.gamesManager.processGame(app.gamesManager.games[i])) {
-					//game is over
+
+			for (var i in app.gamesManager.runningGames) {
+				
+				var game = app.gamesManager.runningGames[i];
+				var gameover = app.gamesManager.processGame(game);
+
+				if (gameover) {
+
+					// game is over
 					app.gamesManager.stopGame(i);
+
 				}
+
 			}
+
 		}, 1000 / gameLogic.FREQUENCY);
+
 	}
 
 
@@ -167,8 +316,12 @@ module.exports = function(app){
 	*	Stops the update loop.
 	*/
 	app.gamesManager.stopLoop = function () {
+
+		console.log(new Date() + ' | Loop has just stopped !'.debug);
+
 		clearInterval(app.gamesManager.loop);
 		app.gamesManager.loop = null;
+
 	}
 
 
@@ -177,30 +330,47 @@ module.exports = function(app){
 	*/
 	app.gamesManager.processGame = function (game) {
 		try {
-			//send game data to each player
+
+			// send game data to each player
 			var data = game.update();
 			for (var i in game.players) {
+
 				if(game.sockets[i] != null) {
+
 					game.sockets[i].emit('gameData', data);
+
 				}
+
 			}
 
 			//check end of game
 			for (var i in data.players) {
+
 				if (game.sockets[i] != null) {
+
 					if (data.players[i].s == gameData.PLAYER_STATUSES.defeat
 						|| data.players[i].s == gameData.PLAYER_STATUSES.victory
 						|| data.players[i].s == gameData.PLAYER_STATUSES.surrender) {
-						game.sockets[i].emit('gameStats', game.stats);
+
+						var dataStats = {
+							type: gameData.TO_CLIENT_SOCKET.gameStats,
+							stats: data.stats
+						};
+						game.sockets[i].emit('data', dataStats);
 						game.sockets[i] = null;
+
 					}
+
 				}
+
 			}
 
 			return app.gamesManager.isUselessGame(game);
 
 		} catch(e) {
-			console.log(new Date() + e);
+
+			console.log(new Date() + ' : ' + e);
+
 		}
 
 		return false;
@@ -210,108 +380,67 @@ module.exports = function(app){
 	/**
 	*	Stops a game.
 	*/
-	app.gamesManager.stopGame = function (index) {
-		app.gamesManager.games.splice(index, 1);
-    	console.log(new Date() + ' | One game has been stopped'.debug);
-		//stop the loop if there are no more games
-		if (app.gamesManager.games.length == 0) {
+	app.gamesManager.stopGame = function (gameId) {
+		
+		console.log(new Date() + ' | One game has been stopped'.debug);
+
+		delete app.gamesManager.runningGames.gameId;
+
+		// stop the loop if there are no more games
+		if (Object.keys(app.gamesManager.runningGames).length == 0) {
+			
 			app.gamesManager.stopLoop();
+
 		}
+
 	}
-
-
-	/**
-	*	One player has just been disconnected.
-	*/
-	app.gamesManager.playerDisconnected = function (socket) {
-		console.log(new Date() + ' | One player has been disconnected'.debug);
-		for (var i in app.gamesManager.games) {
-      		var n = app.gamesManager.games[i].sockets.indexOf(socket);
-	      	if (n >= 0) {
-		        app.gamesManager.games[i].sockets[n] = null;
-		        if (app.gamesManager.isUselessGame(app.gamesManager.games[i])) {
-		        	console.log(new Date() + ' | Game '.info + app.gamesManager.games[i].id + ' has been removed'.info);
-		        	app.gamesManager.stopGame(i);
-		        	app.gamesManager.sendGameListUpdate();
-		        }
-		        break;
-	      	}
-	    }
-	}
-
+	
 
 	/**
 	*	Checks if all the players have left the game.
 	*/
 	app.gamesManager.isUselessGame = function (game) {
+
 		for (var i in game.sockets) {
 			if (game.sockets[i] != null) {
 				return false;
 			}
 		}
+
 		return true;
+
 	}
 
 
 	/**
-	*	The player will receive the joinable games list updates.
+	*	Checks if player was already in game. If so, ask him to rejoin.
 	*/
-	app.gamesManager.addPlayerToGamesUpdates = function (socket) {
-		app.gamesManager.playersWaiting[socket.id] = socket;
-		app.gamesManager.sendGameListUpdate(socket);
-	}
+	app.gamesManager.checkIfPlayerWasIG = function (socket, playerId) {
 
+		for (var i in app.gamesManager.runningGames) {
 
-	/**
-	*	Sends the updated joinable games list.
-	*/
-	app.gamesManager.sendGameListUpdate = function (socket) {
-		var availableGames = []; 
-		for (var i in app.gamesManager.games) {
-			if (!app.gamesManager.games[i].hasStarted && app.gamesManager.games[i].players.length > 0) {
-				var game = app.gamesManager.games[i];
-				availableGames.push(
-					{
-						id: game.id,
-						name: game.players[0].n,
-						currentPlayers: game.players.length,
-						maxPlayers: game.nbPlayers
-					}
-				);
-			}
+			var game = app.gamesManager.runningGames[i];
+
+			for (var j in game.players) {
+
+				if(game.players[j].pid == playerId
+					&& game.players[j].s == gameData.PLAYER_STATUSES.ig) {
+
+		      		//ask player to rejoin game
+		      	var data = {
+		      		type: gameData.TO_CLIENT_SOCKET.rejoin,
+		      		id: game.id,
+		      		name: game.players[0].n,
+		      		nbPlayers: game.nbPlayers
+		      	}
+		      	socket.emit('data', data);
+
+		      	return;
+		      }
+
+		  }
+
 		}
-
-		if (socket == null) {
-			for (var i in app.gamesManager.playersWaiting) {
-				app.gamesManager.playersWaiting[i].emit('joinListUpdate', availableGames);
-			}
-		} else {
-			socket.emit('joinListUpdate', availableGames);
-		}
-	}
-
-
-	/**
-	*	Checks if player is already IG. If so, tell him.
-	*/
-	app.gamesManager.checkIfPlayerIsIG = function (socket, playerId) {
-		for (var i in app.gamesManager.games) {
-			var game = app.gamesManager.games[i];
-		    for (var j in game.players) {
-		      	if(game.players[j].pid == playerId) {
-
-		      		//ask player
-		      		socket.emit('askRejoin', {
-						id: game.id,
-						name: game.players[0].n,
-						currentPlayers: game.players.length,
-						maxPlayers: game.nbPlayers
-					});
-
-		        	return;
-		    	}
-	    	}
-	    }
 	}
 
 
@@ -321,15 +450,15 @@ module.exports = function(app){
 	app.gamesManager.rejoinGame = function (socket, playerId) {
 		for (var i in app.gamesManager.games) {
 			var game = app.gamesManager.games[i];
-		    for (var j in game.players) {
-		      	if(game.players[j].pid == playerId) {
+			for (var j in game.players) {
+				if(game.players[j].pid == playerId) {
 
-		      		game.sockets[j] = socket;
+					game.sockets[j] = socket;
 
 					//the player was in a game
-			        if(game.iterate >= 0) {
+					if(game.iterate >= 0) {
 			        	//game has started, send the player the game info
-						app.gamesManager.sendGameInfo(socket, game, j);
+			        	app.gamesManager.sendGameInfo(socket, game, j);
 
 						//update his socket
 
@@ -337,55 +466,34 @@ module.exports = function(app){
 						game.sockets[j].on('order', function (data) {
 							game.orders.push([data[0], data[1]]);
 						});
-			    	}
+					}
 
-			    	return;
-		      	}
-		    }
-	  	}
+					return;
+				}
+			}
+		}
 	}
 
 
 	/**
-	*	One player has loaded the game and is ready to play.
+	*	One player has just been disconnected.
 	*/
-	app.gamesManager.playerIsReady = function (socket, playerId) {
+	app.gamesManager.playerDisconnected = function (socket) {
+
+		console.log(new Date() + ' | One player has been disconnected'.debug);
+		
 		for (var i in app.gamesManager.games) {
-			var game = app.gamesManager.games[i];
-		    for (var j in game.players) {
-		      	if(game.players[j].pid == playerId) {
-		      		game.players[j].ready = 1;
-
-					//launch game ?
-					for (var n in game.players) {
-						if (game.sockets[n] != null && game.players[n].ready == null) {
-
-							//at least one player is not ready
-							for (var i in game.sockets) {
-				      			if (game.sockets[i] != null) {
-									game.sockets[i].emit('updateGamePlayers', 
-										{
-											players: game.players,
-											playersMax: game.nbPlayers
-										}
-									);
-								}
-							}
-
-							return;
-						}
-					}
-
-					//launch game !
-					for (var i in game.sockets) {
-						if (game.sockets[i] != null) {
-							game.sockets[i].emit('go', null);
-						}
-					}
-
-			    	return;
-		      	}
-		    }
-	  	}
+			var n = app.gamesManager.games[i].sockets.indexOf(socket);
+			if (n >= 0) {
+				app.gamesManager.games[i].sockets[n] = null;
+				if (app.gamesManager.isUselessGame(app.gamesManager.games[i])) {
+					console.log(new Date() + ' | Game '.info + app.gamesManager.games[i].id + ' has been removed'.info);
+					app.gamesManager.stopGame(i);
+					app.gamesManager.sendGameListUpdate();
+				}
+				break;
+			}
+		}
 	}
+
 }

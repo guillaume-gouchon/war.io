@@ -1,4 +1,4 @@
-// handle player's name
+// init player's info
 $('input', '#playerName').val(gameManager.getPlayerName());
 $('input', '#playerName').change(function () {
 	gameManager.updatePlayerName($(this).val());
@@ -11,6 +11,8 @@ $('input', '#playerName').keydown(function (e) {
 		$(this).blur();
 	}
 });
+gameManager.playerId = gameManager.getPlayerId();
+gameManager.playerName = gameManager.getPlayerName();
 
 // center main buttons
 centerElement($('#mainButtons'));
@@ -70,7 +72,7 @@ $('.cancelButton').click(function () {
 	$('.modal').modal('hide');
 });
 
-// create new game button
+// open new game dialog
 $('#createGameButton').click(function () {
 	soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
 	$('#newGame').modal('show');
@@ -81,43 +83,69 @@ $('#tutorialButton').click(function () {
 	soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
 	$(this).unbind('click');
 	showLoadingScreen('Loading');
-	var tutorialInitData = {
-		mapType: gameData.MAP_TYPES.random.id,
-		mapSize: gameData.MAP_SIZES.small.id,
-		vegetation: gameData.VEGETATION_TYPES.standard.id,
-		initialResources: gameData.INITIAL_RESOURCES.standard.id
-	}
-	tutorialInitData.army = $('.checked', '#armies').attr('data-army');
-	gameManager.isOfflineGame = true;
-	gameManager.initGame(tutorialInitData);
+
+	var armyId = $('.checked', '#armies').attr('data-army');
+	var mapType = gameData.MAP_TYPES.random.id;
+	var mapSize = gameData.MAP_SIZES.small.id;
+	var initialResources = gameData.INITIAL_RESOURCES.standard.id;
+	var vegetation = gameData.VEGETATION_TYPES.standard.id;
+	var nbPlayers = 2;
+	var nbIAPlayers = 1;
+	var game = gameManager.createGameObject(gameManager.playerId, gameManager.playerName, armyId, mapType, 
+								  				mapSize, initialResources, vegetation, nbPlayers, nbIAPlayers);
+ 
+	// launch tutorial
+	gameManager.startOfflineGame(game);
+
 	removeWebsiteDom();
 });
 
-// create game !
+// create new game !
 $('#confirmGameCreation').click(function () {
 	soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
 	$(this).unbind('click');
 	$('.modal').modal('hide');
-	showLoadingScreen('Loading');
-	var gameInitData = {
-		mapType: gameData.MAP_TYPES.random.id,
-		mapSize: $('#mapSize').val(),
-		vegetation: gameData.VEGETATION_TYPES.standard.id,
-		initialResources: $('#initialResources').val()
-	};
-	gameInitData.army = $('.checked', '#armies').attr('data-army');
-	gameInitData.nbPlayers = $('#nbPlayers').val();
-	gameManager.initGame(gameInitData);
+	showLoadingScreen('Waiting for opponents');
+	
+	var armyId = $('.checked', '#armies').attr('data-army');
+	var mapType = gameData.MAP_TYPES.random.id;
+	var mapSize = $('#mapSize').val();
+	var initialResources = $('#initialResources').val();
+	var vegetation = gameData.VEGETATION_TYPES.standard.id;
+	var nbPlayers = $('#nbPlayers').val();
+	var nbIAPlayers = 0;
+	$.each($('.player', '#players'), function () {
+		if (!$(this).hasClass('hideI') && $('.checked', this).attr('data-value') == 1) {
+			nbIAPlayers ++;
+		}
+	});
+	var game = gameManager.createGameObject(gameManager.playerId, gameManager.playerName, armyId, mapType, 
+								  				mapSize, initialResources, vegetation, nbPlayers, nbIAPlayers);
+
+	if (nbPlayers - 1 == nbIAPlayers) {
+		// only AI opponents : play offline
+		gameManager.startOfflineGame(game);
+	} else {
+		socketManager.createNewGame(game);	
+	}
+
 	removeWebsiteDom();
 });
 
-// get joinable games list
+// enter salon
 $('#joinGameButton').click(function () {
 	soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
 	$('#joinGame').modal('show');
-	$('tbody', '#lstGames').html('');
-	gameManager.enterSalon();
+	$('.noResult', '#joinGame').removeClass('hide');
+	$('table', '#joinGame').addClass('hide');
+	socketManager.enterSalon();
 });
+
+// leave salon
+$('#joinGame').on('hidden', function () {
+	socketManager.leaveSalon();
+})
+
 
 function initArmyButtons () {
 	for (var i in gameData.RACES) {
@@ -129,16 +157,16 @@ function initArmyButtons () {
 function initMapSizes () {
 	for (var i in gameData.MAP_SIZES) {
 		var mapSize = gameData.MAP_SIZES[i];
-		$('#mapSize').append('<option value="' + i + '" ' + (i == 'medium' ? 'selected' : '') + '>'
+		$('#mapSize').append('<option value="' + mapSize.id + '" ' + (i == 'medium' ? 'selected' : '') + '>'
 			+ mapSize.name + '</option>');
 	}
 }
 
 function initMapInitialResources () {
 	for (var i in gameData.INITIAL_RESOURCES) {
-		var mapSize = gameData.INITIAL_RESOURCES[i];
-		$('#initialResources').append('<option value="' + i + '" ' + (i == 'standard' ? 'selected' : '') + '>'
-			+ mapSize.name + '</option>');
+		var initialResources = gameData.INITIAL_RESOURCES[i];
+		$('#initialResources').append('<option value="' + initialResources.id + '" ' + (i == 'standard' ? 'selected' : '') + '>'
+			+ initialResources.name + '</option>');
 	}
 }
 
@@ -178,39 +206,17 @@ function removeWebsiteDom() {
 	$('#website').remove();
 }
 
-function updateGamesList(games) {
-	$('tbody', '#lstGames').html('');
-	if (games.length > 0) {
-		$('.noResult', '#joinGame').addClass('hide');
-		$('table', '#joinGame').removeClass('hide');
-		for (var i in games) {
-			var game = games[i];
-			$('tbody', '#lstGames').append('<tr data-id="' + game.id + '">' 
-				+ '<td>'+ game.creatorName + '</td><td>' + game.mapSize + '</td>'
-				+ '<td>'+ game.initialResources + '</td><td>' + game.objectives + '</td>'
-				+ '<td>' + game.players + '</td></tr>');
-		}
-	} else {
-		$('.noResult', '#joinGame').removeClass('hide');
-		$('table', '#joinGame').addClass('hide');
-	}
-}
-
 function showLoadingScreen(text) {
-	$('#labelLoading', '#loadingScreen').html(text);
+	$('#labelLoading').html(text);
 	$('#loadingScreen').removeClass('hide');
 	$('#loadingProgress').css('left', (window.innerWidth - $('#loadingProgress').width()) / 2);
-}
-
-function updateLoadingProgress(progress) {
-	$('.bar', '#loadingProgress').css('width', progress + '%');
 }
 
 function addPlayer() {
 	var i = $('.player', '#players').length;
 	if (i > 0) {
-		$('#players').append('<div class="player ' + (i > 3 ? 'hideI' : '') + '">Player ' + (i+1) + '<div class="customRadio checked" data-name="player' + i + '" data-value ="0">Human</div>'
-		 + '<div class="customRadio" data-name="player' + i + '" data-value ="0">IA</div></div>');
+		$('#players').append('<div class="player ' + (i > 3 ? 'hideI' : '') + '">Player ' + (i+1) + '<div class="customRadio checked" data-name="player' + i + '" data-value="0">Human</div>'
+		 + '<div class="customRadio" data-name="player' + i + '" data-value="1">IA</div></div>');
 	} else {
 		$('#players').append('<div class="player">Player 1<div class="checked">Me</div></div>');
 	}
@@ -224,10 +230,25 @@ function updatePlayers(nbPlayers) {
 			$('.player:nth-child(' + i + ')', '#players').addClass('hideI');
 		}
 	}
+	$('#newGame').css({
+		background: '#3b423c', /* Old browsers */
+	    background: '-moz-radial-gradient(center, ellipse cover, #3b423c 1%, #000000 100%)', /* FF3.6+ */
+	    background: '-webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(1%,#3b423c), color-stop(100%,#000000))', /* Chrome,Safari4+ */
+	    background: '-webkit-radial-gradient(center, ellipse cover, #3b423c 1%,#000000 100%)' /* Chrome10+,Safari5.1+ */
+	});
 }
 
-//custom radio buttons
+// custom radio buttons
 $('.customRadio').click(function () {
 	$('.customRadio[data-name="' + $(this).attr('data-name') + '"]').removeClass('checked');
 	$(this).addClass('checked');
+});
+
+$('a[data-toggle="tab"]').on('shown', function (e) {
+	$('#newGame').css({
+		background: '#3b423c', /* Old browsers */
+	    background: '-moz-radial-gradient(center, ellipse cover, #3b423c 1%, #000000 100%)', /* FF3.6+ */
+	    background: '-webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(1%,#3b423c), color-stop(100%,#000000))', /* Chrome,Safari4+ */
+	    background: '-webkit-radial-gradient(center, ellipse cover, #3b423c 1%,#000000 100%)' /* Chrome10+,Safari5.1+ */
+	});
 });
