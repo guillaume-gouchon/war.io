@@ -60,7 +60,7 @@ gameManager.sendOrderToEngine = function (type, params) {
 	if (this.isOfflineGame) {
 		gameContent.game.orders.push([type, params]);
 	} else {
-		socketManager.sendOrder(gameContent.game.id, type, params);
+		socketManager.sendOrder(gameContent.gameId, type, params);
 	}
 }
 
@@ -68,7 +68,7 @@ gameManager.sendOrderToEngine = function (type, params) {
 /**
 *	Creates game object from game information.
 */
-gameManager.createGameObject = function (playerId, playerName, armyId, mapType, mapSize, initialResources, vegetation,  nbPlayers, nbIAPlayers) {
+gameManager.createGameObject = function (playerId, playerName, armyId, mapType, mapSize, initialResources, vegetation, objectives, nbPlayers, iaPlayers) {
 	return {
 		playerId: playerId,
 		playerName: playerName,
@@ -77,8 +77,9 @@ gameManager.createGameObject = function (playerId, playerName, armyId, mapType, 
 		mapSize: mapSize,
 		initialResources: initialResources,
 		vegetation: vegetation,
+		objectives: objectives,
 		nbPlayers: nbPlayers,
-		nbIAPlayers: nbIAPlayers
+		iaPlayers: iaPlayers
 	};
 }
 
@@ -93,14 +94,17 @@ gameManager.startOfflineGame = function (game) {
 	gameContent.players = [];
 	gameContent.players.push(new gameData.Player(0, 0, game.armyId, false));
 	gameContent.players[0].n = game.playerName;
-	for (var i = 1; i < game.nbPlayers; i++) {
-		gameContent.players.push(new gameData.Player(0, i, 0, true));
-		gameContent.players[i].n = gameData.getRandomName();
+	for (var i = 0; i < game.iaPlayers.length; i++) {
+		var ownerId= i + 1;
+		gameContent.players.push(new gameData.Player(ownerId, ownerId, game.iaPlayers[i], true));
+		gameContent.players[ownerId].n = gameData.getRandomName();
 	}
+
 	gameContent.map = new gameData.Map(gameData.MAP_TYPES[Object.keys(gameData.MAP_TYPES)[game.mapType]],
 		gameData.MAP_SIZES[Object.keys(gameData.MAP_SIZES)[game.mapSize]],
 		gameData.VEGETATION_TYPES[Object.keys(gameData.VEGETATION_TYPES)[game.vegetation]],
-		gameData.INITIAL_RESOURCES[Object.keys(gameData.INITIAL_RESOURCES)[game.initialResources]]);
+		gameData.INITIAL_RESOURCES[Object.keys(gameData.INITIAL_RESOURCES)[game.initialResources]],
+		game.objectives);
 	gameContent.game = gameCreation.createNewGame(gameContent.map, gameContent.players);
 	this.waitingData = gameContent.game.gameElements;
 	gameSurface.init();
@@ -119,8 +123,8 @@ gameManager.updateLoadingProgress = function (progress) {
 			this.startGame();
 		}
 	} else {
-		if (progress >= 100 || Math.random() < 0.2) {// limits the number of sockets sent
-			socketManager.updateLoadingProgress(progress);
+		if (progress >= 100 || Math.random() < 1) {// limits the number of sockets sent
+			socketManager.updateLoadingProgress(this.playerId, gameContent.gameId, progress);
 		}
 	}
 }
@@ -179,7 +183,7 @@ gameManager.updateJoinableGamesList = function (data) {
 		var gameId = $(this).attr('data-id');
 		var armyId = $('.checked', '#armies').attr('data-army');
 
-		socketManager.joinGame(this.playerId, this.playerName, gameId, armyId);
+		socketManager.joinGame(gameManager.playerId, gameManager.playerName, gameId, armyId);
 
 		removeWebsiteDom();
 	});
@@ -191,7 +195,7 @@ gameManager.updateJoinableGamesList = function (data) {
 *	The game is full, let's start to load the assets.
 */
 gameManager.initOnlineGame = function (data) {
-	gameContent.game.id = data.gameId;
+	gameContent.gameId = data.gameId;
 	gameContent.players = data.players;
 	gameContent.myArmy = data.myArmy;
 	gameContent.map = data.map;
@@ -202,27 +206,47 @@ gameManager.initOnlineGame = function (data) {
 
 
 /**
+*	Updates the loading queue.
+*/
+gameManager.updateQueue = function (data) {
+
+	$('#playersLoading').removeClass('hide').html('');
+
+	for (var i in data.players) {
+
+		var player = data.players[i];
+		if (this.playerId != player.pid) {
+			$('#playersLoading').append('<div data-id="' + player.pid + '">'
+				+ '<div class="color ' + gameSurface.PLAYERS_COLORS[i] + '">&nbsp;</div>'
+				+ '<div class="name">' + player.n + '</div>'
+				+ '<div class="progress"><div class="bar" style="width: 0%"></div>'
+				+ '</div></div>');
+		}
+
+	}
+	
+}
+
+
+
+
+/**
 *	Updates the loading bars of the players. If everybody is ready, starts the game.
 */
+gameManager.playersReady = [];
 gameManager.updateLoadingQueue = function (data) {
-	var playersNeeded = data.nbPlayers - data.players.length;
-	if (playersNeeded > 0) {
-		$('#labelLoading').html('Waiting for ' + playersNeeded + ' more player' + (playersNeeded > 1 ? 's' : ''));
-	} else {
-		$('#labelLoading').html('Loading');
+
+	$('#labelLoading').html('Loading');
+	$('.bar', 'div[data-id="' + data.playerId + '"]').css('width', data.loadingProgress + '%');
+
+	if(data.loadingProgress >= 100 && this.playersReady.indexOf(data.playerId) == -1) {
+		this.playersReady.push(data.playerId);
 	}
 
-	$('#igPlayersList').removeClass('hide').html('');
-	var readyToGo = true;
-	for (var i in data.players) {
-		var player = data.players[i];
-		if (player.progress < 100) { readyToGo = false;}
-		$('#igPlayersList').append('<div class="' + gameSurface.PLAYERS_COLORS[i] + '" data-id="' + data.players[i].pid + '">' + data.players[i].n + (gameContent.myArmy == null || data.players[i].ready == 1 ? '':' (Loading Game...)') + '</div>');
-	}
-
-	if (readyToGo) {
+	if (this.playersReady.length >= gameContent.players.length) {
 		this.startGame();
 	}
+
 }
 
 

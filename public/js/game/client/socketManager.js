@@ -29,6 +29,7 @@ socketManager.connect = function () {
 *	WEBSOCKETS INPUT
 */
 socketManager.onDataSocket = function (data) {
+
 	switch (data.type) {
 
 		case gameData.TO_CLIENT_SOCKET.login :
@@ -44,11 +45,15 @@ socketManager.onDataSocket = function (data) {
 			break;
 
 		case gameData.TO_CLIENT_SOCKET.rejoin :
-			console.log('TODO rejoin')
+			console.log(data)
 			break;
 
 		case gameData.TO_CLIENT_SOCKET.updateLoadingProgress :
 			gameManager.updateLoadingQueue(data);
+			break;
+
+		case gameData.TO_CLIENT_SOCKET.updateQueue :
+			gameManager.updateQueue(data);
 			break;
 
 		case gameData.TO_CLIENT_SOCKET.gameStats :
@@ -88,8 +93,10 @@ socketManager.joinGame = function (playerId, playerName, gameId, armyId) {
 	this.sendSocketToServer(gameData.TO_SERVER_SOCKET.joinGame, data);
 }
 
-socketManager.updateLoadingProgress = function (loadingProgress) {
+socketManager.updateLoadingProgress = function (playerId, gameId, loadingProgress) {
 	var data = {
+		playerId: playerId,
+		gameId: gameId,
 		loadingProgress: loadingProgress
 	}
 	this.sendSocketToServer(gameData.TO_SERVER_SOCKET.updateLoadingProgress, data);
