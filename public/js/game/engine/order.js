@@ -170,7 +170,8 @@ order.surrender = function (game, army) {
 */
 order.convertDestinationToOrder = function (game, elementsIds, x, y, isMultipleOrder, specialOrder) {
 	var elements = tools.getGameElementsFromIds(game, elementsIds);
-	if (elements.length == 0 || game.grid[x] == null || game.grid[x][y] == null) { return; }
+	if (elements.length == 0 || game.grid[x] == null || game.grid[x][y] == null) { 	console.log(x + ' ' + y);
+return; }
 
 	var target = null;
 	var targetId = game.grid[x][y].c;
