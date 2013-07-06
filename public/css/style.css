@@ -286,6 +286,10 @@ footer span {
     margin-top: 10px;
 }
 #players .player {
+    line-height: 22px;
+}
+#players .player select {
+    margin-bottom: 2px;
 }
 #players .player div {
     display: inline-block;
@@ -303,6 +307,12 @@ footer span {
     opacity: 1;
     background-color: #000;
 }
+#tabVictory .description {
+    font-size: 15px;
+    margin-top: 15px;
+    background-color: #000;
+    text-align: center;
+}
 
 
 /**
@@ -311,16 +321,21 @@ footer span {
 #joinGame {
     text-align: center;
 }
-
 #joinGame .noResult {
     font-size: 1.2em;
 }
 #lstGames tr th {
     font-size: 11px;
 }
-
 #lstGames tr td {
     cursor: pointer;
+}
+#lstGames tbody tr {
+    opacity: 0.9;
+    margin-top: 2px;
+}
+#lstGames tbody tr:hover {
+    background: #111;
 }
 
 
@@ -428,4 +443,25 @@ footer span {
     background: -ms-linear-gradient(left, #b8c6df 0%,#6d88b7 100%)!important; /* IE10+ */
     background: linear-gradient(to right, #b8c6df 0%,#6d88b7 100%)!important; /* W3C */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b8c6df', endColorstr='#6d88b7',GradientType=1 )!important; /* IE6-9 */
+}
+#playersLoading {
+    position: relative;
+    top: 40%;
+    text-align: left;
+    padding-left: 50px;
+}
+#playersLoading .color {
+    display: inline-block;
+    height: 35px;
+    width: 35px;
+    margin-right: 25px;
+}
+#playersLoading .name {
+    display: inline-block;
+    font-size: 35px;
+}
+#playersLoading .progress {
+    display: inline-table;
+    width: 40%;
+    margin-left: 50px;
 }

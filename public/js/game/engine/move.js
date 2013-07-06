@@ -14,6 +14,7 @@ move.ASTAR_MAX_RADIUS_SEARCH = 10;
 */
 move.moveElement = function (game, element, destination) {
   var elementData = tools.getElementData(element);
+
     if (game.iterate % elementData.speed == 0) {
 
         // if destination forbids movement, search neighbors for a new one
@@ -98,9 +99,9 @@ var astar = {
   
   init: function(grid, start, end) {
     var xi = Math.max(0, Math.min(start.x, end.x) - move.ASTAR_MAX_RADIUS_SEARCH);
-    var xf = Math.min(grid[0].length - 1, Math.max(start.x, end.x) + move.ASTAR_MAX_RADIUS_SEARCH);
+    var xf = Math.min(grid[0].length, Math.max(start.x, end.x) + move.ASTAR_MAX_RADIUS_SEARCH);
     var yi = Math.max(0, Math.min(start.y, end.y) - move.ASTAR_MAX_RADIUS_SEARCH);
-    var yf = Math.min(grid.length - 1, Math.max(start.y, end.y) + move.ASTAR_MAX_RADIUS_SEARCH);
+    var yf = Math.min(grid.length, Math.max(start.y, end.y) + move.ASTAR_MAX_RADIUS_SEARCH);
 
     for(var x = xi; x < xf; x++) {
         for(var y = yi; y < yf; y++) {

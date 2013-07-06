@@ -4,9 +4,15 @@ var gameContent = {};
 /**
 *	Useful game information.
 */
+gameContent.gameId = null;
 gameContent.map = null;
 gameContent.players = null;
 gameContent.myArmy = null;
+
+
+/**
+*	Used only in offline game
+*/
 gameContent.game = null;
 
 

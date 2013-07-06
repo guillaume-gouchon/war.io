@@ -405,6 +405,7 @@ gameSurface.geometryLoaded = function (key) {
 gameSurface.updateLoadingCounter = function () {
 	this.stuffLoaded ++;
 	gameManager.updateLoadingProgress(parseInt(100 * this.stuffLoaded / this.totalStuffToLoad));
+	console.log(this.stuffLoaded + ' ' + this.totalStuffToLoad)
 }
 
 

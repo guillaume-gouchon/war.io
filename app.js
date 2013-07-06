@@ -6,13 +6,13 @@ var app = module.exports = express();
 var server = app.listen(config.server.port);
 console.log("WarNode Server is running !");
 
-//initializes Socket IO
+// initializes Socket IO
 app.io = require('socket.io').listen(server);
-//removes debug logs
+// removes debug logs
 app.io.set('log level', 1);
 
 
-//config
+// config
 app.configure(function () {
   app.use(express.bodyParser());
   app.use(express.methodOverride());
@@ -22,7 +22,7 @@ app.configure(function () {
 });
 
 
-//console color
+// console color
 var colors = require('colors');
 colors.setTheme({
   error: 'red',
@@ -33,10 +33,10 @@ colors.setTheme({
 });
 
 
-require('./services')(app);
+require('./services/gameServices')(app);
 
 
-//setup index page route
+// setup index page route
 app.get('/', function (req, res) {
   if (config.server.enableCaching && !res.getHeader('Cache-Control')) {
     res.setHeader('Cache-Control', 'public, max-age=' + config.server.ageCache);

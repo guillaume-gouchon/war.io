@@ -1,6 +1,6 @@
 gameData.Unit = function (unit, x, y, owner) {
 
-	//personal data
+	// personal data
 	this.f = gameData.FAMILIES.unit;// family of the element
 	this.id = gameData.createUniqueId(this.f);// unique id
 	this.t = unit.t; // type

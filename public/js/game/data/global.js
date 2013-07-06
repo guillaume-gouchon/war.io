@@ -33,6 +33,23 @@ gameData.RESOURCES = {
 
 
 /**
+*	The victory conditions.
+*/
+gameData.VICTORY_CONDITIONS = {
+	annihilation : {
+		id: 0,
+		name: 'Annihilation',
+		description: 'Destroy all the enemies\' buildings'
+	}, 
+	takeandhold : {
+		id: 1,
+		name: 'Take and Hold',
+		description: 'Capture two-third of the strategic points and retain control of them for 3 minutes'
+	}
+}
+
+
+/**
 *	List of the different types of socket exchanged between the client and the server.
 */
 gameData.TO_CLIENT_SOCKET = {
@@ -41,6 +58,7 @@ gameData.TO_CLIENT_SOCKET = {
 	gameStart : 2,
 	rejoin : 3,
 	login : 4,
+	updateQueue: 5,
 	gameData : 10,
 	gameStats : 11
 }

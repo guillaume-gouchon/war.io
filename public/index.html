@@ -82,14 +82,15 @@
 						<div id="tabMap" class="tab-pane fade">
 						    <p><span>Size of the map</span>
 						    <select id="mapSize" class="span2"></select></p>
+						    <p><span>Vegetation</span>
+						    <select id="vegetation" class="span2"></select></p>
 						    <p><span>Initial amount of resources</span>
 						    <select id="initialResources" class="span2"></select></p>
 						</div>
 						<div id="tabVictory" class="tab-pane fade">
-						    <p><span>Victory condition 1</span>
+						    <p><span>Victory condition</span>
 						    <select id="vc1" class="span2"></select></p>
-						    <p><span>Victory condition 2</span>
-						    <select id="vc2" class="span2"></select></p>
+						    <p class="well well-small description"> </p>
 						</div>
 					</div>
 				</div>
@@ -105,7 +106,7 @@
 	  			</div>
 	  			<div class="modal-body">
 	  				<div class="noResult">No games available yet... create one !</div>
-			  		<table id="lstGames" class="table table-hover hide">
+			  		<table id="lstGames" class="table hide">
 			  			<thead>
 							<tr>
 								<th>Creator</th>
@@ -139,7 +140,7 @@
 			  		</p>
 			  		<p>
 			  			<img class="right" alt="Chrome logo" src="img/chrome.png"/>
-			  			Warnode is compatible with Google Chrome, Safari, Chromium as well as Google Chrome for Android / iOS.
+			  			Warnode is compatible with Google Chrome, Firefox, Safari, Chromium as well as Google Chrome for Android / iOS.
 			  		</p>
 		  		</div>
 		  	</div>
@@ -258,6 +259,7 @@
 	  		<div id="loadingProgress" class="progress">
 				<div class="bar" style="width: 0%"></div>
 			</div>
+			<div id="playersLoading" class="hide"></div>
 	  	</div>
 
 	  	<div id="errorWebGL" class="modal hide fade" tabindex="-1" role="dialog" >
