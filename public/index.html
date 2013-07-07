@@ -194,23 +194,26 @@
 
 	  	<div id="game" class="hide">
 		  	<div id="gui" class="fullScreen" onmousedown="return false">
-			  	<div id="resources" class="sprite sprite-bgResources" ></div>
-			  	<div id="toolbar" ></div>
-			  	<div id="population" class="sprite sprite-bgPop" ><div class="spriteBefore sprite-population"></div></div>
-			  	<div id="info" class="sprite sprite-bgInfo hide" >
-			  		<div id="firstHalfInfo">
-		  				<div id="portrait"></div>
-			  			<div>
-			  				<div id="name"></div>
-			  				<div id="life"></div>
-			  				<div id="frags"></div>
-			  			</div>	  			
-			  		</div>
-			  		<div id="stats"></div>
-			  	</div>
+			  	<div id="topBar">
+					<div id="population" class="spriteBefore sprite-population" ></div>
+				</div>
+				<div id="bottomBar">
+					<div id="toolbar">
+						<div id="commonButtons">
+							<button id="attackButton" class="enableTooltip" data-toggle="tooltip" title="Attack (A)"><img alt="attack order" src="img/GUI/bg_attack_btn.png"/></button>
+							<button id="stopButton" class="enableTooltip" data-toggle="tooltip" title="Stop (S)"><img alt="stop order" src="img/GUI/bg_stop_btn.png"/></button>
+							<button id="holdButton" class="enableTooltip" data-toggle="tooltip" title="Hold Position (H)"><img alt="hold order" src="img/GUI/bg_hold_btn.png"/></button>							
+							<button id="patrolButton" class="enableTooltip" data-toggle="tooltip" title="Patrol (P)"><img alt="patrol order" src="img/GUI/bg_patrol_btn.png"/></button>
+						</div>
+						<div id="specialButtons"></div>
+					</div>
+					<div id="infoBar">
+						<div>info selected</div>
+					</div>
+				</div>
+				<canvas id="minimap"></canvas>
 			  	<div id="messages" ></div>
-		  		<div id="diplomacy"></div>
-
+		  		<div id="diplomacy" class="hide"></div>
 		  		<div id="selectionRectangle"></div>
 		  	</div>
 

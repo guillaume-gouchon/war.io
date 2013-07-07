@@ -136,23 +136,15 @@ gameSurface.init = function () {
 	this.createScene();
 	this.init3DModels();
 
-	this.minimapCanvas = document.createElement("canvas");
-
+	// init minimap canvas
+	this.minimapCanvas = $('#minimap')[0];
 	this.minimapCanvas.width = gameContent.map.size.x;
-	this.minimapCanvas.style.width = GUI.MINIMAP_SIZE + "px";
 	this.minimapCanvas.height = gameContent.map.size.y;
-	this.minimapCanvas.style.height = GUI.MINIMAP_SIZE + "px";
-	this.minimapCanvas.style.position = 'absolute';
-	this.minimapCanvas.style.bottom = '0px';
-	this.minimapCanvas.style.right = '0px';
-	this.minimapCanvas.style.zIndex = 101;
 	this.minimapContext = this.minimapCanvas.getContext('2d');
-	document.body.appendChild(this.minimapCanvas);
 	this.minimapData = this.minimapContext.getImageData(0,0,this.minimapCanvas.width, this.minimapCanvas.height);
 
 	// add listeners
 	window.addEventListener('resize', this.onWindowResize, false);
-
 
 	function render() {
 		gameSurface.iteration = (gameSurface.iteration > 1000 ? 0 : gameSurface.iteration + 1);

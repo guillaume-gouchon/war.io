@@ -1,3 +1,6 @@
+/**
+*   MAIN 3D CANVAS
+*/
 canvas {
 	background-color: #000;
   -webkit-touch-callout: none;
@@ -8,7 +11,88 @@ canvas {
   user-select: none;
 }
 
-#endGame {
+
+/**
+*   TOP BAR
+*/
+#topBar {
+  position: absolute;
+  top: 10px;
+  right: 25px;
+}
+
+#topBar div {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    line-height: 30px;
+    margin-left: 30px;
+}
+
+
+/**
+*   BOTTOM BAR
+*/
+#bottomBar {
+  position: absolute;
+  bottom: 0px;
+  height: 20%;
+  background: #000;
+  opacity: 0.8;
+  width: 88%;
+}
+#bottomBar div {
+  display: inline-block;
+}
+#toolbar {
+  max-width: 260px;
+}
+#toolbar button {
+  padding: 5px;
+  margin: 3px;
+}
+.tooltip {
+  opacity: 0.8;
+  background: #000;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+#minimap {
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  width: 12%;
+  background: #000;
+  opacity: 0.8;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#i {
     opacity: 0.8;
     text-align: center;
 }
@@ -32,28 +116,6 @@ canvas {
     font-size: 2.2em;
 }
 
-#resources {
-    position: absolute;
-    top: 2px;
-    left: 124px;
-    width: 210px;
-    height: 60px;
-    text-align: center;
-}
-
-#resources div {
-    display: inline-block;
-    width: 50%;
-    text-align: center;
-    font-size: 16px;
-    font-weight: bold;
-    color: #fff;
-    line-height: 60px;
-}
-
-#resources div div {
-    width: auto;
-}
 
 #messages {
   position: absolute;
@@ -74,24 +136,6 @@ canvas {
   opacity: 0!important;
 }
 
-#toolbar {
-    position: absolute;
-    bottom: 10px;
-    left: 10px;
-    display: inline-block;
-}
-
-#toolbar .toolbarButton {
-    height: 80px;
-    width: 80px;
-    font-size: 22px;
-    font-weight: bold;
-    color: #fff;
-}
-
-#toolbar .toolbarButton div {
-    text-align: center;
-}
 
 .disabled {
     opacity: 0.5;
@@ -108,24 +152,6 @@ canvas {
   margin-right: 5px;
 }
 
-
-#population {
-    position: absolute;
-    top: 2px;
-    left: 2px;
-    width: 120px;
-    height: 60px;
-    text-align: center;
-}
-
-#population div {
-    display: inline-block;
-    font-size: 16px;
-    font-weight: bold;
-    color: #fff;
-    line-height: 60px;
-    vertical-align: middle;
-}
 
 #chat {
   position: absolute;
@@ -171,13 +197,6 @@ canvas {
     background: #eee;
 }
 
-#info {
-    position: absolute;
-    bottom: 6px;
-    height: 70px;
-    width: 350px;
-    text-align: center;
-}
 
 #firstHalfInfo {
     display: inline-block;
@@ -282,21 +301,6 @@ canvas {
     margin-right: 3px;
 }
 
-#minimap {
-    position: absolute;
-    right: 0px;
-    bottom: 0px;
-    height: 140px;
-    width: 140px;
-    opacity: 0.7;
-    border-radius: 10px;
-    color: #d55;
-}
-
-#minimapLocation {
-    position: absolute;
-}
-
 .minimapPointBuilding {
   position: absolute;
   height: 8px;
@@ -353,12 +357,6 @@ canvas {
 /**
 *  SPRITES
 */
-#population .spriteBefore:before {
-  margin-top: 14px; margin-right: 11px;
-}
-#resources .spriteBefore:before {
-  margin-top: 14px; margin-right: 7px;
-}
 .bigButton .spriteBefore:before {
   margin-top: 19px; margin-right: 27px;
 }

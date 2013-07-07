@@ -12,7 +12,6 @@ GUI.toolbar = [];
 *	CONSTANTS
 */
 GUI.IMAGES_PATH = 'img/GUI/';
-GUI.MINIMAP_SIZE = 200;
 GUI.BUTTONS_SIZE = 80;
 GUI.TOOLBAR_BUTTONS = {
 	build : {buttonId : 1000, image : 'build.png', isEnabled : true, name: 'Build'},
@@ -48,6 +47,19 @@ GUI.init = function () {
 	this.initInfobar();
 	this.initMinimap();
 	this.initDiplomacy();
+	$('.enableTooltip').tooltip();
+	$('#attackButton').click(function () {
+		userInput.enterAttackMode();
+	});
+	$('#stopButton').click(function () {
+		userInput.pressStopKey();
+	});
+	$('#holdButton').click(function () {
+		userInput.pressHoldKey();
+	});
+	$('#patrolButton').click(function () {
+		userInput.enterPatrolMode();
+	});
 }
 
 
@@ -133,8 +145,8 @@ GUI.createResourcesBar = function () {
 *	Adds a resource icon and the value to the resource box.
 */
 GUI.createResourceElement = function (resource) {
-	var div = '<div id="resource' + resource.id + '"><div class="spriteBefore sprite-' + resource.name + '">0</div></div>';
-	$('#resources').append(div);
+	var div = '<div id="resource' + resource.id + '" class="spriteBefore sprite-' + resource.name + '">0</div>';
+	$('#topBar').append(div);
 }
 
 
@@ -157,7 +169,7 @@ GUI.createToolbarButton = function (button) {
 	if ($('#toolbar' + button.buttonId).html() != null) {
 		$('#toolbar' + button.buttonId).removeClass('hide');
 	} else {
-		var div = '<div id="toolbar' + button.buttonId + '" class="toolbarButton sprite sprite-boxNormal" title="' + button.name + '"><div class="sprite sprite-' + button.image.replace('.png', '') + '"></div></div>';
+		var div = '<button id="toolbar' + button.buttonId + '" class="toolbarButton enableTooltip" data-toggle="tooltip" title="' + button.name + '"><img alt="' + button.name + '" src="' + GUI.IMAGES_PATH + button.image + '"/></div>';
 		$('#toolbar').append(div);
 
 		//add price
@@ -185,7 +197,7 @@ GUI.createToolbarButton = function (button) {
 */
 GUI.updatePopulation = function () {
 	var player = gameContent.players[gameContent.myArmy];
-	$('div', '#population').html(player.pop.current + ' / ' + player.pop.max);
+	$('#population').html(player.pop.current + ' / ' + player.pop.max);
 }
 
 
