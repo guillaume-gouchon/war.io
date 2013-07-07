@@ -145,7 +145,7 @@ GUI.createResourcesBar = function () {
 *	Adds a resource icon and the value to the resource box.
 */
 GUI.createResourceElement = function (resource) {
-	var div = '<div id="resource' + resource.id + '" class="spriteBefore sprite-' + resource.name + '">0</div>';
+	var div = '<div id="resource' + resource.id + '" class="spriteBefore sprite-' + resource.name + 15 + '">0</div>';
 	$('#topBar').append(div);
 }
 
