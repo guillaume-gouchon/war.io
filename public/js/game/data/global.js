@@ -70,6 +70,7 @@ gameData.TO_SERVER_SOCKET = {
 	leaveSalon : 3,
 	joinGame : 4,
 	updateLoadingProgress : 5,
+	rejoinGame : 6,
 	sendOrder : 10
 }
 

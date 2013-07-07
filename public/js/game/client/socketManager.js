@@ -45,7 +45,7 @@ socketManager.onDataSocket = function (data) {
 			break;
 
 		case gameData.TO_CLIENT_SOCKET.rejoin :
-			console.log(data)
+			gameManager.askRejoin(data);
 			break;
 
 		case gameData.TO_CLIENT_SOCKET.updateLoadingProgress :
@@ -113,4 +113,12 @@ socketManager.sendOrder = function (gameId, orderType, params) {
 
 socketManager.sendSocketToServer = function (socketType, data) {
 	this.socket.emit(socketType, data);
+}
+
+socketManager.rejoinGame = function (playerId, gameId) {
+	var data = {
+		playerId: playerId,
+		gameId: gameId
+	};
+	this.sendSocketToServer(gameData.TO_SERVER_SOCKET.rejoinGame, data);
 }

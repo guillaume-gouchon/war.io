@@ -223,7 +223,7 @@ footer span {
     line-height: 30px;
     vertical-align: top;
 }
-#confirmGameCreation {
+button.green {
     background: #299a0b; /* Old browsers */
     background: -moz-linear-gradient(top, #299a0b 0%, #000000 100%); /* FF3.6+ */
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#299a0b), color-stop(100%,#000000)); /* Chrome,Safari4+ */
@@ -233,10 +233,10 @@ footer span {
     background: linear-gradient(to bottom, #299a0b 0%,#000000 100%); /* W3C */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#299a0b', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
 }
-#confirmGameCreation:hover {
+button.green:hover {
     background: #eee;
 }
-.cancelButton {
+button.red {
     background: #cc0000; /* Old browsers */
     background: -moz-linear-gradient(top, #cc0000 0%, #000000 100%); /* FF3.6+ */
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cc0000), color-stop(100%,#000000)); /* Chrome,Safari4+ */
@@ -245,7 +245,7 @@ footer span {
     background: -ms-linear-gradient(top, #cc0000 0%,#000000 100%); /* IE10+ */
     background: linear-gradient(to bottom, #cc0000 0%,#000000 100%); /* W3C */
 }
-.cancelButton:hover {
+button.red:hover {
     background: #eee!important;
 }
 #newGame input, #newGame select {
@@ -464,4 +464,25 @@ footer span {
     display: inline-table;
     width: 40%;
     margin-left: 50px;
+}
+
+
+/**
+*   REJOIN GAME NOTIFICATION
+*/
+.notification {
+    float: right;
+    padding: 12px 12px 0px 12px;
+    border-radius: 8px;
+    margin: 8px;
+    opacity: 0.9;
+    -webkit-box-shadow:0px 0px 10px 3px rgba(75, 131, 235, 0.6);
+    box-shadow: 0px 0px 10px 3px rgba(75, 131, 235, 0.6);
+}
+.notification div {
+    text-align: center;
+}
+.notification button {
+    font-size: 1.2em;
+    padding: 5px 10px 5px 10px;
 }

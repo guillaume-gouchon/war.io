@@ -9,13 +9,6 @@ gameManager.offlineGameLoop = null;
 gameManager.musicEnabled = false;
 
 
-// connect to server
-try {
-	socketManager.connect();
-} catch (e) {
-}
-
-
 /**
 *	Returns player unique id from cookie or create it if it does not exist.
 */
@@ -117,13 +110,13 @@ gameManager.startOfflineGame = function (game) {
 */
 gameManager.updateLoadingProgress = function (progress) {
 	$('.bar', '#loadingProgress').css('width', progress + '%');
-	
-	if (this.isOfflineGame) {
+
+	if (this.isOfflineGame || gameContent.isRunning) {
 		if (progress >= 100) {
 			this.startGame();
 		}
 	} else {
-		if (progress >= 100 || Math.random() < 1) {// limits the number of sockets sent
+		if (progress >= 100 || Math.random() < 0.2) {// limits the number of sockets sent
 			socketManager.updateLoadingProgress(this.playerId, gameContent.gameId, progress);
 		}
 	}
@@ -199,6 +192,7 @@ gameManager.initOnlineGame = function (data) {
 	gameContent.players = data.players;
 	gameContent.myArmy = data.myArmy;
 	gameContent.map = data.map;
+	gameContent.isRunning = data.isRunning;
 	this.waitingData = data.initElements;
 	gameSurface.init();
 	GUI.init();
@@ -226,8 +220,6 @@ gameManager.updateQueue = function (data) {
 	}
 	
 }
-
-
 
 
 /**
@@ -281,4 +273,26 @@ gameManager.showStats = function (playerStatus, stats) {
 			statPlayer.buildingsCreated + '</td></tr>');
 	}
 
+}
+
+
+/**
+*	Shows a rejoin notification to the player.
+*/
+gameManager.askRejoin = function (data) {
+	$('#notifications').removeClass('hide').append('<div class="notification rejoin blackBackground">'
+		+ 'You were in a game. Do you want to rejoin it ?'
+		+ '<div><button class="ok green">Yes</button><button class="no red">No</button></div>'
+		+ '</div>');
+	$('.ok', '.rejoin').click(function () {
+		$(this).unbind('click');
+		$('.modal').modal('hide');
+		removeWebsiteDom();
+		showLoadingScreen('Loading');
+		socketManager.rejoinGame(gameManager.playerId, data.gameId);
+		$('.rejoin').fadeOut();
+	});
+	$('.no', '.rejoin').click(function () {
+		$('.rejoin').fadeOut();
+	});
 }

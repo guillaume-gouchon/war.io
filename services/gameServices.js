@@ -60,6 +60,10 @@ module.exports = function(app){
 			app.gameServices.sendOrder(socket, data);
 		});
 
+		socket.on(gameData.TO_SERVER_SOCKET.rejoinGame, function (data) {
+			app.gameServices.rejoinGame(socket, data);
+		});
+
 		socket.on('disconnect', function() {
 			app.gameServices.disconnect(socket);
 	   });
@@ -270,7 +274,6 @@ module.exports = function(app){
 
 		console.log(new Date() + ' | A game just started !'.success);
 
-		
 		// update game with some more info
 		var someMoreGameData = gameCreation.createNewGame(game.map, game.players);
 		game.players = someMoreGameData.players;
@@ -287,7 +290,7 @@ module.exports = function(app){
 		// send game info to the players
 		for (var i in game.players) {
 			if(game.sockets[i] != null) {
-				app.gameServices.sendGameInfo(game.sockets[i], game, i);
+				app.gameServices.sendGameInfo(game.sockets[i], game, i, false);
 			}
 		}
 
@@ -304,7 +307,7 @@ module.exports = function(app){
 	/**
 	*	Sends a player the game info he needs to initializes the game.
 	*/
-	app.gameServices.sendGameInfo = function (socket, game, playerIndex) {
+	app.gameServices.sendGameInfo = function (socket, game, playerIndex, gameIsRunning) {
 
 		var data = {
 			type: gameData.TO_CLIENT_SOCKET.gameStart,
@@ -312,7 +315,8 @@ module.exports = function(app){
 			players: game.players,
 			myArmy: playerIndex,
 			map: game.map,
-			initElements: game.gameElements 
+			initElements: game.gameElements,
+			isRunning : gameIsRunning
 		};
 
 		socket.emit('data', data);
@@ -337,7 +341,7 @@ module.exports = function(app){
 				if (gameover) {
 
 					// game is over
-					app.gameServices.stopGame(i);
+					app.gameServices.stopGame(game.id);
 
 				}
 
@@ -422,7 +426,7 @@ module.exports = function(app){
 		
 		console.log(new Date() + ' | One game has been stopped'.debug);
 
-		delete app.gameServices.runningGames.gameId;
+		delete app.gameServices.runningGames[gameId];
 
 		// stop the loop if there are no more games
 		if (Object.keys(app.gameServices.runningGames).length == 0) {
@@ -486,10 +490,10 @@ module.exports = function(app){
 				for (var j in game.players) {
 					if(game.players[j].pid == playerId && game.players[j].s == gameData.PLAYER_STATUSES.ig) {
 
-			      		//ask player to rejoin game
+			      		// ask player to rejoin game
 				      	var data = {
 				      		type: gameData.TO_CLIENT_SOCKET.rejoin,
-				      		id: game.id,
+				      		gameId: game.id,
 				      		name: game.players[0].n,
 				      		nbPlayers: game.nbPlayers
 				      	}
@@ -507,31 +511,22 @@ module.exports = function(app){
 	/**
 	*	The player rejoins a game.
 	*/
-	app.gameServices.rejoinGame = function (socket, playerId) {
-		for (var i in app.gameServices.games) {
-			var game = app.gameServices.games[i];
-			for (var j in game.players) {
-				if(game.players[j].pid == playerId) {
+	app.gameServices.rejoinGame = function (socket, data) {
 
-					game.sockets[j] = socket;
+		var game = app.gameServices.runningGames[data.gameId];
 
-					//the player was in a game
-					if(game.iterate >= 0) {
-			        	//game has started, send the player the game info
-			        	app.gameServices.sendGameInfo(socket, game, j);
-
-						//update his socket
-
-						//reinit the order socket
-						game.sockets[j].on('order', function (data) {
-							game.orders.push([data[0], data[1]]);
-						});
-					}
-
+		if (game != null) {
+			for (var i in game.players) {
+				var player = game.players[i];
+				if (player.pid == data.playerId) {
+					game.sockets[i] = socket;
+					app.gameServices.sendGameInfo(game.sockets[i], game, i, true);
+					game.chat.push({ o: -1, text: player.n + ' is back !' });
 					return;
 				}
 			}
 		}
+
 	}
 
 
@@ -550,8 +545,8 @@ module.exports = function(app){
 
 			var game = app.gameServices.runningGames[i];
 			for (var j in game.sockets) {
-
-				if (game.sockets[j].id == socket.id) {
+				var s = game.sockets[j];
+				if (s != null && s.id == socket.id) {
 					game.sockets[j] = null;
 					game.chat.push({ o: -1, text: game.players[j].n + ' has been disconnected' });
 					return;
@@ -566,8 +561,8 @@ module.exports = function(app){
 
 			var game = app.gameServices.joinableGames[i];
 			for (var j in game.sockets) {
-
-				if (game.sockets[j].id == socket.id) {
+				var s = game.sockets[j];
+				if (s != null && s.id == socket.id) {
 
 					game.sockets.splice(j, 1);
 					game.players.splice(j, 1);

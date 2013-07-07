@@ -14,6 +14,12 @@ $('input', '#playerName').keydown(function (e) {
 gameManager.playerId = gameManager.getPlayerId();
 gameManager.playerName = gameManager.getPlayerName();
 
+// connect to server
+try {
+	socketManager.connect();
+} catch (e) {
+}
+
 // center main buttons
 centerElement($('#mainButtons'));
 

@@ -8,6 +8,7 @@ gameContent.gameId = null;
 gameContent.map = null;
 gameContent.players = null;
 gameContent.myArmy = null;
+gameContent.isRunning = false;
 
 
 /**
