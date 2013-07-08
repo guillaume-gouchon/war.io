@@ -95,9 +95,9 @@ production.repairBuilding = function (game, building) {
 
 	var playerResources = game.players[building.o].re;
 
-	if (playerResources[gameData.RESOURCES.wood.id] > 0 && playerResources[gameData.RESOURCES.gold.id] > 0) {
+	if (playerResources[gameData.RESOURCES.wood.id] > 0 && playerResources[gameData.RESOURCES.water.id] > 0) {
 
-		playerResources[gameData.RESOURCES.gold.id]--;
+		playerResources[gameData.RESOURCES.water.id]--;
 		playerResources[gameData.RESOURCES.wood.id]--;
 		building.l += this.REPAIRING_SPEED;
 		building.l = Math.min(building.l, tools.getElementData(building).l);

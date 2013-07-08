@@ -136,17 +136,8 @@ GUI.updateMouse = function (mouseIcon) {
 GUI.createResourcesBar = function () {
 	for (var i in gameData.RESOURCES) {
 		var resource = gameData.RESOURCES[i];
-		this.createResourceElement(resource);
+		$('#topBar').append('<div id="resource' + resource.id + '" class="spriteBefore">0</div>');
 	}
-}
-
-
-/**
-*	Adds a resource icon and the value to the resource box.
-*/
-GUI.createResourceElement = function (resource) {
-	var div = '<div id="resource' + resource.id + '" class="spriteBefore sprite-' + resource.name + 15 + '">0</div>';
-	$('#topBar').append(div);
 }
 
 

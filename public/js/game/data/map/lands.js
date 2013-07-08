@@ -16,7 +16,7 @@ gameData.ELEMENTS[gameData.FAMILIES.land].push(
 		t : 1,
 		shape : [[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1]],
 		canMoveIn : false,
-		resourceType : gameData.RESOURCES.gold.id,
+		resourceType : gameData.RESOURCES.water.id,
 		ra : 3000,
 		g : 'goldmine.js',
 		image : 'gold-mine.png',

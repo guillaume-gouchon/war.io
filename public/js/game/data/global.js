@@ -19,15 +19,15 @@ gameData.RACES = {
 *	The different resources.
 */
 gameData.RESOURCES = {
-	wood : {
+	water : {
 		id: 0,
-		name : 'wood',
-		image : 'wood.png'
+		name : 'Water',
+		image : 'ic_water.png'
 	},
-	gold : {
+	wood : {
 		id: 1,
-		name : 'gold',
-		image : 'gold.png'
+		name : 'Wood',
+		image : 'ic_wood.png'
 	}
 }
 
@@ -75,13 +75,41 @@ gameData.TO_SERVER_SOCKET = {
 }
 
 
+/**
+*	List of cool random names.
+*/
 gameData.DEFAULT_NAMES = ['Colonel Heinz', 'Juice Master', 'Lord Bobby', 'Lemon Alisa',
 						'The Red Baron', 'Tom Boy', 'Tommy Toe', 'Lee Mon', 'Sigmund Fruit'];
 
 
 /**
-*	Returns a random fun name.
+*	Returns a fun random name.
 */
 gameData.getRandomName = function () {
 	return this.DEFAULT_NAMES[parseInt(Math.random() * this.DEFAULT_NAMES.length)];
+}
+
+
+/**
+*	List of buttons.
+*/
+gameData.BUTTONS = {
+	build : {
+		buttonId : 1000,
+		name: 'Build (B)',
+		image : 'bg_build_btn.png', 
+		isEnabled : true
+	},
+	back : {
+		buttonId : 1001,
+		name: 'Back (ESC)',
+		image : 'bg_back_btn.png', 
+		isEnabled : true
+	},
+	cancel : {
+		buttonId : 1002,
+		name: 'Cancel (ESC)',
+		image : 'bg_cancel_btn.png', 
+		isEnabled : true
+	}
 }

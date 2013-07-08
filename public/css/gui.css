@@ -20,7 +20,6 @@ canvas {
   top: 10px;
   right: 25px;
 }
-
 #topBar div {
     display: inline-block;
     font-size: 14px;
@@ -29,7 +28,12 @@ canvas {
     line-height: 30px;
     margin-left: 30px;
 }
-
+#resource0:before {
+  content: url('../img/GUI/ic_water.png');
+}
+#resource1:before {
+  content: url('../img/GUI/ic_wood.png');
+}
 
 /**
 *   BOTTOM BAR
@@ -37,10 +41,11 @@ canvas {
 #bottomBar {
   position: absolute;
   bottom: 0px;
-  height: 20%;
+  height: 120px;
   background: #000;
   opacity: 0.8;
   width: 88%;
+  padding: 5px 0px 5px 0px;
 }
 #bottomBar div {
   display: inline-block;
