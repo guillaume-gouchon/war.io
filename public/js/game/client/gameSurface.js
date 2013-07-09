@@ -333,8 +333,8 @@ gameSurface.init3DModels = function () {
 		for (var j in gameData.ELEMENTS[gameData.FAMILIES.building][gameContent.players[i].r]) {
 			var elementData = gameData.ELEMENTS[gameData.FAMILIES.building][gameContent.players[i].r][j];
 			if (elementData.g != null && this.geometries[elementData.g] == null) {
-					this.geometries[elementData.g] = {};
-					this.loadObject(elementData.g, gameData.FAMILIES.building, elementData.r);	
+				this.geometries[elementData.g] = {};
+				this.loadObject(elementData.g, gameData.FAMILIES.building, elementData.r);	
 			}
 		}
 
@@ -342,8 +342,8 @@ gameSurface.init3DModels = function () {
 		for (var j in gameData.ELEMENTS[gameData.FAMILIES.unit][gameContent.players[i].r]) {
 			var elementData = gameData.ELEMENTS[gameData.FAMILIES.unit][gameContent.players[i].r][j];
 			if (elementData.g != null && this.geometries[elementData.g] == null) {
-					this.geometries[elementData.g] = {};
-					this.loadObject(elementData.g, gameData.FAMILIES.unit, elementData.r);	
+				this.geometries[elementData.g] = {};
+				this.loadObject(elementData.g, gameData.FAMILIES.unit, elementData.r);	
 			}
 		}
 	}
@@ -352,8 +352,8 @@ gameSurface.init3DModels = function () {
 	for (var i in gameData.ELEMENTS[gameData.FAMILIES.land][0]) {
 		var elementData = gameData.ELEMENTS[gameData.FAMILIES.land][0][i];
 		if (elementData.g != null && this.geometries[elementData.g] == null) {
-				this.geometries[elementData.g] = {};
-				this.loadObject(elementData.g, gameData.FAMILIES.land, 0);	
+			this.geometries[elementData.g] = {};
+			this.loadObject(elementData.g, gameData.FAMILIES.land, 0);	
 		}
 	}
 	gameSurface.materials["billboardBar"] = new THREE.SpriteMaterial({color: 0xFFFFFF, useScreenCoordinates:false, map:THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + "fog2.png")});
@@ -369,13 +369,13 @@ gameSurface.loadObject = function (key, family, race) {
 		for (var n = 0; n < gameContent.players.length; n++) {
 			if (gameContent.players[n].r == race) {
 				var color = this.ARMIES_COLORS[n];
-				gameSurface.materials[key + color] = new THREE.MeshLambertMaterial({map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key.replace('.js', '') + color + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
-				gameSurface.materials["HIDDEN" + key + color] = new THREE.MeshBasicMaterial({color: 0x555555, map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key.replace('.js', '') + color + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
+				gameSurface.materials[key + color] = new THREE.MeshLambertMaterial({map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key + color + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
+				gameSurface.materials["HIDDEN" + key + color] = new THREE.MeshBasicMaterial({color: 0x555555, map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key, '' + color + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
 			}
 		}
 	} else {
-		gameSurface.materials[key] = new THREE.MeshLambertMaterial({map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key.replace('.js', '.png'), new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
-		gameSurface.materials["HIDDEN" + key] = new THREE.MeshBasicMaterial({color: 0x555555, map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key.replace('.js', '.png'), new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
+		gameSurface.materials[key] = new THREE.MeshLambertMaterial({map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
+		gameSurface.materials["HIDDEN" + key] = new THREE.MeshBasicMaterial({color: 0x555555, map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
 	}
 }
 

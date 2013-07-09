@@ -136,7 +136,7 @@ GUI.updateMouse = function (mouseIcon) {
 GUI.createResourcesBar = function () {
 	for (var i in gameData.RESOURCES) {
 		var resource = gameData.RESOURCES[i];
-		$('#topBar').append('<div id="resource' + resource.id + '" class="spriteBefore">0</div>');
+		$('#topBar').append('<div id="resource' + resource.id + '">0</div>');
 	}
 }
 
@@ -148,7 +148,7 @@ GUI.updateResources = function () {
 	var player = gameContent.players[gameContent.myArmy];
 	for (var i in gameData.RESOURCES) {
 		var resource = gameData.RESOURCES[i];
-		$('div', '#resource' + resource.id).html(player.re[resource.id]);
+		$('#resource' + resource.id).html(player.re[resource.id]);
 	}
 }
 
@@ -160,7 +160,7 @@ GUI.createToolbarButton = function (button) {
 	if ($('#toolbar' + button.buttonId).html() != null) {
 		$('#toolbar' + button.buttonId).removeClass('hide');
 	} else {
-		var div = '<button id="toolbar' + button.buttonId + '" class="toolbarButton enableTooltip" data-toggle="tooltip" title="' + button.name + '"><img alt="' + button.name + '" src="' + GUI.IMAGES_PATH + button.image + '"/></div>';
+		var div = '<button id="toolbar' + button.buttonId + '" class="toolbarButton enableTooltip" data-toggle="tooltip" title="' + button.name + '"><img alt="' + button.name + '" src="' + GUI.IMAGES_PATH + button.gui + '"/></div>';
 		$('#toolbar').append(div);
 
 		//add price
@@ -169,7 +169,7 @@ GUI.createToolbarButton = function (button) {
 			for (var j in gameData.RESOURCES) {
 				if (gameData.RESOURCES[j].id == need.t) {
 					var bottom = (this.toolbar.length - 1) * GUI.BUTTONS_SIZE - $('#toolbar' + button.buttonId).position().top + i * 20 + 10;
-					$('#toolbar' + button.buttonId).append('<div class="price" style="bottom: ' + bottom + 'px"><div class="spriteBefore sprite-' + gameData.RESOURCES[j].image.replace('.png', '') + '15" />' + need.value + '</div></div>');
+					$('#toolbar' + button.buttonId).append('<div class="price" style="bottom: ' + bottom + 'px"><div class="spriteBefore sprite-' + gameData.RESOURCES[j].gui + '" />' + need.value + '</div></div>');
 					break;
 				}
 			}
@@ -225,7 +225,7 @@ GUI.updateInfo = function () {
 		var element = utils.getElementFromId(gameContent.selected[0]);
 		var elementData = tools.getElementData(element);
 		$('#name').html(elementData.name);
-		$('#portrait').attr('class', 'sprite sprite-' + elementData.image.replace('.png', ''));
+		$('#portrait').attr('class', 'sprite sprite-' + elementData.gui);
 		if (elementData.attack != null) {
 			$('#frags').html('FRAGS : ' + element.fr);
 		} else {
@@ -237,7 +237,7 @@ GUI.updateInfo = function () {
 			$('#life').html('&infin; / &infin;');
 			for (var i in gameData.RESOURCES) {
 				if (gameData.RESOURCES[i].id == elementData.resourceType) {
-					this.addStatLine(gameData.RESOURCES[i].image.replace('.png', '') + '15', element.ra, "Amount of resources left");
+					this.addStatLine(gameData.RESOURCES[i].gui, element.ra, "Amount of resources left");
 					break;
 				}
 			}
@@ -252,9 +252,9 @@ GUI.updateInfo = function () {
 					var e = element.q[i];
 					var inConstruction = tools.getElementDataFrom(gameData.FAMILIES.unit, element.r, e);
 					if (i == 0) {
-						GUI.addQueue(inConstruction.image, parseInt(element.qp) + '%', inConstruction.name);	
+						GUI.addQueue(inConstruction.gui, parseInt(element.qp) + '%', inConstruction.name);	
 					} else {
-						GUI.addQueue(inConstruction.image, '', inConstruction.name);	
+						GUI.addQueue(inConstruction.gui, '', inConstruction.name);	
 					}
 				}
 			} else {

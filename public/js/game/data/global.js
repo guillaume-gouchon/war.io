@@ -97,19 +97,19 @@ gameData.BUTTONS = {
 	build : {
 		buttonId : 1000,
 		name: 'Build (B)',
-		image : 'bg_build_btn.png', 
+		gui : 'ic_build.png', 
 		isEnabled : true
 	},
 	back : {
 		buttonId : 1001,
 		name: 'Back (ESC)',
-		image : 'bg_back_btn.png', 
+		gui : 'ic_back.png', 
 		isEnabled : true
 	},
 	cancel : {
 		buttonId : 1002,
 		name: 'Cancel (ESC)',
-		image : 'bg_cancel_btn.png', 
+		gui : 'ic_cancel.png', 
 		isEnabled : true
 	}
 }

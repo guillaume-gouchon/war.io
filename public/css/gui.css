@@ -25,14 +25,22 @@ canvas {
     font-size: 14px;
     font-weight: bold;
     color: #fff;
-    line-height: 30px;
+    vertical-align: top;
+    line-height: 26px;
     margin-left: 30px;
+    text-shadow: 1px 1px 2px #000000;
 }
 #resource0:before {
+  margin-right: 8px;
   content: url('../img/GUI/ic_water.png');
 }
 #resource1:before {
+  margin-right: 8px;
   content: url('../img/GUI/ic_wood.png');
+}
+#population:before {
+  margin-right: 8px;
+  content: url('../img/GUI/ic_pop.png');
 }
 
 /**

@@ -266,7 +266,7 @@ button.red:hover {
 }
 .nav-tabs>li>a, .nav-tabs>li>a:hover {
     background: none;
-    color : #333;
+    color : #999;
     border: none;
 }
 .nav-tabs>li>a:hover {
