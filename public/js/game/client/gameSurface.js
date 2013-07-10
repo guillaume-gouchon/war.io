@@ -364,7 +364,7 @@ gameSurface.init3DModels = function () {
 *	Loads a geometry.
 */
 gameSurface.loadObject = function (key, family, race) {
-	this.loader.load(this.MODELS_PATH + key, this.geometryLoaded(key));
+	this.loader.load(this.MODELS_PATH + key + '.js', this.geometryLoaded(key));
 	if (family != gameData.FAMILIES.land) {
 		for (var n = 0; n < gameContent.players.length; n++) {
 			if (gameContent.players[n].r == race) {
@@ -409,6 +409,7 @@ gameSurface.onWindowResize = function() {
 	camera.aspect = window.innerWidth / window.innerHeight;
 	camera.updateProjectionMatrix();
 	renderer.setSize( window.innerWidth, window.innerHeight );
+	GUI.initMinimapSize();
 
 	controls.handleResize();
 }
@@ -434,6 +435,7 @@ gameSurface.addElement = function (element) {
 	var object = new THREE.Mesh(this.geometries[model], element.material);
 	object.elementId = element.id;
 	this.setElementPosition(object, element.p.x, element.p.y);
+	object.rotation.x = this.de2ra(90);
 	if (model == 'tree.js') {
 		object.scale.y = 1.5;
 		object.rotation.x = this.de2ra(90);
@@ -577,11 +579,7 @@ gameSurface.updateElement = function (element) {
 		
 
 		if (element.o == gameContent.myArmy && gameElement.l > element.l) {
-			// you are being attacked
-			GUI.addAlertMinimap(element);
-		} else if (element.visible) {
-			// update minimap
-			GUI.updateElementOnMinimap(element);
+			// TODO : alert : you are being attacked
 		}
 	}
 
@@ -703,6 +701,21 @@ gameSurface.centerCameraOnElement = function (element) {
 	controls.target.z = element.m.position.z;
 }
 
+
+/**
+*	Centers game window on position.
+*/
+gameSurface.centerCameraOnPosition = function (gamePosition) {
+	controls.reset();
+	camera.position.x = gamePosition.x;
+	camera.position.y = gamePosition.y - this.CENTER_CAMERA_Y_OFFSET;
+	camera.position.z = controls.ZOOM_MIN;	
+	controls.target.x = gamePosition.x;
+	controls.target.y = gamePosition.y;
+	controls.target.z = 0;
+}
+
+
 /**
 *	Show an element if it is not currently visible.
 *	Manages fog memory for elements concerned
@@ -754,10 +767,6 @@ gameSurface.showElementModel = function (element) {
 
 	element.modelVisible = true;
 	var object = utils.getElementFromId(element.id).m;
-	if (element.f != gameData.FAMILIES.land) {
-		//update minimap
-		GUI.addElementOnMinimap(element);
-	}
 	scene.add(object);
 }
 
@@ -771,10 +780,6 @@ gameSurface.hideElementModel = function (element, object) {
 	element.modelVisible = false;
 	if (object == undefined)
 		object = utils.getElementFromId(element.id).m;
-	if (element.f != gameData.FAMILIES.land) {
-		//update minimap
-		GUI.removeElementFromMinimap(element);
-	}
 	scene.remove(object);
 }
 

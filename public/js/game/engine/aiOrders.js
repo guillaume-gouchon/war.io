@@ -69,7 +69,7 @@ aiOrders.buildRax = function(game, player, playerID) {
  *      Build Town Hall
  */
 aiOrders.buildTownHall = function(game, player, playerID) {
-    var townHall = gameData.ELEMENTS[gameData.FAMILIES.building][player.r].townhall;
+    var townHall = gameData.ELEMENTS[gameData.FAMILIES.building][player.r].mothertree;
     if (player.re[0] > townHall.needs[0].value && player.re[1] > townHall.needs[1].value && player.pop.current > 30) {
         var worker = null;
         var n = 0;
@@ -190,7 +190,7 @@ aiOrders.finishBuildings = function(game, playerID) {
 aiOrders.trainHarvesters = function(game, playerID) {
     for (var n in game.gameElements.building) {
         var building = game.gameElements.building[n];
-        if (building.o == playerID && building.t == gameData.ELEMENTS[building.f][building.r].townhall.t) {
+        if (building.o == playerID && building.t == gameData.ELEMENTS[building.f][building.r].mothertree.t) {
                 if (building.q.length < 2) { // Don't queue worker, it's useless
                     order.buy(game, [building.id], gameData.ELEMENTS[gameData.FAMILIES.unit][building.r].builder);
                 }
@@ -208,10 +208,10 @@ aiOrders.trainSoldiers = function(game, player, playerID) {
         if (building.o == playerID && building.t == gameData.ELEMENTS[gameData.FAMILIES.building][building.r].casern.t) {
             if (building.q.length < 2) { // Don't queue soldiers, it's useless
                 if (player.re[1] < 200) { // Train Bowman
-                    order.buy(game, [building.id], gameData.ELEMENTS[gameData.FAMILIES.unit][building.r].bowman);
+                    order.buy(game, [building.id], gameData.ELEMENTS[gameData.FAMILIES.unit][building.r].basicUnit2);
                 }
                 else { // Train Knight
-                    order.buy(game, [building.id], gameData.ELEMENTS[gameData.FAMILIES.unit][building.r].knight);
+                    order.buy(game, [building.id], gameData.ELEMENTS[gameData.FAMILIES.unit][building.r].basicUnit1);
                 }
             }
         }

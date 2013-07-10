@@ -12,11 +12,6 @@ GUI.toolbar = [];
 *	CONSTANTS
 */
 GUI.IMAGES_PATH = 'img/GUI/';
-GUI.BUTTONS_SIZE = 80;
-GUI.TOOLBAR_BUTTONS = {
-	build : {buttonId : 1000, image : 'build.png', isEnabled : true, name: 'Build'},
-	cancel : {buttonId : 1001, image : 'cancel.png', isEnabled : true, name: 'Cancel'}
-}
 GUI.MOUSE_ICONS = {
 	standard : 'url("' + GUI.IMAGES_PATH + 'cursor.png"), auto', 
 	select : 'url("' + GUI.IMAGES_PATH + 'cursor_hover.png"), auto',
@@ -30,24 +25,57 @@ GUI.MOUSE_ICONS = {
 	arrowRight : 'e-resize',
 	arrowLeft : 'w-resize'
 }
-GUI.UPDATE_FREQUENCY = 0.5;
+GUI.UPDATE_FREQUENCY = 0.2;
+GUI.GUI_ELEMENTS = {
+	none : 0,
+	bottomBar: 1,
+	minimap: 2
+}
 
 
 /**
 *	Show the buildings the player can build. 
 */
 GUI.showBuildings = false;
+GUI.minimapSize = 0;
 
 
 /**
 *	Initializes the GUI by creating the html elements.
 */
 GUI.init = function () {
-	this.createResourcesBar();
-	this.initInfobar();
-	this.initMinimap();
-	this.initDiplomacy();
+
+	this.initMinimapSize();
+	this.initResourcesBar();
+	this.initCommonButtonsEvents();
+	this.initInfobarEvents();
 	$('.enableTooltip').tooltip();
+	
+}
+
+
+/**
+*	Updates the GUI.
+*	Called in the main thread.
+*/
+GUI.update = function () {
+	this.updatePopulation();
+	this.updateResources();
+	this.updateToolbar();
+	this.updateInfo();
+}
+
+
+/**
+*	Initializations methods.
+*/
+GUI.initResourcesBar = function () {
+	for (var i in gameData.RESOURCES) {
+		var resource = gameData.RESOURCES[i];
+		$('#topBar').append('<div id="resource' + resource.id + '">0</div>');
+	}
+}
+GUI.initCommonButtonsEvents = function () {
 	$('#attackButton').click(function () {
 		userInput.enterAttackMode();
 	});
@@ -61,19 +89,55 @@ GUI.init = function () {
 		userInput.enterPatrolMode();
 	});
 }
-
+GUI.initInfobarEvents = function () {
+	// TODO
+}
+GUI.initMinimapSize = function () {
+	var minimap = document.getElementById('minimap');
+	this.minimapSize = 0.12 * window.innerWidth;
+}
 
 /**
-*	Updates the GUI.
-*	Called in the main thread.
+*	Check if click on minimap or on GUI.
 */
-GUI.update = function () {
-	this.updatePopulation();
-	this.updateResources();
-	this.updateToolbar();
-	this.updateInfo();
-	this.updateMinimap();
+GUI.isGUIClicked = function (x, y) {
+
+	if (y > window.innerHeight - 120 && x < window.innerWidth - this.minimapSize) {
+		return this.GUI_ELEMENTS.bottomBar;
+	} else if (x > window.innerWidth - this.minimapSize && y > window.innerHeight - this.minimapSize) {
+		return this.GUI_ELEMENTS.minimap;
+	} else {
+		return this.GUI_ELEMENTS.none;
+	}
 }
+
+
+GUI.clickOnMinimap = function (x, y) {
+	var moveTo = this.convertToMinimapPosition(x, y);
+	gameSurface.centerCameraOnPosition(moveTo);
+}
+GUI.convertToMinimapPosition = function (x, y) {
+	return {
+		x: parseInt(gameContent.map.size.x * gameSurface.PIXEL_BY_NODE * (this.minimapSize - window.innerWidth + x) / this.minimapSize),
+		y: parseInt(gameContent.map.size.y * gameSurface.PIXEL_BY_NODE * (window.innerHeight - y) / this.minimapSize)
+	};
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /**
@@ -129,16 +193,6 @@ GUI.updateMouse = function (mouseIcon) {
 	document.body.style.cursor = mouseIcon;
 }
 
-
-/**
-*	Creates the resources box.
-*/
-GUI.createResourcesBar = function () {
-	for (var i in gameData.RESOURCES) {
-		var resource = gameData.RESOURCES[i];
-		$('#topBar').append('<div id="resource' + resource.id + '">0</div>');
-	}
-}
 
 
 /**
@@ -197,24 +251,22 @@ GUI.updatePopulation = function () {
 */
 GUI.selectButton = function (button) {
 	this.unselectButtons();
-	$('#toolbar' + button.buttonId).addClass('sprite-boxSelect');
+	$('#toolbar' + button.buttonId).addClass('selected');
 }
 
 
 /**
-*	Unselect al the toolbar buttons.
+*	Unselect all the toolbar buttons.
 */
 GUI.unselectButtons = function () {
-	$('.toolbarButton').removeClass('sprite-boxSelect');
+	$('.toolbarButton').removeClass('selected');
 }
 
 
 /**
-*	Initializes the info box.
+*	Initializes the info bar events.
 */
-GUI.initInfobar = function () {
-	$('#info').css('left', (window.innerWidth - $('#info').width()) / 2);
-}
+
 
 
 /**
@@ -288,110 +340,42 @@ GUI.addQueue = function(image, text, tooltip) {
 }
 
 
-/**
-*	Initializes the minimap.
-*/
-GUI.initMinimap = function () {
-	$('#minimap').mousedown(function (e) {
-		var x = (GUI.MINIMAP_SIZE - window.innerWidth + e.clientX) / GUI.MINIMAP_SIZE * gameContent.map.size.x * gameSurface.PIXEL_BY_NODE;
-		var y = (window.innerHeight - e.clientY) / GUI.MINIMAP_SIZE * gameContent.map.size.y * gameSurface.PIXEL_BY_NODE;
-		if (e.which == 1) {
-		} else if (e.which == 3 && gameContent.selected.length > 0
-			&& rank.isAlly(gameContent.players, gameContent.myArmy, utils.getElementFromId(gameContent.selected[0]))
-			&& utils.getElementFromId(gameContent.selected[0]).f == gameData.FAMILIES.unit
-		|| utils.getElementFromId(gameContent.selected[0]).f == gameData.FAMILIES.building) {
-			x = parseInt(x / gameSurface.PIXEL_BY_NODE);
-			y = parseInt(y / gameSurface.PIXEL_BY_NODE);
-//			userInput.sendOrder(x, y);
-		}
-	});
-}
 
 
-/**
-*	Updates minimap.
-*/
-GUI.updateMinimap = function () {
-	$('#minimapLocation').css('left', -8 + (this.MINIMAP_SIZE) * camera.position.x / (gameContent.map.size.x * gameSurface.PIXEL_BY_NODE));
-	$('#minimapLocation').css('top', -8 + (this.MINIMAP_SIZE) * (1 - camera.position.z / (gameContent.map.size.y * gameSurface.PIXEL_BY_NODE)));
-}
+// /**
+// *	Initializes the diplomacy section.
+// */
+// GUI.initDiplomacy = function () {
+// 	for (var i in gameContent.players) {
+// 		if (i != gameContent.myArmy) {
+// 			var player = gameContent.players[i];
+// 			$('#diplomacy').append('<div id="diplomacy' + i + '">'
+// 				+ '<div class="smallButton ' + gameSurface.PLAYERS_COLORS[i] + '">' + player.n + '</div>'
+// 				+ '<div class="smallButton customRadio white" data-name="diplomacy' + i + '" data-value="' + gameData.RANKS.neutral + '">Neutral</div>'
+// 				+ '<div class="smallButton customRadio white" data-name="diplomacy' + i + '" data-value="' + gameData.RANKS.enemy + '">Enemy</div>'
+// 				+ '</div>');
+// 			this.updateDiplomacyButtons(player);
+// 		}
+// 	}
+
+// 	//add event
+// 	$('.customRadio', '#diplomacy').click(function () {
+// 		soundManager.playSound(soundManager.SOUNDS_LIST.button);
+// 		$('.customRadio[data-name="' + $(this).attr('data-name') + '"]').removeClass('checked');
+// 		$(this).addClass('checked');
+// 		gameManager.sendOrderToEngine(order.TYPES.diplomacy, [gameContent.myArmy, $(this).attr('data-name').replace('diplomacy', ''), $(this).attr('data-value')]);
+// 	});
+// }
 
 
-/**
-*	Adds an element on the minimap.
-*/
-GUI.addElementOnMinimap = function (element) {
-	var className;
-	if (element.f == gameData.FAMILIES.building) {
-		className = 'minimapPointBuilding';
-	} else {
-		className = 'minimapPointUnit';
-	}
-	$('#minimap').append('<span id="minimap' + element.id + '" class="' + className + ' ' + gameSurface.PLAYERS_COLORS[element.o] + '">&nbsp;</span>');
-	$('#minimap' + element.id).css('left', (this.MINIMAP_SIZE) * element.p.x / gameContent.map.size.x);
-	$('#minimap' + element.id).css('top', (this.MINIMAP_SIZE) * (1 - element.p.y / gameContent.map.size.y));
-}
-
-
-/**
-*	Adds an alert on the minimap.
-*/
-GUI.addAlertMinimap = function (element) {
-	$('#minimap' + element.id).html('!');
-}
-
-
-/**
-*	Updates an element on the minimap.
-*/
-GUI.updateElementOnMinimap = function (element) {
-	$('#minimap' + element.id).html('&nbsp;').css('left', (this.MINIMAP_SIZE) * element.p.x / gameContent.map.size.x);
-	$('#minimap' + element.id).css('top', (this.MINIMAP_SIZE) * (1 - element.p.y / gameContent.map.size.y));
-}
-
-
-/**
-*	Removes an element from the minimap.
-*/
-GUI.removeElementFromMinimap = function (element) {
-	$('#minimap' + element.id).remove();
-}
-
-
-/**
-*	Initializes the diplomacy section.
-*/
-GUI.initDiplomacy = function () {
-	for (var i in gameContent.players) {
-		if (i != gameContent.myArmy) {
-			var player = gameContent.players[i];
-			$('#diplomacy').append('<div id="diplomacy' + i + '">'
-				+ '<div class="smallButton ' + gameSurface.PLAYERS_COLORS[i] + '">' + player.n + '</div>'
-				+ '<div class="smallButton customRadio white" data-name="diplomacy' + i + '" data-value="' + gameData.RANKS.neutral + '">Neutral</div>'
-				+ '<div class="smallButton customRadio white" data-name="diplomacy' + i + '" data-value="' + gameData.RANKS.enemy + '">Enemy</div>'
-				+ '</div>');
-			this.updateDiplomacyButtons(player);
-		}
-	}
-
-	//add event
-	$('.customRadio', '#diplomacy').click(function () {
-		soundManager.playSound(soundManager.SOUNDS_LIST.button);
-		$('.customRadio[data-name="' + $(this).attr('data-name') + '"]').removeClass('checked');
-		$(this).addClass('checked');
-		gameManager.sendOrderToEngine(order.TYPES.diplomacy, [gameContent.myArmy, $(this).attr('data-name').replace('diplomacy', ''), $(this).attr('data-value')]);
-	});
-}
-
-
-/**
-*	Updates the diplomacy buttons for one player.
-*/
-GUI.updateDiplomacyButtons = function (player) {
-	$('.customRadio', '#diplomacy' + player.o).removeClass('checked');
-	if (gameContent.players[gameContent.myArmy].ra[player.o] == gameData.RANKS.neutral) {
-		$('.customRadio', '#diplomacy' + player.o).first().addClass('checked');
-	} else {
-		$('.customRadio', '#diplomacy' + player.o).last().addClass('checked');
-	}
-}
+// /**
+// *	Updates the diplomacy buttons for one player.
+// */
+// GUI.updateDiplomacyButtons = function (player) {
+// 	$('.customRadio', '#diplomacy' + player.o).removeClass('checked');
+// 	if (gameContent.players[gameContent.myArmy].ra[player.o] == gameData.RANKS.neutral) {
+// 		$('.customRadio', '#diplomacy' + player.o).first().addClass('checked');
+// 	} else {
+// 		$('.customRadio', '#diplomacy' + player.o).last().addClass('checked');
+// 	}
+// }

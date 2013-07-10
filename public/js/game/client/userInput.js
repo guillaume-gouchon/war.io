@@ -18,6 +18,14 @@ userInput.hotKeysContent = [[], [], [], [], []];
 
 userInput.doSelect = function (x, y, isCtrlKey, isShiftKey) {
 
+	var clickedPart = GUI.isGUIClicked(x, y);
+	if (clickedPart == GUI.GUI_ELEMENTS.bottomBar) {
+		return;
+	} else if (clickedPart == GUI.GUI_ELEMENTS.minimap) {
+		GUI.clickOnMinimap(x, y);
+		return;
+	}
+
 	// the user clicked on a toolbar's button
 	if (GUI.toolbar.length > 0 && x < GUI.BUTTONS_SIZE + 10 && x > 10
 		&& y < window.innerHeight - 10 && y > window.innerHeight- 10 - GUI.BUTTONS_SIZE * GUI.toolbar.length) {
@@ -38,20 +46,15 @@ userInput.doSelect = function (x, y, isCtrlKey, isShiftKey) {
 	//the user wants to select one or more elements
 	else {
 
-		//click on minimap
-		if (x > window.innerWidth - GUI.MINIMAP_SIZE && y > window.innerHeight - GUI.MINIMAP_SIZE) {
-			return;
-		}
-
 		this.leaveConstructionMode();
 
 		if (!isCtrlKey) {
-			//reset selected array
+			// reset selected array
 			gameSurface.unselectAll();
 			gameContent.selected = [];	
 		}
 		
-		//reset the selection rectangle
+		// reset the selection rectangle
 		gameContent.selectionRectangle = [];
 		gameSurface.updateSelectionRectangle(-1, -1, -1, -1);
 
@@ -91,16 +94,27 @@ userInput.doSelect = function (x, y, isCtrlKey, isShiftKey) {
 
 userInput.doAction = function (x, y, isShiftKey, specialOrder) {
 
-	if (x > window.innerWidth - GUI.MINIMAP_SIZE && y > window.innerHeight - GUI.MINIMAP_SIZE) { return false; }
-
-	//leave the construction mode if activated
+	// leave the construction mode if activated
 	if(gameContent.building != null) {
 		this.leaveConstructionMode();
 	} else if(gameContent.selected.length > 0) {
+
 		var selected = utils.getElementFromId(gameContent.selected[0]);
 		if (rank.isAlly(gameContent.players, gameContent.myArmy, selected)
 			&& (selected.f == gameData.FAMILIES.unit || selected.f == gameData.FAMILIES.building)) {
-			this.dispatchUnitAction(x, y, isShiftKey, specialOrder);
+
+			var isFromMinimap = false;
+
+			// minimap
+			var clickedPart = GUI.isGUIClicked(x, y);
+			if (clickedPart == GUI.GUI_ELEMENTS.minimap) {
+				var convertedDestination = GUI.convertToMinimapPosition(x, y);
+				x = convertedDestination.x;
+				y = convertedDestination.y;
+				isFromMinimap = true;
+			}
+
+			this.dispatchUnitAction(x, y, isShiftKey, specialOrder, isFromMinimap);
 		}
 	}
 
@@ -355,25 +369,33 @@ userInput.tryBuildHere = function (isShiftKey) {
 /**
 *	Dispatches the action according to the order.
 */
-userInput.dispatchUnitAction = function (x, y, isShiftKey, specialOrder) {
-	var destination;
-	var elementUnder = gameSurface.getFirstIntersectObject(x, y);
-	if (elementUnder != null) {
-		if (elementUnder.object.elementId != null) {
-			destination = utils.getElementFromId(elementUnder.object.elementId).p;
-			gameSurface.animateSelectionCircle(elementUnder.object.elementId);
-		} else {
-			destination = {
-				x : parseInt(elementUnder.point.x / gameSurface.PIXEL_BY_NODE),
-				y : parseInt(elementUnder.point.y / gameSurface.PIXEL_BY_NODE)
+userInput.dispatchUnitAction = function (x, y, isShiftKey, specialOrder, isFromMinimap) {
+	var destination = null;
+	if (isFromMinimap) {
+		destination = {
+			x : parseInt(x / gameSurface.PIXEL_BY_NODE),
+			y : parseInt(y / gameSurface.PIXEL_BY_NODE)
+		}
+	} else {
+		var elementUnder = gameSurface.getFirstIntersectObject(x, y);
+		if (elementUnder != null) {
+			if (elementUnder.object.elementId != null) {
+				destination = utils.getElementFromId(elementUnder.object.elementId).p;
+				gameSurface.animateSelectionCircle(elementUnder.object.elementId);
+			} else {
+				destination = {
+					x : parseInt(elementUnder.point.x / gameSurface.PIXEL_BY_NODE),
+					y : parseInt(elementUnder.point.y / gameSurface.PIXEL_BY_NODE)
+				}
 			}
 		}
-
-		if (destination.x >= 0 && destination.y >= 0 && destination.x < gameContent.map.size.x && destination.y < gameContent.map.size.y) {
-			gameManager.sendOrderToEngine(order.TYPES.action, [gameContent.selected, destination.x, destination.y, isShiftKey, specialOrder]);
-		}
-
 	}
+
+
+	if (destination != null && destination.x >= 0 && destination.y >= 0 && destination.x < gameContent.map.size.x && destination.y < gameContent.map.size.y) {
+		gameManager.sendOrderToEngine(order.TYPES.action, [gameContent.selected, destination.x, destination.y, isShiftKey, specialOrder]);
+	}
+	
 }
 
 
