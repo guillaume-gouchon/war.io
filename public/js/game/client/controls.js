@@ -525,7 +525,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 				userInput.doAction( event.clientX, event.clientY, event.shiftKey, _this.clickMode );
 
 				// leave special click mode
-				_this.clickMode = _this.MODES.normal;
+				userInput.leaveSpecialClickMode();
 				
 			} else {
 
@@ -539,7 +539,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 			if (_this.clickMode != _this.MODES.normal) {
 
 				// leave special click mode
-				_this.clickMode = _this.MODES.normal;
+				userInput.leaveSpecialClickMode();
 
 			} else {
 

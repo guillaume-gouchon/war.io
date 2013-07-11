@@ -11,6 +11,16 @@ canvas {
   user-select: none;
 }
 
+button.selected {
+  background: #cc0000; /* Old browsers */
+  background: -moz-linear-gradient(top, #cc0000 0%, #000000 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cc0000), color-stop(100%,#000000)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #cc0000 0%,#000000 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #cc0000 0%,#000000 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #cc0000 0%,#000000 100%); /* IE10+ */
+  background: linear-gradient(to bottom, #cc0000 0%,#000000 100%); /* W3C */
+}
+
 
 /**
 *   TOP BAR
@@ -43,6 +53,7 @@ canvas {
   content: url('../img/GUI/ic_pop.png');
 }
 
+
 /**
 *   BOTTOM BAR
 */
@@ -60,6 +71,7 @@ canvas {
 }
 #toolbar {
   max-width: 260px;
+  vertical-align: top;
 }
 #toolbar button {
   padding: 5px;
@@ -80,6 +92,29 @@ canvas {
   opacity: 0.8;
 }
 
+
+/**
+*   INFO SECTION
+*/
+#infoBar {
+  height: 100%;
+}
+#listSelected {
+  min-width: 150px;
+  height: 80%;
+  width: 40%;
+  border-right: 1px solid #111;
+  border-left: 1px solid #111;
+  vertical-align: top;
+}
+#listSelected button {
+  padding: 3px;
+  margin: 3px; 
+}
+#infoSelected {
+  padding: 5px;
+  height: 80%;
+}
 
 
 

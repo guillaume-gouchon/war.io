@@ -244,13 +244,13 @@ userInput.onMouseUp = function () {
 userInput.clickOnToolbar = function (button) {
 	if (button.isEnabled) {
 		soundManager.playSound(soundManager.SOUNDS_LIST.button);
-		if (button.buttonId == GUI.TOOLBAR_BUTTONS.build.buttonId) {
+		if (button.id == gameData.BUTTONS.build.id) {
 			//build something
 			GUI.showBuildings = true;
 		} else if (GUI.showBuildings && button.isEnabled) {
 			//building
 			this.enterConstructionMode(button);
-		} else if (button.buttonId == GUI.TOOLBAR_BUTTONS.cancel.buttonId) {
+		} else if (button.buttonId == gameData.BUTTONS.cancel.buttonId) {
 			//cancel construction
 			gameManager.sendOrderToEngine(order.TYPES.cancelConstruction, [utils.getElementFromId(gameContent.selected[0]).id]);
 		} else if (utils.getElementFromId(gameContent.selected[0]).f == gameData.FAMILIES.building) {
@@ -503,6 +503,8 @@ userInput.pressHoldKey = function () {
 
 userInput.enterPatrolMode = function () {
 	if (gameContent.selected.length > 0) {
+		GUI.unselectButtons();
+		$('#patrolButton').addClass('selected');
 		controls.clickMode = controls.MODES.patrol;
 	}
 }
@@ -510,8 +512,16 @@ userInput.enterPatrolMode = function () {
 
 userInput.enterAttackMode = function () {
 	if (gameContent.selected.length > 0) {
+		GUI.unselectButtons();
+		$('#attackButton').addClass('selected');
 		controls.clickMode = controls.MODES.attack;	
 	}
+}
+
+
+userInput.leaveSpecialClickMode = function () {
+	GUI.unselectButtons();
+	controls.clickMode = controls.MODES.normal;
 }
 
 

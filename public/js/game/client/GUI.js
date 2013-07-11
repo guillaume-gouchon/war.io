@@ -59,15 +59,17 @@ GUI.init = function () {
 *	Called in the main thread.
 */
 GUI.update = function () {
+
 	this.updatePopulation();
 	this.updateResources();
 	this.updateToolbar();
-	this.updateInfo();
+	this.updateInfoBar();
+
 }
 
 
 /**
-*	Initializations methods.
+*	Initialization methods.
 */
 GUI.initResourcesBar = function () {
 	for (var i in gameData.RESOURCES) {
@@ -90,6 +92,18 @@ GUI.initCommonButtonsEvents = function () {
 	});
 }
 GUI.initInfobarEvents = function () {
+	$('#listSelected').on('click', 'button', function (e) {
+		var elementId = parseInt($(this).attr('data-id'));
+		if (e.ctrlKey && gameContent.selected.indexOf(elementId) > -1) {
+			gameContent.selected.splice(gameContent.selected.indexOf(elementId), 1);
+			gameSurface.unselectElement(elementId);
+		} else {
+			gameContent.selected = [elementId];
+			gameSurface.unselectAll();
+			gameSurface.selectElement(elementId);
+		}
+	});
+	
 	// TODO
 }
 GUI.initMinimapSize = function () {
@@ -97,11 +111,96 @@ GUI.initMinimapSize = function () {
 	this.minimapSize = 0.12 * window.innerWidth;
 }
 
+
+/**
+*	Update methods.
+*/
+GUI.updatePopulation = function () {
+	var player = gameContent.players[gameContent.myArmy];
+	$('#population').html(player.pop.current + ' / ' + player.pop.max);
+}
+GUI.updateResources = function () {
+	var player = gameContent.players[gameContent.myArmy];
+	for (var i in gameData.RESOURCES) {
+		var resource = gameData.RESOURCES[i]; 
+		$('#resource' + resource.id).html(player.re[resource.id]);
+	}
+}
+GUI.updateInfoBar = function () {
+	if (gameContent.selected.length > 0) {
+
+		// update list selected
+		$.each($('button', '#listSelected'), function () {
+			if(gameContent.selected.indexOf(parseInt($(this).attr('data-id'))) == -1) {
+				$(this).remove();
+			}
+		});
+		for (var i in gameContent.selected) {
+			var element = utils.getElementFromId(gameContent.selected[i]);
+			var elementData = tools.getElementData(element);
+
+			var guiElement = $('button[data-id="' + element.id + '"]', '#listSelected');
+			if (guiElement.length == 0) {
+				$('#listSelected').append('<button data-id="' + element.id + '" style="background:' + gameSurface.getLifeBarHexColor(element.l / elementData.l) + '"><img alt="selected unit" src="'+  GUI.IMAGES_PATH + elementData.gui + '"</button>');
+			} else {
+				guiElement.css('background', gameSurface.getLifeBarHexColor(element.l / elementData.l));
+			}	
+		}
+
+	/*	var element = utils.getElementFromId(gameContent.selected[0]);
+		var elementData = tools.getElementData(element);
+		$('#name').html(elementData.name);
+		$('#portrait').attr('class', 'sprite sprite-' + elementData.gui);
+		if (elementData.attack != null) {
+			$('#frags').html('FRAGS : ' + element.fr);
+		} else {
+			$('#frags').html('');
+		}
+		$('#stats').html('');
+		if (element.f == gameData.FAMILIES.land) {
+			//land
+			$('#life').html('&infin; / &infin;');
+			for (var i in gameData.RESOURCES) {
+				if (gameData.RESOURCES[i].id == elementData.resourceType) {
+					this.addStatLine(gameData.RESOURCES[i].gui, element.ra, "Amount of resources left");
+					break;
+				}
+			}
+		} else {
+			$('#life').html(element.l + '/' + elementData.l);
+			if (element.f == gameData.FAMILIES.building && elementData.attack == null) {
+				//building
+				GUI.addStatLine("defense", elementData.defense, "Defense");
+				GUI.addStatLine("pop20", elementData.pop, "Max Population Bonus");
+
+				for (var i in element.q) {
+					var e = element.q[i];
+					var inConstruction = tools.getElementDataFrom(gameData.FAMILIES.unit, element.r, e);
+					if (i == 0) {
+						GUI.addQueue(inConstruction.gui, parseInt(element.qp) + '%', inConstruction.name);	
+					} else {
+						GUI.addQueue(inConstruction.gui, '', inConstruction.name);	
+					}
+				}
+			} else {
+				//unit
+				GUI.addStatLine("attack", elementData.attack, "Attack");
+				GUI.addStatLine("defense", elementData.defense, "Defense");
+				GUI.addStatLine("attackSpeed", elementData.attackSpeed, "Attack Speed");
+				GUI.addStatLine("range", elementData.range, "Range");
+			}
+		}
+		$('#info').removeClass('hide');*/
+	} else if ($('#listSelected').html() != '') {
+		$('#listSelected').html('');
+	}
+}
+
+
 /**
 *	Check if click on minimap or on GUI.
 */
 GUI.isGUIClicked = function (x, y) {
-
 	if (y > window.innerHeight - 120 && x < window.innerWidth - this.minimapSize) {
 		return this.GUI_ELEMENTS.bottomBar;
 	} else if (x > window.innerWidth - this.minimapSize && y > window.innerHeight - this.minimapSize) {
@@ -112,6 +211,9 @@ GUI.isGUIClicked = function (x, y) {
 }
 
 
+/**
+*	Minimap actions.
+*/
 GUI.clickOnMinimap = function (x, y) {
 	var moveTo = this.convertToMinimapPosition(x, y);
 	gameSurface.centerCameraOnPosition(moveTo);
@@ -194,19 +296,6 @@ GUI.updateMouse = function (mouseIcon) {
 }
 
 
-
-/**
-*	Updates the resources box with the new values.
-*/
-GUI.updateResources = function () {
-	var player = gameContent.players[gameContent.myArmy];
-	for (var i in gameData.RESOURCES) {
-		var resource = gameData.RESOURCES[i];
-		$('#resource' + resource.id).html(player.re[resource.id]);
-	}
-}
-
-
 /**
 *	Creates a toolbar button.
 */
@@ -238,15 +327,6 @@ GUI.createToolbarButton = function (button) {
 
 
 /**
-*	Updates the player's population box.
-*/
-GUI.updatePopulation = function () {
-	var player = gameContent.players[gameContent.myArmy];
-	$('#population').html(player.pop.current + ' / ' + player.pop.max);
-}
-
-
-/**
 *	One toolbar button has been selected.
 */
 GUI.selectButton = function (button) {
@@ -256,71 +336,10 @@ GUI.selectButton = function (button) {
 
 
 /**
-*	Unselect all the toolbar buttons.
+*	Unselect all the buttons.
 */
 GUI.unselectButtons = function () {
-	$('.toolbarButton').removeClass('selected');
-}
-
-
-/**
-*	Initializes the info bar events.
-*/
-
-
-
-/**
-*	Updates the information box.
-*/
-GUI.updateInfo = function () {
-	if (gameContent.selected.length > 0) {
-		var element = utils.getElementFromId(gameContent.selected[0]);
-		var elementData = tools.getElementData(element);
-		$('#name').html(elementData.name);
-		$('#portrait').attr('class', 'sprite sprite-' + elementData.gui);
-		if (elementData.attack != null) {
-			$('#frags').html('FRAGS : ' + element.fr);
-		} else {
-			$('#frags').html('');
-		}
-		$('#stats').html('');
-		if (element.f == gameData.FAMILIES.land) {
-			//land
-			$('#life').html('&infin; / &infin;');
-			for (var i in gameData.RESOURCES) {
-				if (gameData.RESOURCES[i].id == elementData.resourceType) {
-					this.addStatLine(gameData.RESOURCES[i].gui, element.ra, "Amount of resources left");
-					break;
-				}
-			}
-		} else {
-			$('#life').html(element.l + '/' + elementData.l);
-			if (element.f == gameData.FAMILIES.building && elementData.attack == null) {
-				//building
-				GUI.addStatLine("defense", elementData.defense, "Defense");
-				GUI.addStatLine("pop20", elementData.pop, "Max Population Bonus");
-
-				for (var i in element.q) {
-					var e = element.q[i];
-					var inConstruction = tools.getElementDataFrom(gameData.FAMILIES.unit, element.r, e);
-					if (i == 0) {
-						GUI.addQueue(inConstruction.gui, parseInt(element.qp) + '%', inConstruction.name);	
-					} else {
-						GUI.addQueue(inConstruction.gui, '', inConstruction.name);	
-					}
-				}
-			} else {
-				//unit
-				GUI.addStatLine("attack", elementData.attack, "Attack");
-				GUI.addStatLine("defense", elementData.defense, "Defense");
-				GUI.addStatLine("attackSpeed", elementData.attackSpeed, "Attack Speed");
-				GUI.addStatLine("range", elementData.range, "Range");
-			}
-		}
-		$('#info').removeClass('hide');
-	} else if (!$('#info').hasClass('hide')){ 
-		$('#info').addClass('hide');
-	}
+	$('button', '#toolbar').removeClass('selected');
 }
 
 
