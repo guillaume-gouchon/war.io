@@ -255,6 +255,12 @@ gameSurface.createScene = function () {
     planeSurface.overdraw = true;
     scene.add(planeSurface);
 
+    var transparentSurface = new THREE.Mesh(new THREE.PlaneGeometry(5000, 5000), new THREE.MeshNormalMaterial({ transparent: true, opacity: 0 }));
+	transparentSurface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
+    transparentSurface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
+    transparentSurface.overdraw = true;
+    scene.add(transparentSurface);
+
 	this.fogOfWarMatrix = [];
 	this.deepFogOfWarMatrix = [];
 	for ( var x = 0; x < gameContent.map.size.x; x++) {

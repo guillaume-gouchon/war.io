@@ -21,7 +21,8 @@ try {
 }
 
 // center main buttons
-centerElement($('#mainButtons'));
+window.addEventListener('resize', centerMainButtons, false);
+centerMainButtons();
 
 // init the sound manager
 soundManager.init();
@@ -165,6 +166,10 @@ $('#joinGame').on('hidden', function () {
 	socketManager.leaveSalon();
 })
 
+
+function centerMainButtons() {
+	centerElement($('#mainButtons'));
+}
 
 function initArmyButtons () {
 	for (var i in gameData.RACES) {
