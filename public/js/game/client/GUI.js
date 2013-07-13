@@ -16,14 +16,16 @@ GUI.MOUSE_ICONS = {
 	standard : 'url("' + GUI.IMAGES_PATH + 'cursor.png"), auto', 
 	select : 'url("' + GUI.IMAGES_PATH + 'cursor_hover.png"), auto',
 	attack : 'url("' + GUI.IMAGES_PATH + 'cursor_attack.png"), auto',
-	arrowTop : 'n-resize',
-	arrowTopRight : 'ne-resize',
-	arrowTopLeft : 'nw-resize',
-	arrowBottom : 's-resize',
-	arrowBottomRight : 'se-resize',
-	arrowBottomLeft : 'sw-resize',
-	arrowRight : 'e-resize',
-	arrowLeft : 'w-resize'
+	cross : 'url("' + GUI.IMAGES_PATH + 'cursor_cross.png"), auto',
+	crossHover : 'url("' + GUI.IMAGES_PATH + 'cursor_cross_hover.png"), auto',
+	arrowTop : 'url("' + GUI.IMAGES_PATH + 'cursor_v.png"), auto',
+	arrowTopRight : 'url("' + GUI.IMAGES_PATH + 'cursor_sw.png"), auto',
+	arrowTopLeft : 'url("' + GUI.IMAGES_PATH + 'cursor_se.png"), auto',
+	arrowBottom : 'url("' + GUI.IMAGES_PATH + 'cursor_v.png"), auto',
+	arrowBottomRight : 'url("' + GUI.IMAGES_PATH + 'cursor_se.png"), auto',
+	arrowBottomLeft : 'url("' + GUI.IMAGES_PATH + 'cursor_sw.png"), auto',
+	arrowRight : 'url("' + GUI.IMAGES_PATH + 'cursor_h.png"), auto',
+	arrowLeft : 'url("' + GUI.IMAGES_PATH + 'cursor_h.png"), auto'
 }
 GUI.UPDATE_FREQUENCY = 0.2;
 GUI.GUI_ELEMENTS = {

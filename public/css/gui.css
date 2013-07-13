@@ -11,6 +11,10 @@ canvas {
   user-select: none;
 }
 
+#toolbar button {
+  cursor: url(../img/GUI/cursor_hover.png) 0 0, auto;
+}
+
 
 /**
 *   TOP BAR
@@ -83,6 +87,14 @@ canvas {
 
 
 
+
+
+
+#selectionRectangle {
+  position: absolute;
+  border: 2px solid #5f5;
+  opacity: 0.8;
+}
 
 
 
@@ -357,12 +369,6 @@ canvas {
 
 #diplomacy .customRadio:hover {
     background: #ccc;
-}
-
-#selectionRectangle {
-  position: absolute;
-  border: 2px solid #5f5;
-  opacity: 0.8;
 }
 
 
