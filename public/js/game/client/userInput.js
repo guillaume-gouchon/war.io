@@ -437,7 +437,7 @@ userInput.drawSelectionRectangle = function (x, y, isCtrlKey) {
 			var selectionRectangleGamePosition = [
 				gamePosition1.x, gamePosition1.y, gamePosition2.x, gamePosition2.y
 			];
-
+console.log(selectionRectangleGamePosition)
 			for (var i = Math.min(selectionRectangleGamePosition[0], selectionRectangleGamePosition[2]); i <= Math.max(selectionRectangleGamePosition[0], selectionRectangleGamePosition[2]); i++) {
 				for (var j = Math.min(selectionRectangleGamePosition[1], selectionRectangleGamePosition[3]); j <= Math.max(selectionRectangleGamePosition[1], selectionRectangleGamePosition[3]); j++) {
 					if (gameContent.grid[i][j] > 0) {

@@ -26,6 +26,7 @@ canvas {
 }
 #topBar div {
     display: inline-block;
+    min-width: 65px;
     font-size: 14px;
     font-weight: bold;
     color: #fff;
