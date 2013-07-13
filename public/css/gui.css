@@ -166,14 +166,9 @@ canvas {
     opacity: 0.5;
 }
 
-.sprite {
-  background: url('../img/GUI/sprite.png') no-repeat top left;
-}
-
 .spriteBefore:before {
   float: left;
   content: "";
-  background: url('../img/GUI/sprite.png') no-repeat top left;
   margin-right: 5px;
 }
 

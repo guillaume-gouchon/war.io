@@ -126,6 +126,9 @@ header {
     text-transform: uppercase;
     z-index: 1000;
 }
+header #playerName:before {
+    content: url(../img/GUI/ic_player.png);
+}
 header #playerName input:hover {
     color: #aaa;
 }
@@ -151,6 +154,9 @@ header #music {
 }
 header #music.musicEnabled {
     color: #70CC83;
+}
+header #music:before {
+    content: url(../img/GUI/ic_music.png);
 }
 header #armies div {
     display: inline-block;

@@ -8,8 +8,8 @@ var scene, camera, controls;
 */
 gameSurface.MODELS_PATH = 'img/3D/';
 gameSurface.PIXEL_BY_NODE = 10;
-gameSurface.NEAR = 1;
-gameSurface.FAR = 2000;
+gameSurface.NEAR = 0.1;
+gameSurface.FAR = 20000;
 
 gameSurface.ZOOM_STEP = 15;
 gameSurface.ORDER_ANIMATION_SPEED = 0.015;
@@ -100,7 +100,7 @@ gameSurface.init = function () {
 	controls = new THREE.TrackballControls(camera);
 
 	// init simple fog
-	scene.fog = new THREE.Fog( 0xffffff, this.FOG_DENSITY, 1200);
+	//scene.fog = new THREE.Fog( 0xffffff, this.FOG_DENSITY, 1200);
 
 	// init renderer
 	renderer = new THREE.WebGLRenderer();
@@ -114,7 +114,7 @@ gameSurface.init = function () {
 	this.loader = new THREE.JSONLoader();
 
 	// count the number of stuff to be loaded
-	this.totalStuffToLoad += 2;// grass + skybox
+	this.totalStuffToLoad += 7;// grass + skybox
 	var races = [];
 	for (var i in gameContent.players) {
 
@@ -184,18 +184,22 @@ gameSurface.createScene = function () {
 	scene.add(pointLight);
 
 	//add skybox
+	var directions  = ["xpos", "xneg", "ypos", "yneg", "zpos", "zneg"];
+	var skyGeometry = new THREE.CubeGeometry( 5000, 5000, 5000 );
+	var skyboxType = 'alien';
+	var fileExtension = '.jpg';
+
 	var materialArray = [];
-	var skyboxMaterial = new THREE.MeshBasicMaterial({map: THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'skybox.jpg', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
-   	skyboxMaterial.side = THREE.BackSide;
-	for (var i = 0; i < 6; i++) {
-		materialArray.push(skyboxMaterial);
-	}
-	var skyboxMaterial = new THREE.MeshFaceMaterial(materialArray);
-	var skyboxGeom = new THREE.CubeGeometry(2000, 2000, 2000);
-	var skybox = new THREE.Mesh(skyboxGeom, skyboxMaterial);
-	skybox.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
-	skybox.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
-	scene.add(skybox);
+	for (var i = 0; i < 6; i++)
+		materialArray.push( new THREE.MeshBasicMaterial({
+			map: THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'skyboxes/' + skyboxType + '_' + directions[i] + fileExtension, new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()}),
+			side: THREE.BackSide
+		}));
+	var skyMaterial = new THREE.MeshFaceMaterial(materialArray);
+	var skyBox = new THREE.Mesh(skyGeometry, skyMaterial);
+	skyBox.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
+	skyBox.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
+	scene.add(skyBox);
 
 	//generate the land
 	var rwidth = gameContent.map.size.x, rheight = gameContent.map.size.y, rsize = rwidth * rheight;
@@ -269,8 +273,7 @@ gameSurface.createScene = function () {
 	}
 
 
-	var planeSize = 2000;
-	var geometry = new THREE.PlaneGeometry(2000, 2000, 50,50);
+	var geometry = new THREE.PlaneGeometry(5000, 5000, 50,50);
 	for (var i=0, l=geometry.faces.length; i<l; i++) {
 		var centroid = geometry.faces[i].centroid;
 		if (Math.abs(centroid.x)<500 && Math.abs(centroid.y)<500) {
@@ -294,7 +297,7 @@ gameSurface.createScene = function () {
     surface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
     surface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
     surface.position.z = -.01;
-    scene.add(surface);
+    // scene.add(surface);
 
 
 	//add order geometry
