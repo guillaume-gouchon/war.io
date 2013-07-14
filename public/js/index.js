@@ -1,3 +1,5 @@
+centerMainButtons();
+
 // init player's info
 $('input', '#playerName').val(gameManager.getPlayerName());
 $('input', '#playerName').change(function () {
@@ -22,7 +24,6 @@ try {
 
 // center main buttons
 window.addEventListener('resize', centerMainButtons, false);
-centerMainButtons();
 
 // init the sound manager
 soundManager.init();
@@ -168,6 +169,7 @@ $('#joinGame').on('hidden', function () {
 
 
 function centerMainButtons() {
+	centerElement($('#mountains'));
 	centerElement($('#mainButtons'));
 }
 
