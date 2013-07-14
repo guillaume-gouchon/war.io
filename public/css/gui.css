@@ -93,7 +93,7 @@ canvas {
 
 #selectionRectangle {
   position: absolute;
-  border: 2px solid #5f5;
+  border: 2px solid #3f3;
   opacity: 0.8;
 }
 
