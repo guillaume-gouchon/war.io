@@ -45,6 +45,7 @@ body {
 }
 
 button {
+    border-radius: 6px!important;
     font-family: 'godofwar';
     font-size: 30px;
     text-align: center;
@@ -521,12 +522,27 @@ button.red:hover {
      from {-webkit-transform: translateY(0px);}
      to   {-webkit-transform: translateY(6px);}
 }
-
-/*Lets start with the cloud formation rather*/
-
-/*The container will also serve as the SKY*/
-
-*{ margin: 0; padding: 0;}
+@-webkit-keyframes animatedBackground {
+    from { background-position: 0 0; }
+    to { background-position: -100% 0; }
+}
+#grass {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 55%;
+    background: #48AB3E;
+    background: -webkit-linear-gradient(top, #48AB3E 0%, #14570C 20%);
+}
+#mountains {
+    -webkit-animation: animatedBackground 60s linear infinite;
+    width: 100%;
+    position: absolute;
+    top: 35%;
+    height: 200px;
+    background: url(../img/mountains.png) repeat-x ;
+    background-position: 0px 0px;
+}
 
 body {
     /*To hide the horizontal scroller appearing during the animation*/
@@ -576,9 +592,9 @@ body {
 
 /*Time to animate*/
 .x1 {
-    -webkit-animation: moveclouds 15s linear infinite;
-    -moz-animation: moveclouds 15s linear infinite;
-    -o-animation: moveclouds 15s linear infinite;
+    -webkit-animation: moveclouds 30s linear infinite;
+    -moz-animation: moveclouds 30s linear infinite;
+    -o-animation: moveclouds 30s linear infinite;
 }
 
 /*variable speed, opacity, and position of clouds for realistic effect*/
@@ -592,9 +608,9 @@ body {
     
     /*Speed will also be proportional to the size and opacity*/
     /*More the speed. Less the time in 's' = seconds*/
-    -webkit-animation: moveclouds 25s linear infinite;
-    -moz-animation: moveclouds 25s linear infinite;
-    -o-animation: moveclouds 25s linear infinite;
+    -webkit-animation: moveclouds 50s linear infinite;
+    -moz-animation: moveclouds 50s linear infinite;
+    -o-animation: moveclouds 50s linear infinite;
 }
 
 .x3 {
@@ -605,9 +621,9 @@ body {
     transform: scale(0.8);
     opacity: 0.8; /*opacity proportional to the size*/
     
-    -webkit-animation: moveclouds 20s linear infinite;
-    -moz-animation: moveclouds 20s linear infinite;
-    -o-animation: moveclouds 20s linear infinite;
+    -webkit-animation: moveclouds 40s linear infinite;
+    -moz-animation: moveclouds 40s linear infinite;
+    -o-animation: moveclouds 40s linear infinite;
 }
 
 .x4 {
@@ -618,9 +634,9 @@ body {
     transform: scale(0.75);
     opacity: 0.75; /*opacity proportional to the size*/
     
-    -webkit-animation: moveclouds 18s linear infinite;
-    -moz-animation: moveclouds 18s linear infinite;
-    -o-animation: moveclouds 18s linear infinite;
+    -webkit-animation: moveclouds 36s linear infinite;
+    -moz-animation: moveclouds 36s linear infinite;
+    -o-animation: moveclouds 36s linear infinite;
 }
 
 .x5 {
@@ -631,20 +647,20 @@ body {
     transform: scale(0.8);
     opacity: 0.8; /*opacity proportional to the size*/
     
-    -webkit-animation: moveclouds 20s linear infinite;
-    -moz-animation: moveclouds 20s linear infinite;
-    -o-animation: moveclouds 20s linear infinite;
+    -webkit-animation: moveclouds 40s linear infinite;
+    -moz-animation: moveclouds 40s linear infinite;
+    -o-animation: moveclouds 40s linear infinite;
 }
 
 @-webkit-keyframes moveclouds {
-    0% {margin-left: 1000px;}
-    100% {margin-left: -1000px;}
+    0% {margin-left: 2000px;}
+    100% {margin-left: -2000px;}
 }
 @-moz-keyframes moveclouds {
-    0% {margin-left: 1000px;}
-    100% {margin-left: -1000px;}
+    0% {margin-left: 2000px;}
+    100% {margin-left: -2000px;}
 }
 @-o-keyframes moveclouds {
-    0% {margin-left: 1000px;}
-    100% {margin-left: -1000px;}
+    0% {margin-left: 2000px;}
+    100% {margin-left: -2000px;}
 }
