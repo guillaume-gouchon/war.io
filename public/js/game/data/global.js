@@ -95,19 +95,19 @@ gameData.getRandomName = function () {
 */
 gameData.BUTTONS = {
 	build : {
-		buttonId : 1000,
+		id : 'build',
 		name: 'Build (B)',
 		gui : 'ic_build.png', 
 		isEnabled : true
 	},
 	back : {
-		buttonId : 1001,
+		id : 'back',
 		name: 'Back (ESC)',
 		gui : 'ic_back.png', 
 		isEnabled : true
 	},
 	cancel : {
-		buttonId : 1002,
+		id : 'cancel',
 		name: 'Cancel (ESC)',
 		gui : 'ic_cancel.png', 
 		isEnabled : true

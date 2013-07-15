@@ -26,17 +26,8 @@ userInput.doSelect = function (x, y, isCtrlKey, isShiftKey) {
 		return;
 	}
 
-	// the user clicked on a toolbar's button
-	if (GUI.toolbar.length > 0 && x < GUI.BUTTONS_SIZE + 10 && x > 10
-		&& y < window.innerHeight - 10 && y > window.innerHeight- 10 - GUI.BUTTONS_SIZE * GUI.toolbar.length) {
-
-			this.clickOnToolbar(GUI.toolbar[parseInt(GUI.toolbar.length - (window.innerHeight - y - 10) / GUI.BUTTONS_SIZE)]);
-			return false;
-
-	}
-
 	// the user is building something
-	else if (gameContent.building != null) {
+	if (gameContent.building != null) {
 
 		this.tryBuildHere(isShiftKey);
 		return false;
@@ -246,23 +237,40 @@ userInput.onMouseUp = function () {
 *	The user clicked on a button in the toolbar.
 * 	@param button : the button that was clicked
 */
-userInput.clickOnToolbar = function (button) {
-	if (button.isEnabled) {
-		soundManager.playSound(soundManager.SOUNDS_LIST.button);
-		if (button.buttonId == GUI.TOOLBAR_BUTTONS.build.buttonId) {
-			//build something
-			GUI.showBuildings = true;
-		} else if (GUI.showBuildings && button.isEnabled) {
-			//building
-			this.enterConstructionMode(button);
-		} else if (button.buttonId == GUI.TOOLBAR_BUTTONS.cancel.buttonId) {
-			//cancel construction
-			gameManager.sendOrderToEngine(order.TYPES.cancelConstruction, [utils.getElementFromId(gameContent.selected[0]).id]);
-		} else if (utils.getElementFromId(gameContent.selected[0]).f == gameData.FAMILIES.building) {
-			gameManager.sendOrderToEngine(order.TYPES.buy,
-					 					[gameContent.selected, button]);
+userInput.clickSpecialButton = function (buttonId) {
+
+	soundManager.playSound(soundManager.SOUNDS_LIST.button);
+	if (buttonId == gameData.BUTTONS.build.id) {
+		// build something
+		GUI.showBuildings = true;
+	} else if (buttonId == gameData.BUTTONS.back.id) {
+		// back button
+		GUI.showBuildings = false;
+	} else if (buttonId == gameData.BUTTONS.cancel.id) {
+		// cancel construction
+		gameManager.sendOrderToEngine(order.TYPES.cancelConstruction, [utils.getElementFromId(gameContent.selected[0]).id]);
+	} else if (GUI.showBuildings) {
+		// building
+		var buildings = gameData.ELEMENTS[gameData.FAMILIES.building][gameContent.players[gameContent.myArmy].r];
+		var building = buildings[Object.keys(buildings)[('' + buttonId)[2]]];
+		this.enterConstructionMode(building);
+	}  else if (utils.getElementFromId(gameContent.selected[0]).f == gameData.FAMILIES.building) {
+		// buy unit / research
+		var family = ('' + buttonId)[0];
+		var elementBought;
+		if (family == gameData.FAMILIES.unit) {
+			// unit
+			var units = gameData.ELEMENTS[gameData.FAMILIES.unit][gameContent.players[gameContent.myArmy].r];
+			elementBought = units[Object.keys(units)[('' + buttonId)[2]]];
+		} else {
+			// research
+			var researches = gameData.ELEMENTS[gameData.FAMILIES.research][gameContent.players[gameContent.myArmy].r];
+			elementBought = researches[('' + buttonId).substring(2)];
 		}
+		
+		gameManager.sendOrderToEngine(order.TYPES.buy, [gameContent.selected, elementBought]);
 	}
+	
 }
 
 
@@ -515,6 +523,8 @@ userInput.pressHoldKey = function () {
 
 userInput.enterPatrolMode = function () {
 	if (gameContent.selected.length > 0) {
+		GUI.unselectButtons();
+		$('#patrolButton').addClass('selected');
 		controls.clickMode = controls.MODES.patrol;
 	}
 }
@@ -522,8 +532,16 @@ userInput.enterPatrolMode = function () {
 
 userInput.enterAttackMode = function () {
 	if (gameContent.selected.length > 0) {
+		GUI.unselectButtons();
+		$('#attackButton').addClass('selected');
 		controls.clickMode = controls.MODES.attack;	
 	}
+}
+
+
+userInput.leaveSpecialClickMode = function () {
+	GUI.unselectButtons();
+	controls.clickMode = controls.MODES.normal;
 }
 
 

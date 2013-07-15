@@ -284,7 +284,7 @@ tools.getElementById = function (game, id) {
 *	Returns element data.
 */
 tools.getElementData = function (element) {
-	var list = gameData.ELEMENTS[element.f][element.r]; 
+	var list = gameData.ELEMENTS[element.f][element.r];
 	return list[Object.keys(list)[element.t]];
 }
 
@@ -292,6 +292,10 @@ tools.getElementData = function (element) {
 *	Returns element data.
 */
 tools.getElementDataFrom = function (family, race, type) {
-	var list = gameData.ELEMENTS[family][race]; 
-	return list[Object.keys(list)[type]];
+	var list = gameData.ELEMENTS[family][race];
+	if (type >= 0) {
+		return list[Object.keys(list)[type]];	
+	} else {
+		return list[type];
+	}
 }

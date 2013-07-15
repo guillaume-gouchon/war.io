@@ -351,6 +351,21 @@ gameSurface.getLifeBarColor = function (lifeRatio) {
 		return 0x00ff00;
 	}
 }
+/**
+*	Returns the color of the life bar.
+*/
+gameSurface.getLifeBarBackgroundColor = function (lifeRatio) {
+	if (lifeRatio < 0.25) {
+		return 'lowLife';
+	} else if (lifeRatio < 0.5) {
+		return 'mediumLife';
+	} else if (lifeRatio < 0.75) {
+		return 'highLife';
+	} else {
+		return 'veryHighLife';
+	}
+}
+
 
 
 /**
