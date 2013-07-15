@@ -1,3 +1,5 @@
+centerMainButtons();
+
 // init player's info
 $('input', '#playerName').val(gameManager.getPlayerName());
 $('input', '#playerName').change(function () {
@@ -21,7 +23,7 @@ try {
 }
 
 // center main buttons
-centerElement($('#mainButtons'));
+window.addEventListener('resize', centerMainButtons, false);
 
 // init the sound manager
 soundManager.init();
@@ -166,6 +168,11 @@ $('#joinGame').on('hidden', function () {
 })
 
 
+function centerMainButtons() {
+	centerElement($('#mountains'));
+	centerElement($('#mainButtons'));
+}
+
 function initArmyButtons () {
 	for (var i in gameData.RACES) {
 		var army = gameData.RACES[i];
@@ -216,10 +223,15 @@ function preloadImages() {
 		}
 	}
 	preload(
-		GUI.IMAGES_PATH + 'sprite.png',
 		GUI.IMAGES_PATH + 'cursor.png',
 		GUI.IMAGES_PATH + 'cursor_hover.png',
-		GUI.IMAGES_PATH + 'cursor_attack.png'
+		GUI.IMAGES_PATH + 'cursor_attack.png',
+		GUI.IMAGES_PATH + 'cursor_cross.png',
+		GUI.IMAGES_PATH + 'cursor_cross_hover.png',
+		GUI.IMAGES_PATH + 'cursor_h.png',
+		GUI.IMAGES_PATH + 'cursor_v.png',
+		GUI.IMAGES_PATH + 'cursor_sw.png',
+		GUI.IMAGES_PATH + 'cursor_se.png'
 	)
 }
 

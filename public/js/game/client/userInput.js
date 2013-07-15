@@ -84,6 +84,11 @@ userInput.doSelect = function (x, y, isCtrlKey, isShiftKey) {
 
 
 userInput.doAction = function (x, y, isShiftKey, specialOrder) {
+	
+	var clickedPart = GUI.isGUIClicked(x, y);
+	if (clickedPart == GUI.GUI_ELEMENTS.bottomBar) {
+		return;
+	}
 
 	// leave the construction mode if activated
 	if(gameContent.building != null) {
@@ -305,20 +310,27 @@ userInput.leaveConstructionMode = function () {
 
 
 /**
-*	Updates mouse icon.
+*	Updates the mouse icon.
 */
 userInput.updateMouseIcon = function (mouseX, mouseY) {
 	var elementUnder = gameSurface.getFirstIntersectObject(mouseX, mouseY);
 	var x = - controls.scroll[0];
 	var y = controls.scroll[1];
 	
+	
 	if (elementUnder != null && elementUnder.object.elementId != null) {
+		if (controls.clickMode != controls.MODES.normal) {
+			GUI.updateMouse(GUI.MOUSE_ICONS.crossHover);
+			return;
+		}
 		var e = utils.getElementFromId(elementUnder.object.elementId);
 		if (e != null && e.f != gameData.FAMILIES.land && rank.isEnemy(gameContent.players, gameContent.myArmy, e)) {
 			GUI.updateMouse(GUI.MOUSE_ICONS.attack);
 		} else {
 			GUI.updateMouse(GUI.MOUSE_ICONS.select);
 		}
+	} else if (controls.clickMode != controls.MODES.normal) {
+		GUI.updateMouse(GUI.MOUSE_ICONS.cross);
 	} else if (!controls.isKeyboardScrolling) {
 		if (x > 0 && y > 0) {
 			GUI.updateMouse(GUI.MOUSE_ICONS.arrowTopRight);

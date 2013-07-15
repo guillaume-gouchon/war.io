@@ -8,8 +8,8 @@ var scene, camera, controls;
 */
 gameSurface.MODELS_PATH = 'img/3D/';
 gameSurface.PIXEL_BY_NODE = 10;
-gameSurface.NEAR = 1;
-gameSurface.FAR = 2000;
+gameSurface.NEAR = 0.1;
+gameSurface.FAR = 20000;
 
 gameSurface.ZOOM_STEP = 15;
 gameSurface.ORDER_ANIMATION_SPEED = 0.015;
@@ -100,7 +100,7 @@ gameSurface.init = function () {
 	controls = new THREE.TrackballControls(camera);
 
 	// init simple fog
-	scene.fog = new THREE.Fog( 0xffffff, this.FOG_DENSITY, 1200);
+	//scene.fog = new THREE.Fog( 0xffffff, this.FOG_DENSITY, 1200);
 
 	// init renderer
 	renderer = new THREE.WebGLRenderer();
@@ -114,7 +114,7 @@ gameSurface.init = function () {
 	this.loader = new THREE.JSONLoader();
 
 	// count the number of stuff to be loaded
-	this.totalStuffToLoad += 2;// grass + skybox
+	this.totalStuffToLoad += 7;// grass + skybox
 	var races = [];
 	for (var i in gameContent.players) {
 
@@ -176,26 +176,24 @@ gameSurface.init = function () {
 */
 gameSurface.createScene = function () {
 
-	//add light
-	var pointLight = new THREE.PointLight(0xFFFFFF);
-	pointLight.position.x = 0;
-	pointLight.position.y = 0;
-	pointLight.position.z = 150;
-	scene.add(pointLight);
 
 	//add skybox
+	var directions  = ["xpos", "xneg", "ypos", "yneg", "zpos", "zneg"];
+	var skyGeometry = new THREE.CubeGeometry( 5000, 5000, 5000 );
+	var skyboxType = 'alien';
+	var fileExtension = '.jpg';
+
 	var materialArray = [];
-	var skyboxMaterial = new THREE.MeshBasicMaterial({map: THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'skybox.jpg', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
-   	skyboxMaterial.side = THREE.BackSide;
-	for (var i = 0; i < 6; i++) {
-		materialArray.push(skyboxMaterial);
-	}
-	var skyboxMaterial = new THREE.MeshFaceMaterial(materialArray);
-	var skyboxGeom = new THREE.CubeGeometry(2000, 2000, 2000);
-	var skybox = new THREE.Mesh(skyboxGeom, skyboxMaterial);
-	skybox.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
-	skybox.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
-	scene.add(skybox);
+	for (var i = 0; i < 6; i++)
+		materialArray.push( new THREE.MeshBasicMaterial({
+			map: THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'skyboxes/' + skyboxType + '_' + directions[i] + fileExtension, new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()}),
+			side: THREE.BackSide
+		}));
+	var skyMaterial = new THREE.MeshFaceMaterial(materialArray);
+	var skyBox = new THREE.Mesh(skyGeometry, skyMaterial);
+	skyBox.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
+	skyBox.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
+	scene.add(skyBox);
 
 	//generate the land
 	var rwidth = gameContent.map.size.x, rheight = gameContent.map.size.y, rsize = rwidth * rheight;
@@ -209,7 +207,7 @@ gameSurface.createScene = function () {
 
 	var grassTexture  = THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'grass2.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
 	grassTexture.wrapT = grassTexture.wrapS = THREE.RepeatWrapping;
-	grassTexture.repeat.set(16,16);
+	grassTexture.repeat.set(64,64);
 
 
     this.fogOfWarGroundTexture = new THREE.DataTexture( this.fogOfWarDataColor, rwidth, rheight, THREE.RGBFormat );
@@ -257,6 +255,12 @@ gameSurface.createScene = function () {
     planeSurface.overdraw = true;
     scene.add(planeSurface);
 
+    var transparentSurface = new THREE.Mesh(new THREE.PlaneGeometry(5000, 5000), new THREE.MeshNormalMaterial({ transparent: true, opacity: 0 }));
+	transparentSurface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
+    transparentSurface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
+    transparentSurface.position.z = -3;
+    scene.add(transparentSurface);
+
 	this.fogOfWarMatrix = [];
 	this.deepFogOfWarMatrix = [];
 	for ( var x = 0; x < gameContent.map.size.x; x++) {
@@ -270,10 +274,13 @@ gameSurface.createScene = function () {
 
 
 	var planeSize = 2000;
-	var geometry = new THREE.PlaneGeometry(2000, 2000, 50,50);
+	var steps = 50;
+	var stepSize = planeSize / steps;
+	var innerBorderThreshold = planeSize / 4;
+	var geometry = new THREE.PlaneGeometry(gameContent.map.size.x * this.PIXEL_BY_NODE * 1.5, gameContent.map.size.y * this.PIXEL_BY_NODE * 1.5, steps, steps);
 	for (var i=0, l=geometry.faces.length; i<l; i++) {
 		var centroid = geometry.faces[i].centroid;
-		if (Math.abs(centroid.x)<500 && Math.abs(centroid.y)<500) {
+		if (Math.abs(centroid.x)<innerBorderThreshold-stepSize && Math.abs(centroid.y)<innerBorderThreshold-stepSize) {
 			geometry.faces.splice(i, 1);
 			l--;
 			i--;
@@ -281,19 +288,39 @@ gameSurface.createScene = function () {
 	}
 	for (var i=0, l=geometry.vertices.length; i<l; i++) {
 		var vertice = geometry.vertices[i];
-		//if (Math.abs(vertice.x)<500 && Math.abs(vertice.y)<500) {
+		if (Math.abs(vertice.x)<innerBorderThreshold-stepSize && Math.abs(vertice.y)<innerBorderThreshold-stepSize)
+			continue;
+		/*if (Math.abs(vertice.y)<innerBorderThreshold+stepSize/2) {
+			if (vertice.x>=0 && vertice.x < innerBorderThreshold) vertice.x = innerBorderThreshold;
+			else if (vertice.x<0 && vertice.x > -innerBorderThreshold) vertice.x = -innerBorderThreshold;
+		}
+		if (Math.abs(vertice.x)<innerBorderThreshold+stepSize/2) {
+			if (vertice.y>=0 && vertice.y < innerBorderThreshold) vertice.y = innerBorderThreshold;
+			else if (vertice.y<0 && vertice.y > -innerBorderThreshold) vertice.y = -innerBorderThreshold;
+		}*/
 		//} else {
-			vertice.setZ(-Math.max(0,(Math.max(Math.abs(vertice.x), Math.abs(vertice.y))-500)/500 * 50));
+			var dist = Math.max(Math.abs(vertice.x), Math.abs(vertice.y))-innerBorderThreshold;
+			if (dist < stepSize)
+				continue;
+			// TODO change here for height management
+			vertice.z = Math.pow(.9, dist/10) * 100 - Math.pow(1.1, dist/10) * 20 + 15 - Math.random() * 35;
+			//if (dist > 20 && dist < 100)
+			//	vertice.z += (100-dist);
+			//vertice.x += (Math.random()-.5) * 3;
+			//vertice.y += (Math.random()-.5) * 3;
 		//}
 	}
 	geometry.elementsNeedUpdate = true;
 	geometry.verticesNeedUpdate = true;
 	geometry.computeCentroids();
 	geometry.computeFaceNormals();
-	var surface = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({color:0x666666}));
+	var rockTexture  = THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'rock.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
+	rockTexture.wrapT = rockTexture.wrapS = THREE.RepeatWrapping;
+	rockTexture.repeat.set(16,16);
+	var surface = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({map:rockTexture}));
     surface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
     surface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
-    surface.position.z = -.01;
+    surface.position.z = -.3;
     scene.add(surface);
 
 
@@ -369,12 +396,12 @@ gameSurface.loadObject = function (key, family, race) {
 		for (var n = 0; n < gameContent.players.length; n++) {
 			if (gameContent.players[n].r == race) {
 				var color = this.ARMIES_COLORS[n];
-				gameSurface.materials[key + color] = new THREE.MeshLambertMaterial({map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key + color + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
+				gameSurface.materials[key + color] = new THREE.MeshBasicMaterial({map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key + color + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
 				gameSurface.materials["HIDDEN" + key + color] = new THREE.MeshBasicMaterial({color: 0x555555, map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key, '' + color + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
 			}
 		}
 	} else {
-		gameSurface.materials[key] = new THREE.MeshLambertMaterial({map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
+		gameSurface.materials[key] = new THREE.MeshBasicMaterial({map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
 		gameSurface.materials["HIDDEN" + key] = new THREE.MeshBasicMaterial({color: 0x555555, map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
 	}
 }
@@ -436,52 +463,52 @@ gameSurface.addElement = function (element) {
 	object.elementId = element.id;
 	this.setElementPosition(object, element.p.x, element.p.y);
 	object.rotation.x = this.de2ra(90);
-	if (model == 'tree.js') {
+	if (model == 'tree') {
 		object.scale.y = 1.5;
 		object.rotation.x = this.de2ra(90);
 		object.rotation.y = this.de2ra(Math.random() * 360);
-	} else if ( model == 'castle.js') {
+	} else if ( model == 'castle') {
 		object.scale.x = 3;
 		object.scale.y = 3;
 		object.scale.z = 3;
 		object.rotation.x = this.de2ra(90);
-	} else if (model == 'goldmine.js') {
+	} else if (model == 'goldmine') {
 		object.scale.x = 1.5;
 		object.scale.y = 1.5;
 		object.scale.z = 1.5;
 		object.rotation.x = this.de2ra(90);
 		object.rotation.y = this.de2ra(Math.random() * 360);
-	} else if (model == 'house.js') {
+	} else if (model == 'house') {
 		object.scale.x = 3;
 		object.scale.y = 3;
 		object.scale.z = 3;
 		object.rotation.x = this.de2ra(90);
-	} else if (model == 'casern.js') {
+	} else if (model == 'casern') {
 		object.scale.x = 2;
 		object.scale.y = 2;
 		object.scale.z = 2;
 		object.rotation.x = this.de2ra(90);
-	} else if (model == 'peon.js') {
+	} else if (model == 'peon') {
 		object.scale.x = 2;
 		object.scale.y = 2;
 		object.scale.z = 2;
 		object.rotation.x = this.de2ra(90);
-	} else if (model == 'swordsman.js') {
+	} else if (model == 'swordsman') {
 		object.scale.x = 2;
 		object.scale.y = 2;
 		object.scale.z = 2;
 		object.rotation.x = this.de2ra(90);
-	} else if (model == 'bowman.js') {
+	} else if (model == 'bowman') {
 		object.scale.x = 2;
 		object.scale.y = 2;
 		object.scale.z = 2;
 		object.rotation.x = this.de2ra(90);
-	} else if (model == 'knight.js') {
+	} else if (model == 'knight') {
 		object.scale.x = 2;
 		object.scale.y = 2;
 		object.scale.z = 2;
 		object.rotation.x = this.de2ra(90);
-	} else if (model == 'tower.js') {
+	} else if (model == 'tower') {
 		object.scale.x = 2;
 		object.scale.z = 2;
 		object.scale.y = 2;
