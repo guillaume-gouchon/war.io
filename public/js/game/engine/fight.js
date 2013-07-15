@@ -26,6 +26,24 @@ fightLogic.WEAPONS_EFFICIENCY = [
 	[1.5, 1.5, 1.5, 1.5, 0.1]
 ]
 
+fightLogic.STATS_BUFF = {
+	attack: 0,
+	defense: 1,
+	attackSpeed: 2,
+	speed: 3,
+	range: 4,
+	vision: 5
+}
+
+fightLogic.ACTIVE_BUFF = {
+	poison: 0
+}
+
+fightLogic.PASSIVE_SKILLS = {
+	poison: 0,
+	zone: 1
+}
+
 
 /**
 *	Applies a basic attack.
