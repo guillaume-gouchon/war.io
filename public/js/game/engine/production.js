@@ -35,7 +35,6 @@ production.updateConstruction = function (game, building) {
 	building.l = Math.min(buildingData.l, building.l);
 	
 	if(building.cp >= 100) {
-
 		this.finishConstruction(game, building);
 
 	}
@@ -78,7 +77,10 @@ production.finishConstruction = function (game, building) {
 	building.cp = 100;
 	building.l = buildingData.l;
 
-	//updates player's max population
+	// add tech
+	game.players[building.o].tec.push(building.key);
+
+	// updates player's max population
 	if(buildingData.pop > 0) {
 		game.players[building.o].pop.max += buildingData.pop;
 	}
@@ -119,6 +121,9 @@ production.removeBuilding = function (game, building) {
 	if(buildingData.pop > 0 && building.cp == 100) {
 
 		game.players[building.o].pop.max -= buildingData.pop;
+
+		// remove tech
+		game.players[building.o].tec.splice(game.players[building.o].tec.indexOf(building.key));
 
 	}
 
@@ -225,6 +230,13 @@ production.buyElement = function (game, buildings, elementData) {
 				this.paysForElement(game, building.o, elementData);
 				building.q.push(elementData.t);
 				tools.addUniqueElementToArray(game.modified, building);
+				if (elementData.t >= 0) {
+					// unit
+				} else {
+					// research
+					game.players[building.o].tecC.push(elementData.t);
+					return;
+				}
 		}
 	}
 
@@ -235,14 +247,26 @@ production.buyElement = function (game, buildings, elementData) {
 *	Update the queue and the progression of what the building is creating.
 */
 production.updateQueueProgress = function (game, building) {
-	var unitData = tools.getElementDataFrom(gameData.FAMILIES.unit, building.r, building.q[0]);
-	building.qp += 100 / (gameLogic.FREQUENCY * unitData.timeConstruction);
+	var elementData;
+	if (building.q[0] >= 0) {
+		// unit
+		elementData = tools.getElementDataFrom(gameData.FAMILIES.unit, building.r, building.q[0]);
+	} else {
+		// research
+		elementData = tools.getElementDataFrom(gameData.FAMILIES.research, building.r, building.q[0]);
+	}
+	building.qp += 100 / (gameLogic.FREQUENCY * elementData.timeConstruction);
 	if(building.qp >= 100) {
 		var canGoToNext = true;
-		//if(building.q[0].f == gameData.FAMILIES.unit) {
-			//check if the unit can be released
+		if (building.q[0] >= 0) {
+			// check if the unit can be released
 			canGoToNext = this.createNewUnit(game, building.q[0], building);	
-		//}
+		} else {
+			// add research to player
+			canGoToNext = true;
+			game.players[building.o].tec.push(building.q[0]);
+			game.players[building.o].tecC.splice(game.players[building.o].tecC.indexOf(building.q[0]));
+		}
 
 		if (canGoToNext) {
 			//element is ready, go to next one
@@ -315,8 +339,16 @@ production.removeUnit = function (game, unit) {
 production.canBuyIt = function (players, owner, element) {
 	for(var i in element.needs) {
 		var need = element.needs[i];
-		if(need.value > players[owner].re[need.t]) {
-			return false;
+		if(need.t >= 0) {
+			// resources
+			if (need.value > players[owner].re[need.t]) {
+				return false;
+			}
+		} else {
+			// buildings / researchs
+			if (players[owner].tec.indexOf(need.t) == -1) {
+				return false;
+			}
 		}
 	}
 	return true;
@@ -329,7 +361,9 @@ production.canBuyIt = function (players, owner, element) {
 production.paysForElement = function (game, owner, element) {
 	for(var i in element.needs) {
 		var need = element.needs[i];
-		game.players[owner].re[need.t] -= need.value;
+		if (need.t >= 0) {
+			game.players[owner].re[need.t] -= need.value;
+		}
 	}
 }
 
@@ -340,7 +374,9 @@ production.paysForElement = function (game, owner, element) {
 production.sellsElement = function (game, owner, element) {
 	for(var i in element.needs) {
 		var need = element.needs[i];
-		game.players[owner].re[need.t] += parseInt(need.value / 2);
+		if (need.t >= 0) {
+			game.players[owner].re[need.t] += parseInt(need.value / 2);
+		}
 	}
 }
 
@@ -349,18 +385,23 @@ production.sellsElement = function (game, owner, element) {
 *	Filters the list of things which can be bought depending 
 *	on its needs (resources, researchs, etc...).
 */
-production.getWhatCanBeBought = function (family, players, owner, elements) {
+production.getWhatCanBeBought = function (players, owner, elements) {
 	var array = [];
 	for(var key in elements) {
 		var element = elements[key];
-		element.isEnabled = this.canBuyIt(players, owner, element);
-		element.id = '' + family + element.r + element.t;
-		array.push(element);
+
+		// remove already done researches
+		if (element.t >= 0 || players[owner].tec.indexOf(element.t) == -1 && players[owner].tecC.indexOf(element.t) == -1) {
+			element.isEnabled = this.canBuyIt(players, owner, element);
+			element.id = '' + element.f + element.r + element.t;
+			array.push(element);
+		}
 	}
 
 	// add back button
-	if (family == gameData.FAMILIES.building) {
+	if (elements.length > 0 && elements[0].f == gameData.FAMILIES.building) {
 		array.splice(4, 0, gameData.BUTTONS.back);
 	}
+
 	return array;
 }

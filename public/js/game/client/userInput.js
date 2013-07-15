@@ -255,10 +255,20 @@ userInput.clickSpecialButton = function (buttonId) {
 		var building = buildings[Object.keys(buildings)[('' + buttonId)[2]]];
 		this.enterConstructionMode(building);
 	}  else if (utils.getElementFromId(gameContent.selected[0]).f == gameData.FAMILIES.building) {
-		// buy unit
-		var units = gameData.ELEMENTS[gameData.FAMILIES.unit][gameContent.players[gameContent.myArmy].r];
-		var unit = units[Object.keys(units)[('' + buttonId)[2]]];
-		gameManager.sendOrderToEngine(order.TYPES.buy, [gameContent.selected, unit]);
+		// buy unit / research
+		var family = ('' + buttonId)[0];
+		var elementBought;
+		if (family == gameData.FAMILIES.unit) {
+			// unit
+			var units = gameData.ELEMENTS[gameData.FAMILIES.unit][gameContent.players[gameContent.myArmy].r];
+			elementBought = units[Object.keys(units)[('' + buttonId)[2]]];
+		} else {
+			// research
+			var researches = gameData.ELEMENTS[gameData.FAMILIES.research][gameContent.players[gameContent.myArmy].r];
+			elementBought = researches[('' + buttonId).substring(2)];
+		}
+		
+		gameManager.sendOrderToEngine(order.TYPES.buy, [gameContent.selected, elementBought]);
 	}
 	
 }

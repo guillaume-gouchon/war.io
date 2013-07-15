@@ -2,7 +2,8 @@ gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.tomatoes.id] = {
 	builder: {
 		name: 'Builder',
 		tooltip: 'Builder (B)',
-		r: 0,
+		f: gameData.FAMILIES.unit,
+		r: gameData.RACES.tomatoes.id,
 		t: 0,
 		shape: [[1]],
 		speed: 1,
@@ -29,7 +30,8 @@ gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.tomatoes.id] = {
 	baseUnit1: {
 		name: 'Gunner',
 		tooltip: 'Gunner (D)',
-		r: 0,
+		f: gameData.FAMILIES.unit,
+		r: gameData.RACES.tomatoes.id,
 		t: 1,
 		shape: [[1]],
 		speed: 1,
@@ -54,7 +56,8 @@ gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.tomatoes.id] = {
 	baseUnit2: {
 		name: 'Tom Rambo',
 		tooltip: 'Tom Rambo (M)',
-		r: 0,
+		f: gameData.FAMILIES.unit,
+		r: gameData.RACES.tomatoes.id,
 		t: 1,
 		shape: [[1]],
 		speed: 1,
@@ -79,7 +82,8 @@ gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.tomatoes.id] = {
 	baseUnit3: {
 		name: 'Minigun',
 		tooltip: 'Minigun (N)',
-		r: 0,
+		f: gameData.FAMILIES.unit,
+		r: gameData.RACES.tomatoes.id,
 		t: 1,
 		shape: [[1]],
 		speed: 1,
@@ -104,7 +108,8 @@ gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.tomatoes.id] = {
 	spceialUnit1: {
 		name: 'Boomer',
 		tooltip: 'Boomer (P)',
-		r: 0,
+		f: gameData.FAMILIES.unit,
+		r: gameData.RACES.tomatoes.id,
 		t: 1,
 		shape: [[1]],
 		speed: 1,

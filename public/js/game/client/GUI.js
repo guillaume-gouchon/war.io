@@ -225,7 +225,7 @@ GUI.updateToolbar = function () {
 				// building is not finished yet, show cancel button
 				this.toolbar = [gameData.BUTTONS.cancel];
 			} else {
-				this.toolbar = production.getWhatCanBeBought(gameData.FAMILIES.unit, gameContent.players, selected.o, tools.getElementDataFrom(gameData.FAMILIES.building, selected.r, selected.t).buttons);
+				this.toolbar = production.getWhatCanBeBought(gameContent.players, selected.o, tools.getElementDataFrom(gameData.FAMILIES.building, selected.r, selected.t).buttons);
 			}
 		} else if (selected.f == gameData.FAMILIES.unit) {
 
@@ -292,7 +292,7 @@ GUI.convertToMinimapPosition = function (x, y) {
 *	Returns the list of the buildings which can be built by the builder(s) selected.
 */
 GUI.getBuildingButtons = function (builder) {
-	return production.getWhatCanBeBought(gameData.FAMILIES.building, gameContent.players, builder.o, gameData.ELEMENTS[gameData.FAMILIES.building][builder.r]);
+	return production.getWhatCanBeBought(gameContent.players, builder.o, gameData.ELEMENTS[gameData.FAMILIES.building][builder.r]);
 }
 
 

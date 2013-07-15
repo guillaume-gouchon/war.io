@@ -2,7 +2,8 @@ gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.lemons.id] = {
 	builder: {
 		name: 'Builder',
 		tooltip: 'Builder (B)',
-		r: 0,
+		f: gameData.FAMILIES.unit,
+		r: gameData.RACES.lemons.id,
 		t: 0,
 		shape: [[1]],
 		speed: 1,
@@ -29,7 +30,8 @@ gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.lemons.id] = {
 	baseUnit1: {
 		name: 'Dart Thrower',
 		tooltip: 'Dart Thrower (D)',
-		r: 0,
+		f: gameData.FAMILIES.unit,
+		r: gameData.RACES.lemons.id,
 		t: 1,
 		shape: [[1]],
 		speed: 1,
@@ -54,7 +56,8 @@ gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.lemons.id] = {
 	baseUnit2: {
 		name: 'Shuriken Maniac',
 		tooltip: 'Shuriken Maniac (M)',
-		r: 0,
+		f: gameData.FAMILIES.unit,
+		r: gameData.RACES.lemons.id,
 		t: 1,
 		shape: [[1]],
 		speed: 1,
@@ -79,7 +82,8 @@ gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.lemons.id] = {
 	baseUnit3: {
 		name: 'Ninja',
 		tooltip: 'Ninja (N)',
-		r: 0,
+		f: gameData.FAMILIES.unit,
+		r: gameData.RACES.lemons.id,
 		t: 1,
 		shape: [[1]],
 		speed: 1,
@@ -104,7 +108,8 @@ gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.lemons.id] = {
 	spceialUnit1: {
 		name: 'Pyrotechnician',
 		tooltip: 'Pyrotechnician (P)',
-		r: 0,
+		f: gameData.FAMILIES.unit,
+		r: gameData.RACES.lemons.id,
 		t: 1,
 		shape: [[1]],
 		speed: 1,

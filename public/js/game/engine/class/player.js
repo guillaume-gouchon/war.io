@@ -9,6 +9,7 @@ gameData.Player = function (playerId, owner, race, isAI) {
 	this.s = gameData.PLAYER_STATUSES.ig;//player's status
 	
 	this.tec = [];// researchs owned by the player, can be buildings
+	this.tecC = [];// researchs being researched
 
 	this.pop = {max : 0, current : 0};// player's population info
 

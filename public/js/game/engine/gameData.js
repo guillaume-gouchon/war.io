@@ -7,14 +7,15 @@ var gameData = {}
 gameData.FAMILIES = {
 	unit : 0,
 	building : 1,
-	land : 2
+	land : 2,
+	research : 3
 }
 
 
 /**
 *	Big array containing all the elements data.
 */
-gameData.ELEMENTS = [[], [] ,[]];
+gameData.ELEMENTS = [[], [] ,[], []];
 gameData.BASECAMPS = [];
 
 

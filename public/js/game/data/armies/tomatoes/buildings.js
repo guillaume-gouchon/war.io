@@ -2,11 +2,12 @@ gameData.ELEMENTS[gameData.FAMILIES.building][gameData.RACES.tomatoes.id] = {
 	mothertree: {
 		name: 'Mother Tree',
 		tooltip: 'Mother Tree (M)',
-		r: 0,
+		f: gameData.FAMILIES.building,
+		r: gameData.RACES.tomatoes.id,
 		t: 0,
 		shape: [[1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1], [1, 1, 1, 1, 1]],
 		timeConstruction: 80,
-		buttons: [gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.tomatoes.id].builder],
+		buttons: [gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.tomatoes.id].builder, gameData.ELEMENTS[gameData.FAMILIES.research][gameData.RACES.tomatoes.id].doublekatana, gameData.ELEMENTS[gameData.FAMILIES.research][gameData.RACES.tomatoes.id].triplekatana],
 		needs: [{t: gameData.RESOURCES.wood.id, value: 300}, {t: gameData.RESOURCES.water.id, value: 300}],
 		l: 500,
 		defense: 0,
@@ -16,12 +17,14 @@ gameData.ELEMENTS[gameData.FAMILIES.building][gameData.RACES.tomatoes.id] = {
 		gui: 'ic_tomato_mothertree.png',
 		height: 21,
 		vision: 15,
-		lifeBarWidth: 50
+		lifeBarWidth: 50,
+		key: 'mothertree'
 	},
 	house: {
 		name: 'House',
 		tooltip: 'House (O)',
-		r: 0,
+		f: gameData.FAMILIES.building,
+		r: gameData.RACES.tomatoes.id,
 		t: 1,
 		shape: [[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1], [1, 1 , 1 , 1]],
 		timeConstruction: 40,
@@ -35,12 +38,14 @@ gameData.ELEMENTS[gameData.FAMILIES.building][gameData.RACES.tomatoes.id] = {
 		gui: 'ic_tomato_house.png',
 		height: 12,
 		vision: 15,
-		lifeBarWidth: 40
+		lifeBarWidth: 40,
+		key: 'house'
 	},
 	casern: {
 		name: 'Casern',
 		tooltip: 'Casern (C)',
-		r: 0,
+		f: gameData.FAMILIES.building,
+		r: gameData.RACES.tomatoes.id,
 		t: 2,
 		shape: [[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1]],
 		timeConstruction: 60,
@@ -54,12 +59,14 @@ gameData.ELEMENTS[gameData.FAMILIES.building][gameData.RACES.tomatoes.id] = {
 		gui: 'ic_tomato_casern.png',
 		height: 18,
 		vision: 15,
-		lifeBarWidth: 40
+		lifeBarWidth: 40,
+		key: 'casern'
 	},
 	researchlab: {
 		name: 'Research Lab',
 		tooltip: 'Research Lab (R)',
-		r: 0,
+		f: gameData.FAMILIES.building,
+		r: gameData.RACES.tomatoes.id,
 		t: 3,
 		shape: [[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1]],
 		timeConstruction: 45,
@@ -73,12 +80,14 @@ gameData.ELEMENTS[gameData.FAMILIES.building][gameData.RACES.tomatoes.id] = {
 		gui: 'ic_tomato_researchlab.png',
 		height: 18,
 		vision: 15,
-		lifeBarWidth: 40
+		lifeBarWidth: 40,
+		key: 'researchlab'
 	},
 	tower: {
 		name: 'Tiny Tree',
 		tooltip: 'Tiny Tree (T)',
-		r: 0,
+		f: gameData.FAMILIES.building,
+		r: gameData.RACES.tomatoes.id,
 		t: 4,
 		shape: [[1, 1, 1], [1, 1, 1], [1, 1, 1]],
 		timeConstruction: 45,
@@ -96,12 +105,14 @@ gameData.ELEMENTS[gameData.FAMILIES.building][gameData.RACES.tomatoes.id] = {
 		attack: 6, 
 		weaponType: fightLogic.WEAPON_TYPES.piercing,
 		range: 20,
-		lifeBarWidth: 30
+		lifeBarWidth: 30,
+		key: 'tower'
 	},
 	factory: {
 		name: 'Factory',
 		tooltip: 'Factory (F)',
-		r: 0,
+		f: gameData.FAMILIES.building,
+		r: gameData.RACES.tomatoes.id,
 		t: 5,
 		shape: [[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1]],
 		timeConstruction: 45,
@@ -115,6 +126,7 @@ gameData.ELEMENTS[gameData.FAMILIES.building][gameData.RACES.tomatoes.id] = {
 		gui: 'ic_tomato_factory.png',
 		height: 18,
 		vision: 15,
-		lifeBarWidth: 40
+		lifeBarWidth: 40,
+		key: 'factory'
 	}
 };
