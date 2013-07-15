@@ -509,11 +509,13 @@ button.red:hover {
 }
 #bgLeft {
     -webkit-animation: bounce1 0.5s ease infinite alternate;
+    margin-left: 5%;
 }
 
 #bgRight {
     -webkit-animation: bounce2 0.5s ease infinite alternate 0.8s;
     right: 0px;
+    margin-right: 5%;
 }
 @-webkit-keyframes bounce1{
      from {-webkit-transform: translateY(0px);}
