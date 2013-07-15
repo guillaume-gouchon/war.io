@@ -349,12 +349,18 @@ production.sellsElement = function (game, owner, element) {
 *	Filters the list of things which can be bought depending 
 *	on its needs (resources, researchs, etc...).
 */
-production.getWhatCanBeBought = function (players, owner, elements) {
+production.getWhatCanBeBought = function (family, players, owner, elements) {
 	var array = [];
 	for(var key in elements) {
 		var element = elements[key];
 		element.isEnabled = this.canBuyIt(players, owner, element);
+		element.id = '' + family + element.r + element.t;
 		array.push(element);
+	}
+
+	// add back button
+	if (family == gameData.FAMILIES.building) {
+		array.splice(4, 0, gameData.BUTTONS.back);
 	}
 	return array;
 }
