@@ -54,7 +54,7 @@ fightLogic.attack = function (game, attacker, target) {
 	var defenderData = tools.getElementData(target);
 
 	var attackFactor = this.WEAPONS_EFFICIENCY[attackerData.weaponType][defenderData.armorType]; 
-	var damage = Math.max(0, parseInt(attackerData.attack * attackFactor * (1 + 0.2 * Math.random())) - defenderData.defense);
+	var damage = Math.max(0, parseInt(accessors.getStat(game.players, attacker.o, attackerData, this.STATS_BUFF.attack) * attackFactor * (1 + 0.2 * Math.random())) - accessors.getStat(game.players, target.o, defenderData, this.STATS_BUFF.defense));
 
 	this.applyDamage(game, damage, target, attacker);
 

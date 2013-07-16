@@ -25,7 +25,8 @@ gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.tomatoes.id] = {
 		height: 6,
 		range: 1,
 		vision: 12,
-		lifeBarWidth: 8
+		lifeBarWidth: 8,
+		techs: [gameData.ELEMENTS[gameData.FAMILIES.research][gameData.RACES.tomatoes.id].doublekatana.t]
 	},
 	baseUnit1: {
 		name: 'Gunner',

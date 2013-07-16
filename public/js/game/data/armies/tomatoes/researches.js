@@ -6,10 +6,8 @@ gameData.ELEMENTS[gameData.FAMILIES.research][gameData.RACES.tomatoes.id] = {
 		name: 'Double katana',
 		tooltip: 'Double Katana (+ 5 atk)',
 		timeConstruction: 5,
-		needs: [{t: gameData.RESOURCES.wood.id, value: 10}, {t: gameData.RESOURCES.water.id, value: 10}, {t: gameData[gameData.FAMILIES.building][gameData.RACES.lemon.id].house.t}],
+		needs: [{t: gameData.RESOURCES.wood.id, value: 10}, {t: gameData.RESOURCES.water.id, value: 10}, {t: 'house'}],
 		gui: 'ic_lemon_mothertree.png',
-		targetFamily: null,
-		targetTypes: [gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.tomatoes.id].baseUnit1],
 		addPassiveSkills: [],
 		addStats: [{stat: fightLogic.STATS_BUFF.attack, value: 5}]
 	},
@@ -22,8 +20,6 @@ gameData.ELEMENTS[gameData.FAMILIES.research][gameData.RACES.tomatoes.id] = {
 		timeConstruction: 10,
 		needs: [{t: gameData.RESOURCES.wood.id, value: 20}, {t: gameData.RESOURCES.water.id, value: 20}, {t: 'doublekatana'}],
 		gui: 'ic_lemon_mothertree.png',
-		targetFamily: null,
-		targetTypes: [gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.tomatoes.id].baseUnit1],
 		addPassiveSkills: [],
 		addStats: [{stat: fightLogic.STATS_BUFF.attack, value: 5}]
 	}

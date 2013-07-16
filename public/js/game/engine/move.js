@@ -14,56 +14,56 @@ move.ASTAR_MAX_RADIUS_SEARCH = 10;
 */
 move.moveElement = function (game, element, destination) {
   var elementData = tools.getElementData(element);
-
-    if (game.iterate % elementData.speed == 0) {
+  
+  if (game.iterate % accessors.getStat(game.players, element.o, elementData, fightLogic.STATS_BUFF.speed) == 0) {
 
         // if destination forbids movement, search neighbors for a new one
-      	var counter = 0;
-      	grosBoucle : while(game.grid[destination.x][destination.y].c > 0 && counter < this.DESTINATION_SEARCH_NUMBER) {
-      		counter ++;
-      	    var endNeighbors = astar.neighbors(game.grid, destination.x, destination.y, true);
-      	    for(var i in endNeighbors){
+        var counter = 0;
+        grosBoucle : while(game.grid[destination.x][destination.y].c > 0 && counter < this.DESTINATION_SEARCH_NUMBER) {
+          counter ++;
+          var endNeighbors = astar.neighbors(game.grid, destination.x, destination.y, true);
+          for(var i in endNeighbors){
                 if(endNeighbors[i].c == 0) {// if this tile is free, let's go there !
-                    destination = endNeighbors[i];
-                    element.a.moveTo = {x : destination.x, y : destination.y};
-                    break grosBoucle;
-                }
-      	    }
+                  destination = endNeighbors[i];
+                element.a.moveTo = {x : destination.x, y : destination.y};
+                break grosBoucle;
+              }
+            }
             destination = {x: endNeighbors[1].x, y : endNeighbors[1].y};
-      	}
+          }
 
         if (destination.c > 0) {// if destination is unreachable for now, stop the movement
-            element.a.moveTo = null;
-            return;
+          element.a.moveTo = null;
+          return;
         }
-      	
+        
       	// use A* algorithm to find the path
       	var path = astar.search(game.grid, element.p, game.grid[destination.x][destination.y], true);
 
       	if(path.length > 0) {
 
   			// remove old position
-            var shape = elementData.shape;
-  			for (var i in shape) {
-  				for (var j in shape[i]) {
-  					if (shape[i][j] > 0) {
-  						var partPosition = tools.getPartPosition(element, i, j);
-  						game.grid[partPosition.x][partPosition.y].c = 0;
-  					}
-  				}
-  			}
+        var shape = elementData.shape;
+        for (var i in shape) {
+          for (var j in shape[i]) {
+           if (shape[i][j] > 0) {
+            var partPosition = tools.getPartPosition(element, i, j);
+            game.grid[partPosition.x][partPosition.y].c = 0;
+          }
+        }
+      }
 
   			// update new position
   			element.p.x = path[0].x;
         element.p.y = path[0].y;
-  			for (var i in shape) {
-  				for (var j in shape[i]) {
-  					if (shape[i][j] > 0) {
-  						var partPosition = tools.getPartPosition(element, i, j);
-  						game.grid[partPosition.x][partPosition.y].c = element.id;
-  					}
-  				}
-  			}
+        for (var i in shape) {
+          for (var j in shape[i]) {
+           if (shape[i][j] > 0) {
+            var partPosition = tools.getPartPosition(element, i, j);
+            game.grid[partPosition.x][partPosition.y].c = element.id;
+          }
+        }
+      }
 
       		// if element has arrived to its destination, updates its order
       		if(element.a.moveTo.x == element.p.x && element.a.moveTo.y == element.p.y) {
@@ -73,9 +73,9 @@ move.moveElement = function (game, element, destination) {
               element.a = null;
               
               if (element.pa.length > 0) {
-            
+                
                 order.goToElementNextOrder(game, element);
-            
+                
               }
               
             } else {
@@ -84,10 +84,10 @@ move.moveElement = function (game, element, destination) {
               element.fl = gameData.ELEMENTS_FLAGS.nothing;
 
             }
-      		}
-      	}
+          }
+        }
+      }
     }
-}
 
 
 
@@ -104,23 +104,23 @@ var astar = {
     var yf = Math.min(grid.length, Math.max(start.y, end.y) + move.ASTAR_MAX_RADIUS_SEARCH);
 
     for(var x = xi; x < xf; x++) {
-        for(var y = yi; y < yf; y++) {
-            var node = grid[x][y];
-            node.f = 0;
-            node.g = 0;
-            node.h = 0;
-            node.cost = 1;
-            node.visited = false;
-            node.closed = false;
-            node.parent = null;
-        }
+      for(var y = yi; y < yf; y++) {
+        var node = grid[x][y];
+        node.f = 0;
+        node.g = 0;
+        node.h = 0;
+        node.cost = 1;
+        node.visited = false;
+        node.closed = false;
+        node.parent = null;
+      }
     }
   },
 
   heap: function() {
-      return new BinaryHeap(function(node) { 
-          return node.f; 
-      });
+    return new BinaryHeap(function(node) { 
+      return node.f; 
+    });
   },
 
   search: function(grid, start, end, diagonal, heuristic) {
@@ -139,13 +139,13 @@ var astar = {
 
       // End case -- result has been found, return the traced path.
       if(currentNode === end || openHeap.size() > this.ASTAR_MAX_STEPS_SEARCH) {
-          var curr = currentNode;
-          var ret = [];
-          while(curr.parent) {
-              ret.push(curr);
-              curr = curr.parent;
-          }
-          return ret.reverse();
+        var curr = currentNode;
+        var ret = [];
+        while(curr.parent) {
+          ret.push(curr);
+          curr = curr.parent;
+        }
+        return ret.reverse();
       }
       // Normal case -- move currentNode from open to closed, process each of its neighbors.
       currentNode.closed = true;
@@ -154,11 +154,11 @@ var astar = {
       var neighbors = astar.neighbors(grid, currentNode.x, currentNode.y, diagonal);
 
       for(var i = 0, il = neighbors.length; i < il; i++) {
-          var neighbor = neighbors[i];
-          if(neighbor.closed || neighbor.c > 0) {
+        var neighbor = neighbors[i];
+        if(neighbor.closed || neighbor.c > 0) {
               // Not a valid node to process, skip to next neighbor.
               continue;
-          }
+            }
 
           // The g score is the shortest distance from start to current node.
           // We need to check if the path we have arrived at this neighbor is the shortest one we have seen yet.
@@ -176,14 +176,14 @@ var astar = {
               if (!beenVisited) {
                   // Pushing to heap will put it in proper place based on the 'f' value.
                   openHeap.push(neighbor);
-              }
-              else {
+                }
+                else {
                   // Already seen the node, but since it has been rescored we need to reorder it in the heap
                   openHeap.rescoreElement(neighbor);
+                }
               }
+            }
           }
-      }
-    }
 
     // No result was found - empty array signifies failure to find path.
     return [];   
@@ -195,59 +195,59 @@ var astar = {
       var d1 = Math.abs (pos1.x - pos0.x);
       var d2 = Math.abs (pos1.y - pos0.y);
       return d1 + d2;
-  },
+    },
 
-  neighbors: function(grid, x, y, diagonals) {
+    neighbors: function(grid, x, y, diagonals) {
       var ret = [];
 
       // West
       if(grid[x-1] && grid[x-1][y]) {
-          ret.push(grid[x-1][y]);
+        ret.push(grid[x-1][y]);
       }
 
       // East
       if(grid[x+1] && grid[x+1][y]) {
-          ret.push(grid[x+1][y]);
+        ret.push(grid[x+1][y]);
       }
 
       // South
       if(grid[x] && grid[x][y-1]) {
-          ret.push(grid[x][y-1]);
+        ret.push(grid[x][y-1]);
       }
 
       // North
       if(grid[x] && grid[x][y+1]) {
-          ret.push(grid[x][y+1]);
+        ret.push(grid[x][y+1]);
       }
 
       if (diagonals) {
 
           // Southwest
           if(grid[x-1] && grid[x-1][y-1]) {
-              ret.push(grid[x-1][y-1]);
+            ret.push(grid[x-1][y-1]);
           }
 
           // Southeast
           if(grid[x+1] && grid[x+1][y-1]) {
-              ret.push(grid[x+1][y-1]);
+            ret.push(grid[x+1][y-1]);
           }
 
           // Northwest
           if(grid[x-1] && grid[x-1][y+1]) {
-              ret.push(grid[x-1][y+1]);
+            ret.push(grid[x-1][y+1]);
           }
 
           // Northeast
           if(grid[x+1] && grid[x+1][y+1]) {
-              ret.push(grid[x+1][y+1]);
+            ret.push(grid[x+1][y+1]);
           }
 
+        }
+
+        return ret;
       }
 
-      return ret;
-  }
-
-};
+    };
 
 // Binary Heap
 // Taken from http://eloquentjavascript.net/appendix2.html
@@ -314,7 +314,7 @@ BinaryHeap.prototype = {
     while (n > 0) {
       // Compute the parent element's index, and fetch it.
       var parentN = Math.floor((n + 1) / 2) - 1,
-          parent = this.content[parentN];
+      parent = this.content[parentN];
       // Swap the elements if the parent is greater.
       if (this.scoreFunction(element) < this.scoreFunction(parent)) {
         this.content[parentN] = element;
@@ -332,8 +332,8 @@ BinaryHeap.prototype = {
   bubbleUp: function(n) {
     // Look up the target element and its score.
     var length = this.content.length,
-        element = this.content[n],
-        elemScore = this.scoreFunction(element);
+    element = this.content[n],
+    elemScore = this.scoreFunction(element);
 
     while(true) {
       // Compute the indices of the child elements.
@@ -345,7 +345,7 @@ BinaryHeap.prototype = {
       if (child1N < length) {
         // Look it up and compute its score.
         var child1 = this.content[child1N],
-            child1Score = this.scoreFunction(child1);
+        child1Score = this.scoreFunction(child1);
         // If the score is less than our element's, we need to swap.
         if (child1Score < elemScore)
           swap = child1N;
@@ -353,7 +353,7 @@ BinaryHeap.prototype = {
       // Do the same checks for the other child.
       if (child2N < length) {
         var child2 = this.content[child2N],
-            child2Score = this.scoreFunction(child2);
+        child2Score = this.scoreFunction(child2);
         if (child2Score < (swap == null ? elemScore : child1Score))
           swap = child2N;
       }

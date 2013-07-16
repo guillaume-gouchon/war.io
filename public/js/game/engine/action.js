@@ -54,7 +54,8 @@ action.doTheBuild = function (game, element, building) {
 *	Basic attack action.
 */
 action.doTheAttack = function (game, element, target) {
-	if(game.iterate % (this.ATTACK_SPEED_CONSTANT - tools.getElementData(element).attackSpeed) == 0) {
+	var elementData = tools.getElementData(element);
+	if(game.iterate % (this.ATTACK_SPEED_CONSTANT - accessors.getStat(game.players, element.o, elementData, fightLogic.STATS_BUFF.attackSpeed)) == 0) {
 
 		fightLogic.attack(game, element, target);
 		element.fl = gameData.ELEMENTS_FLAGS.attacking;
