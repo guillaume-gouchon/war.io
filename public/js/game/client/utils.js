@@ -51,3 +51,16 @@ utils.canBeBuiltHere = function (building) {
 utils.getElementFromId = function (id) {
 	return gameContent.gameElements[Object.keys(gameData.FAMILIES)[('' + id)[1]]][id];
 }
+
+utils.copyValuesToObject = function (src, dst) {
+    if(src == null || typeof(src) != 'object')
+        return src;
+
+	for (var attr in src) {
+		console.log(attr);
+		if (dst[attr] == undefined)
+			dst[attr] = {};
+		dst[attr] = utils.copyValuesToObject(src[attr], dst[attr]);
+	}
+	return dst;
+}
