@@ -312,6 +312,18 @@ GUI.convertToMinimapPosition = function (x, y) {
 	};
 }
 
+GUI.fromRealToMinimapPosition = function (x, y) {
+	var pos = {
+		x: parseInt(x / (gameContent.map.size.x * gameSurface.PIXEL_BY_NODE) * this.minimapSize),
+		y: parseInt(y / (gameContent.map.size.y * gameSurface.PIXEL_BY_NODE) * this.minimapSize)
+	};
+	if (pos.x < 0) pos.x = 0;
+	else if (pos.x > this.minimapSize-1) pos.x = this.minimapSize-1;
+	if (pos.y < 0) pos.y = 0;
+	else if (pos.y > this.minimapSize-1) pos.y = this.minimapSize-1;
+	return pos;
+}
+
 
 /**
 *	Returns the list of the buildings which can be built by the builder(s) selected.

@@ -82,6 +82,8 @@ gameSurface.minimapCanvas;
 gameSurface.minimapContext;
 gameSurface.minimapData;
 
+gameSurface.cameraMinimapPosition = {x:0, y:0};
+
 
 /**
 *	Initializes the game surface.
@@ -98,6 +100,13 @@ gameSurface.init = function () {
 
 	// init camera controls / input
 	controls = new THREE.TrackballControls(camera);
+
+	controls.addEventListener('change', function (event) {
+		console.log(event);
+		var pos = event.target.target;
+		gameSurface.cameraMinimapPosition = GUI.fromRealToMinimapPosition(pos.x, pos.y);
+		// console.log("camera game position: x=" + mapPos.x + ", y=" + mapPos.y);
+	});
 
 	// init simple fog
 	//scene.fog = new THREE.Fog( 0xffffff, this.FOG_DENSITY, 1200);
@@ -637,6 +646,9 @@ gameSurface.updateElement = function (element) {
 
 	var visible = gameElement.visible;
 	var modelVisible = gameElement.modelVisible;
+
+
+	//gameElement = utils.copyValuesToObject(element, gameElement);
 	if (gameManager.isOfflineGame) {
 		gameContent.gameElements[Object.keys(gameData.FAMILIES)[element.f]][element.id] = element.toJSON();
 	} else {
@@ -929,7 +941,11 @@ gameSurface.updateMinimap = function() {
 	var xy = 0, r,g,b,a,vision;
 	for (var y = gameContent.map.size.y-1, maxY=0; y >= maxY; y--) {
 		for (var x = 0, maxX=gameContent.map.size.x; x < maxX; x++, xy += 4) {
-			if (this.deepFogOfWarMatrix[x][y] == 0) {
+			/*if (this.cameraMinimapPosition.x == x && this.cameraMinimapPosition.y == y) {
+			    r=0;
+			    g=b=a=255;
+			}
+			else */if (this.deepFogOfWarMatrix[x][y] == 0) {
 				r=g=b=0;
 			} else if (this.fogOfWarMatrix[x][y] == 0) {
 				this.minimapData.data[xy + 3] = 128;
@@ -977,4 +993,15 @@ gameSurface.updateMinimap = function() {
 		}
 	}
 	this.minimapContext.putImageData(this.minimapData, 0, 0);
+	var ctx = this.minimapContext;
+	var pos = this.cameraMinimapPosition;
+	var x = pos.x;
+	var y = gameContent.map.size.y - pos.y;
+	ctx.fillStyle = "rgb(255,0,255)";
+	ctx.beginPath();
+	ctx.moveTo(x - 5, y + 5);
+	ctx.lineTo(x + 5, y + 5);
+	ctx.lineTo(x, y - 7);
+	ctx.lineTo(x - 5, y + 5);
+	ctx.fill();
 }
