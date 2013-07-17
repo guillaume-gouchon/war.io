@@ -400,28 +400,10 @@ gameSurface.MESSAGES = {
 *	Shows a message then disappear.
 */
 gameSurface.showMessage = function (message, color) {
-	if ($('#message' + message.id).length == 0) {
-		$('#messages').append('<div><div id="message' + message.id + '" class="fadeOut easeTransition">' + message.text + '</div></div>');
-		if (color == null) {
-			$('#message' + message.id).addClass('white');
-		} else {
-			$('#message' + message.id).addClass(color);
-		}
-		var tweenFadeIn = new TWEEN.Tween({alpha:0}).to({alpha:1}, 100)
-		.onComplete(function () {
-			$('#message' + message.id).removeClass('fadeOut');
-		}).start();
-		var tweenFadeOut = new TWEEN.Tween({alpha:0}).to({alpha:1}, 9000)
-		.onComplete(function () {
-			$('#message' + message.id).addClass('fadeOut');
-		});
-		var tweenHide = new TWEEN.Tween({alpha:0}).to({alpha:1}, 500)
-		.onComplete(function () {
-			$('#message' + message.id).parent('div').remove();
-		});
-		tweenFadeIn.chain(tweenFadeOut);
-		tweenFadeOut.chain(tweenHide);
-	}
+	$('#messages').removeClass('hide');
+	var date = new Date();
+	$('#messages').append('<div>' + date.getHours() + ':' + date.getMinutes() + ':' + (date.getSeconds() < 10 ? '0':'') + date.getSeconds() + '<span class="' + (color == null ? 'white': color) + '">' + message.text + '</span></div>')
+				.scrollTop(10000);
 }
 
 
