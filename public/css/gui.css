@@ -234,7 +234,9 @@ div.lowLife {
 }
 
 
-
+/**
+*   TOOLTIPS
+*/
 .tooltip .price {
   display: inline-block;
   padding-left: 10px;
@@ -245,10 +247,62 @@ div.lowLife {
 }
 
 
-
-
-
-
+/**
+*   CHAT
+*/
+#messages {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  min-height: 0px;
+  max-height: 16%;
+  width: 25%;
+  overflow: auto;
+  padding: 3px;
+  opacity: 0.8;
+  background: #000;
+  box-shadow: 0px 0px 5px 5px #000;
+}
+#messages div {
+  font-size: 0.8em;
+  padding: 2px 5px 2px 5px;
+  color: #eee;
+}
+#messages div span {
+    font-size: 1.3em;
+  margin-left: 10px;
+}
+.red {
+    color: #C41616;
+}
+.blue {
+    color: #9E9EF0;
+}
+.green {
+    color: #70CC83;
+}
+.yellow {
+    color: #EDC71C;
+}
+.black {
+    color: #000;
+}
+.white {
+    color: #eee;
+}
+::-webkit-scrollbar {
+    width: 12px;
+}
+ 
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(200,200,200,0.3);
+    border-radius: 10px;
+}
+ 
+::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: inset 0 0 6px rgba(200,200,200,0.5);
+    border-radius: 10px;
+}
 
 
 
@@ -286,20 +340,7 @@ div.lowLife {
 }
 
 
-#messages {
-  position: absolute;
-  top: 80px;
-  left: 20px;
-}
 
-#messages div div {
-  font-size: 1.2em;
-  color: #111;
-  margin-bottom: 5px;
-  padding: 10px;
-  opacity: 0.7;
-  float: left;
-}
 
 .fadeOut {
   opacity: 0!important;
@@ -337,29 +378,6 @@ div.lowLife {
     text-align: center;
 }
 
-.red {
-    background: #C41616;
-}
-
-.blue {
-    background: #9E9EF0;
-}
-
-.green {
-    background: #70CC83;
-}
-
-.yellow {
-    background: #EDC71C;
-}
-
-.black {
-    background: #000;
-}
-
-.white {
-    background: #eee;
-}
 
 
 #firstHalfInfo {
