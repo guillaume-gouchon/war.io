@@ -82,9 +82,14 @@ gameSurface.minimapCanvas;
 gameSurface.minimapContext;
 gameSurface.minimapData;
 
+gameSurface.planeSurface;
+gameSurface.transparentSurface;
+
 gameSurface.cameraMinimapPosition = {x:0, y:0};
+gameSurface.cameraMinimapAngle = 0;
+gameSurface.cameraVisionCorners = [0, 0, 0, 0];
 
-
+var chibre = 0;
 /**
 *	Initializes the game surface.
 */
@@ -102,9 +107,14 @@ gameSurface.init = function () {
 	controls = new THREE.TrackballControls(camera);
 
 	controls.addEventListener('change', function (event) {
-		console.log(event);
+		/*if (chibre++ % 10 == 0)
+			console.log(event);
 		var pos = event.target.target;
+		var cameraPos = event.target.object.position;
+		gameSurface.cameraMinimapAngle = Math.atan2(pos.x- cameraPos.x, - pos.y, cameraPos.y);
 		gameSurface.cameraMinimapPosition = GUI.fromRealToMinimapPosition(pos.x, pos.y);
+		var targets = [gameSurface.transparentSurface];
+		console.log(gameSurface.getFirstIntersectObject(0,0,targets));*/
 		// console.log("camera game position: x=" + mapPos.x + ", y=" + mapPos.y);
 	});
 
@@ -163,6 +173,7 @@ gameSurface.init = function () {
 
 		gameSurface.updateMoveExtrapolation();
 
+		gameSurface.updateCameraViewBounds();
 		// animations
 		TWEEN.update();
 
@@ -261,14 +272,15 @@ gameSurface.createScene = function () {
 	var planeSurface = new THREE.Mesh(landGeometry, grassMaterial);
     planeSurface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
     planeSurface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
-    planeSurface.overdraw = true;
     scene.add(planeSurface);
+    this.planeSurface = planeSurface;
 
     var transparentSurface = new THREE.Mesh(new THREE.PlaneGeometry(5000, 5000), new THREE.MeshNormalMaterial({ transparent: true, opacity: 0 }));
 	transparentSurface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
     transparentSurface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
     transparentSurface.position.z = -3;
     scene.add(transparentSurface);
+    this.transparentSurface = transparentSurface;
 
 	this.fogOfWarMatrix = [];
 	this.deepFogOfWarMatrix = [];
@@ -712,17 +724,46 @@ gameSurface.getAbsolutePositionFromPixel = function (x, y) {
 
 
 /**
+*	Returns the game coordinates from some screen coordinates.
+*/
+gameSurface.getAbsolutePositionFromPixelNoBounds = function (x, y) {
+	var intersect = this.getFirstIntersectObject(x, y);
+	if (intersect != null) {
+		return this.convertScenePositionToGamePositionNoBounds(intersect.point);
+	} else {
+		return {x : 0, y : 0};
+	}
+}
+
+
+/**
 *	Returns first element which intersects with the mouse.
 */
-gameSurface.getFirstIntersectObject = function (x, y) {
+gameSurface.getFirstIntersectObject = function (x, y, targets) {
+	if (targets == undefined)
+		targets = scene.children;
 	var vector = new THREE.Vector3( ( x / window.innerWidth ) * 2 - 1, - ( y / window.innerHeight ) * 2 + 1, 0.5 );
 	this.projector.unprojectVector( vector, camera );
 	var raycaster = new THREE.Raycaster( camera.position, vector.sub( camera.position ).normalize() );
-	var intersects = raycaster.intersectObjects(scene.children);
+	var intersects = raycaster.intersectObjects(targets);
 	if ( intersects.length > 0 ) {
 		return intersects[0];	
 	}
 	return null;
+}
+
+
+/**
+*	Returns first element which intersects with the mouse.
+*/
+gameSurface.updateCameraViewBounds = function () {
+	this.cameraVisionCorners = [
+		this.getAbsolutePositionFromPixelNoBounds(0,0),
+		this.getAbsolutePositionFromPixelNoBounds(window.innerWidth,0),
+		this.getAbsolutePositionFromPixelNoBounds(window.innerWidth,window.innerHeight),
+		this.getAbsolutePositionFromPixelNoBounds(0,window.innerHeight),
+	];
+	//console.log(this.cameraVisionCorners);
 }
 
 
@@ -994,14 +1035,25 @@ gameSurface.updateMinimap = function() {
 	}
 	this.minimapContext.putImageData(this.minimapData, 0, 0);
 	var ctx = this.minimapContext;
-	var pos = this.cameraMinimapPosition;
+
+	var corners = gameSurface.cameraVisionCorners;
+	ctx.lineWidth = 1;
+	ctx.strokeStyle = "white";
+	ctx.beginPath();
+	ctx.moveTo(corners[3].x, gameContent.map.size.y - corners[3].y);
+	for (var i=0; i<4; i++)
+		ctx.lineTo(corners[i].x, gameContent.map.size.y - corners[i].y);
+	ctx.stroke();
+
+	/*var pos = this.cameraMinimapPosition;
 	var x = pos.x;
 	var y = gameContent.map.size.y - pos.y;
+	var angle = this.cameraMinimapAngle + Math.PI;
 	ctx.fillStyle = "rgb(255,0,255)";
 	ctx.beginPath();
-	ctx.moveTo(x - 5, y + 5);
-	ctx.lineTo(x + 5, y + 5);
-	ctx.lineTo(x, y - 7);
-	ctx.lineTo(x - 5, y + 5);
-	ctx.fill();
+	ctx.moveTo(x, y);
+	ctx.lineTo(x + (Math.cos(angle)+.2)*10, y + (Math.sin(angle)+.2)*10);
+	ctx.lineTo(x + (Math.cos(angle)-.2)*10, y + (Math.sin(angle)-.2)*10);
+	ctx.lineTo(x, y);
+	ctx.fill();*/
 }
