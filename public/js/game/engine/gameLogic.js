@@ -160,8 +160,7 @@ gameLogic.resolveActions = function (game, element) {
 					action.doTheAttack(game, element, target);
 
 				}
-
-			} else if (distance <= elementData.range) {
+			} else if (distance <= accessors.getStat(game.players, element.o, elementData, fightLogic.STATS_BUFF.range)) {
 
 				if (rank.isEnemy(game.players, element.o, target)) {
 					

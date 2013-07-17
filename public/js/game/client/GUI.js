@@ -192,17 +192,19 @@ GUI.updateInfoBar = function () {
 			}
 		} else {
 			$('.landOnly').addClass('hideI');
+
 			$('#lifeElement').html(element.l + '/' + elementData.l).attr('class', gameSurface.getLifeBarBackgroundColor() + ' stat');
-			$('#defenseStat').html(elementData.defense).removeClass('hideI');
 			// $('#armorTypeStat').html(elementData.armorType).removeClass('hideI');
 			$('#popStat').html(elementData.pop).removeClass('hideI');
+			$('#defenseStat').html(accessors.getStat(gameContent.players, element.o, elementData, fightLogic.STATS_BUFF.defense)).removeClass('hideI');
 
 			if (elementData.attack != null) {
 				$('.unitOnly').removeClass('hideI');
 				$('#fragsStat').html(element.fr);
-				$('#attackStat').html(elementData.attack);
-				$('#attackSpeedStat').html(elementData.attackSpeed);
-				$('#rangeStat').html(elementData.range);
+
+				$('#attackStat').html(accessors.getStat(gameContent.players, element.o, elementData, fightLogic.STATS_BUFF.attack));
+				$('#attackSpeedStat').html(accessors.getStat(gameContent.players, element.o, elementData, fightLogic.STATS_BUFF.attackSpeed));
+				$('#rangeStat').html(accessors.getStat(gameContent.players, element.o, elementData, fightLogic.STATS_BUFF.range));
 				// $('#weaponTypeStat').html(elementData.weaponType);
 
 			} else {
