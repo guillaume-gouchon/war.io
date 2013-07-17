@@ -147,9 +147,9 @@ userInput.doDoubleClick = function (x, y) {
 
 
 userInput.pressToolbarShortcut = function (i) {
-	if(i < GUI.toolbar.length) {
-		this.clickOnToolbar(GUI.toolbar[i]);
-	}
+	// if(i < GUI.toolbar.length) {
+	// 	this.clickOnToolbar(GUI.toolbar[i]);
+	// }
 }
 
 

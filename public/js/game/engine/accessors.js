@@ -27,7 +27,7 @@ accessors.getStat = function (players, owner, elementData, stat) {
 		var tech = elementData.techs[i];
 		var techData = gameData.ELEMENTS[gameData.FAMILIES.research][players[owner].r][tech];
 		for (var j in techData.addStats) {
-			if (techData.addStats[j].stat == stat && players[owner].techs.indexOf(tech) >= 0) {
+			if (techData.addStats[j].stat == stat && players[owner].tec.indexOf(tech) >= 0) {
 				n += parseInt(techData.addStats[j].value);
 			}
 		}

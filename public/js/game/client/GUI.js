@@ -56,7 +56,8 @@ GUI.init = function () {
 	    selector: '.enableTooltip'
 	});
 	$.extend($.fn.tooltip.defaults, {
-    	animation: false
+    	animation: false,
+    	html: true
 	});
 }
 
@@ -181,6 +182,7 @@ GUI.updateInfoBar = function () {
 			$('#defenseStat').addClass('hideI');
 			// $('#armorTypeStat').addClass('hideI');
 			$('#popStat').addClass('hideI');
+			$('#queueBuilding').addClass('hideI');
 			if (element.t == gameData.RESOURCES.wood.id) {
 				$('#resourcesStatWood').html(element.ra);
 				$('#resourcesStatWood').removeClass('hideI');
@@ -193,7 +195,7 @@ GUI.updateInfoBar = function () {
 		} else {
 			$('.landOnly').addClass('hideI');
 
-			$('#lifeElement').html(element.l + '/' + elementData.l).attr('class', gameSurface.getLifeBarBackgroundColor() + ' stat');
+			$('#lifeElement').html(element.l + '/' + elementData.l).attr('class', gameSurface.getLifeBarBackgroundColor(element.l / elementData.l) + ' stat');
 			// $('#armorTypeStat').html(elementData.armorType).removeClass('hideI');
 			$('#popStat').html(elementData.pop).removeClass('hideI');
 			$('#defenseStat').html(accessors.getStat(gameContent.players, element.o, elementData, fightLogic.STATS_BUFF.defense)).removeClass('hideI');
@@ -211,6 +213,21 @@ GUI.updateInfoBar = function () {
 				$('.unitOnly').addClass('hideI');
 			}
 
+			// add queue to buildings
+			if (element.f == gameData.FAMILIES.building && element.q.length > 0) {
+				$('#queueBuilding').html('');
+				// for (var i in element.q) {
+					// var q = gameData.ELEMENTS[gameData.FAMILIES.unit][building.r][element.q[i]];
+				// 	if (i == 0) {
+				// 		// adds progression
+				// 	}
+					// $('#queueBuilding').append('<button data-id="' + i + '" class="enableTooltip" title="Cancel ' + q.name + '"><img alt="element in progress" src="'+  GUI.IMAGES_PATH + q.gui + '"</button>');
+
+				// }
+				$('#queueBuilding').removeClass('hideI');
+			} else {
+				$('#queueBuilding').addClass('hideI');
+			}
 		}
 
 		$('#infoSelected').removeClass('hideI');
@@ -319,20 +336,24 @@ GUI.createToolbarButton = function (button) {
 	if ($('#toolbar' + button.id).html() != null) {
 		$('#toolbar' + button.id).removeClass('hide');
 	} else {
-		var div = '<button id="toolbar' + button.id + '" data-id="' + button.id + '" class="enableTooltip" data-toggle="tooltip" title="' + button.name + '"><img alt="' + button.name + '" src="' + GUI.IMAGES_PATH + button.gui + '"/></button>';
-		$('#specialButtons').append(div);
-
-		//add price
+		// build tooltip
+		var tooltip;
+		if (button.needs != null && button.needs.length > 0) {
+			tooltip = '<p>' + button.name + '</p>';
+		} else {
+			tooltip = button.name;
+		}
 		for (var i in button.needs) {
 			var need = button.needs[i];
-			for (var j in gameData.RESOURCES) {
-				if (gameData.RESOURCES[j].id == need.t) {
-					var bottom = (this.toolbar.length - 1) * GUI.BUTTONS_SIZE - $('#toolbar' + button.id).position().top + i * 20 + 10;
-					$('#toolbar' + button.id).append('<div class="price" style="bottom: ' + bottom + 'px"><div class="spriteBefore sprite-' + gameData.RESOURCES[j].gui + '" />' + need.value + '</div></div>');
-					break;
-				}
+			if (need.t >= 0) {
+				tooltip += '<p class="price"><img alt="requirement" src="' + GUI.IMAGES_PATH + gameData.RESOURCES[Object.keys(gameData.RESOURCES)[need.t]].image + '"/>' + need.value + '</p>';
+			} else {
+				tooltip += '<p>' + need.t + '</p>';
 			}
 		}
+
+		var div = '<button id="toolbar' + button.id + '" data-id="' + button.id + '" class="enableTooltip" data-toggle="tooltip" title=\'' + tooltip + '\'><img alt="' + button.name + '" src="' + GUI.IMAGES_PATH + button.gui + '"/></button>';
+		$('#specialButtons').append(div);
 	}
 	if(!button.isEnabled) {
 		$('#toolbar' + button.id).addClass('disabled');
@@ -361,13 +382,6 @@ GUI.unselectButtons = function () {
 
 
 
-
-/**
-*	Adds on stat line in the info box.
-*/
-GUI.addQueue = function(image, text, tooltip) {
-	$('#stats').append('<div class="queue" title="' + tooltip + '"><div id="queueProgress">' + text + '</div><div class="sprite sprite-' + image.replace('.png', '') + '15"></div></div>');
-}
 
 
 
