@@ -70,6 +70,7 @@ button.selected {
   opacity: 0.8;
   width: 88%;
   padding: 5px 0px 5px 0px;
+  box-shadow: -17px 5px 21px 20px #000;
 }
 #toolbar {
   display: inline-block;
@@ -95,6 +96,7 @@ button.selected {
   width: 12%;
   background: #000;
   opacity: 0.8;
+  box-shadow: 12px 5px 21px 20px #000;
 }
 #toolbar #specialButtons {
   display: block;
@@ -103,9 +105,10 @@ button.selected {
   display: inline-block;
   width: 30%;
   height: 80%;
-  border-right: 1px solid #111;
-  border-left: 1px solid #111;
   vertical-align: top;
+  padding-left: 3px;
+  padding-right: 3px;
+  text-align: center;
 }
 #listSelected button {
   padding: 3px;
@@ -195,7 +198,7 @@ div.veryHighLife {
   background: linear-gradient(to bottom, #FFE100 0%,#000000 100%); /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#FFE100', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
 }
-div.highlife {
+div.highLife {
   color: #FFE100;
 }
 .mediumLife {
@@ -232,7 +235,14 @@ div.lowLife {
 
 
 
-
+.tooltip .price {
+  display: inline-block;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.tooltip .price img {
+  padding-right: 6px;
+}
 
 
 
@@ -410,37 +420,6 @@ div.lowLife {
     height: 20px;
     width: 20px;
     vertical-align: middle;
-}
-
-.queue {
-    display: inline-block;
-    width: 15%;
-}
-
-.queue #queueProgress {
-    position: absolute;
-    top: 39px;
-    left: 188px;
-    color: rgb(224, 188, 25);
-    font-weight: bold;
-    font-size: 0.9em;
-}
-
-#toolbar .price {
-    position: absolute;
-    bottom: 0px;
-    left: 80px;
-    width: 50px;
-    line-height: 15px;
-    font-size: 0.5em;
-}
-
-#toolbar .price img {
-    display: inline-block;
-    height: 15px;
-    width: 15px;
-    margin-top: 0px;
-    margin-right: 3px;
 }
 
 .minimapPointBuilding {
