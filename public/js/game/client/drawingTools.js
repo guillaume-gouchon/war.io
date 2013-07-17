@@ -35,6 +35,18 @@ gameSurface.convertScenePositionToGamePosition = function (scenePosition) {
 	}
 }
 
+/**
+*	Converts a scene position to a game position.
+*	@param : scenePosition = {x: xPosition, y : yPosition}
+*	@return : gamePosition = {x : ... , y : ...}
+*/
+gameSurface.convertScenePositionToGamePositionNoBounds = function (scenePosition) {
+	return {
+		x : Math.min(gameContent.map.size.x - 1, parseInt(scenePosition.x / this.PIXEL_BY_NODE)),
+		y : Math.min(gameContent.map.size.y - 1, parseInt(scenePosition.y / this.PIXEL_BY_NODE))
+	}
+}
+
 
 /**
 *	Draws a selection circle.
