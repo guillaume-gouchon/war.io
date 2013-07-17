@@ -52,10 +52,12 @@ GUI.init = function () {
 	this.initCommonButtonsEvents();
 	this.initSpecialButtons();
 	this.initInfobarEvents();
-	$('.enableTooltip').tooltip({
-		animation: false
+	$('#gui').tooltip({
+	    selector: '.enableTooltip'
 	});
-	
+	$.extend($.fn.tooltip.defaults, {
+    	animation: false
+	});
 }
 
 
@@ -111,9 +113,13 @@ GUI.initInfobarEvents = function () {
 			gameContent.selected.splice(gameContent.selected.indexOf(elementId), 1);
 			gameSurface.unselectElement(elementId);
 		} else {
-			gameContent.selected = [elementId];
-			gameSurface.unselectAll();
-			gameSurface.selectElement(elementId);
+			if (gameContent.selected.length == 1) {
+				gameSurface.centerCameraOnElement(utils.getElementFromId(elementId));
+			} else {
+				gameContent.selected = [elementId];
+				gameSurface.unselectAll();
+				gameSurface.selectElement(elementId);
+			}
 		}
 	});
 	
@@ -173,9 +179,9 @@ GUI.updateInfoBar = function () {
 			$('.landOnly').removeClass('hideI');
 			$('.unitOnly').addClass('hideI');
 			$('#defenseStat').addClass('hideI');
-			$('#armorTypeStat').addClass('hideI');
+			// $('#armorTypeStat').addClass('hideI');
 			$('#popStat').addClass('hideI');
-			if (element.t == gameData.RESOURCES.water.id) {
+			if (element.t == gameData.RESOURCES.wood.id) {
 				$('#resourcesStatWood').html(element.ra);
 				$('#resourcesStatWood').removeClass('hideI');
 				$('#resourcesStatWater').addClass('hideI');
@@ -186,10 +192,10 @@ GUI.updateInfoBar = function () {
 			}
 		} else {
 			$('.landOnly').addClass('hideI');
-			$('#lifeElement').html(element.l + '/' + elementData.l);
+			$('#lifeElement').html(element.l + '/' + elementData.l).attr('class', gameSurface.getLifeBarBackgroundColor() + ' stat');
 			$('#defenseStat').html(elementData.defense).removeClass('hideI');
-			$('#armorTypeStat').html(elementData.armorType).removeClass('hideI');
-			$('#popStat').html(elementData.pop);
+			// $('#armorTypeStat').html(elementData.armorType).removeClass('hideI');
+			$('#popStat').html(elementData.pop).removeClass('hideI');
 
 			if (elementData.attack != null) {
 				$('.unitOnly').removeClass('hideI');
@@ -197,7 +203,7 @@ GUI.updateInfoBar = function () {
 				$('#attackStat').html(elementData.attack);
 				$('#attackSpeedStat').html(elementData.attackSpeed);
 				$('#rangeStat').html(elementData.range);
-				$('#weaponTypeStat').html(elementData.weaponType);
+				// $('#weaponTypeStat').html(elementData.weaponType);
 
 			} else {
 				$('.unitOnly').addClass('hideI');

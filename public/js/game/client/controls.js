@@ -43,7 +43,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 	this.WHEEL_ROTATION_SPEED = 40;
 	this.ANGLE_ROTATION_MIN = 0.005;
 
-	this.PAN_LIMITS = [-100, -100, gameContent.map.size.x * gameSurface.PIXEL_BY_NODE + 100, gameContent.map.size.y * gameSurface.PIXEL_BY_NODE + 100];
+	this.PAN_LIMITS = [-200, -200, gameContent.map.size.x * gameSurface.PIXEL_BY_NODE + 200, gameContent.map.size.y * gameSurface.PIXEL_BY_NODE + 200];
 
 	this.noRotate = false;
 	this.noZoom = false;

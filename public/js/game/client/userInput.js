@@ -541,6 +541,7 @@ userInput.enterAttackMode = function () {
 
 userInput.leaveSpecialClickMode = function () {
 	GUI.unselectButtons();
+	GUI.updateMouse(GUI.MOUSE_ICONS.standard);
 	controls.clickMode = controls.MODES.normal;
 }
 

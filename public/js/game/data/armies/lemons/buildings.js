@@ -17,7 +17,8 @@ gameData.ELEMENTS[gameData.FAMILIES.building][gameData.RACES.lemons.id] = {
 		gui: 'ic_lemon_mothertree.png',
 		height: 21,
 		vision: 15,
-		lifeBarWidth: 50
+		lifeBarWidth: 50,
+		key: 'mothertree'
 	},
 	house: {
 		name: 'House',
@@ -37,7 +38,8 @@ gameData.ELEMENTS[gameData.FAMILIES.building][gameData.RACES.lemons.id] = {
 		gui: 'ic_lemon_house.png',
 		height: 12,
 		vision: 15,
-		lifeBarWidth: 40
+		lifeBarWidth: 40,
+		key: 'house'
 	},
 	casern: {
 		name: 'Casern',
@@ -57,7 +59,8 @@ gameData.ELEMENTS[gameData.FAMILIES.building][gameData.RACES.lemons.id] = {
 		gui: 'ic_lemon_casern.png',
 		height: 18,
 		vision: 15,
-		lifeBarWidth: 40
+		lifeBarWidth: 40,
+		key: 'casern'
 	},
 	researchlab: {
 		name: 'Research Lab',
@@ -77,7 +80,8 @@ gameData.ELEMENTS[gameData.FAMILIES.building][gameData.RACES.lemons.id] = {
 		gui: 'ic_lemon_researchlab.png',
 		height: 18,
 		vision: 15,
-		lifeBarWidth: 40
+		lifeBarWidth: 40,
+		key: 'researchlab'
 	},
 	tower: {
 		name: 'Acid Lake',
@@ -101,7 +105,8 @@ gameData.ELEMENTS[gameData.FAMILIES.building][gameData.RACES.lemons.id] = {
 		attack: 6, 
 		weaponType: fightLogic.WEAPON_TYPES.piercing,
 		range: 20,
-		lifeBarWidth: 30
+		lifeBarWidth: 30,
+		key: 'tower'
 	},
 	factory: {
 		name: 'Factory',
@@ -121,6 +126,7 @@ gameData.ELEMENTS[gameData.FAMILIES.building][gameData.RACES.lemons.id] = {
 		gui: 'ic_lemon_factory.png',
 		height: 18,
 		vision: 15,
-		lifeBarWidth: 40
+		lifeBarWidth: 40,
+		key: 'factory'
 	}
 };

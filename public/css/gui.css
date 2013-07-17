@@ -21,7 +21,7 @@ button.selected {
   background: linear-gradient(to bottom, #cc0000 0%,#000000 100%); /* W3C */
 }
 
-#toolbar button {
+#gui button {
   cursor: url(../img/GUI/cursor_hover.png) 0 0, auto;
 }
 
@@ -71,12 +71,9 @@ button.selected {
   width: 88%;
   padding: 5px 0px 5px 0px;
 }
-#bottomBar div {
-  display: inline-block;
-  vertical-align: top;
-}
 #toolbar {
-  max-width: 260px;
+  display: inline-block;
+  width: 33%;
   vertical-align: top;
 }
 #toolbar button {
@@ -84,10 +81,12 @@ button.selected {
   margin: 3px;
 }
 .tooltip {
-  opacity: 0.8;
+  font-size: 15px;
+  opacity: 0.9;
   background: #000;
   border: 1px solid #ddd;
   border-radius: 5px;
+  text-shadow: 1px 1px 2px #000000;
 }
 #minimap {
   position: absolute;
@@ -97,19 +96,13 @@ button.selected {
   background: #000;
   opacity: 0.8;
 }
-
-
-/**
-*   INFO SECTION
-*/
-#infoBar {
-  height: 100%;
-  width: 50%;
+#toolbar #specialButtons {
+  display: block;
 }
 #listSelected {
-  min-width: 150px;
+  display: inline-block;
+  width: 30%;
   height: 80%;
-  width: 40%;
   border-right: 1px solid #111;
   border-left: 1px solid #111;
   vertical-align: top;
@@ -118,9 +111,24 @@ button.selected {
   padding: 3px;
   margin: 3px; 
 }
+
+/**
+*   INFO SECTION
+*/
 #infoSelected {
-  padding: 5px;
+  display: inline-block;
   height: 80%;
+  width: 30%;
+  padding: 5px;
+}
+#infoSelected .stat {
+  display: inline-block;
+  vertical-align: top;
+  padding: 10px;
+  text-shadow: 1px 1px 2px #000000;
+}
+#infoSelected div:before {
+  margin-right: 5px;
 }
 #rangeStat:before {
   content: url(../img/GUI/ic_range.png);
@@ -147,11 +155,17 @@ button.selected {
   content: url(../img/GUI/ic_wood20.png);
 }
 #secondaryStats {
-  margin-top: 8px;
   display: block!important;
 }
-#secondaryStats div {
-  padding: 6px;
+#nameElement {
+  font-size: 22px;
+  vertical-align: middle;
+}
+#lifeElement {
+  font-size: 15px;
+  vertical-align: middle;
+  background: none;
+  margin-top: 4px;
 }
 
 
@@ -168,6 +182,9 @@ button.selected {
   background: linear-gradient(to bottom, #299a0b 0%,#000000 100%); /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#299a0b', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
 }
+div.veryHighLife {
+  color: #299a0b;
+}
 .highLife {
   background: #FFE100; /* Old browsers */
   background: -moz-linear-gradient(top, #FFE100 0%, #000000 100%); /* FF3.6+ */
@@ -177,6 +194,9 @@ button.selected {
   background: -ms-linear-gradient(top, #FFE100 0%,#000000 100%); /* IE10+ */
   background: linear-gradient(to bottom, #FFE100 0%,#000000 100%); /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#FFE100', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
+}
+div.highlife {
+  color: #FFE100;
 }
 .mediumLife {
   background: #FF7700; /* Old browsers */
@@ -188,6 +208,9 @@ button.selected {
   background: linear-gradient(to bottom, #FF7700 0%,#000000 100%); /* W3C */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#FF7700', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
 }
+div.mediumLife {
+  color: #FF7700;
+}
 .lowLife {
   background: #cc0000; /* Old browsers */
   background: -moz-linear-gradient(top, #cc0000 0%, #000000 100%); /* FF3.6+ */
@@ -196,10 +219,10 @@ button.selected {
   background: -o-linear-gradient(top, #cc0000 0%,#000000 100%); /* Opera 11.10+ */
   background: -ms-linear-gradient(top, #cc0000 0%,#000000 100%); /* IE10+ */
   background: linear-gradient(to bottom, #cc0000 0%,#000000 100%); /* W3C */
-} 
-
-
-
+}
+div.lowLife {
+  color: #cc0000;
+}
 
 #selectionRectangle {
   position: absolute;
@@ -387,18 +410,6 @@ button.selected {
     height: 20px;
     width: 20px;
     vertical-align: middle;
-}
-
-#stats div div {
-    display: inline-block;
-    font-size: 0.7em;
-    font-weight: bold;
-    margin-left: 10px;
-}
-
-.stat {
-    display: inline-block;
-    width: 48%;
 }
 
 .queue {

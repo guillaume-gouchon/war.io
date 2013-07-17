@@ -78,7 +78,7 @@ production.finishConstruction = function (game, building) {
 	building.l = buildingData.l;
 
 	// add tech
-	game.players[building.o].tec.push(building.key);
+	game.players[building.o].tec.push(buildingData.key);
 
 	// updates player's max population
 	if(buildingData.pop > 0) {
@@ -123,7 +123,7 @@ production.removeBuilding = function (game, building) {
 		game.players[building.o].pop.max -= buildingData.pop;
 
 		// remove tech
-		game.players[building.o].tec.splice(game.players[building.o].tec.indexOf(building.key));
+		game.players[building.o].tec.splice(game.players[building.o].tec.indexOf(buildingData.key));
 
 	}
 
@@ -399,8 +399,8 @@ production.getWhatCanBeBought = function (players, owner, elements) {
 	}
 
 	// add back button
-	if (elements.length > 0 && elements[0].f == gameData.FAMILIES.building) {
-		array.splice(4, 0, gameData.BUTTONS.back);
+	if (elements.house != null) {
+		array.splice(0, 0, gameData.BUTTONS.back);
 	}
 
 	return array;
