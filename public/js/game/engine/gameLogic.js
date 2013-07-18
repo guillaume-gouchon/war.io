@@ -62,7 +62,7 @@ gameLogic.update = function (game) {
 		}
 	}
 
-	this.addNewBuildings(game);
+	this.synchronizeActions(game);
 	this.removeDeads(game);
 	this.checkGameOver(game);
 	stats.update(game);
@@ -87,7 +87,7 @@ gameLogic.update = function (game) {
 /**
 * 	Synchronizes user's build actions with the game loop.
 */
-gameLogic.addNewBuildings = function (game) {
+gameLogic.synchronizeActions = function (game) {
 	for (var i in game.newBuildings) {
 		game.newBuildings[i].l = 1;
 		gameCreation.addGameElement(game, game.newBuildings[i]);
@@ -97,8 +97,13 @@ gameLogic.addNewBuildings = function (game) {
 	for (var i in game.cancelBuildings) {
 		gameCreation.removeGameElement(game, game.cancelBuildings[i]);
 	}
-
 	game.cancelBuildings = [];
+
+	for (var i in game.cancel) {
+		var cancel = game.cancel[i];
+		production.cancel(game, cancel.building, cancel.index);
+	}
+	game.cancel = [];
 }
 
 

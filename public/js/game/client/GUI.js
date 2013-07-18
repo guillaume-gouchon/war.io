@@ -103,8 +103,12 @@ GUI.initSpecialButtons = function () {
 	$('#specialButtons').on('click', 'button', function () {
 		if (!$(this).hasClass('disabled')) {
 			var buttonId = $(this).attr('data-id');
-			userInput.clickSpecialButton(buttonId);
+			userInput.clickSpecialButton(buttonId);	
 		}
+	});
+	$('#queueBuilding').on('click', 'button', function () {
+		var buttonId = $(this).attr('data-id');
+		userInput.cancelQueue(buttonId);
 	});
 }
 GUI.initInfobarEvents = function () {
@@ -215,15 +219,24 @@ GUI.updateInfoBar = function () {
 
 			// add queue to buildings
 			if (element.f == gameData.FAMILIES.building && element.q.length > 0) {
-				$('#queueBuilding').html('');
-				// for (var i in element.q) {
-					// var q = gameData.ELEMENTS[gameData.FAMILIES.unit][building.r][element.q[i]];
-				// 	if (i == 0) {
-				// 		// adds progression
-				// 	}
-					// $('#queueBuilding').append('<button data-id="' + i + '" class="enableTooltip" title="Cancel ' + q.name + '"><img alt="element in progress" src="'+  GUI.IMAGES_PATH + q.gui + '"</button>');
-
-				// }
+				$('button', '#queueBuilding').addClass('hideI');
+				for (var i in element.q) {
+					var q = null;
+					if (element.q[0] >= 0) {
+						// unit
+						var chibron = gameData.ELEMENTS[gameData.FAMILIES.unit][element.r];
+						q = chibron[Object.keys(chibron)[element.q[i]]];
+					} else {
+						// research
+						q = tools.getElementDataFrom(gameData.FAMILIES.research, element.r, element.q[i]);
+					}
+					if (i == 0) {
+						// add progression
+						$('#queueProgress').html(element.qp + '%');
+					}
+					$('img:eq(' + i + ')', '#queueBuilding').attr('src', GUI.IMAGES_PATH + q.gui);
+					$('button:eq(' + i + ')', '#queueBuilding').removeClass('hideI');
+				}
 				$('#queueBuilding').removeClass('hideI');
 			} else {
 				$('#queueBuilding').addClass('hideI');

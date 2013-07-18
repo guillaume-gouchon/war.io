@@ -582,3 +582,11 @@ userInput.pressHotKey = function (index, isCtrlKey) {
 	}
 
 }
+
+
+/**
+*	The user cancelled an unit or a research.
+*/
+userInput.cancelQueue = function (buttonId) {
+	gameManager.sendOrderToEngine(order.TYPES.cancelQueue, [gameContent.selected[0], buttonId]);
+}

@@ -68,6 +68,26 @@ production.cancelConstruction = function (game, building) {
 
 
 /**
+*	The user cancels the construction of a unit or a research.
+*/
+production.cancel = function (game, building, index) {
+	var family = null;
+	if (building.q[index] >=0) {
+		family = gameData.FAMILIES.unit;
+	} else {
+		family = gameData.FAMILIES.research;
+		game.players[building.o].tecC.splice(game.players[building.o].tecC.indexOf(index));
+	}
+	this.sellsElement(game, building.o, tools.getElementDataFrom(family, building.r, building.q[index]));
+	building.q.splice(index, 1);
+	if (index == 0) { 
+		building.qp = 0;
+	}
+	tools.addUniqueElementToArray(game.modified, building);
+}
+
+
+/**
 *	A building has just been finished to construct.
 */
 production.finishConstruction = function (game, building) {
@@ -125,6 +145,10 @@ production.removeBuilding = function (game, building) {
 		// remove tech
 		game.players[building.o].tec.splice(game.players[building.o].tec.indexOf(buildingData.key));
 
+	}
+
+	for (var i in building.q) {
+		this.cancel(game, building, i);
 	}
 
 	if (building.murderer != null) {

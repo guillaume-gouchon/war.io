@@ -5,21 +5,22 @@ var order = {};
 *	CONSTANTS
 */
 order.TYPES = {
-	action : 0,
-	buildThatHere : 1, 
-	buy : 2,
-	cancelConstruction : 3,
-	chat : 4,
-	diplomacy : 5,
-	surrender : 6,
-	stop : 7,
-	hold : 8
+	action: 0,
+	buildThatHere: 1, 
+	buy: 2,
+	cancelConstruction: 3,
+	chat: 4,
+	diplomacy: 5,
+	surrender: 6,
+	stop: 7,
+	hold: 8,
+	cancelQueue: 9
 }
 
 order.SPECIAL_ORDERS = {
-	normal : 0,
-	attack : 1,
-	patrol : 2
+	normal: 0,
+	attack: 1,
+	patrol: 2
 }
 
 
@@ -52,6 +53,9 @@ order.dispatchReceivedOrder = function (game, type, params) {
 		case 8 :
 			this.holdUnits(game, params[0]);
 			break;
+		case 9 :
+			this.cancelQueue(game, params[0], params[1]);
+			break;
 	}
 }
 
@@ -77,6 +81,12 @@ order.buy = function (game, buildingsIds, element) {
 order.cancelConstruction = function (game, buildingId) {
 	var building = tools.getGameElementsFromIds(game, [buildingId]);
 	production.cancelConstruction(game, building[0]);
+}
+
+
+order.cancelQueue = function (game, buildingId, cancelIndex) {
+	var building = tools.getGameElementsFromIds(game, [buildingId]);
+	game.cancel.push({building: building[0], index: cancelIndex});
 }
 
 

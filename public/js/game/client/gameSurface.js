@@ -24,7 +24,7 @@ gameSurface.SELECTION_NEUTRAL_COLOR = '#e3e314';
 gameSurface.CAMERA_INIT_ANGLE = 0.7;
 gameSurface.CAN_BUILD_CUBE_COLOR = 0x00ff00;
 gameSurface.CANNOT_BUILD_CUBE_COLOR = 0xff0000;
-gameSurface.BUILD_CUBE_OPACITY = 0.5;
+gameSurface.BUILD_CUBE_OPACITY = 0.3;
 
 gameSurface.CENTER_CAMERA_Y_OFFSET = 20 * gameSurface.PIXEL_BY_NODE;
 gameSurface.BARS_HEIGHT = 0.5;

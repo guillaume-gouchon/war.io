@@ -286,7 +286,8 @@ gameManager.showStats = function (playerStatus, gameStats) {
 		yaxis: {
 			min: 0,
 			autoscaleMargin: 1,
-			position: 'right'
+			position: 'right',
+			tickDecimals: 0
 		},
 		colors: gameSurface.PLAYERS_COLORS
 	};

@@ -28,6 +28,7 @@ gameData.Game = function () {
 	*/
 	this.newBuildings = [];
 	this.cancelBuildings = [];
+	this.cancel = [];
 	this.orders = [];
 
 
