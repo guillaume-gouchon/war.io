@@ -279,13 +279,23 @@ gameManager.showStats = function (playerStatus, gameStats) {
 	}
 
 	// population chart
-	var options = {};
+	var options = {
+		xaxis: {
+			show: false
+		},
+		yaxis: {
+			min: 0,
+			autoscaleMargin: 1,
+			position: 'right'
+		},
+		colors: gameSurface.PLAYERS_COLORS
+	};
 	$("#popChart").css({
 		height: '160px',
 		width: window.innerWidth / 2,
 		left: window.innerWidth / 4
 	});
-console.log(dataPopChart)
+
 	$.plot($("#popChart"), dataPopChart, options);
 	
 }

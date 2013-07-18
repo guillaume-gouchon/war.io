@@ -205,6 +205,10 @@ footer span {
 #creditsButton, #aboutButton {
   margin-left: 10px;
 }
+#aboutButton:hover, #creditsButton:hover {
+    color: #000;
+    opacity: 0.8;
+}
 
 
 /**

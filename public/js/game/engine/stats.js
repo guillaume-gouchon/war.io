@@ -35,10 +35,6 @@ stats.update = function (game) {
 	if(game.iterate % this.UPDATE_FREQUENCY == 0) {
 		for (var i in game.players) {
 			game.stats[i].pop.push([new Date().getTime(), game.players[i].pop.current]);
-						game.stats[i].pop.push([new Date().getTime(), game.players[i].pop.current]);
-
-			game.stats[i].pop.push([new Date().getTime(), game.players[i].pop.current]);
-
 		}
 	}
 }

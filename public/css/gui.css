@@ -315,11 +315,18 @@ div.lowLife {
 */
 #endGame {
   text-align: center;
+  overflow: auto;
+  text-shadow: 2px 2px 4px #000000;
+}
+#endGame h3 {
+  color: #eee;
+  font-weight: normal;
+  margin: 0px;
 }
 #endGameMessage {
     padding: 50px;
     font-size: 4.0em;
-    text-shadow: 2px 2px 4px #000000;
+
 }
 #endGameStats {
     padding: 15px;
