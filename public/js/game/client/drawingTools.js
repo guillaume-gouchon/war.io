@@ -162,10 +162,9 @@ gameSurface.updateOrderPosition = function () {
 			}
 
 			this.setElementPosition(this.order, position.x, position.y);
-			this.order.rotation.z += gameSurface.ORDER_ROTATION_SPEED;
+			
 			if (this.order.scale.x >= gameSurface.ORDER_SIZE_MAX) {
 				gameSurface.orderFactor = -1;
-					
 			} else if (this.order.scale.x <= gameSurface.ORDER_SIZE_MIN){
 				gameSurface.orderFactor = 1;
 			}

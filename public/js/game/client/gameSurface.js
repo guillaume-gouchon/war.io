@@ -12,7 +12,7 @@ gameSurface.NEAR = 0.1;
 gameSurface.FAR = 20000;
 
 gameSurface.ZOOM_STEP = 15;
-gameSurface.ORDER_ANIMATION_SPEED = 0.015;
+gameSurface.ORDER_ANIMATION_SPEED = 0.08;
 gameSurface.ORDER_ROTATION_SPEED = 1 / 12;
 gameSurface.ORDER_SIZE_MAX = 0.9;
 gameSurface.ORDER_SIZE_MIN = 0.5;
@@ -133,7 +133,7 @@ gameSurface.init = function () {
 	this.loader = new THREE.JSONLoader();
 
 	// count the number of stuff to be loaded
-	this.totalStuffToLoad += 7;// grass + skybox
+	this.totalStuffToLoad += 8;// grass + skybox
 	var races = [];
 	for (var i in gameContent.players) {
 
@@ -345,7 +345,7 @@ gameSurface.createScene = function () {
 
 
 	//add order geometry
-	this.order = new THREE.Mesh(new THREE.TorusGeometry(5, 2, 2, 6), new THREE.LineBasicMaterial( { color: '#0f0', opacity: this.ORDER_OPACITY, transparent: true} ));
+	this.order = new THREE.Mesh(new THREE.TorusGeometry(3, 0.9, 2, 18), new THREE.LineBasicMaterial( { color: '#050'} ));
 	this.order.visible = false;
 	scene.add(this.order);
 

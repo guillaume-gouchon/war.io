@@ -253,30 +253,33 @@
 			</div>
 
 			<div id="endGame" class="fullScreen blackBackground hide" >
-				<div id="endGameMessage" class="fullScreenTitle easeTransition"></div>
+				<div id="endGameMessage"></div>
 				<div id="endGameStats">
 					<table class="table table-bordered">
 						<thead>
 							<tr>
 								<th class="black"></th>
-								<th colspan="4" class="black">Units</th>
-								<th colspan="3" class="black">Economy</th>
+								<th colspan="4" class="big">Units</th>
+								<th colspan="4" class="big">Economy</th>
+								<th colspan="1" rowspan="2" class="big">Total<br>Score</th>
 							</tr>
-			  			<tr>
-			  				<th class="black">Player</th>
-				  			<th class="black">Units killed</th>
-				  			<th class="black">Units lost</th>
-				  			<th class="black">Buildings destroyed</th>
-				  			<th class="black">Units created</th>
-				  			<th class="black">Resources</th>
-				  			<th class="black">Builders created</th>
-				  			<th class="black">Buildings created</th>
-				  		</tr>
-			  		</thead>
-			  		<tbody id="tableBody" ></tbody>
+				  			<tr>
+				  				<th>Player</th>
+					  			<th>Units killed</th>
+					  			<th>Units lost</th>
+					  			<th>Buildings destroyed</th>
+					  			<th>Units created</th>
+					  			<th>Resources</th>
+					  			<th>Builders created</th>
+					  			<th>Buildings created</th>
+					  			<th>Technologies</th>
+					  		</tr>
+			  			</thead>
+			  			<tbody></tbody>
 					</table>
+					<div id="popChart"></div>
 				</div>
-				<div id="returnHome"><a href="">Return Home</a></div>
+				<a id="returnHome" class="btn" href="">Return Home</a>
 			</div>
 		</div>
 
@@ -366,8 +369,10 @@
 
 	<!-- WEBSITE -->
 	<script src="http://code.jquery.com/jquery-latest.js"></script>
+	<script type="text/javascript" src="js/jquery.flot.min.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/index.js"></script>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
 	</body>
 

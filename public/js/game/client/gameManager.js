@@ -5,7 +5,7 @@ var gameManager = {};
 *	VARIABLES
 */
 gameManager.isOfflineGame = false;
-gameManager.offlineGameLoop = null;
+gameManager.offlineGameLoop = 0;
 gameManager.musicEnabled = false;
 
 
@@ -136,8 +136,8 @@ gameManager.startGame = function () {
 
 	gameContent.init(this.waitingData);
 
-	if (this.isOfflineGame) {
-		this.offlineGameLoop = setInterval(function(){
+	if (this.isOfflineGame && this.offlineGameLoop == 0) {
+		this.offlineGameLoop = setInterval(function () {
 			gameContent.update(gameContent.game.update());
 		}, 1000 / gameLogic.OFFLINE_FREQUENCY);
 
@@ -245,7 +245,7 @@ gameManager.updateLoadingQueue = function (data) {
 /**
 *	Shows the game statistics.
 */
-gameManager.showStats = function (playerStatus, stats) {
+gameManager.showStats = function (playerStatus, gameStats) {
 
 	// show victory / defeat message
 	if (playerStatus == gameData.PLAYER_STATUSES.victory) {
@@ -258,21 +258,36 @@ gameManager.showStats = function (playerStatus, stats) {
 	$('#endGame').removeClass('hide');
 
 	// show stats
-	$('table', '#endGameStats').css('width', window.innerWidth - 60);
-	for (var i in stats) {
-		var statPlayer = stats[i];
-		var playerName = gameContent.players[i].n;
-		$('#tableBody').append('<tr class="' + gameSurface.PLAYERS_COLORS[i] + '"><td>' +  
-			playerName + '</td><td>' +  
+	var dataPopChart = [];
+	for (var i in gameStats) {
+		var statPlayer = gameStats[i];
+		var player = gameContent.players[i];
+		var scoreTotal = stats.getTotalScore(statPlayer, player.tec.length);
+		$('tbody', '#endGame').append('<tr class="' + gameSurface.PLAYERS_COLORS[i] + '"><td>' +  
+			player.n + '</td><td>' +  
 			statPlayer.killed + '</td><td>' +  
 			statPlayer.lost + '</td><td>' +  
 			statPlayer.buildingsDestroyed + '</td><td>' +  
 			statPlayer.unitsCreated + '</td><td>' +  
 			statPlayer.resources + '</td><td>' +  
-			statPlayer.buildersCreated + '</td><td>' +  
-			statPlayer.buildingsCreated + '</td></tr>');
+			statPlayer.buildersCreated + '</td><td>' + 
+			statPlayer.buildingsCreated + '</td><td>' +  
+			player.tec.length + '</td><td>' +  
+			scoreTotal + '</td></tr>');
+
+		dataPopChart.push(statPlayer.pop);
 	}
 
+	// population chart
+	var options = {};
+	$("#popChart").css({
+		height: '160px',
+		width: window.innerWidth / 2,
+		left: window.innerWidth / 4
+	});
+console.log(dataPopChart)
+	$.plot($("#popChart"), dataPopChart, options);
+	
 }
 
 

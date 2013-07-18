@@ -12,17 +12,21 @@ canvas {
 }
 
 button.selected {
-  background: #cc0000; /* Old browsers */
-  background: -moz-linear-gradient(top, #cc0000 0%, #000000 100%); /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cc0000), color-stop(100%,#000000)); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top, #cc0000 0%,#000000 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top, #cc0000 0%,#000000 100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(top, #cc0000 0%,#000000 100%); /* IE10+ */
-  background: linear-gradient(to bottom, #cc0000 0%,#000000 100%); /* W3C */
+    background: #cc0000; /* Old browsers */
+    background: -moz-linear-gradient(top, #cc0000 0%, #000000 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cc0000), color-stop(100%,#000000)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #cc0000 0%,#000000 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #cc0000 0%,#000000 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #cc0000 0%,#000000 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #cc0000 0%,#000000 100%); /* W3C */
 }
 
-#gui button {
-  cursor: url(../img/GUI/cursor_hover.png) 0 0, auto;
+#game button, #game .btn {
+    cursor: url(../img/GUI/cursor_hover.png) 0 0, auto;
+}
+
+.big {
+    font-size: 1.5em;
 }
 
 
@@ -255,7 +259,7 @@ div.lowLife {
   top: 10px;
   left: 10px;
   min-height: 0px;
-  max-height: 16%;
+  max-height: 13%;
   width: 25%;
   overflow: auto;
   padding: 3px;
@@ -267,10 +271,11 @@ div.lowLife {
   font-size: 0.8em;
   padding: 2px 5px 2px 5px;
   color: #eee;
+  line-height: 10px;
 }
 #messages div span {
     font-size: 1.3em;
-  margin-left: 10px;
+    margin-left: 10px;
 }
 .red {
     color: #C41616;
@@ -293,16 +298,70 @@ div.lowLife {
 ::-webkit-scrollbar {
     width: 12px;
 }
- 
+
 ::-webkit-scrollbar-track {
     -webkit-box-shadow: inset 0 0 6px rgba(200,200,200,0.3);
     border-radius: 10px;
 }
- 
+
 ::-webkit-scrollbar-thumb {
     -webkit-box-shadow: inset 0 0 6px rgba(200,200,200,0.5);
     border-radius: 10px;
 }
+
+
+/**
+*   END GAME STATS
+*/
+#endGame {
+  text-align: center;
+}
+#endGameMessage {
+    padding: 50px;
+    font-size: 4.0em;
+    text-shadow: 2px 2px 4px #000000;
+}
+#endGameStats {
+    padding: 15px;
+}
+#endGameStats table {
+    box-shadow: 0px 0px 15px 8px #000;
+    border: none;
+}
+#endGameStats table tr th {
+    color: #eee;
+    vertical-align: middle;
+    text-align: center;
+    font-weight: normal;
+    border: thin solid #ddd;
+    text-shadow: 1px 1px 2px #000000;
+}
+#endGameStats table tr td {
+    text-align: center;
+    border: thin solid #ddd;
+}
+.victory {
+    color : #0d0;
+}
+.defeat {
+    color : #d00;
+}
+#endGame .btn {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    color: #ccc;
+}
+#endGame .btn:hover {
+    background: #ddd;
+    color : #222;
+}
+#popChart canvas {
+  background: none;
+}
+
+
+
 
 
 
@@ -320,24 +379,6 @@ div.lowLife {
     text-align: center;
 }
 
-.victory {
-    color : #0d0;
-}
-
-.defeat {
-    color : #d00;
-}
-
-#returnHome {
-    position: absolute;
-    bottom: 30px;
-    width: 100%;
-    text-align: center;
-}
-
-#returnHome a {
-    font-size: 2.2em;
-}
 
 
 
@@ -366,16 +407,6 @@ div.lowLife {
   opacity: 0.8;
   padding: 10px 10px 0px 10px;
   border-radius: 5px;
-}
-
-#endGameStats {
-    position: relative;
-    top: 250px;
-    left: 30px;
-}
-
-#endGameStats table tr th, #endGameStats table tr td {
-    text-align: center;
 }
 
 
