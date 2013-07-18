@@ -101,7 +101,7 @@ gameSurface.init = function () {
 	scene = new THREE.Scene();
 
 	// init camera
-	camera = new THREE.PerspectiveCamera(50, window.innerWidth/window.innerHeight, this.NEAR, this.FAR);
+	camera = new THREE.PerspectiveCamera(25, window.innerWidth/window.innerHeight, this.NEAR, this.FAR);
 
 	// init camera controls / input
 	controls = new THREE.TrackballControls(camera);
@@ -172,20 +172,19 @@ gameSurface.init = function () {
 		controls.update();
 
 		gameSurface.updateMoveExtrapolation();
-
-		gameSurface.updateCameraViewBounds();
 		// animations
 		TWEEN.update();
+
+		renderer.render(scene, camera);
+
 
 		// update GUI
 		if (gameSurface.iteration % (1 / GUI.UPDATE_FREQUENCY) == 0) {
 			gameSurface.updateOrderPosition();
 			GUI.update();
+			gameSurface.updateCameraViewBounds();
 			gameSurface.updateMinimap();
 		}
-
-		renderer.render(scene, camera);
-
 	}
 
 	render();
@@ -278,7 +277,7 @@ gameSurface.createScene = function () {
     var transparentSurface = new THREE.Mesh(new THREE.PlaneGeometry(5000, 5000), new THREE.MeshNormalMaterial({ transparent: true, opacity: 0 }));
 	transparentSurface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
     transparentSurface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
-    transparentSurface.position.z = -3;
+    transparentSurface.position.z = -1;
     scene.add(transparentSurface);
     this.transparentSurface = transparentSurface;
 
@@ -727,7 +726,7 @@ gameSurface.getAbsolutePositionFromPixel = function (x, y) {
 *	Returns the game coordinates from some screen coordinates.
 */
 gameSurface.getAbsolutePositionFromPixelNoBounds = function (x, y) {
-	var intersect = this.getFirstIntersectObject(x, y);
+	var intersect = this.getFirstIntersectObject(x, y, [this.transparentSurface]);
 	if (intersect != null) {
 		return this.convertScenePositionToGamePositionNoBounds(intersect.point);
 	} else {
