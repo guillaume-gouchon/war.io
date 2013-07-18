@@ -79,7 +79,7 @@ gameData.TO_SERVER_SOCKET = {
 *	List of cool random names.
 */
 gameData.DEFAULT_NAMES = ['Colonel Heinz', 'Juice Master', 'Lord Bobby', 'Lemon Alisa',
-						'The Red Baron', 'Tom Boy', 'Tommy Toe', 'Lee Mon', 'Sigmund Fruit'];
+						'The Red Baron', 'Tom Boy', 'Tommy Toe', 'Lee Mon', 'Sigmund Fruit', 'Al Pacho'];
 
 
 /**
