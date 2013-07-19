@@ -505,63 +505,16 @@ button.red:hover {
 /**
 *   BACKGROUNDS
 */
-#backgrounds {
+#backgrounds, #clouds, #tomatoes, #lemons {
     height: 100%;
     width: 100%;
 }
-#bgLeft, #bgRight {
+#backgrounds div {
     position: absolute;
-    bottom: 40px;
-    height: 400px;
 }
-#bgLeft {
-    -webkit-animation: bounce1 0.5s ease infinite alternate;
-    margin-left: 5%;
-}
-
-#bgRight {
-    -webkit-animation: bounce2 0.5s ease infinite alternate 0.8s;
-    right: 0px;
-    margin-right: 5%;
-}
-@-webkit-keyframes bounce1{
-     from {-webkit-transform: translateY(0px);}
-     to   {-webkit-transform: translateY(6px);}
-}
-@-webkit-keyframes bounce2{
-     from {-webkit-transform: translateY(0px);}
-     to   {-webkit-transform: translateY(6px);}
-}
-@-webkit-keyframes animatedBackground {
-    from { background-position: 0 0; }
-    to { background-position: -100% 0; }
-}
-#grass {
-    position: absolute;
-    height: 50%;
+#sky {
+    height: 40%;
     width: 100%;
-    top: 50%;
-    background: #48AB3E;
-    background: -webkit-linear-gradient(top, #48AB3E 0%, #14570C 20%);
-}
-#mountains {
-    -webkit-animation: animatedBackground 60s linear infinite;
-    width: 100%;
-    position: absolute;
-    top: 32%;
-    height: 200px;
-    background: url(../img/mountains.png) repeat-x ;
-    background-position: 0px 0px;
-}
-
-body {
-    /*To hide the horizontal scroller appearing during the animation*/
-    overflow: hidden;
-}
-
-#clouds{
-    height: 50%;
-    padding: 100px 0;
     background: #87e0fd; /* Old browsers */
     background: -moz-linear-gradient(45deg, #87e0fd 0%, #53cbf1 40%, #05abe0 100%); /* FF3.6+ */
     background: -webkit-gradient(linear, left bottom, right top, color-stop(0%,#87e0fd), color-stop(40%,#53cbf1), color-stop(100%,#05abe0)); /* Chrome,Safari4+ */
@@ -571,111 +524,111 @@ body {
     background: linear-gradient(45deg, #87e0fd 0%,#53cbf1 40%,#05abe0 100%); /* W3C */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#87e0fd', endColorstr='#05abe0',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
-
-/*Time to finalise the cloud shape*/
-.cloud {
-    width: 200px; height: 60px;
-    background: #fff;
-    
-    border-radius: 200px;
-    -moz-border-radius: 200px;
-    -webkit-border-radius: 200px;
-    
-    position: relative; 
+#grass {
+    height: 60%;
+    width:100%;
+    top: 40%;
+    background: #48AB3E;
+    background: -webkit-linear-gradient(top, #48AB3E 0%, #14570C 20%);
+}
+#clouds div {
+    position: fixed;
+    height: 200px;
+    width: 100%;
+    background-repeat: no-repeat;
+}
+.cloud1 {
+    top: 0px;
+    -webkit-animation: moveClouds 30s linear infinite;
+    -moz-animation: moveClouds 30s linear infinite;
+    -o-animation: moveClouds 30s linear infinite;
+    background-image: url(../img/nuage1.png);
+}
+.cloud2 {
+    top: -30px;
+    opacity: 0.6;
+    -webkit-animation: moveClouds 50s linear infinite;
+    -moz-animation: moveClouds 50s linear infinite;
+    -o-animation: moveClouds 50s linear infinite;
+    background-image: url(../img/nuage2.png);
+}
+.cloud3 {
+    top: 100px
+    opacity: 0.8;
+    -webkit-animation: moveClouds 40s linear infinite;
+    -moz-animation: moveClouds 40s linear infinite;
+    -o-animation: moveClouds 40s linear infinite;
+    background-image: url(../img/nuage3.png);
+}
+.cloud4 {
+    top: 50px;
+    opacity: 0.75;
+    -webkit-animation: moveClouds 36s linear infinite;
+    -moz-animation: moveClouds 36s linear infinite;
+    -o-animation: moveClouds 36s linear infinite;
+    background-image: url(../img/nuage4.png);
+}
+.cloud5 {
+    top: -75px;
+    opacity: 0.8;
+    -webkit-animation: moveClouds 25s linear infinite;
+    -moz-animation: moveClouds 25s linear infinite;
+    -o-animation: moveClouds 25s linear infinite;
+    background-image: url(../img/nuage5.png);
+}
+#mountains {
+    height: 200px;
+    width: 100%;
+    position: absolute;
+    top: -150%;
+    background: url(../img/mountains.png) repeat-x ;
+    background-position: 0px 0px;
+    -webkit-animation: moveMountains 60s linear infinite;
+}
+#tomatoes img, #lemons img {
+    position: absolute;
+    -webkit-animation: bounce 1.5s alternate infinite;
+}
+.z10 {
+    height: 220px;
+    bottom: 10%;
+    -webkit-animation-delay: 0.7s!important;
+}
+.z30 {
+    height: 70px;
+    bottom: 25%;
+    -webkit-animation-delay: 0.2s!important;
+}
+.left10 {
+    left: 10%;
+}
+.left70 {
+    left: 70%;
 }
 
-.cloud:before, .cloud:after {
-    content: '';
-    position: absolute; 
-    background: #fff;
-    width: 100px; height: 80px;
-    position: absolute; top: -15px; left: 10px;
-    
-    border-radius: 100px;
-    -moz-border-radius: 100px;
-    -webkit-border-radius: 100px;
-    
-    -webkit-transform: rotate(30deg);
-    transform: rotate(30deg);
-    -moz-transform: rotate(30deg);
-}
 
-.cloud:after {
-    width: 120px; height: 120px;
-    top: -55px; left: auto; right: 15px;
-}
 
-/*Time to animate*/
-.x1 {
-    -webkit-animation: moveclouds 30s linear infinite;
-    -moz-animation: moveclouds 30s linear infinite;
-    -o-animation: moveclouds 30s linear infinite;
+@-webkit-keyframes moveClouds {
+    0% {background-position: 150%;}
+    100% {background-position: -150%;}
 }
-
-/*variable speed, opacity, and position of clouds for realistic effect*/
-.x2 {
-    left: 200px;
-    
-    -webkit-transform: scale(0.6);
-    -moz-transform: scale(0.6);
-    transform: scale(0.6);
-    opacity: 0.6; /*opacity proportional to the size*/
-    
-    /*Speed will also be proportional to the size and opacity*/
-    /*More the speed. Less the time in 's' = seconds*/
-    -webkit-animation: moveclouds 50s linear infinite;
-    -moz-animation: moveclouds 50s linear infinite;
-    -o-animation: moveclouds 50s linear infinite;
+@-moz-keyframes moveClouds {
+    0% {left: 150%;}
+    100% {left: -150%;}
 }
-
-.x3 {
-    left: -250px; top: -200px;
-    
-    -webkit-transform: scale(0.8);
-    -moz-transform: scale(0.8);
-    transform: scale(0.8);
-    opacity: 0.8; /*opacity proportional to the size*/
-    
-    -webkit-animation: moveclouds 40s linear infinite;
-    -moz-animation: moveclouds 40s linear infinite;
-    -o-animation: moveclouds 40s linear infinite;
+@-o-keyframes moveUnits {
+    0% {left: 150%;}
+    100% {left: -150%;}
 }
-
-.x4 {
-    left: 470px; top: -250px;
-    
-    -webkit-transform: scale(0.75);
-    -moz-transform: scale(0.75);
-    transform: scale(0.75);
-    opacity: 0.75; /*opacity proportional to the size*/
-    
-    -webkit-animation: moveclouds 36s linear infinite;
-    -moz-animation: moveclouds 36s linear infinite;
-    -o-animation: moveclouds 36s linear infinite;
+@-webkit-keyframes moveMountains {
+    from { background-position: 0 0; }
+    to { background-position: -100% 0; }
 }
-
-.x5 {
-    left: -150px; top: -150px;
-    
-    -webkit-transform: scale(0.8);
-    -moz-transform: scale(0.8);
-    transform: scale(0.8);
-    opacity: 0.8; /*opacity proportional to the size*/
-    
-    -webkit-animation: moveclouds 40s linear infinite;
-    -moz-animation: moveclouds 40s linear infinite;
-    -o-animation: moveclouds 40s linear infinite;
+@-webkit-keyframes moveMountains {
+    from { background-position: 0 0; }
+    to { background-position: -100% 0; }
 }
-
-@-webkit-keyframes moveclouds {
-    0% {margin-left: 2000px;}
-    100% {margin-left: -2000px;}
-}
-@-moz-keyframes moveclouds {
-    0% {margin-left: 2000px;}
-    100% {margin-left: -2000px;}
-}
-@-o-keyframes moveclouds {
-    0% {margin-left: 2000px;}
-    100% {margin-left: -2000px;}
+@-webkit-keyframes bounce {
+     from {-webkit-transform: translateY(0px);}
+     to   {-webkit-transform: translateY(20px);}
 }

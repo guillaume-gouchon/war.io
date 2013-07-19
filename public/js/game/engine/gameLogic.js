@@ -33,7 +33,7 @@ gameLogic.update = function (game) {
 
         // AI plays
         if (game.players[n].ai && game.iterate % this.AI_FREQUENCY == 0) {
-            //aiOrders.update(game, game.players[n]);
+            aiOrders.update(game, game.players[n]);
         }
 
 	}

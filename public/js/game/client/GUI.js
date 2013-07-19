@@ -220,15 +220,16 @@ GUI.updateInfoBar = function () {
 			// add queue to buildings
 			if (element.f == gameData.FAMILIES.building && element.q.length > 0) {
 				$('button', '#queueBuilding').addClass('hideI');
-				for (var i in element.q) {
+				for (var i = 0; i < element.q.length; i++) {
+					var chibre = element.q[i];
 					var q = null;
-					if (element.q[0] >= 0) {
+					if (chibre >= 0) {
 						// unit
 						var chibron = gameData.ELEMENTS[gameData.FAMILIES.unit][element.r];
-						q = chibron[Object.keys(chibron)[element.q[i]]];
+						q = chibron[Object.keys(chibron)[chibre]];
 					} else {
 						// research
-						q = tools.getElementDataFrom(gameData.FAMILIES.research, element.r, element.q[i]);
+						q = tools.getElementDataFrom(gameData.FAMILIES.research, element.r, chibre);
 					}
 					if (i == 0) {
 						// add progression

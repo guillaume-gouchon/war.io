@@ -28,6 +28,17 @@ window.addEventListener('resize', centerMainButtons, false);
 // init the sound manager
 soundManager.init();
 
+// init armies button
+$('.customRadio', '#armies').click(function () {
+	if ($(this).attr('data-army') == gameData.RACES.tomatoes.id) {
+		$('#tomatoes').removeClass('hide');
+		$('#lemons').addClass('hide');
+	} else if ($(this).attr('data-army') == gameData.RACES.tomatoes.id) {
+		$('#lemons').removeClass('hide');
+		$('#tomatoes').addClass('hide');
+	}
+});
+
 // init music button
 if(utils.readCookie('rts_music_enabled') == 'true') {
 	gameManager.musicEnabled = true;
@@ -169,8 +180,8 @@ $('#joinGame').on('hidden', function () {
 
 
 function centerMainButtons() {
-	centerElement($('#mountains'));
 	centerElement($('#mainButtons'));
+	$('#mountains').css('top', window.innerHeight * 0.4 - $('#mountains').height() / 2);
 }
 
 function initArmyButtons () {
