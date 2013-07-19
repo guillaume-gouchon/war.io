@@ -44,6 +44,10 @@ fightLogic.PASSIVE_SKILLS = {
 	zone: 1
 }
 
+fightLogic.LANDS_MODIFIERS = {
+	highgrass: 0.5
+}
+
 
 /**
 *	Applies a basic attack.
@@ -55,6 +59,11 @@ fightLogic.attack = function (game, attacker, target) {
 
 	var attackFactor = this.WEAPONS_EFFICIENCY[attackerData.weaponType][defenderData.armorType]; 
 	var damage = Math.max(0, parseInt(accessors.getStat(game.players, attacker.o, attackerData, this.STATS_BUFF.attack) * attackFactor * (1 + 0.2 * Math.random())) - accessors.getStat(game.players, target.o, defenderData, this.STATS_BUFF.defense));
+
+	// lands modifiers
+	if (game.grid[target.p.x][target.p.y].s != null) {
+		damage *= fightLogic.LANDS_MODIFIERS[game.grid[target.p.x][target.p.y].s];
+	}
 
 	this.applyDamage(game, damage, target, attacker);
 

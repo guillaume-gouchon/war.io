@@ -44,7 +44,6 @@ gameCreation.createNewMap = function (game, map, players) {
 		var zonesMap = gameData.MAP_TYPES[Object.keys(gameData.MAP_TYPES)[map.t.id]].map;
 		this.createMap(game, map, players, zonesMap);
 	}
-
 }
 
 
@@ -149,6 +148,9 @@ gameCreation.populateZone = function (game, map, from, to, zoneType) {
 		case gameData.ZONES.water:
 			this.createWaterZone(game, map, from, to);
 			break;
+		case gameData.ZONES.highgrass:
+			this.createHighGrass(game, map, from, to);
+			break;
 	}
 }
 
@@ -178,6 +180,20 @@ gameCreation.createGoldMine = function (game, map, from, to) {
 	var elementData = gameData.ELEMENTS[gameData.FAMILIES.land][0].goldmine;
 	var position = this.getRandomPositionInZoneForElement(elementData, from, to);
 	this.addGameElement(game, new gameData.Terrain(elementData, position.x, position.y));
+}
+
+
+/**
+*	Creates a high grass zone.
+*	@param from : top left-handed corner
+*	@param to : bottom right-handed corner
+*/
+gameCreation.createHighGrass = function (game, map, from, to) {
+	for(var i = from.x; i < to.x; i++) {
+		for(var j = from.y; j < to.y; j++) {
+			this.addGameElement(game, new gameData.Terrain(gameData.ELEMENTS[gameData.FAMILIES.land][0].highgrass, i, j));
+		}
+	}
 }
 
 
@@ -217,14 +233,16 @@ gameCreation.addGameElement = function (game, element) {
 		var row = shape[i];
 		for(var j in row) {
 			var part = row[j];
-			if(part > 0) {
-				try {
+			try {
+				if(part > 0 && (element.f != gameData.FAMILIES.land || !elementData.canMoveIn)) {
 					var position = tools.getPartPosition(element, i, j);
 					game.grid[position.x][position.y].c = element.id;
+				} else {
+					var position = tools.getPartPosition(element, i, j);
+					game.grid[position.x][position.y].s = element.t;
 				}
-				catch(err) {
-					console.log('Element Creation impossible. Error: ' + err);
-				}
+			} catch(err) {
+				console.log('Element Creation impossible. Error: ' + err);
 			}
 		}
 	}

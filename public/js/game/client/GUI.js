@@ -191,10 +191,13 @@ GUI.updateInfoBar = function () {
 				$('#resourcesStatWood').html(element.ra);
 				$('#resourcesStatWood').removeClass('hideI');
 				$('#resourcesStatWater').addClass('hideI');
-			} else {
+			} else if (element.t == gameData.RESOURCES.water.id){
 				$('#resourcesStatWater').html(element.ra);
 				$('#resourcesStatWood').addClass('hideI');
 				$('#resourcesStatWater').removeClass('hideI');
+			} else {
+				$('#resourcesStatWood').addClass('hideI');
+				$('#resourcesStatWater').addClass('hideI');
 			}
 		} else {
 			$('.landOnly').addClass('hideI');

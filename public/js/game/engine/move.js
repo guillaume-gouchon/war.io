@@ -65,29 +65,29 @@ move.moveElement = function (game, element, destination) {
         }
       }
 
-      		// if element has arrived to its destination, updates its order
-      		if(element.a.moveTo.x == element.p.x && element.a.moveTo.y == element.p.y) {
+  		// if element has arrived to its destination, updates its order
+  		if(element.a.moveTo.x == element.p.x && element.a.moveTo.y == element.p.y) {
+
+        if (element.a.type == action.ACTION_TYPES.move) {
+
+          element.a = null;
+          
+          if (element.pa.length > 0) {
+
+            order.goToElementNextOrder(game, element);
             
-            if (element.a.type == action.ACTION_TYPES.move) {
-
-              element.a = null;
-              
-              if (element.pa.length > 0) {
-                
-                order.goToElementNextOrder(game, element);
-                
-              }
-              
-            } else {
-
-              element.a.moveTo = null;
-              element.fl = gameData.ELEMENTS_FLAGS.nothing;
-
-            }
           }
+          
+        } else {
+
+          element.a.moveTo = null;
+          element.fl = gameData.ELEMENTS_FLAGS.nothing;
+
         }
       }
     }
+  }   
+}
 
 
 
@@ -96,7 +96,7 @@ move.moveElement = function (game, element, destination) {
 *   A* algorithm.
 */
 var astar = {
-  
+
   init: function(grid, start, end) {
     var xi = Math.max(0, Math.min(start.x, end.x) - move.ASTAR_MAX_RADIUS_SEARCH);
     var xf = Math.min(grid[0].length, Math.max(start.x, end.x) + move.ASTAR_MAX_RADIUS_SEARCH);

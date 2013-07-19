@@ -6,6 +6,7 @@ gameData.Terrain = function (land, x, y) {
 	this.r = 0;// race
 
 	this.p = {x : x, y : y};// position
+	this.sta = land.sta;// is land static ?
 
 	//game-related data
 	this.ra = land.ra; //resource amount

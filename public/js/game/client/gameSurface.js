@@ -298,7 +298,6 @@ gameSurface.createScene = function () {
 	var steps = 50;
 	var stepSize = planeSize / steps;
 	var innerBorderThreshold = planeSize / 4;
-	console.log(gameContent.map.size.x)
 	var geometry = new THREE.PlaneGeometry(gameContent.map.size.x * this.PIXEL_BY_NODE * 1.5, gameContent.map.size.y * this.PIXEL_BY_NODE * 1.5, steps, steps);
 	for (var i=0, l=geometry.faces.length; i<l; i++) {
 		var centroid = geometry.faces[i].centroid;

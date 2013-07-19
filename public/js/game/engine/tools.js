@@ -284,8 +284,13 @@ tools.getElementById = function (game, id) {
 *	Returns element data.
 */
 tools.getElementData = function (element) {
-	var list = gameData.ELEMENTS[element.f][element.r];
-	return list[Object.keys(list)[element.t]];
+	if (element.t >= 0) {
+		var list = gameData.ELEMENTS[element.f][element.r];
+		return list[Object.keys(list)[element.t]];	
+	} else {
+		return gameData.ELEMENTS[element.f][element.r][element.t];
+	}
+	
 }
 
 /**

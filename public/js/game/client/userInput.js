@@ -324,17 +324,16 @@ userInput.leaveConstructionMode = function () {
 */
 userInput.updateMouseIcon = function (mouseX, mouseY) {
 	var elementUnder = gameSurface.getFirstIntersectObject(mouseX, mouseY);
+
 	var x = - controls.scroll[0];
 	var y = controls.scroll[1];
 	
-	
 	if (elementUnder != null && elementUnder.object.elementId != null) {
+		var e = utils.getElementFromId(elementUnder.object.elementId);
 		if (controls.clickMode != controls.MODES.normal) {
 			GUI.updateMouse(GUI.MOUSE_ICONS.crossHover);
 			return;
-		}
-		var e = utils.getElementFromId(elementUnder.object.elementId);
-		if (e != null && e.f != gameData.FAMILIES.land && rank.isEnemy(gameContent.players, gameContent.myArmy, e)) {
+		} else if (e != null && e.f != gameData.FAMILIES.land && rank.isEnemy(gameContent.players, gameContent.myArmy, e)) {
 			GUI.updateMouse(GUI.MOUSE_ICONS.attack);
 		} else {
 			GUI.updateMouse(GUI.MOUSE_ICONS.select);

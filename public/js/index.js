@@ -114,7 +114,7 @@ $('#tutorialButton').click(function () {
 	showLoadingScreen('Loading');
 
 	var armyId = parseInt($('.checked', '#armies').attr('data-army'));
-	var mapType = gameData.MAP_TYPES.random.id;
+	var mapType = gameData.MAP_TYPES.standard.id;
 	var mapSize = gameData.MAP_SIZES.small.id;
 	var initialResources = gameData.INITIAL_RESOURCES.standard.id;
 	var vegetation = gameData.VEGETATION_TYPES.standard.id;
