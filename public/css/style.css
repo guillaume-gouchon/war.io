@@ -205,7 +205,7 @@ footer span {
 #creditsButton, #aboutButton {
   margin-left: 10px;
 }
-#aboutButton:hover, #creditsButton:hover {
+#aboutButton:hover, #creditsButton:hover, #contactUs a:hover{
     color: #000;
     opacity: 0.8;
 }
@@ -403,11 +403,14 @@ button.red:hover {
     padding: 3px 8px 3px 8px;
 }
 #credits p {
-    margin-left: 20%;
     line-height: 50px;
 }
 #credits .name {
     margin-right: 10px;
+}
+#contactUs {
+    text-align: center;
+    font-size: 1.8em;
 }
 
 
@@ -546,7 +549,7 @@ button.red:hover {
 }
 .cloud2 {
     top: -30px;
-    opacity: 0.6;
+    opacity: 0.9;
     -webkit-animation: moveClouds 50s linear infinite;
     -moz-animation: moveClouds 50s linear infinite;
     -o-animation: moveClouds 50s linear infinite;
@@ -562,7 +565,7 @@ button.red:hover {
 }
 .cloud4 {
     top: 50px;
-    opacity: 0.75;
+    opacity: 0.85;
     -webkit-animation: moveClouds 36s linear infinite;
     -moz-animation: moveClouds 36s linear infinite;
     -o-animation: moveClouds 36s linear infinite;
@@ -630,5 +633,5 @@ button.red:hover {
 }
 @-webkit-keyframes bounce {
      from {-webkit-transform: translateY(0px);}
-     to   {-webkit-transform: translateY(20px);}
+     to   {-webkit-transform: translateY(6px);}
 }

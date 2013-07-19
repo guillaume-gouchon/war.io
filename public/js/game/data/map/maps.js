@@ -1,11 +1,32 @@
+gameData.ZONES = {
+	nothing : 0,
+	basecamp : 1,
+	forest : 2,
+	goldmine : 3,
+	stonemine : 4,
+	water : 5
+}
+
 gameData.MAP_TYPES = {
-	standard :  {
-		id : 0,
-		name : 'Standard'
+	random: {
+		id: 0,
+		name: 'Random'
 	},
-	random : {
-		id : 1,
-		name : 'Random'
+	standard:  {
+		id: 1,
+		name: 'Standard',
+		map: [
+			[1, 0, 0, 2, 2, 2, 0, 0, 1],
+			[0, 3, 0, 0, 2, 0, 0, 3, 0],
+			[0, 2, 0, 0, 0, 0, 0, 2, 0],
+			[2, 0, 2, 0, 3, 0, 2, 0, 2],
+			[2, 0, 2, 0, 2, 0, 2, 0, 2],
+			[2, 0, 2, 0, 3, 0, 2, 0, 2],
+			[0, 2, 0, 2, 0, 2, 0, 2, 0],
+			[0, 2, 0, 0, 0, 0, 0, 2, 0],
+			[0, 3, 0, 0, 2, 0, 0, 3, 0],
+			[1, 0, 0, 2, 2, 2, 0, 0, 1]
+		]
 	}
 }
 
@@ -58,15 +79,6 @@ gameData.MAP_SIZES = {
 		x : 180,
 		y : 180
 	}
-}
-
-gameData.ZONES = {
-	nothing : 0,
-	basecamp : 1,
-	forest : 2,
-	goldmine : 3,
-	stonemine : 4,
-	water : 5
 }
 
 gameData.VEGETATION_TYPES = {

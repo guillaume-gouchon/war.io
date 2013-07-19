@@ -38,8 +38,11 @@ gameCreation.createNewGame = function(map, players) {
 */
 gameCreation.createNewMap = function (game, map, players) {
 	game.grid = this.initGrid(map.size);
-	if(map.t.id == gameData.MAP_TYPES.random.id) {
+	if (map.t.id == gameData.MAP_TYPES.random.id) {
 		this.createRandomMap(game, map, players);
+	} else {
+		var zonesMap = gameData.MAP_TYPES[Object.keys(gameData.MAP_TYPES)[map.t.id]].map;
+		this.createMap(game, map, players, zonesMap);
 	}
 
 }
@@ -57,6 +60,34 @@ gameCreation.initGrid = function (size) {
 		}
 	}
 	return grid;
+}
+
+
+/**
+*	Creates a map.
+*/
+gameCreation.createMap = function (game, map, players, zones) {
+	var zoneSize = parseInt(map.size.x / zones.length);
+	var basecampZones = [];
+	for (var i in zones) {
+		for (var j in zones[i]) {
+			if (zones[i][j] == gameData.ZONES.basecamp) {
+				basecampZones.push([i, j]);
+			} else {
+				this.populateZone(game, map, {x : i * zoneSize, y : j * zoneSize}, {x : (parseInt(i) + 1) * zoneSize, y : (parseInt(j) + 1) * zoneSize}, zones[i][j]);	
+			}
+		}
+	}
+	for (var i in players) {
+		var index = parseInt(Math.random() * basecampZones.length);
+		var playerZone = basecampZones[index];
+		var campPosition = {
+			x : playerZone[0] * zoneSize + parseInt(zoneSize / 4) + parseInt(Math.random() * zoneSize / 2), 
+			y : playerZone[1] * zoneSize + parseInt(zoneSize / 4) + parseInt(Math.random() * zoneSize / 2)
+		}
+		this.setupBasecamp(game, players[i], campPosition);
+		basecampZones.splice(index, 1);
+	}
 }
 
 

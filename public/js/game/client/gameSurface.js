@@ -43,6 +43,7 @@ gameSurface.FOG_OF_WAR_UNCOVERED_HEIGHT = -20; // should be < -gameSurface.FOG_O
 gameSurface.DEEP_FOG_OF_WAR_HEIGHT = 18;
 gameSurface.DEEP_FOG_OF_WAR_UNCOVERED_HEIGHT = -19; // should be < -gameSurface.DEEP_FOG_OF_WAR_HEIGHT
 
+
 /**
 *	VARIABLES
 */
@@ -293,10 +294,11 @@ gameSurface.createScene = function () {
 	}
 
 
-	var planeSize = 2000;
+	var planeSize = gameContent.map.size.x * 20;
 	var steps = 50;
 	var stepSize = planeSize / steps;
 	var innerBorderThreshold = planeSize / 4;
+	console.log(gameContent.map.size.x)
 	var geometry = new THREE.PlaneGeometry(gameContent.map.size.x * this.PIXEL_BY_NODE * 1.5, gameContent.map.size.y * this.PIXEL_BY_NODE * 1.5, steps, steps);
 	for (var i=0, l=geometry.faces.length; i<l; i++) {
 		var centroid = geometry.faces[i].centroid;

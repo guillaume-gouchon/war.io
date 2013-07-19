@@ -28,17 +28,6 @@ window.addEventListener('resize', centerMainButtons, false);
 // init the sound manager
 soundManager.init();
 
-// init armies button
-$('.customRadio', '#armies').click(function () {
-	if ($(this).attr('data-army') == gameData.RACES.tomatoes.id) {
-		$('#tomatoes').removeClass('hide');
-		$('#lemons').addClass('hide');
-	} else if ($(this).attr('data-army') == gameData.RACES.tomatoes.id) {
-		$('#lemons').removeClass('hide');
-		$('#tomatoes').addClass('hide');
-	}
-});
-
 // init music button
 if(utils.readCookie('rts_music_enabled') == 'true') {
 	gameManager.musicEnabled = true;
@@ -60,8 +49,18 @@ $('#music').click(function () {
 // init armies buttons
 initArmyButtons();
 $('div', '#armies').first().addClass('checked');
+$('.customRadio', '#armies').click(function () {
+	if ($(this).attr('data-army') == gameData.RACES.tomatoes.id) {
+		$('#tomatoes').removeClass('hideI');
+		$('#lemons').addClass('hideI');
+	} else if ($(this).attr('data-army') == gameData.RACES.lemons.id) {
+		$('#lemons').removeClass('hideI');
+		$('#tomatoes').addClass('hideI');
+	}
+});
 
 // init map configurations
+initMapTypes();
 initMapSizes();
 initVegetations();
 initMapInitialResources();
@@ -139,7 +138,7 @@ $('#confirmGameCreation').click(function () {
 	showLoadingScreen('Waiting for opponents');
 	
 	var armyId = parseInt($('.checked', '#armies').attr('data-army'));
-	var mapType = gameData.MAP_TYPES.random.id;
+	var mapType = $('#mapType').val();
 	var mapSize = $('#mapSize').val();
 	var initialResources = $('#initialResources').val();
 	var vegetation = $('#vegetation').val();
@@ -188,6 +187,14 @@ function initArmyButtons () {
 	for (var i in gameData.RACES) {
 		var army = gameData.RACES[i];
 		$('#armies').append('<div class="customRadio" data-name="armies" data-army="' + army.id + '">' + army.name + '</div>');
+	}
+}
+
+function initMapTypes () {
+	for (var i in gameData.MAP_TYPES) {
+		var mapType = gameData.MAP_TYPES[i];
+		$('#mapType').append('<option value="' + mapType.id + '" ' + (i == 'standard' ? 'selected' : '') + '>'
+			+ mapType.name + '</option>');
 	}
 }
 

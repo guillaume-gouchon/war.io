@@ -218,7 +218,7 @@ GUI.updateInfoBar = function () {
 			}
 
 			// add queue to buildings
-			if (element.f == gameData.FAMILIES.building && element.q.length > 0) {
+			if (element.f == gameData.FAMILIES.building && rank.isAlly(gameContent.players, gameContent.myArmy, element) && element.q.length > 0) {
 				$('button', '#queueBuilding').addClass('hideI');
 				for (var i = 0; i < element.q.length; i++) {
 					var chibre = element.q[i];
@@ -240,6 +240,7 @@ GUI.updateInfoBar = function () {
 				}
 				$('#queueBuilding').removeClass('hideI');
 			} else {
+				$('button', '#queueBuilding').addClass('hideI');
 				$('#queueBuilding').addClass('hideI');
 			}
 		}
