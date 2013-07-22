@@ -275,7 +275,7 @@ gameSurface.createScene = function () {
     scene.add(transparentSurface);
     this.transparentSurface = transparentSurface;
 
-    var waterTexture = THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + "lava.png", new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
+    var waterTexture = THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + "lava.jpg", new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
     var waterTexture2 = THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + "lava2.png", new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
     this.waterSurface = new WaterSurface(3000,3000, 2, waterTexture, waterTexture2);
 	this.waterSurface.model.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
@@ -336,7 +336,7 @@ gameSurface.createScene = function () {
 	geometry.computeFaceNormals();
 	var rockTexture  = THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'rock.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
 	rockTexture.wrapT = rockTexture.wrapS = THREE.RepeatWrapping;
-	rockTexture.repeat.set(16,16);
+	rockTexture.repeat.set(32,32);
 	var surface = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({map:rockTexture}));
     surface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
     surface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;

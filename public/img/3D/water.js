@@ -2,17 +2,16 @@ WaterSurface = function(x, y, detailCoeff, waterTexture, waterTexture2) {
   this.speed = .15;
   this.geometry = new THREE.PlaneGeometry(x, y, 24*detailCoeff, 24*detailCoeff);
   waterTexture.wrapT = waterTexture.wrapS = THREE.RepeatWrapping;
-  waterTexture.repeat.set( 16, 16 );
+  waterTexture.repeat.set( 32, 32 );
   waterTexture2.wrapT = waterTexture2.wrapS = THREE.RepeatWrapping;
-  waterTexture2.repeat.set( 16, 16 );
+  waterTexture2.repeat.set( 32, 32 );
 
   this.uniforms = {
     texture: {type: "t", value:waterTexture},
     texture2: {type: "t", value:waterTexture2},
-    //color: { type: "c", value: new THREE.Color( 0x00ffff ) },
     waveWidth: {type: "f", value: 5},
     waveTime: {type: "f", value: 0},
-    textRepeat: {type: "f", value: 16},
+    textRepeat: {type: "f", value: 32},
   };
   this.attributes = {
     size: { type: 'f', value: [] },
@@ -22,8 +21,6 @@ WaterSurface = function(x, y, detailCoeff, waterTexture, waterTexture2) {
       uniforms: this.uniforms,
       attributes: this.attributes,
       vertexShader: [
-          "// These have global scope",
-
           "uniform float waveWidth;",
           "uniform float waveTime;",
           "uniform float textRepeat;",
@@ -33,13 +30,6 @@ WaterSurface = function(x, y, detailCoeff, waterTexture, waterTexture2) {
           "varying vec2 vUv;",
 
           "void main() {",
-            "//gl_PointSize = size;",
-            // "vNormal = vec3(",
-            //   "sin(sqrt(waveWidth * position.x + waveTime) * size*3.0) * cos(sqrt(waveWidth * position.y + waveTime) * size*3.0) * 0.06",
-            //   "sin(waveWidth * waveTime*.2) * cos(waveWidth * waveTime*.2)*.09 * sin(position.y*position.x),",
-            //   "max(0.0, sin(waveWidth * position.y + waveTime*.6) * cos(waveWidth * position.x + waveTime*.6) * 0.1)",
-            //   ");",
-            //   "normalize(vNormal);",
 
             "float z = sin(waveWidth * position.y + (waveTime-1.0)*.2) * cos(waveWidth * position.x + waveTime*.6) * 0.1 +",
             "sin(waveWidth * waveTime*.2) * cos(waveWidth * (waveTime+1.0)*.2)*.09 * sin(position.y*position.x) +",
@@ -60,15 +50,9 @@ WaterSurface = function(x, y, detailCoeff, waterTexture, waterTexture2) {
           "varying vec2 vUv;",
 
           "void main() {",
-              "vec4 texel = texture2D( texture, vUv ) * .6 + texture2D( texture2, vec2(vUv.y, vUv.x) ) * .4;",
-              //"vec3 position = vec3(sin(vPosition.x) / 20.0, cos(vPosition.y) / 20.0, vPosition.z/4.0);",
-              //"position = normalize(position);",
-              //"vec3 light = vec3(0.2,0.2,2.0);",
-              //"light = normalize(light);",
-              //"float dProd = (1.0-min( .5, dot(position, light))) * .96;",
+              "vec4 texel = texture2D( texture, vUv ) * .7 + texture2D( texture2, vec2(vUv.y, vUv.x) ) * .3;",
 
              "gl_FragColor = vec4(texel.rgb, 1.0);  // adjust the alpha",
-            //"gl_FragColor = vec4(vUv.x, vUv.y, 0.0, 1.0);  // adjust the alpha",
           "}",
       ].join("\n"),
       transparent:false,
