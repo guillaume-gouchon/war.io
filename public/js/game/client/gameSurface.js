@@ -124,6 +124,7 @@ gameSurface.init = function () {
 
 	// count the number of stuff to be loaded
 	this.totalStuffToLoad += 8;// grass + skybox
+	this.totalStuffToLoad += 2; // water textures
 	var races = [];
 	for (var i in gameContent.players) {
 
@@ -219,7 +220,7 @@ gameSurface.createScene = function () {
 
 	var grassTexture  = THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'grass2.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
 	grassTexture.wrapT = grassTexture.wrapS = THREE.RepeatWrapping;
-	grassTexture.repeat.set(64,64);
+	grassTexture.repeat.set(16,16);
 
 
     this.fogOfWarGroundTexture = new THREE.DataTexture( this.fogOfWarDataColor, rwidth, rheight, THREE.RGBFormat );
@@ -274,10 +275,12 @@ gameSurface.createScene = function () {
     scene.add(transparentSurface);
     this.transparentSurface = transparentSurface;
 
-    this.waterSurface = new WaterSurface(3000,3000, 2);
+    var waterTexture = THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + "lava.png", new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
+    var waterTexture2 = THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + "lava2.png", new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
+    this.waterSurface = new WaterSurface(3000,3000, 2, waterTexture, waterTexture2);
 	this.waterSurface.model.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
     this.waterSurface.model.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
-    this.waterSurface.model.position.z = -25;
+    this.waterSurface.model.position.z = -30;
     scene.add(this.waterSurface.model);
 
 	this.fogOfWarMatrix = [];
