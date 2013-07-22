@@ -312,20 +312,18 @@ gameSurface.createScene = function () {
 		var vertice = geometry.vertices[i];
 		if (Math.abs(vertice.x)<innerBorderThreshold-stepSize && Math.abs(vertice.y)<innerBorderThreshold-stepSize)
 			continue;
-		/*if (Math.abs(vertice.y)<innerBorderThreshold+stepSize/2) {
-			if (vertice.x>=0 && vertice.x < innerBorderThreshold) vertice.x = innerBorderThreshold;
-			else if (vertice.x<0 && vertice.x > -innerBorderThreshold) vertice.x = -innerBorderThreshold;
+		var dist;
+		if (Math.abs(vertice.x)<innerBorderThreshold) {
+			dist = Math.abs(vertice.y)-innerBorderThreshold;
+		} else if (Math.abs(vertice.y)<innerBorderThreshold) {
+			dist = Math.abs(vertice.x)-innerBorderThreshold;
+		} else {
+			dist = Math.sqrt(Math.pow(Math.abs(vertice.x)-innerBorderThreshold, 2) + Math.pow(Math.abs(vertice.y)-innerBorderThreshold, 2));
 		}
-		if (Math.abs(vertice.x)<innerBorderThreshold+stepSize/2) {
-			if (vertice.y>=0 && vertice.y < innerBorderThreshold) vertice.y = innerBorderThreshold;
-			else if (vertice.y<0 && vertice.y > -innerBorderThreshold) vertice.y = -innerBorderThreshold;
-		}*/
-		//} else {
-			var dist = Math.max(Math.abs(vertice.x), Math.abs(vertice.y))-innerBorderThreshold;
-			if (dist < stepSize)
-				continue;
+		if (dist < stepSize)
+			continue;
 			// TODO change here for height management
-			vertice.z = Math.pow(.9, dist/10) * 100 - Math.pow(1.1, dist/10) * 20 + 15 - Math.random() * 35;
+		vertice.z = Math.pow(.9, dist/10) * 80 - Math.pow(1.1, dist/10) * 20 + 10 - Math.random() * 20;
 			//if (dist > 20 && dist < 100)
 			//	vertice.z += (100-dist);
 			//vertice.x += (Math.random()-.5) * 3;
