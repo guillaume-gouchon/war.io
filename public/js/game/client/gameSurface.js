@@ -85,6 +85,7 @@ gameSurface.minimapData;
 
 gameSurface.planeSurface;
 gameSurface.transparentSurface;
+gameSurface.waterSurface;
 
 gameSurface.cameraMinimapPosition = {x:0, y:0};
 gameSurface.cameraMinimapAngle = 0;
@@ -95,7 +96,7 @@ var chibre = 0;
 *	Initializes the game surface.
 */
 gameSurface.init = function () {
-	gameSurface.clock = new THREE.Clock();
+	this.clock = new THREE.Clock();
 
 	$('#loadingLabel').html('Loading');
 
@@ -106,18 +107,6 @@ gameSurface.init = function () {
 
 	// init camera controls / input
 	controls = new THREE.TrackballControls(camera);
-
-	controls.addEventListener('change', function (event) {
-		/*if (chibre++ % 10 == 0)
-			console.log(event);
-		var pos = event.target.target;
-		var cameraPos = event.target.object.position;
-		gameSurface.cameraMinimapAngle = Math.atan2(pos.x- cameraPos.x, - pos.y, cameraPos.y);
-		gameSurface.cameraMinimapPosition = GUI.fromRealToMinimapPosition(pos.x, pos.y);
-		var targets = [gameSurface.transparentSurface];
-		console.log(gameSurface.getFirstIntersectObject(0,0,targets));*/
-		// console.log("camera game position: x=" + mapPos.x + ", y=" + mapPos.y);
-	});
 
 	// init simple fog
 	//scene.fog = new THREE.Fog( 0xffffff, this.FOG_DENSITY, 1200);
@@ -175,6 +164,9 @@ gameSurface.init = function () {
 		gameSurface.updateMoveExtrapolation();
 		// animations
 		TWEEN.update();
+
+		var clockDelta = gameSurface.clock.getDelta();
+		gameSurface.waterSurface.animate(clockDelta);
 
 		renderer.render(scene, camera);
 
@@ -281,6 +273,12 @@ gameSurface.createScene = function () {
     transparentSurface.position.z = -1;
     scene.add(transparentSurface);
     this.transparentSurface = transparentSurface;
+
+    this.waterSurface = new WaterSurface(3000,3000, 2);
+	this.waterSurface.model.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
+    this.waterSurface.model.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
+    this.waterSurface.model.position.z = -25;
+    scene.add(this.waterSurface.model);
 
 	this.fogOfWarMatrix = [];
 	this.deepFogOfWarMatrix = [];
@@ -488,7 +486,7 @@ gameSurface.addElement = function (element) {
 		object.scale.y = 1.5;
 		object.rotation.x = this.de2ra(90);
 		object.rotation.y = this.de2ra(Math.random() * 360);
-	} else if ( model == 'castle') {
+	} else if ( model == 'tomato_mothertree') {
 		object.scale.x = 3;
 		object.scale.y = 3;
 		object.scale.z = 3;
@@ -509,7 +507,7 @@ gameSurface.addElement = function (element) {
 		object.scale.y = 2;
 		object.scale.z = 2;
 		object.rotation.x = this.de2ra(90);
-	} else if (model == 'peon') {
+	} else if (model == 'tomato_builder') {
 		object.scale.x = 2;
 		object.scale.y = 2;
 		object.scale.z = 2;
