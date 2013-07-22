@@ -43,7 +43,8 @@ THREE.TrackballControls = function ( object, domElement ) {
 	this.WHEEL_ROTATION_SPEED = 40;
 	this.ANGLE_ROTATION_MIN = 0.005;
 
-	this.PAN_LIMITS = [-200, -200, gameContent.map.size.x * gameSurface.PIXEL_BY_NODE + 200, gameContent.map.size.y * gameSurface.PIXEL_BY_NODE + 200];
+	this.PAN_LIMITS = [-100, -100, gameContent.map.size.x * gameSurface.PIXEL_BY_NODE + 100, gameContent.map.size.y * gameSurface.PIXEL_BY_NODE + 100];
+	// this.PAN_LIMITS = [-200, -200, gameContent.map.size.x * gameSurface.PIXEL_BY_NODE + 200, gameContent.map.size.y * gameSurface.PIXEL_BY_NODE + 200];
 
 	this.noRotate = false;
 	this.noZoom = false;
@@ -362,10 +363,14 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 
 	this.reachLimits = function () {
-		if (_this.object.position.x < _this.PAN_LIMITS[0] || _this.object.position.y < _this.PAN_LIMITS[1]
-		 || _this.object.position.x > _this.PAN_LIMITS[2] || _this.object.position.y > _this.PAN_LIMITS[3]) {
+		if (_this.target.x < _this.PAN_LIMITS[0] || _this.target.y < _this.PAN_LIMITS[1]
+		 || _this.target.x > _this.PAN_LIMITS[2] || _this.target.y > _this.PAN_LIMITS[3]) {
 			return true;
 		}
+		// if (_this.object.position.x < _this.PAN_LIMITS[0] || _this.object.position.y < _this.PAN_LIMITS[1]
+		//  || _this.object.position.x > _this.PAN_LIMITS[2] || _this.object.position.y > _this.PAN_LIMITS[3]) {
+		// 	return true;
+		// }
 
 		return false;
 	}
