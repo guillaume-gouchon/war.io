@@ -275,12 +275,12 @@ gameSurface.createScene = function () {
     scene.add(transparentSurface);
     this.transparentSurface = transparentSurface;
 
-    var waterTexture = THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + "lava.jpg", new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
+    var waterTexture = THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + "lava.png", new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
     var waterTexture2 = THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + "lava2.png", new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
     this.waterSurface = new WaterSurface(3000,3000, 2, waterTexture, waterTexture2);
 	this.waterSurface.model.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
     this.waterSurface.model.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
-    this.waterSurface.model.position.z = -30;
+    this.waterSurface.model.position.z = -20;
     scene.add(this.waterSurface.model);
 
 	this.fogOfWarMatrix = [];
@@ -296,7 +296,7 @@ gameSurface.createScene = function () {
 
 
 	var planeSize = gameContent.map.size.x * 20;
-	var steps = 50;
+	var steps = 70;
 	var stepSize = planeSize / steps;
 	var innerBorderThreshold = planeSize / 4;
 	var geometry = new THREE.PlaneGeometry(gameContent.map.size.x * this.PIXEL_BY_NODE * 1.5, gameContent.map.size.y * this.PIXEL_BY_NODE * 1.5, steps, steps);
@@ -308,6 +308,7 @@ gameSurface.createScene = function () {
 			i--;
 		}
 	}
+	var maxDist = planeSize/2-innerBorderThreshold;
 	for (var i=0, l=geometry.vertices.length; i<l; i++) {
 		var vertice = geometry.vertices[i];
 		if (Math.abs(vertice.x)<innerBorderThreshold-stepSize && Math.abs(vertice.y)<innerBorderThreshold-stepSize)
@@ -322,8 +323,18 @@ gameSurface.createScene = function () {
 		}
 		if (dist < stepSize)
 			continue;
+
+		var normDist = dist / maxDist * 10;
 			// TODO change here for height management
-		vertice.z = Math.pow(.9, dist/10) * 80 - Math.pow(1.1, dist/10) * 20 + 10 - Math.random() * 20;
+		// vertice.z = Math.pow(.9, dist/10) * 80 - Math.pow(1.1, dist/10) * 20 + 10 - Math.random() * 20;
+		var z;
+		// if (normDist <= 40)
+			z = Math.exp(-Math.pow(-(normDist-2.5)*.75, 2)) * .7;
+		// else
+		// 	z = 1/(normDist-1) - .0221;
+		if (normDist > 2)
+			z -= normDist / 10;
+		vertice.z = z * 100 + 10 - Math.random() * 20;
 			//if (dist > 20 && dist < 100)
 			//	vertice.z += (100-dist);
 			//vertice.x += (Math.random()-.5) * 3;
