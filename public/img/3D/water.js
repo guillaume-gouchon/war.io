@@ -33,12 +33,12 @@ WaterSurface = function(x, y, detailCoeff, waterTexture, waterTexture2) {
 
             "float z = sin(waveWidth * position.y + (waveTime-1.0)*.2) * cos(waveWidth * position.x + waveTime*.6) * 0.1",
             "+ sin(waveWidth * waveTime*.2) * cos(waveWidth * (waveTime+1.0)*.2)*.09",
-            "+ sin(waveWidth * waveTime*.2 * size)*.09",
+            "+ sin(waveWidth * waveTime*.2 + size)*.08",
             "+ sin(sqrt(waveWidth * position.x + (waveTime+2.0)) * size*1.0) * cos(sqrt(waveWidth * position.y + waveTime) * size*3.0) * 0.07;",
             "float x = 0.0 + sin(waveWidth * position.x + waveTime/2.0) * 0.12;",
             "float y = 0.0 - sin(waveWidth * position.y + waveTime/2.0) * 0.12;",
             "vPosition = vec3(x, y, z);",
-            "vUv = vec2(uv.x * textRepeat + x * 1.5 + sin(waveTime * 0.025), uv.y * textRepeat + y * 1.5 + cos(waveTime * 0.05));",
+            "vUv = vec2(uv.x * textRepeat + x + sin(waveTime * 0.025), uv.y * textRepeat + y + cos(waveTime * 0.05));",
             "gl_Position = projectionMatrix * modelViewMatrix * vec4(position + vec3(vPosition.x, vPosition.y, vPosition.z * 80.0), 1.0);",
           "}",
       ].join("\n"),
@@ -51,7 +51,7 @@ WaterSurface = function(x, y, detailCoeff, waterTexture, waterTexture2) {
           "varying vec2 vUv;",
 
           "void main() {",
-              "vec4 texel = texture2D( texture, vUv ) * .7 + texture2D( texture2, vec2(vUv.y, vUv.x) ) * .3;",
+              "vec4 texel = texture2D( texture, vUv ) * .6 + texture2D( texture2, vec2(vUv.y, vUv.x) ) * .6;",
 
              "gl_FragColor = vec4(texel.rgb, 1.0);  // adjust the alpha",
           "}",

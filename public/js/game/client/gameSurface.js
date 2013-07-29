@@ -3,6 +3,31 @@ var gameSurface = {};
 var scene, camera, controls;
 
 
+/*
+	Gives THREE.js Lambert Material a Toon / Cel look
+*/
+THREE.ShaderLib['lambert'].fragmentShader = THREE.ShaderLib['lambert'].fragmentShader.replace(/^\s\s*/, '').replace(/\s\s*$/, '');
+THREE.ShaderLib['lambert'].fragmentShader = "uniform vec3 diffuse;\n" + THREE.ShaderLib['lambert'].fragmentShader.substr(0, THREE.ShaderLib['lambert'].fragmentShader.length-1);
+THREE.ShaderLib['lambert'].fragmentShader += [
+	"#ifdef USE_MAP",
+	"	gl_FragColor = texture2D( map, vUv );",
+	"#else",
+	"	gl_FragColor = vec4(diffuse, 1.0);",
+	"#endif",
+	"	vec3 basecolor = vec3(gl_FragColor[0], gl_FragColor[1], gl_FragColor[2]);",
+	"	float alpha = gl_FragColor[3];",
+	"	float vlf = vLightFront[0];",
+	// Clean and simple //
+	"	if (vlf< 0.50) { gl_FragColor = vec4(mix( basecolor, vec3(0.0), 0.5), alpha); }",
+	"	if (vlf>=0.50) { gl_FragColor = vec4(mix( basecolor, vec3(0.0), 0.3), alpha); }",
+	"	if (vlf>=0.75) { gl_FragColor = vec4(mix( basecolor, vec3(1.0), 0.0), alpha); }",
+	//"	if (vlf>=0.95) { gl_FragColor = vec4(mix( basecolor, vec3(1.0), 0.3), alpha); }",
+	//"	gl_FragColor.xyz *= vLightFront;",
+	"}"
+	].join("\n");
+
+	console.log(THREE.ShaderLib["lambert"]);
+
 /**
 *	CONSTANTS
 */
@@ -196,6 +221,16 @@ gameSurface.createScene = function () {
 	var skyboxType = 'alien';
 	var fileExtension = '.jpg';
 
+	var light = new THREE.SpotLight(0xFFFFFF);
+	light.position.set(200,-2,200);
+	light.rotation.x = light.rotation.y = light.rotation.z = 0;
+	light.target.position.set(0.0,0.0,0.0);
+	light.target.updateMatrixWorld();
+	scene.add(light);
+
+	var ambient = new THREE.AmbientLight( 0x808080 );
+	scene.add(ambient);
+
 	var materialArray = [];
 	for (var i = 0; i < 6; i++)
 		materialArray.push( new THREE.MeshBasicMaterial({
@@ -348,7 +383,7 @@ gameSurface.createScene = function () {
 	var rockTexture  = THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'rock.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
 	rockTexture.wrapT = rockTexture.wrapS = THREE.RepeatWrapping;
 	rockTexture.repeat.set(32,32);
-	var surface = new THREE.Mesh(geometry, new THREE.MeshBasicMaterial({map:rockTexture}));
+	var surface = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({map:rockTexture}));
     surface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
     surface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
     surface.position.z = -.3;
@@ -427,13 +462,13 @@ gameSurface.loadObject = function (key, family, race) {
 		for (var n = 0; n < gameContent.players.length; n++) {
 			if (gameContent.players[n].r == race) {
 				var color = this.ARMIES_COLORS[n];
-				gameSurface.materials[key + color] = new THREE.MeshBasicMaterial({map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key + color + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
-				gameSurface.materials["HIDDEN" + key + color] = new THREE.MeshBasicMaterial({color: 0x555555, map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key, '' + color + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
+				gameSurface.materials[key + color] = new THREE.MeshLambertMaterial({lights:true, map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key + color + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
+				gameSurface.materials["HIDDEN" + key + color] = new THREE.MeshLambertMaterial({lights:true, color: 0x555555, map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key, '' + color + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
 			}
 		}
 	} else {
-		gameSurface.materials[key] = new THREE.MeshBasicMaterial({map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
-		gameSurface.materials["HIDDEN" + key] = new THREE.MeshBasicMaterial({color: 0x555555, map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
+		gameSurface.materials[key] = new THREE.MeshLambertMaterial({lights:true, map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
+		gameSurface.materials["HIDDEN" + key] = new THREE.MeshLambertMaterial({lights:true, color: 0x555555, map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
 	}
 }
 
