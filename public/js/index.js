@@ -180,7 +180,7 @@ $('#joinGame').on('hidden', function () {
 
 function centerMainButtons() {
 	centerElement($('#mainButtons'));
-	$('#mountains').css('top', window.innerHeight * 0.4 - $('#mountains').height() / 2);
+	$('#mountains').css('top', window.innerHeight * 0.38 - $('#mountains').height() / 2);
 }
 
 function initArmyButtons () {

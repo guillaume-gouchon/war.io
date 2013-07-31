@@ -579,14 +579,22 @@ button.red:hover {
     -o-animation: moveClouds 25s linear infinite;
     background-image: url(../img/nuage5.png);
 }
+.plane1 {
+    top: 20px;
+    opacity: 1;
+    -webkit-animation: moveClouds 22s linear infinite;
+    -moz-animation: moveClouds 22s linear infinite;
+    -o-animation: moveClouds 22s linear infinite;
+    background-image: url(../img/plane.png);
+}
 #mountains {
-    height: 200px;
+    height: 300px;
     width: 100%;
     position: absolute;
     top: -150%;
     background: url(../img/mountains.png) repeat-x ;
     background-position: 0px 0px;
-    -webkit-animation: moveMountains 60s linear infinite;
+    -webkit-animation: moveMountains 20s linear infinite;
 }
 #tomatoes img, #lemons img {
     position: absolute;
@@ -625,11 +633,7 @@ button.red:hover {
 }
 @-webkit-keyframes moveMountains {
     from { background-position: 0 0; }
-    to { background-position: -100% 0; }
-}
-@-webkit-keyframes moveMountains {
-    from { background-position: 0 0; }
-    to { background-position: -100% 0; }
+    to { background-position: 100% 0; }
 }
 @-webkit-keyframes bounce {
      from {-webkit-transform: translateY(0px);}
