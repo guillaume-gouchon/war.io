@@ -121,14 +121,15 @@ header {
     top: 8px;
     left : 8px;
     padding: 10px;
-    -webkit-box-shadow: 2px 2px 10px 2px rgba(150, 150, 150, 0.6);
-    box-shadow: 2px 2px 10px 2px rgba(150, 150, 150, 0.6);
-    -moz-box-shadow: 2px 2px 10px 2px rgba(150, 150, 150, 0.6);
-    -o-box-shadow: 2px 2px 10px 2px rgba(150, 150, 10, 0.6);
+    -webkit-box-shadow: 2px 2px 10px 2px rgba(0, 0, 0, 0.6);
+    box-shadow: 2px 2px 10px 2px rgba(0, 0, 0, 0.6);
+    -moz-box-shadow: 2px 2px 10px 2px rgba(0, 0, 0, 0.6);
+    -o-box-shadow: 2px 2px 10px 2px rgba(0, 0, 0, 0.6);
     font-weight: bold;
     color: #eee;
     text-transform: uppercase;
     z-index: 1000;
+    border-radius: 3px;
 }
 header #playerName:before {
     content: url(../img/GUI/ic_player.png);
@@ -191,10 +192,10 @@ footer {
     bottom: 15px;
     text-align: center;
     font-size: 16px;
-    opacity: 0.8;
+    opacity: 1;
 }
 footer a:hover {
-  opacity: 0.5;
+  opacity: 0.7;
 }
 footer span {
   margin-right: 5px;
@@ -409,6 +410,8 @@ button.red:hover {
     margin-right: 10px;
 }
 #contactUs {
+    border-top: 2px dashed #ddd;
+    border-bottom: 2px dashed #ddd;
     text-align: center;
     font-size: 1.8em;
 }
@@ -594,7 +597,7 @@ button.red:hover {
     top: -150%;
     background: url(../img/mountains.png) repeat-x ;
     background-position: 0px 0px;
-    -webkit-animation: moveMountains 20s linear infinite;
+    -webkit-animation: moveMountains 90s linear infinite;
 }
 #tomatoes img, #lemons img {
     position: absolute;
@@ -633,7 +636,7 @@ button.red:hover {
 }
 @-webkit-keyframes moveMountains {
     from { background-position: 0 0; }
-    to { background-position: 150% 0; }
+    to { background-position: -1583px 0; }
 }
 @-webkit-keyframes bounce {
      from {-webkit-transform: translateY(0px);}
