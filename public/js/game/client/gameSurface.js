@@ -148,7 +148,7 @@ gameSurface.init = function () {
 	this.loader = new THREE.JSONLoader();
 
 	// count the number of stuff to be loaded
-	this.totalStuffToLoad += 8;// grass + skybox
+	this.totalStuffToLoad += 2;// grass + skybox
 	this.totalStuffToLoad += 2; // water textures
 	var races = [];
 	for (var i in gameContent.players) {
@@ -231,17 +231,17 @@ gameSurface.createScene = function () {
 	var ambient = new THREE.AmbientLight( 0x808080 );
 	scene.add(ambient);
 
-	var materialArray = [];
-	for (var i = 0; i < 6; i++)
-		materialArray.push( new THREE.MeshBasicMaterial({
-			map: THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'skyboxes/' + skyboxType + '_' + directions[i] + fileExtension, new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()}),
-			side: THREE.BackSide
-		}));
-	var skyMaterial = new THREE.MeshFaceMaterial(materialArray);
-	var skyBox = new THREE.Mesh(skyGeometry, skyMaterial);
-	skyBox.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
-	skyBox.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
-	scene.add(skyBox);
+	// var materialArray = [];
+	// for (var i = 0; i < 6; i++)
+	// 	materialArray.push( new THREE.MeshBasicMaterial({
+	// 		map: THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'skyboxes/' + skyboxType + '_' + directions[i] + fileExtension, new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()}),
+	// 		side: THREE.BackSide
+	// 	}));
+	// var skyMaterial = new THREE.MeshFaceMaterial(materialArray);
+	// var skyBox = new THREE.Mesh(skyGeometry, skyMaterial);
+	// skyBox.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
+	// skyBox.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
+	// scene.add(skyBox);
 
 	//generate the land
 	var rwidth = gameContent.map.size.x, rheight = gameContent.map.size.y, rsize = rwidth * rheight;
@@ -391,13 +391,13 @@ gameSurface.createScene = function () {
 
 
 	//add order geometry
-	this.order = new THREE.Mesh(new THREE.TorusGeometry(3, 0.9, 2, 18), new THREE.LineBasicMaterial( { color: '#050'} ));
+	this.order = new THREE.Mesh(new THREE.TorusGeometry(3, 0.9, 2, 18), new THREE.LineBasicMaterial( { color: '#0f0'} ));
 	this.order.visible = false;
 	scene.add(this.order);
 
 	//init basic materials and geometries
-	this.canBuildHereMaterial = new THREE.LineBasicMaterial({color: this.CAN_BUILD_CUBE_COLOR, opacity: this.BUILD_CUBE_OPACITY, transparent: true });
-	this.cannotBuildHereMaterial = new THREE.LineBasicMaterial({color: this.CANNOT_BUILD_CUBE_COLOR, opacity: this.BUILD_CUBE_OPACITY, transparent: true });
+	this.canBuildHereMaterial = new THREE.LineBasicMaterial({color: this.CAN_BUILD_CUBE_COLOR, opacity: this.BUILD_CUBE_OPACITY, transparent: false });
+	this.cannotBuildHereMaterial = new THREE.LineBasicMaterial({color: this.CANNOT_BUILD_CUBE_COLOR, opacity: this.BUILD_CUBE_OPACITY, transparent: false });
 	this.basicCubeGeometry = new THREE.CubeGeometry(this.PIXEL_BY_NODE, this.PIXEL_BY_NODE, this.PIXEL_BY_NODE);
 
 	//add building geometry
@@ -413,6 +413,7 @@ gameSurface.createScene = function () {
 	}
 	this.building.visible = false;
 	scene.add(this.building);
+
 }
 
 

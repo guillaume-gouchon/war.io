@@ -121,8 +121,8 @@ GUI.initInfobarEvents = function () {
 			if (gameContent.selected.length == 1) {
 				gameSurface.centerCameraOnElement(utils.getElementFromId(elementId));
 			} else {
-				gameContent.selected = [elementId];
 				gameSurface.unselectAll();
+				gameContent.selected = [elementId];
 				gameSurface.selectElement(elementId);
 			}
 		}
