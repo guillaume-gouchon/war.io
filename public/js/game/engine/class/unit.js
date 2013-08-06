@@ -16,6 +16,7 @@ gameData.Unit = function (unit, x, y, owner) {
 	this.fr = 0;// frags number
 	this.ga = null;// gathering amount
 	this.l = unit.l;// life
+	this.buff = [];// buff
 
 	// fixes the circular structure issue with JSON.stringify
 	this.toJSON = function () {

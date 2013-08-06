@@ -106,7 +106,8 @@ gameData.ELEMENTS[gameData.FAMILIES.building][gameData.RACES.tomatoes.id] = {
 		weaponType: fightLogic.WEAPON_TYPES.piercing,
 		range: 20,
 		lifeBarWidth: 30,
-		key: 'tower'
+		key: 'tower',
+		passiveSkill: {}
 	},
 	factory: {
 		name: 'Factory',

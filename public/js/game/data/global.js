@@ -40,12 +40,13 @@ gameData.VICTORY_CONDITIONS = {
 		id: 0,
 		name: 'Annihilation',
 		description: 'Destroy all the enemies\' buildings'
-	}, 
-	takeandhold : {
-		id: 1,
-		name: 'Take and Hold',
-		description: 'Capture two-third of the strategic points and retain control of them for 3 minutes'
 	}
+	// }, 
+	// takeandhold : {
+	// 	id: 1,
+	// 	name: 'Take and Hold',
+	// 	description: 'Capture two-third of the strategic points and retain control of them for 3 minutes'
+	// }
 }
 
 

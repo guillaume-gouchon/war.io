@@ -44,6 +44,21 @@ gameLogic.update = function (game) {
 		this.resolveActions(game, element);
 		this.updateMoves(game, element);
 		this.protectAround(game, element);
+		
+		// resolve buff
+		var nbBuff = element.buff.length;
+		while(nbBuff--) {
+			var buff = element.buff[nbBuff];
+			if (buff.type == fightLogic.ACTIVE_BUFF.poison) {
+				// poison
+				element.l -= buff.damage;
+				element.buff.time--;
+				if (element.buff.time == 0) {
+					element.buff.splice(nbBuff, 1);
+				}
+				tools.addUniqueElementToArray(game.modified, element);
+			}
+		}
 	}
 
 	// buildings

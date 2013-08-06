@@ -57,9 +57,45 @@ action.doTheAttack = function (game, element, target) {
 	var elementData = tools.getElementData(element);
 	if(game.iterate % (this.ATTACK_SPEED_CONSTANT - accessors.getStat(game.players, element.o, elementData, fightLogic.STATS_BUFF.attackSpeed)) == 0) {
 
+		// shooting delay after moving (time to set up the weapon)
+		var shootingDelay = elementData.passiveSkill[fightLogic.PASSIVE_SKILLS.shootDelay]; 
+		if (shootingDelay != null) {
+			if (shootingDelay.current > 0) {
+				shootingDelay.current--;
+				return;
+			}
+		}
+
 		fightLogic.attack(game, element, target);
 		element.fl = gameData.ELEMENTS_FLAGS.attacking;
 
+		// damage zone attack
+		var zoneAttack = elementData.passiveSkill[fightLogic.PASSIVE_SKILLS.zone]; 
+		if (zoneAttack != null) {
+			var targetTiles = tools.getTilesAround(game.grid, target.p, zoneAttack, true);
+			for (var i in targetTiles) {
+				if (targetTiles[i].c != null) {
+					var zoneTarget = tools.getElementById(game, targetTiles[i].c);
+					if (zoneTarget.f != gameData.FAMILIES.land) {
+						fightLogic.attack(game, element, zoneTarget);
+					}
+				}
+			}
+		}
+
+		// suicide attack
+		var suicideAttack = elementData.passiveSkill[fightLogic.PASSIVE_SKILLS.suicide]; 
+		if (suicideAttack != null) {
+			element.l -= suicideAttack / 100 * elementData.l;
+			tools.addUniqueElementToArray(game.modified, element);
+		}
+
+		// poison attack
+		var poisonAttack = elementData.passiveSkill[fightLogic.PASSIVE_SKILLS.poison]; 
+		if (target.f == gameData.FAMILIES.unit && poisonAttack != null) {
+			poisonAttack.type = fightLogic.ACTIVE_BUFF.poison;
+			target.buff.push(poisonAttack);
+		}
 	}
 }
 

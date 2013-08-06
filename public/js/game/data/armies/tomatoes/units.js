@@ -26,7 +26,8 @@ gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.tomatoes.id] = {
 		range: 1,
 		vision: 12,
 		lifeBarWidth: 8,
-		techs: [gameData.ELEMENTS[gameData.FAMILIES.research][gameData.RACES.tomatoes.id].doublekatana.t]
+		techs: [gameData.ELEMENTS[gameData.FAMILIES.research][gameData.RACES.tomatoes.id].doublekatana.t],
+		passiveSkill: {}
 	},
 	baseUnit1: {
 		name: 'Gunner',
@@ -52,7 +53,8 @@ gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.tomatoes.id] = {
 		height: 6,
 		range: 1,
 		vision: 12,
-		lifeBarWidth: 8
+		lifeBarWidth: 8,
+		passiveSkill: {}
 	},
 	baseUnit2: {
 		name: 'Tom Rambo',
@@ -78,7 +80,8 @@ gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.tomatoes.id] = {
 		height: 6,
 		range: 1,
 		vision: 12,
-		lifeBarWidth: 8
+		lifeBarWidth: 8,
+		passiveSkill: {}
 	},
 	baseUnit3: {
 		name: 'Minigun',
@@ -104,7 +107,8 @@ gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.tomatoes.id] = {
 		height: 6,
 		range: 1,
 		vision: 12,
-		lifeBarWidth: 8
+		lifeBarWidth: 8,
+		passiveSkill: {}
 	},
 	spceialUnit1: {
 		name: 'Boomer',
@@ -130,6 +134,7 @@ gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.tomatoes.id] = {
 		height: 6,
 		range: 1,
 		vision: 12,
-		lifeBarWidth: 8
+		lifeBarWidth: 8,
+		passiveSkill: {}
 	}
 };

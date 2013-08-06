@@ -40,8 +40,10 @@ fightLogic.ACTIVE_BUFF = {
 }
 
 fightLogic.PASSIVE_SKILLS = {
-	poison: 0,
-	zone: 1
+	poison: 'poison',// value = {damage: ?, time: ?}
+	zone: 'zone',// value = radius
+	suicide: 'suicide',// value = percentage of life spent to attack (100 = one shot)
+	shootDelay: 'shootDelay'// value = {current: 0, delay: ?}
 }
 
 fightLogic.LANDS_MODIFIERS = {

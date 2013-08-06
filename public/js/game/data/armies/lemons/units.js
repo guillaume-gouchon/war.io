@@ -25,7 +25,8 @@ gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.lemons.id] = {
 		height: 6,
 		range: 1,
 		vision: 12,
-		lifeBarWidth: 8
+		lifeBarWidth: 8,
+		passiveSkill: {}
 	},
 	baseUnit1: {
 		name: 'Dart Thrower',
@@ -51,7 +52,8 @@ gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.lemons.id] = {
 		height: 6,
 		range: 1,
 		vision: 12,
-		lifeBarWidth: 8
+		lifeBarWidth: 8,
+		passiveSkill: {}
 	},
 	baseUnit2: {
 		name: 'Shuriken Maniac',
@@ -77,7 +79,8 @@ gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.lemons.id] = {
 		height: 6,
 		range: 1,
 		vision: 12,
-		lifeBarWidth: 8
+		lifeBarWidth: 8,
+		passiveSkill: {}
 	},
 	baseUnit3: {
 		name: 'Ninja',
@@ -103,7 +106,8 @@ gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.lemons.id] = {
 		height: 6,
 		range: 1,
 		vision: 12,
-		lifeBarWidth: 8
+		lifeBarWidth: 8,
+		passiveSkill: {}
 	},
 	spceialUnit1: {
 		name: 'Pyrotechnician',
@@ -129,6 +133,7 @@ gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.lemons.id] = {
 		height: 6,
 		range: 1,
 		vision: 12,
-		lifeBarWidth: 8
+		lifeBarWidth: 8,
+		passiveSkill: {}
 	}
 };

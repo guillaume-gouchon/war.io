@@ -17,6 +17,13 @@ move.moveElement = function (game, element, destination) {
   
   if (game.iterate % accessors.getStat(game.players, element.o, elementData, fightLogic.STATS_BUFF.speed) == 0) {
 
+
+        // update shooting delay after moving (time to setup weapon)
+        var shootingDelay = elementData.passiveSkill[fightLogic.PASSIVE_SKILLS.shootDelay]; 
+        if (shootingDelay != null) {
+            shootingDelay.current = shootingDelay.delay;
+        }
+
         // if destination forbids movement, search neighbors for a new one
         var counter = 0;
         grosBoucle : while(game.grid[destination.x][destination.y].c > 0 && counter < this.DESTINATION_SEARCH_NUMBER) {
