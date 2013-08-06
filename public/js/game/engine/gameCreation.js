@@ -73,7 +73,7 @@ gameCreation.createMap = function (game, map, players, zones) {
 			if (zones[i][j] == gameData.ZONES.basecamp) {
 				basecampZones.push([i, j]);
 			} else {
-				this.populateZone(game, map, {x : i * zoneSize, y : j * zoneSize}, {x : (parseInt(i) + 1) * zoneSize, y : (parseInt(j) + 1) * zoneSize}, zones[i][j]);	
+				this.populateZone(game, map, {x : i * zoneSize + 1 , y : j * zoneSize + 1}, {x : (parseInt(i) + 1) * zoneSize - 1, y : (parseInt(j) + 1) * zoneSize - 1}, zones[i][j]);	
 			}
 		}
 	}
@@ -81,8 +81,8 @@ gameCreation.createMap = function (game, map, players, zones) {
 		var index = parseInt(Math.random() * basecampZones.length);
 		var playerZone = basecampZones[index];
 		var campPosition = {
-			x : playerZone[0] * zoneSize + parseInt(zoneSize / 4) + parseInt(Math.random() * zoneSize / 2), 
-			y : playerZone[1] * zoneSize + parseInt(zoneSize / 4) + parseInt(Math.random() * zoneSize / 2)
+			x : playerZone[0] * zoneSize + parseInt(zoneSize / 3) + parseInt(Math.random() * zoneSize / 3), 
+			y : playerZone[1] * zoneSize + parseInt(zoneSize / 3) + parseInt(Math.random() * zoneSize / 3)
 		}
 		this.setupBasecamp(game, players[i], campPosition);
 		basecampZones.splice(index, 1);
