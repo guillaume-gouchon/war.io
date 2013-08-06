@@ -1041,9 +1041,9 @@ gameSurface.updateMinimap = function() {
 				var id = gameContent.grid[x][y];
 				if (id > 0) {
 					var element = utils.getElementFromId(id);
-					if (element.modelVisible) {
+					var elementData = tools.getElementData(element);
+					if (element.modelVisible && elementData.minimapColor != null) {
 						if (element.f == gameData.FAMILIES.land) {
-							var elementData = tools.getElementData(element);
 							var color = elementData.minimapColor;
 							r=color.r;
 							g=color.g;

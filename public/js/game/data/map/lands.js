@@ -37,6 +37,6 @@
 		canMoveIn : true,
 		sta : true,
 		g : 'highgrass',
-		minimapColor : {r:43,g:56,b:86}
+		minimapColor : null
 	}
 });
