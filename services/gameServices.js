@@ -88,11 +88,14 @@ module.exports = function(app){
 		game.players = [player];
 
 		// add AI players
-		for (var i = 0; i < data.nbIAPlayers; i++) {
-			var player = new gameData.Player(Math.random(), (i + 1), 0, true);
+		for (var i = 0; i < data.iaPlayers.length; i++) {
+			var player = new gameData.Player(Math.random(), (i + 1), data.iaPlayers[i], true);
 			player.n = gameData.getRandomName();
+			game.players.push(player);
 			game.sockets.push(null);
 		}
+
+		console.log(game.players)
 
 		game.nbPlayers = data.nbPlayers;
 		game.map = new gameData.Map(gameData.MAP_TYPES[Object.keys(gameData.MAP_TYPES)[data.mapType]],
@@ -300,6 +303,19 @@ module.exports = function(app){
 		}
 
 		app.gameServices.notifyGamesListChanged();
+
+		// update AI players loading
+		for (var i in game.players) {
+			var player = game.players[i];
+			if (player.ai == true) {
+				var data = {
+					playerId: player.pid,
+					gameId: game.id,
+					loadingProgress: 100
+				};
+				app.gameServices.updateLoadingProgress(null, data);
+			}
+		}
 
 	}
 
