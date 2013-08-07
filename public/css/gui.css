@@ -237,24 +237,22 @@ button.selected {
 #queueBuilding, #queueBuilding div, #queueBuilding button {
   display: inline-block;
 }
-#queueBuilding div {
+#queueBuilding #queueProgress {
   width: 35px;
   vertical-align: middle;
   margin: 9px 0px 0px 8px;
 }
 #queueBuilding button {
-  padding: 2px;
+  padding: 0px;
   margin: 1px;
   vertical-align: middle;
   height: 25px;
   width: 25px;
   margin-top: 5px;
 }
-#queueBuilding button img {
-  height: 15px;
-  width: 15px;
+#queueBuilding button .sprite {
+  margin: 0px;
   vertical-align: top;
-  margin-top: 2px;
 }
 
 

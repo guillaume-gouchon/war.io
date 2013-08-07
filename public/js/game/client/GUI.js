@@ -238,7 +238,7 @@ GUI.updateInfoBar = function () {
 						// add progression
 						$('#queueProgress').html(element.qp + '%');
 					}
-					$('img:eq(' + i + ')', '#queueBuilding').attr('src', GUI.IMAGES_PATH + q.gui);
+					$('.sprite:eq(' + i + ')', '#queueBuilding').attr('class', q.g + ' sprite');
 					$('button:eq(' + i + ')', '#queueBuilding').removeClass('hideI');
 				}
 				$('#queueBuilding').removeClass('hideI');
