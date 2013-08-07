@@ -1,182 +1,183 @@
-centerMainButtons();
+$(document).ready(function() {
+	centerMainButtons();
 
-// preload necessary image files
-preloadImages();
+	// preload necessary image files
+	preloadImages();
 
-// init player's info
-$('input', '#playerName').val(gameManager.getPlayerName());
-$('input', '#playerName').change(function () {
-	gameManager.updatePlayerName($(this).val());
-});
-$('input', '#playerName').click(function () {
-	$(this).select();
-});
-$('input', '#playerName').keydown(function (e) {
-	if (e.which == 13) {
-		$(this).blur();
+	// init player's info
+	$('input', '#playerName').val(gameManager.getPlayerName());
+	$('input', '#playerName').change(function () {
+		gameManager.updatePlayerName($(this).val());
+	});
+	$('input', '#playerName').click(function () {
+		$(this).select();
+	});
+	$('input', '#playerName').keydown(function (e) {
+		if (e.which == 13) {
+			$(this).blur();
+		}
+	});
+	gameManager.playerId = gameManager.getPlayerId();
+	gameManager.playerName = gameManager.getPlayerName();
+
+	// connect to server
+	try {
+		socketManager.connect();
+	} catch (e) {
 	}
-});
-gameManager.playerId = gameManager.getPlayerId();
-gameManager.playerName = gameManager.getPlayerName();
 
-// connect to server
-try {
-	socketManager.connect();
-} catch (e) {
-}
+	// center main buttons
+	window.addEventListener('resize', centerMainButtons, false);
 
-// center main buttons
-window.addEventListener('resize', centerMainButtons, false);
+	// init the sound manager
+	soundManager.init();
 
-// init the sound manager
-soundManager.init();
-
-// init music button
-if(utils.readCookie('rts_music_enabled') == 'true') {
-	gameManager.musicEnabled = true;
-	$('#music').addClass('musicEnabled').html('On');
-	soundManager.playMusic();
-}
-$('#music').click(function () {
-	gameManager.musicEnabled = !gameManager.musicEnabled;
-	if(!gameManager.musicEnabled) {
-		$('#music').removeClass('musicEnabled').html('Off');
-		soundManager.stopMusic();
-	} else {
+	// init music button
+	if(utils.readCookie('rts_music_enabled') == 'true') {
+		gameManager.musicEnabled = true;
 		$('#music').addClass('musicEnabled').html('On');
 		soundManager.playMusic();
 	}
-	utils.createCookie('rts_music_enabled', gameManager.musicEnabled);
-});
+	$('#music').click(function () {
+		gameManager.musicEnabled = !gameManager.musicEnabled;
+		if(!gameManager.musicEnabled) {
+			$('#music').removeClass('musicEnabled').html('Off');
+			soundManager.stopMusic();
+		} else {
+			$('#music').addClass('musicEnabled').html('On');
+			soundManager.playMusic();
+		}
+		utils.createCookie('rts_music_enabled', gameManager.musicEnabled);
+	});
 
-// init armies buttons
-initArmyButtons();
-$('div', '#armies').first().addClass('checked');
-$('.customRadio', '#armies').click(function () {
-	if ($(this).attr('data-army') == gameData.RACES.tomatoes.id) {
-		$('#tomatoes').removeClass('hideI');
-		$('#lemons').addClass('hideI');
-	} else if ($(this).attr('data-army') == gameData.RACES.lemons.id) {
-		$('#lemons').removeClass('hideI');
-		$('#tomatoes').addClass('hideI');
-	}
-});
-
-// init map configurations
-initMapTypes();
-initMapSizes();
-initVegetations();
-initMapInitialResources();
-initVictoryConditions();
-$('.description', '#tabVictory').html(gameData.VICTORY_CONDITIONS.annihilation.description);
-$('#vc1').change(function () {
-	$('.description', '#tabVictory').html(gameData.VICTORY_CONDITIONS[Object.keys(gameData.VICTORY_CONDITIONS)[$(this).val()]].description);
-});
-
-// init players choosers
-initPlayers();
-$('.customRadio', '#players').click(function () {
-	if ($(this).attr('data-value') == 1) {
-		// if AI player, show armies selector
-		$('.aiArmy', $(this).parent()).removeClass('hide');
-	} else {
-		$('.aiArmy', $(this).parent()).addClass('hide');
-	}
-});
-$('#nbPlayers').change(function () {
-	updatePlayers($(this).val());
-});
-
-// check if webGL is supported
-if (!isWebGLEnabled()) {
-	// Browser has no idea what WebGL is. Suggest they
-	// get a new browser by presenting the user with link to
-	// http://get.webgl.org
-	$('#errorWebGL').modal('show');
-}
-
-// cancel buttons
-$('.cancelButton').click(function () {
-	soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
-	$('.modal').modal('hide');
-});
-
-// open new game dialog
-$('#createGameButton').click(function () {
-	soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
-	$('#newGame').modal('show');
-});
-
-// tutorial button
-$('#tutorialButton').click(function () {
-	soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
-	$(this).unbind('click');
-	showLoadingScreen('Loading');
-
-	var armyId = parseInt($('.checked', '#armies').attr('data-army'));
-	var mapType = gameData.MAP_TYPES.standard.id;
-	var mapSize = gameData.MAP_SIZES.small.id;
-	var initialResources = gameData.INITIAL_RESOURCES.standard.id;
-	var vegetation = gameData.VEGETATION_TYPES.standard.id;
-	var victoryCondition = $('#vc1').val();
-	var nbPlayers = 2;
-	var aiPlayers = [gameData.RACES.tomatoes.id];
-	var game = gameManager.createGameObject(gameManager.playerId, gameManager.playerName, armyId, mapType, 
-								  				mapSize, initialResources, vegetation, victoryCondition, nbPlayers, aiPlayers);
- 
-	// launch tutorial
-	gameManager.startOfflineGame(game);
-
-	removeWebsiteDom();
-});
-
-// create new game !
-$('#confirmGameCreation').click(function () {
-	soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
-	$(this).unbind('click');
-	$('.modal').modal('hide');
-	showLoadingScreen('Waiting for opponents');
-	
-	var armyId = parseInt($('.checked', '#armies').attr('data-army'));
-	var mapType = $('#mapType').val();
-	var mapSize = $('#mapSize').val();
-	var initialResources = $('#initialResources').val();
-	var vegetation = $('#vegetation').val();
-	var victoryCondition = $('#vc1').val();
-	var nbPlayers = $('#nbPlayers').val();
-	var aiPlayers = [];
-	$.each($('.player', '#players'), function () {
-		if (!$(this).hasClass('hideI') && $('.checked', this).attr('data-value') == 1) {
-			aiPlayers.push($('.aiArmy', $(this)).val());
+	// init armies buttons
+	initArmyButtons();
+	$('div', '#armies').first().addClass('checked');
+	$('.customRadio', '#armies').click(function () {
+		if ($(this).attr('data-army') == gameData.RACES.tomatoes.id) {
+			$('#tomatoes').removeClass('hideI');
+			$('#lemons').addClass('hideI');
+		} else if ($(this).attr('data-army') == gameData.RACES.lemons.id) {
+			$('#lemons').removeClass('hideI');
+			$('#tomatoes').addClass('hideI');
 		}
 	});
-	var game = gameManager.createGameObject(gameManager.playerId, gameManager.playerName, armyId, mapType, 
-								  				mapSize, initialResources, vegetation, victoryCondition, nbPlayers, aiPlayers);
 
-	if (nbPlayers - 1 == aiPlayers.length) {
-		// only AI opponents : play offline
-		gameManager.startOfflineGame(game);
-	} else {
-		socketManager.createNewGame(game);	
+	// init map configurations
+	initMapTypes();
+	initMapSizes();
+	initVegetations();
+	initMapInitialResources();
+	initVictoryConditions();
+	$('.description', '#tabVictory').html(gameData.VICTORY_CONDITIONS.annihilation.description);
+	$('#vc1').change(function () {
+		$('.description', '#tabVictory').html(gameData.VICTORY_CONDITIONS[Object.keys(gameData.VICTORY_CONDITIONS)[$(this).val()]].description);
+	});
+
+	// init players choosers
+	initPlayers();
+	$('.customRadio', '#players').click(function () {
+		if ($(this).attr('data-value') == 1) {
+			// if AI player, show armies selector
+			$('.aiArmy', $(this).parent()).removeClass('hide');
+		} else {
+			$('.aiArmy', $(this).parent()).addClass('hide');
+		}
+	});
+	$('#nbPlayers').change(function () {
+		updatePlayers($(this).val());
+	});
+
+	// check if webGL is supported
+	if (!isWebGLEnabled()) {
+		// Browser has no idea what WebGL is. Suggest they
+		// get a new browser by presenting the user with link to
+		// http://get.webgl.org
+		$('#errorWebGL').modal('show');
 	}
 
-	removeWebsiteDom();
+	// cancel buttons
+	$('.cancelButton').click(function () {
+		soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
+		$('.modal').modal('hide');
+	});
+
+	// open new game dialog
+	$('#createGameButton').click(function () {
+		soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
+		$('#newGame').modal('show');
+	});
+
+	// tutorial button
+	$('#tutorialButton').click(function () {
+		soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
+		$(this).unbind('click');
+		showLoadingScreen('Loading');
+
+		var armyId = parseInt($('.checked', '#armies').attr('data-army'));
+		var mapType = gameData.MAP_TYPES.standard.id;
+		var mapSize = gameData.MAP_SIZES.small.id;
+		var initialResources = gameData.INITIAL_RESOURCES.standard.id;
+		var vegetation = gameData.VEGETATION_TYPES.standard.id;
+		var victoryCondition = $('#vc1').val();
+		var nbPlayers = 2;
+		var aiPlayers = [gameData.RACES.tomatoes.id];
+		var game = gameManager.createGameObject(gameManager.playerId, gameManager.playerName, armyId, mapType, 
+									  				mapSize, initialResources, vegetation, victoryCondition, nbPlayers, aiPlayers);
+	 
+		// launch tutorial
+		gameManager.startOfflineGame(game);
+
+		removeWebsiteDom();
+	});
+
+	// create new game !
+	$('#confirmGameCreation').click(function () {
+		soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
+		$(this).unbind('click');
+		$('.modal').modal('hide');
+		showLoadingScreen('Waiting for opponents');
+		
+		var armyId = parseInt($('.checked', '#armies').attr('data-army'));
+		var mapType = $('#mapType').val();
+		var mapSize = $('#mapSize').val();
+		var initialResources = $('#initialResources').val();
+		var vegetation = $('#vegetation').val();
+		var victoryCondition = $('#vc1').val();
+		var nbPlayers = $('#nbPlayers').val();
+		var aiPlayers = [];
+		$.each($('.player', '#players'), function () {
+			if (!$(this).hasClass('hideI') && $('.checked', this).attr('data-value') == 1) {
+				aiPlayers.push($('.aiArmy', $(this)).val());
+			}
+		});
+		var game = gameManager.createGameObject(gameManager.playerId, gameManager.playerName, armyId, mapType, 
+									  				mapSize, initialResources, vegetation, victoryCondition, nbPlayers, aiPlayers);
+
+		if (nbPlayers - 1 == aiPlayers.length) {
+			// only AI opponents : play offline
+			gameManager.startOfflineGame(game);
+		} else {
+			socketManager.createNewGame(game);	
+		}
+
+		removeWebsiteDom();
+	});
+
+	// enter salon
+	$('#joinGameButton').click(function () {
+		soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
+		$('#joinGame').modal('show');
+		$('.noResult', '#joinGame').removeClass('hide');
+		$('table', '#joinGame').addClass('hide');
+		socketManager.enterSalon();
+	});
+
+	// leave salon
+	$('#joinGame').on('hidden', function () {
+		socketManager.leaveSalon();
+	});
 });
-
-// enter salon
-$('#joinGameButton').click(function () {
-	soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
-	$('#joinGame').modal('show');
-	$('.noResult', '#joinGame').removeClass('hide');
-	$('table', '#joinGame').addClass('hide');
-	socketManager.enterSalon();
-});
-
-// leave salon
-$('#joinGame').on('hidden', function () {
-	socketManager.leaveSalon();
-})
-
 
 function centerMainButtons() {
 	centerElement($('#mainButtons'));
