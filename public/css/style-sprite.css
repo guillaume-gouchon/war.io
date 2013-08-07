@@ -204,6 +204,7 @@ header #armies div:nth-child(2) {
 *   FOOTER
 */
 footer {
+    z-index: 100;
     position: absolute;
     width: 100%;
     bottom: 15px;
@@ -745,7 +746,7 @@ button.red:hover {
 }
 
 #websiteLoading {
-    z-index: 10000;
+    z-index: 10;
     background: #000;
     text-align: center;
 }
