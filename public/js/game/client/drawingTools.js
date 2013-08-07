@@ -114,6 +114,7 @@ gameSurface.updateProgressBar = function (object, element, elementData) {
 			object.add(progressBar);
 		}
 		progressBar.scale.x = elementData.lifeBarWidth * element.qp / 100;
+		progressBar.position.x = - elementData.lifeBarWidth / 14 + progressBar.scale.x / 14;
 	} else {
 		// population limit reached message
 		if (element.qp >= 99 && gameContent.players[gameContent.myArmy].pop.current == gameContent.players[gameContent.myArmy].pop.max) {

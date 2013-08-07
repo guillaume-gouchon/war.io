@@ -262,7 +262,16 @@ gameManager.showStats = function (playerStatus, gameStats) {
 	for (var i in gameStats) {
 		var statPlayer = gameStats[i];
 		var player = gameContent.players[i];
-		var scoreTotal = stats.getTotalScore(statPlayer, player.tec.length);
+
+		var totalTec = [];
+		for (var i in player.tec) {
+			var tech = player.tec[i];
+			if (totalTec.indexOf(tech) == -1) {
+				totalTec.push(tech);
+			}
+		}
+
+		var scoreTotal = stats.getTotalScore(statPlayer, totalTec.length);
 		$('tbody', '#endGame').append('<tr class="' + gameSurface.PLAYERS_COLORS[i] + '"><td>' +  
 			player.n + '</td><td>' +  
 			statPlayer.killed + '</td><td>' +  
@@ -272,7 +281,7 @@ gameManager.showStats = function (playerStatus, gameStats) {
 			statPlayer.resources + '</td><td>' +  
 			statPlayer.buildersCreated + '</td><td>' + 
 			statPlayer.buildingsCreated + '</td><td>' +  
-			player.tec.length + '</td><td>' +  
+			totalTec.length + '</td><td>' +  
 			scoreTotal + '</td></tr>');
 
 		dataPopChart.push(statPlayer.pop);
