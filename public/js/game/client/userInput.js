@@ -129,7 +129,7 @@ userInput.doDoubleClick = function (x, y) {
 				if (tiles[i] > 0) {
 
 					var element = utils.getElementFromId(tiles[i]);
-					if(element.f == selected.f && rank.isAlly(gameContent.players, gameContent.myArmy, element) && element.t == selected.t) {
+					if(gameContent.selected.indexOf(element.id) == -1 && element.f == selected.f && rank.isAlly(gameContent.players, gameContent.myArmy, element) && element.t == selected.t) {
 
 				  		// select the elements
 				  		gameContent.selected.push(element.id);

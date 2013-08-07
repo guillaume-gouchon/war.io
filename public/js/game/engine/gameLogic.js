@@ -2,7 +2,7 @@ var gameLogic = {};
 
 
 /**
-*	Number of time the game is being updated by second.
+*	Number of times the game is being updated by second.
 */
 gameLogic.FREQUENCY = 5;
 gameLogic.OFFLINE_FREQUENCY = 6;

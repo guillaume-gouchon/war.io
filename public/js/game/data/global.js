@@ -22,12 +22,12 @@ gameData.RESOURCES = {
 	water : {
 		id: 0,
 		name : 'Water',
-		image : 'ic_water.png'
+		image : 'ic_water'
 	},
 	wood : {
 		id: 1,
 		name : 'Wood',
-		image : 'ic_wood.png'
+		image : 'ic_wood'
 	}
 }
 
@@ -98,19 +98,19 @@ gameData.BUTTONS = {
 	build : {
 		id : 'build',
 		name: 'Build (B)',
-		gui : 'ic_build.png', 
+		g : 'ic_build', 
 		isEnabled : true
 	},
 	back : {
 		id : 'back',
 		name: 'Back (ESC)',
-		gui : 'ic_back.png', 
+		g : 'ic_back', 
 		isEnabled : true
 	},
 	cancel : {
 		id : 'cancel',
 		name: 'Cancel (ESC)',
-		gui : 'ic_cancel.png', 
+		g : 'ic_cancel', 
 		isEnabled : true
 	}
 }

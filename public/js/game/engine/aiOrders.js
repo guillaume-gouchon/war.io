@@ -208,10 +208,10 @@ aiOrders.trainSoldiers = function(game, player, playerID) {
         if (building.o == playerID && building.t == gameData.ELEMENTS[gameData.FAMILIES.building][building.r].casern.t) {
             if (building.q.length < 2) { // Don't queue soldiers, it's useless
                 if (player.re[1] < 200) { // Train Bowman
-                    order.buy(game, [building.id], gameData.ELEMENTS[gameData.FAMILIES.unit][building.r].basicUnit2);
+                    order.buy(game, [building.id], gameData.ELEMENTS[gameData.FAMILIES.unit][building.r].baseUnit2);
                 }
                 else { // Train Knight
-                    order.buy(game, [building.id], gameData.ELEMENTS[gameData.FAMILIES.unit][building.r].basicUnit1);
+                    order.buy(game, [building.id], gameData.ELEMENTS[gameData.FAMILIES.unit][building.r].baseUnit1);
                 }
             }
         }

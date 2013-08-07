@@ -25,8 +25,8 @@
 	    <title>WarNode | Online Multiplayer 3D RTS Game</title>
 
 	    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-	    <link href="css/style.css" rel="stylesheet">
-	    <link href="css/gui.css" rel="stylesheet">
+	    <link href="css/style-sprite.css" rel="stylesheet">
+	    <link href="css/gui-sprite.css" rel="stylesheet">
 	</head>
 
 	<body>
@@ -34,12 +34,16 @@
 		<div id="website">
 
 		  	<header class="blackBackground">
-		  		<div id="playerName" class="spriteBefore sprite-playerName">
+		  		<div id="playerName" class="sprite">
 		  			<input type="text"/>
 		  		</div>
 			  	<div id="armies"></div>
-		  		<div id="music" class="spriteBefore" >Off</div>
+		  		<div id="music" class="sprite" >Off</div>
 		  	</header>
+
+		  	<div id="websiteLoading" class="fullScreen">
+		  		<div><img src="img/loading.gif"></div>
+		  	</div>
 			
 		  	<div id="backgrounds">
 		  		<div id="sky"></div>
@@ -54,8 +58,8 @@
 					<div class="plane1"></div>
 				</div>
 				<div id="tomatoes">
-					<img class="z10 left10" src="img/lemon-sunday-roast.png" alt="tomato"/>
-					<img class="z30 left70" src="img/batisseur2.png" alt="tomato"/>
+					<div class="sprite z10 left10"></div>
+					<div class="sprite z30 left70"></div>
 				</div>
 				<div id="lemons" class="hideI"></div>
   			</div>
@@ -88,8 +92,6 @@
 					    		<option value="2">2</option>
 					    		<option value="3">3</option>
 					    		<option value="4" selected>4</option>
-					    		<!-- <option value="5">5</option>
-					    		<option value="6">6</option> -->
 					    	</select>
 						    <div id="players"></div>
 						</div>
@@ -146,16 +148,16 @@
 	  			</div>
 	  			<div class="modal-body">
 			  		<p>
-			  			<img class="right" alt="Game logo" src="img/logo_small.png"/>
+			  			<span id="logoSmall" class="sprite right">&nbsp;</span>
 			  			WarNode is an Online Multiplayer 3D Real-Time Strategy Game built
 			  			with the latest web technologies.
 		  			</p>
 			  		<p>
-			  			<img class="left" alt="HTML5 logo" src="img/html5.png"/>
+			  			<span id="htmlLogo" class="sprite left">&nbsp;</span>
 			  			It is powered by HTML5, WebGL, and WebSockets, enabling the 3D and the real-time gaming on the modern web browsers.
 			  		</p>
 			  		<p>
-			  			<img class="right" alt="Chrome logo" src="img/chrome.png"/>
+			  			<span id="compatBrowsers" class="sprite right">&nbsp;</span>
 			  			Warnode is compatible with Google Chrome, Safari, Firefox, Chromium as well as Google Chrome for Android / iOS.
 			  		</p>
 		  		</div>
@@ -167,28 +169,28 @@
 		  		</div>
 		  		<div class="modal-body">
 			  		<p>
-			  			<img alt="Team picture" src="img/credits1.png"/>
+			  			<span id="teamMember1" class="sprite left">&nbsp;</span>
 			  			<span class="name">Guillaume</span>
 			  			<span class="label label-info">Dev</span>
 			  			<span class="label label-warning">Music</span>
 			  		</p>
 			  		<p>
-		  				<img alt="Team picture" src="img/credits2.png"/>
+			  			<span id="teamMember2" class="sprite left">&nbsp;</span>
 			  			<span class="name">Thomas</span>
 			  			<span class="label label-info">Dev</span>
 			  		</p>
 			  		<p>
-			  			<img alt="Team picture" src="img/credits2.png"/>
+			  			<span id="teamMember3" class="sprite left">&nbsp;</span>
 			  			<span class="name">Romain</span>
 			  			<span class="label label-info">Dev</span>
 			  		</p>
 			  		<p>
-			  			<img alt="Team picture" src="img/credits1.png"/>
+			  			<span id="teamMember4" class="sprite left">&nbsp;</span>
 			  			<span class="name">Didier</span>
 			  			<span class="label label-success">3D Design</span>
 			  		</p>
 			  		<p>
-			  			<img alt="Team picture" src="img/credits2.png"/>
+			  			<span id="teamMember5" class="sprite left">&nbsp;</span>
 			  			<span class="name">Sonia</span>
 			  			<span class="label label-important">Illustrations</span>
 			  			<span class="label label-inverse">Marketing</span>
@@ -200,8 +202,8 @@
 		  	
 		  	<footer>
 	  			<span>Share on</span> 
-	  			<a href="http://www.facebook.com/share.php?u=http://www.warnode.com" target="_blank"><img src="img/fb_icon.png" alt="facebook logo"/></a>
-	  			<a id="twButton" href="https://twitter.com/share?url=http://www.warnode.com&amp;text=Best%203D%20RTS%20Game%20in%20HTML5%20!%20" target="_blank"><img src="img/tw_icon.png" alt="twitter logo"/></a>
+	  			<a id="fbButton" href="http://www.facebook.com/share.php?u=http://www.warnode.com" target="_blank">&<div class="sprite"></div></a>
+	  			<a id="twButton" href="https://twitter.com/share?url=http://www.warnode.com&amp;text=Best%203D%20RTS%20Game%20in%20HTML5%20!%20" target="_blank"><div class="sprite"></div></a>
 		  		-<a id="aboutButton" href="#about" data-toggle="modal">About</a>
 		  		-<a id="creditsButton" href="#credits" data-toggle="modal">Credits</a>
 		  	</footer>
@@ -212,15 +214,15 @@
 	  	<div id="game" class="hide">
 		  	<div id="gui" class="fullScreen" onmousedown="return false">
 			  	<div id="topBar">
-					<div id="population"></div>
+					<div id="population"><div class="sprite"></div><span></span></div>
 				</div>
 				<div id="bottomBar">
 					<div id="toolbar">
 						<div id="commonButtons">
-							<button id="attackButton" class="enableTooltip" data-toggle="tooltip" title="Attack (A)"><img alt="attack order" src="img/GUI/bg_attack_btn.png"/></button>
-							<button id="stopButton" class="enableTooltip" data-toggle="tooltip" title="Stop (S)"><img alt="stop order" src="img/GUI/bg_stop_btn.png"/></button>
-							<button id="holdButton" class="enableTooltip" data-toggle="tooltip" title="Hold Position (H)"><img alt="hold order" src="img/GUI/bg_hold_btn.png"/></button>							
-							<button id="patrolButton" class="enableTooltip" data-toggle="tooltip" title="Patrol (P)"><img alt="patrol order" src="img/GUI/bg_patrol_btn.png"/></button>
+							<button id="attackButton" class="enableTooltip" data-toggle="tooltip" title="Attack (A)"><div class="sprite"></div></button>
+							<button id="stopButton" class="enableTooltip" data-toggle="tooltip" title="Stop (S)"><div class="sprite"></div></button>
+							<button id="holdButton" class="enableTooltip" data-toggle="tooltip" title="Hold Position (H)"><div class="sprite"></div></button>							
+							<button id="patrolButton" class="enableTooltip" data-toggle="tooltip" title="Patrol (P)"><div class="sprite"></div></button>
 						</div>
 						<div id="specialButtons"></div>
 					</div>
@@ -228,24 +230,24 @@
 					<div id="infoSelected" class="hide">
 						<div id="nameElement" class="stat"></div>
 						<div id="lifeElement" class="stat"></div>
-						<div id="fragsStat" class="enableTooltip unitOnly stat" title="Frags"></div>
+						<div id="fragsStat" class="enableTooltip unitOnly stat" title="Frags"><div class="sprite"></div><span></span></div>
 						<div id="secondaryStats" class="stat">
-							<div id="attackStat" class="enableTooltip unitOnly stat" title="Attack"></div>
-							<div id="defenseStat" class="enableTooltip stat" title="Defense"></div>
-							<div id="attackSpeedStat" class="enableTooltip unitOnly stat" title="Attack Speed"></div>
-							<div id="rangeStat" class="enableTooltip unitOnly stat" title="Range"></div>
-							<div id="popStat" class="enableTooltip stat" title="Population Size"></div>
+							<div id="attackStat" class="enableTooltip unitOnly stat" title="Attack"><div class="sprite"></div><span></span></div>
+							<div id="defenseStat" class="enableTooltip stat" title="Defense"><div class="sprite"></div><span></span></div>
+							<div id="attackSpeedStat" class="enableTooltip unitOnly stat" title="Attack Speed"><div class="sprite"></div><span></span></div>
+							<div id="rangeStat" class="enableTooltip unitOnly stat" title="Range"><div class="sprite"></div><span></span></div>
+							<div id="popStat" class="enableTooltip stat" title="Population Size"><div class="sprite"></div><span></span></div>
 							<!-- <div id="weaponTypeStat" class="enableTooltip unitOnly" title="Weapon Type"></div>
 							<div id="armorTypeStat" class="enableTooltip" title="Armor Type"></div> -->
-							<div id="resourcesStatWood" class="enableTooltip landOnly stat" title="Amount of resources left"></div>
-							<div id="resourcesStatWater" class="enableTooltip landOnly stat" title="Amount of resources left"></div>
+							<div id="resourcesStatWood" class="enableTooltip landOnly stat" title="Amount of resources left"><div class="sprite"></div><span></span></div>
+							<div id="resourcesStatWater" class="enableTooltip landOnly stat" title="Amount of resources left"><div class="sprite"></div><span></span></div>
 							<div id="queueBuilding">
 								<div id="queueProgress"></div>
-								<button data-id="0"><img alt="construction in progress"/></button>
-								<button data-id="1"><img alt="construction in progress"/></button>
-								<button data-id="2"><img alt="construction in progress"/></button>
-								<button data-id="3"><img alt="construction in progress"/></button>
-								<button data-id="4"><img alt="construction in progress"/></button>
+								<button data-id="0"><div class="sprite"></div></button>
+								<button data-id="1"><div class="sprite"></div></button>
+								<button data-id="2"><div class="sprite"></div></button>
+								<button data-id="3"><div class="sprite"></div></button>
+								<button data-id="4"><div class="sprite"></div></button>
 							</div>
 						</div>
 					</div>

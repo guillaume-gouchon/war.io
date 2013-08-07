@@ -396,10 +396,12 @@ production.paysForElement = function (game, owner, element) {
 *	Sells the element.
 */
 production.sellsElement = function (game, owner, element) {
-	for(var i in element.needs) {
-		var need = element.needs[i];
-		if (need.t >= 0) {
-			game.players[owner].re[need.t] += parseInt(need.value / 2);
+	if (element != null) {
+		for(var i in element.needs) {
+			var need = element.needs[i];
+			if (need.t >= 0) {
+				game.players[owner].re[need.t] += parseInt(need.value / 2);
+			}
 		}
 	}
 }
