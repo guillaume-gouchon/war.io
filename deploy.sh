@@ -3,14 +3,18 @@ cd ~/warnode;
 git pull;
 cd ~;
 
-#Minify the data
+# Minify the data
 cd ~/warnode/public/js/game;
 ./data.sh;
 
-#Minify the engine
+# Minify the engine
 ./engine.sh;
 
+# Build the sprites
+cd ~/warnode;
+./sprite.sh;
+
 # Restart server
-cd ~/warnode
+cd ~/warnode;
 forever stop app.js;
 forever -a -l node.log -o node.log -e node.log start app.js;

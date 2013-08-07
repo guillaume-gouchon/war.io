@@ -82,7 +82,7 @@ GUI.update = function () {
 GUI.initResourcesBar = function () {
 	for (var i in gameData.RESOURCES) {
 		var resource = gameData.RESOURCES[i];
-		$('#topBar').append('<div id="resource' + resource.id + '">0</div>');
+		$('#topBar').append('<div id="resource' + resource.id + '"><div class="sprite"></div><span>0</span></div>');
 	}
 }
 GUI.initCommonButtonsEvents = function () {
@@ -141,13 +141,13 @@ GUI.initMinimapSize = function () {
 */
 GUI.updatePopulation = function () {
 	var player = gameContent.players[gameContent.myArmy];
-	$('#population').html(player.pop.current + ' / ' + player.pop.max);
+	$('span', '#population').html(player.pop.current + ' / ' + player.pop.max);
 }
 GUI.updateResources = function () {
 	var player = gameContent.players[gameContent.myArmy];
 	for (var i in gameData.RESOURCES) {
 		var resource = gameData.RESOURCES[i]; 
-		$('#resource' + resource.id).html(player.re[resource.id]);
+		$('span', '#resource' + resource.id).html(player.re[resource.id]);
 	}
 }
 GUI.updateInfoBar = function () {
@@ -165,7 +165,7 @@ GUI.updateInfoBar = function () {
 
 			var guiElement = $('button[data-id="' + element.id + '"]', '#listSelected');
 			if (guiElement.length == 0) {
-				$('#listSelected').append('<button data-id="' + element.id + '" class="' + gameSurface.getLifeBarBackgroundColor(element.l / elementData.l) + '"><img alt="selected unit" src="'+  GUI.IMAGES_PATH + elementData.gui + '"</button>');
+				$('#listSelected').append('<button data-id="' + element.id + '" class="' + gameSurface.getLifeBarBackgroundColor(element.l / elementData.l) + '"><div class="' + elementData.g + ' sprite"></div></button>');
 			} else {
 				guiElement.attr('class', gameSurface.getLifeBarBackgroundColor(element.l / elementData.l));
 			}	
@@ -188,11 +188,11 @@ GUI.updateInfoBar = function () {
 			$('#popStat').addClass('hideI');
 			$('#queueBuilding').addClass('hideI');
 			if (element.t == gameData.RESOURCES.wood.id) {
-				$('#resourcesStatWood').html(element.ra);
+				$('span', '#resourcesStatWood').html(element.ra);
 				$('#resourcesStatWood').removeClass('hideI');
 				$('#resourcesStatWater').addClass('hideI');
 			} else if (element.t == gameData.RESOURCES.water.id){
-				$('#resourcesStatWater').html(element.ra);
+				$('span', '#resourcesStatWater').html(element.ra);
 				$('#resourcesStatWood').addClass('hideI');
 				$('#resourcesStatWater').removeClass('hideI');
 			} else {
@@ -204,16 +204,16 @@ GUI.updateInfoBar = function () {
 
 			$('#lifeElement').html(element.l + '/' + elementData.l).attr('class', gameSurface.getLifeBarBackgroundColor(element.l / elementData.l) + ' stat');
 			// $('#armorTypeStat').html(elementData.armorType).removeClass('hideI');
-			$('#popStat').html(elementData.pop).removeClass('hideI');
-			$('#defenseStat').html(accessors.getStat(gameContent.players, element.o, elementData, fightLogic.STATS_BUFF.defense)).removeClass('hideI');
+			$('span', '#popStat').html(elementData.pop).removeClass('hideI');
+			$('span', '#defenseStat').html(accessors.getStat(gameContent.players, element.o, elementData, fightLogic.STATS_BUFF.defense)).removeClass('hideI');
 
 			if (elementData.attack != null) {
 				$('.unitOnly').removeClass('hideI');
-				$('#fragsStat').html(element.fr);
+				$('span', '#fragsStat').html(element.fr);
 
-				$('#attackStat').html(accessors.getStat(gameContent.players, element.o, elementData, fightLogic.STATS_BUFF.attack));
-				$('#attackSpeedStat').html(accessors.getStat(gameContent.players, element.o, elementData, fightLogic.STATS_BUFF.attackSpeed));
-				$('#rangeStat').html(accessors.getStat(gameContent.players, element.o, elementData, fightLogic.STATS_BUFF.range));
+				$('span', '#attackStat').html(accessors.getStat(gameContent.players, element.o, elementData, fightLogic.STATS_BUFF.attack));
+				$('span', '#attackSpeedStat').html(accessors.getStat(gameContent.players, element.o, elementData, fightLogic.STATS_BUFF.attackSpeed));
+				$('span', '#rangeStat').html(accessors.getStat(gameContent.players, element.o, elementData, fightLogic.STATS_BUFF.range));
 				// $('#weaponTypeStat').html(elementData.weaponType);
 
 			} else {
@@ -376,13 +376,13 @@ GUI.createToolbarButton = function (button) {
 		for (var i in button.needs) {
 			var need = button.needs[i];
 			if (need.t >= 0) {
-				tooltip += '<p class="price"><img alt="requirement" src="' + GUI.IMAGES_PATH + gameData.RESOURCES[Object.keys(gameData.RESOURCES)[need.t]].image + '"/>' + need.value + '</p>';
+				tooltip += '<p class="price"><span class="' + gameData.RESOURCES[Object.keys(gameData.RESOURCES)[need.t]].image + ' sprite">&nbsp;</span>' + need.value + '</p>';
 			} else {
 				tooltip += '<p>' + need.t + '</p>';
 			}
 		}
 
-		var div = '<button id="toolbar' + button.id + '" data-id="' + button.id + '" class="enableTooltip" data-toggle="tooltip" title=\'' + tooltip + '\'><img alt="' + button.name + '" src="' + GUI.IMAGES_PATH + button.gui + '"/></button>';
+		var div = '<button id="toolbar' + button.id + '" data-id="' + button.id + '" class="enableTooltip" data-toggle="tooltip" title=\'' + tooltip + '\'><div class="' + button.g + ' sprite"></div></button>';
 		$('#specialButtons').append(div);
 	}
 	if(!button.isEnabled) {

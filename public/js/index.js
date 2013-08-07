@@ -1,5 +1,8 @@
 centerMainButtons();
 
+// preload necessary image files
+preloadImages();
+
 // init player's info
 $('input', '#playerName').val(gameManager.getPlayerName());
 $('input', '#playerName').change(function () {
@@ -91,9 +94,6 @@ if (!isWebGLEnabled()) {
 	// http://get.webgl.org
 	$('#errorWebGL').modal('show');
 }
-
-// preload necessary image files
-preloadImages();
 
 // cancel buttons
 $('.cancelButton').click(function () {
@@ -232,15 +232,26 @@ function initVictoryConditions () {
 
 function preloadImages() {
 	var images = new Array();
+	var imageLoaded = 0;
 	function preload() {
 
 		for (i = 0; i < preload.arguments.length; i++) {
-			images[i] = new Image()
-			images[i].src = preload.arguments[i]
+			images[i] = new Image();
+			images[i].src = preload.arguments[i];
+			images[i].onload = function () {
+				imageLoaded++;
+				if (imageLoaded >= 2) {
+					$('#websiteLoading').fadeOut();
+				}
+			}
 			$('#imagesPreload').append(images[i]);
+
 		}
 	}
 	preload(
+		'img/mountains.png',
+		'img/websiteSprite.png',
+		'img/GUI/guiSprite.png',
 		GUI.IMAGES_PATH + 'cursor.png',
 		GUI.IMAGES_PATH + 'cursor_hover.png',
 		GUI.IMAGES_PATH + 'cursor_attack.png',

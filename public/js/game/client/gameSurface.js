@@ -1042,7 +1042,7 @@ gameSurface.updateMinimap = function() {
 				if (id > 0) {
 					var element = utils.getElementFromId(id);
 					var elementData = tools.getElementData(element);
-					if (element.modelVisible && elementData.minimapColor != null) {
+					if (element.modelVisible && element.f != gameData.FAMILIES.land || elementData.minimapColor != null) {
 						if (element.f == gameData.FAMILIES.land) {
 							var color = elementData.minimapColor;
 							r=color.r;
