@@ -1,6 +1,6 @@
 #!/bin/bash
 cd ~/warnode;
-git checkout public/index.html;
+git checkout .;
 git pull;
 cd ~;
 
