@@ -60,4 +60,4 @@ gameData.Game = function () {
 		var result = gameLogic.update(this);
 		return result;
 	}
-}
+};

@@ -17,4 +17,4 @@ gameData.Order = function (type, moveTo, elementId, info) {
 			info : this.info
 		}
 	}
-}
+};

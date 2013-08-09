@@ -40,4 +40,4 @@ gameData.Unit = function (unit, x, y, owner) {
 		}
 	}
 
-}
+};

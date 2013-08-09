@@ -181,7 +181,7 @@ header #armies {
 }
 header #armies div {
     display: inline-block;
-    width: 50%;
+    width: 48%;
     text-align: center;
     opacity: 0.2;
     cursor: pointer;

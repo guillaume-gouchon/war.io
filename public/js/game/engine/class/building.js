@@ -24,4 +24,4 @@ gameData.Building = function (building, x, y, owner, isBuilt) {
 	this.toJSON = function () {
 		return this;
 	}
-}
+};

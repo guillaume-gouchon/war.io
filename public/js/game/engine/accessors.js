@@ -33,4 +33,4 @@ accessors.getStat = function (players, owner, elementData, stat) {
 		}
 	}
 	return n;
-}
+};

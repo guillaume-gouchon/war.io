@@ -309,4 +309,4 @@ order.holdUnits = function (game, elementsIds) {
 		
 	}
 
-}
+};

@@ -54,4 +54,4 @@ stats.updateField = function (game, owner, field, value) {
 stats.getTotalScore = function (stats, nbTechs) {
 	return stats.killed * 20 - stats.lost * 20 + stats.buildingsDestroyed * 100 + stats.unitsCreated * 10 
 			+ stats.resources + stats.buildersCreated * 5 + stats.buildingsCreated * 20 + nbTechs * 500;
-}
+};

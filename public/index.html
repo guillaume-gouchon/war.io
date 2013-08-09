@@ -25,8 +25,8 @@
 	    <title>WarNode | Online Multiplayer 3D RTS Game</title>
 
 	    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
-	    <link href="css/style-sprite.css" rel="stylesheet">
-	    <link href="css/gui-sprite.css" rel="stylesheet">
+	    <link href="css/style.css" rel="stylesheet">
+	    <link href="css/gui.css" rel="stylesheet">
 	</head>
 
 	<body>
@@ -37,8 +37,11 @@
 		  		<div id="playerName" class="sprite">
 		  			<input type="text"/>
 		  		</div>
-			  	<div id="armies"></div>
-		  		<div id="music" class="sprite" >Off</div>
+			  	<div id="armies">
+			  		<div class="customRadio checked" data-name="armies" data-army="0">Tomatoes</div>
+			  		<div class="customRadio" data-name="armies" data-army="1">Lemons</div>
+			  	</div>
+		  		<div id="music" class="sprite">Off</div>
 		  	</header>
 
 		  	<div id="websiteLoading" class="fullScreen">
@@ -332,7 +335,6 @@
 
 	<script src="/socket.io/socket.io.js"></script>
 
-	<!-- ENGINE -->
 	<script type="text/javascript" src="js/game/engine/gameData.js"></script>
 	<script type="text/javascript" src="js/game/engine/class/building.js"></script>
 	<script type="text/javascript" src="js/game/engine/class/game.js"></script>
@@ -354,8 +356,6 @@
 	<script type="text/javascript" src="js/game/engine/tools.js"></script>
 	<script type="text/javascript" src="js/game/engine/aiOrders.js"></script>
 	<script type="text/javascript" src="js/game/engine/accessors.js"></script>
-
-	<!-- DATA -->
 	<script type="text/javascript" src="js/game/data/global.js"></script>
 	<script type="text/javascript" src="js/game/data/armies/tomatoes/researches.js"></script>
 	<script type="text/javascript" src="js/game/data/armies/tomatoes/units.js"></script>
@@ -366,8 +366,6 @@
 	<script type="text/javascript" src="js/game/data/armies/basecamps.js"></script>
 	<script type="text/javascript" src="js/game/data/map/lands.js"></script>
 	<script type="text/javascript" src="js/game/data/map/maps.js"></script>
-
-	<!-- CLIENT -->
 	<script src="js/game/three.js"></script>
 	<script src="js/game/tween.js"></script>
 	<script type="text/javascript" src="img/3D/water.js"></script>
@@ -382,12 +380,16 @@
 	<script type="text/javascript" src="js/game/client/gameManager.js"></script>
 	<script type="text/javascript" src="js/game/client/soundManager.js"></script>
 
+	<!-- GAME 
+	<script src="js/game/engine.js"></script>
+	<script src="js/game/data.js"></script>
+	<script src="js/game/client.js"></script>-->
+
 	<!-- WEBSITE -->
 	<script src="http://code.jquery.com/jquery-latest.js"></script>
 	<script type="text/javascript" src="js/jquery.flot.min.js"></script>
-	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/index.js"></script>
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 
 	</body>
 
