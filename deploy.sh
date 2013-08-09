@@ -6,7 +6,7 @@ cd ~;
 
 # # Minify, compress, build sprites
 cd ~/warnode/public;
-bash build;
+bash build.sh;
 
 # Update prod version
 cd ~/warnode/public;
