@@ -1,4 +1,4 @@
-$(document).ready(function() {
+// $(document).ready(function() {
 	centerMainButtons();
 
 	// preload necessary image files
@@ -175,7 +175,7 @@ $(document).ready(function() {
 	$('#joinGame').on('hidden', function () {
 		socketManager.leaveSalon();
 	});
-});
+// });
 
 function centerMainButtons() {
 	centerElement($('#mainButtons'));
