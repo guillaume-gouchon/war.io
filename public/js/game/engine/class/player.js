@@ -34,4 +34,4 @@ gameData.Player = function (playerId, owner, race, isAI) {
 			this.pop.current += unit.pop;
 		}
 	}
-}
+};

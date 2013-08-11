@@ -63,4 +63,4 @@ utils.copyValuesToObject = function (src, dst) {
 		dst[attr] = utils.copyValuesToObject(src[attr], dst[attr]);
 	}
 	return dst;
-}
+};

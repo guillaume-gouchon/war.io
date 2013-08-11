@@ -15,4 +15,4 @@ gameData.BASECAMPS[gameData.RACES.lemons.id] = {
 				gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.lemons.id].builder,
 				gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.lemons.id].builder,
 				gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.lemons.id].builder]
-}
+};

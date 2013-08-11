@@ -36,4 +36,4 @@ rank.isAlly = function (players, me, element) {
 	} else {
 		return false;
 	}
-}
+};

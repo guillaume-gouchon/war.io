@@ -4,4 +4,4 @@ gameData.Map = function (type, size, vegetation, initialResources, objectives) {
 	this.ve = vegetation;// plain, forest, mediteranean, desert...
 	this.ir = initialResources;// amount of resources at game start
 	this.objectives = objectives;// game objectives
-}
+};

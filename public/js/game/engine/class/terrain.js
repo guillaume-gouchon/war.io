@@ -14,4 +14,4 @@ gameData.Terrain = function (land, x, y) {
 	this.toJSON = function () {
 		return this;
 	}
-}
+};

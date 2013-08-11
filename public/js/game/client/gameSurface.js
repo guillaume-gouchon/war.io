@@ -1102,4 +1102,4 @@ gameSurface.updateMinimap = function() {
 	ctx.lineTo(x + (Math.cos(angle)-.2)*10, y + (Math.sin(angle)-.2)*10);
 	ctx.lineTo(x, y);
 	ctx.fill();*/
-}
+};
