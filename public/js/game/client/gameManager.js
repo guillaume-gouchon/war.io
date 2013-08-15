@@ -100,6 +100,7 @@ gameManager.startOfflineGame = function (game) {
 		game.objectives);
 	gameContent.game = gameCreation.createNewGame(gameContent.map, gameContent.players);
 	this.waitingData = gameContent.game.gameElements;
+	$('#loadingLabel').html('Loading');
 	gameSurface.init();
 	GUI.init();
 }
@@ -194,6 +195,7 @@ gameManager.initOnlineGame = function (data) {
 	gameContent.map = data.map;
 	gameContent.isRunning = data.isRunning;
 	this.waitingData = data.initElements;
+	$('#loadingLabel').html('Loading');
 	gameSurface.init();
 	GUI.init();
 }
