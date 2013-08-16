@@ -30,8 +30,8 @@ controls.init = function () {
 	window.addEventListener( 'contextmenu', function ( event ) { event.preventDefault(); }, false );
 	window.addEventListener( 'keydown', controls.keydown, false );
 	window.addEventListener( 'keyup', controls.keyup, false );
-	// window.addEventListener( 'mousedown', controls.mousedown, false );
-	// window.addEventListener( 'mousemove', controls.mousemove, false );
+	window.addEventListener( 'mousedown', controls.mousedown, false );
+	window.addEventListener( 'mousemove', controls.mousemove, false );
 	window.addEventListener( 'dblclick', controls.doubleClick, false );
 	this.cameraMovesLimits = [-100, -100, gameContent.map.size.x * gameSurface.PIXEL_BY_NODE + 100, gameContent.map.size.y * gameSurface.PIXEL_BY_NODE + 100];
 }
@@ -178,26 +178,26 @@ controls.mousedown = function (event) {
 	event.stopPropagation();
 
 	if (event.button == 0) {
-		if (this.clickMode != this.MODES.normal) {
+		if (controls.clickMode != controls.MODES.normal) {
 			// do special action
-			userInput.doAction( event.clientX, event.clientY, event.shiftKey, this.clickMode );
+			userInput.doAction( event.clientX, event.clientY, event.shiftKey, controls.clickMode );
 
 			// leave special click mode
 			userInput.leaveSpecialClickMode();
 		} else {
 			// left click = selection
-			this._state === controls.STATE.SELECTION;
+			controls._state = controls.STATE.SELECTION;
 			userInput.doSelect( event.clientX, event.clientY, event.ctrlKey, event.shiftKey );
 		}
 	} else if (event.button == 2) {
-		if (this.clickMode != this.MODES.normal) {
+		if (controls.clickMode != controls.MODES.normal) {
 
 			// leave special click mode
 			userInput.leaveSpecialClickMode();
 
 		} else {
 			// right click = action
-			userInput.doAction( event.clientX, event.clientY, event.shiftKey, _this.clickMode );
+			userInput.doAction( event.clientX, event.clientY, event.shiftKey, controls.clickMode );
 		}
 	}
 
@@ -209,35 +209,32 @@ controls.mousemove = function (event) {
 	event.preventDefault();
 	event.stopPropagation();
 
-	if (this._state === controls.STATE.SELECTION) {
-
+console.log
+	if (controls._state === controls.STATE.SELECTION) {
 		// draw selection rectangle
 		userInput.drawSelectionRectangle(event.clientX, event.clientY, event.ctrlKey );
-
 	} else {
-
-		if (event.clientX < this.SCROLL_THRESHOLD) {
-			this.updateScrolling(0, 1, false);
-		} else if(event.clientX > window.innerWidth - this.SCROLL_THRESHOLD) {
-			this.updateScrolling(0, -1, false);
-		} else if (!this.isKeyboardScrolling && this.scroll[0] != 0) {
-			this.updateScrolling(0, 0, false);
+		if (event.clientX < controls.SCROLL_THRESHOLD) {
+			controls.updateScrolling(0, 1, false);
+		} else if(event.clientX > window.innerWidth - controls.SCROLL_THRESHOLD) {
+			controls.updateScrolling(0, -1, false);
+		} else if (!controls.isKeyboardScrolling && controls.scroll[0] != 0) {
+			controls.updateScrolling(0, 0, false);
 		}
 
-		if (event.clientY < this.SCROLL_THRESHOLD) {
-			this.updateScrolling(1, 1, false);
-		} else if (event.clientY > window.innerHeight - this.SCROLL_THRESHOLD) {
-			this.updateScrolling(1, -1, false);
-		} else if (!this.isKeyboardScrolling && this.scroll[1] != 0) {
-			this.updateScrolling(1, 0, false);
+		if (event.clientY < controls.SCROLL_THRESHOLD) {
+			controls.updateScrolling(1, 1, false);
+		} else if (event.clientY > window.innerHeight - controls.SCROLL_THRESHOLD) {
+			controls.updateScrolling(1, -1, false);
+		} else if (!controls.isKeyboardScrolling && controls.scroll[1] != 0) {
+			controls.updateScrolling(1, 0, false);
 		}
 
 		userInput.onMouseMove( event.clientX, event.clientY );
-
 	}
 
-	this.mousePosition.x = event.clientX;
-	this.mousePosition.y = event.clientY;
+	controls.mousePosition.x = event.clientX;
+	controls.mousePosition.y = event.clientY;
 }
 
 function mouseup( event ) {

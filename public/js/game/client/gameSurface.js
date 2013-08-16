@@ -3,6 +3,11 @@ var camera, scene, engine, canvas;
 var gameSurface = {};
 
 
+gameSurface.building = null;
+
+
+
+
 /**
 *   CONSTANTS
 */
@@ -96,3 +101,13 @@ gameSurface.init = function () {
     controls.init();
 
 };
+
+
+gameSurface.getFirstIntersectObject = function (x, y) {
+    var pickInfo = scene.pick(x, y);
+
+    if (!pickInfo.hit)
+        return;
+
+    return pickInfo.pickedMesh;
+}
