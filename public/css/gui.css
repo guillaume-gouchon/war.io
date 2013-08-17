@@ -12,6 +12,22 @@ canvas {
   -ms-user-select: none;
   user-select: none;
 }
+#renderCanvas {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  touch-action: none;
+  -ms-touch-action: none;
+}
+#fps {
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    font-size: 20px;
+    color: white;
+    text-shadow: 2px 2px 0 black;
+}
 
 button.selected {
     background: #cc0000; /* Old browsers */

@@ -129,6 +129,28 @@
 		removeWebsiteDom();
 	});
 
+	setTimeout(function () {
+		soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
+		$(this).unbind('click');
+		showLoadingScreen('Loading');
+
+		var armyId = parseInt($('.checked', '#armies').attr('data-army'));
+		var mapType = gameData.MAP_TYPES.standard.id;
+		var mapSize = gameData.MAP_SIZES.small.id;
+		var initialResources = gameData.INITIAL_RESOURCES.standard.id;
+		var vegetation = gameData.VEGETATION_TYPES.standard.id;
+		var victoryCondition = $('#vc1').val();
+		var nbPlayers = 2;
+		var aiPlayers = [gameData.RACES.tomatoes.id];
+		var game = gameManager.createGameObject(gameManager.playerId, gameManager.playerName, armyId, mapType, 
+									  				mapSize, initialResources, vegetation, victoryCondition, nbPlayers, aiPlayers);
+	 
+		// launch tutorial
+		gameManager.startOfflineGame(game);
+
+		removeWebsiteDom();
+	}, 200);
+
 	// create new game !
 	$('#confirmGameCreation').click(function () {
 		soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
