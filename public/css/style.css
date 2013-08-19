@@ -700,7 +700,7 @@ button.red:hover {
     background-repeat: repeat-x ;
     background-image: url(../img/montagnes.png);
     background-position: 0px 0px;
-    -webkit-animation: moveMountains 180s linear infinite;
+    -webkit-animation: moveMountains 100s linear infinite;
 }
 .tomato1 {
     height: 180px;
