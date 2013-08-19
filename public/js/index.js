@@ -264,7 +264,7 @@ function preloadImages() {
 		}
 	}
 	preload(
-		'img/mountains.png',
+		'img/montagnes.png',
 		'img/websiteSprite.png',
 		'img/GUI/guiSprite.png',
 		GUI.IMAGES_PATH + 'cursor.png',
@@ -352,3 +352,19 @@ $('a[data-toggle="tab"]').on('shown', function (e) {
 	    background: '-webkit-radial-gradient(center, ellipse cover, #3b423c 1%,#000000 100%)' /* Chrome10+,Safari5.1+ */
 	});
 });
+
+// animations
+$('.rock6').hover(function() {
+	$('.tomato1').addClass('bounce');
+	soundManager.playSound(soundManager.SOUNDS_LIST.chainsaw);
+}, function () {
+	$('.tomato1').removeClass('bounce');
+});
+
+// animations
+$('.rock1').hover(function() {
+	$('.tomato2').addClass('hideTomato2');
+}, function () {
+	$('.tomato2').removeClass('hideTomato2');
+});
+

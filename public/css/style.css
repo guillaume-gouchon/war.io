@@ -708,10 +708,11 @@ button.red:hover {
     bottom: 26%;
     left: 75%;
     background-image: url(../img/lemon-sunday-roast.png);/** sprite-ref: websiteSprite; */
-    /*-webkit-animation: bounce 1s alternate infinite;
-    -moz-animation: bounce 1s alternate infinite;
-    -o-animation: bounce 1s alternate infinite;
-    -webkit-animation-delay: 0.7s!important;*/
+}
+.bounce {
+    -webkit-animation: bounce 0.5s alternate infinite;
+    -moz-animation: bounce 0.5s alternate infinite;
+    -o-animation: bounce 0.5s alternate infinite;
 }
 .tomato2 {
     height: 200px;
@@ -719,6 +720,13 @@ button.red:hover {
     bottom: 1%;
     left: 5%;
     background-image: url(../img/batisseur2.png);/** sprite-ref: websiteSprite; */
+    -webkit-transition: all 0.5s ease-in-out;
+    -moz-transition: all 0.5s ease-in-out;
+    -o-transition: all 0.5s ease-in-out;
+    transition: all 0.5s ease-in-out;
+}
+.hideTomato2 {
+    bottom: -4%;
 }
 .left10 {
     left: 10%;

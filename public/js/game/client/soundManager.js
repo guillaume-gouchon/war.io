@@ -10,9 +10,11 @@ soundManager.SOUNDS_LIST = {
 	mainButton: 'main_button',
 	button: 'button',
 	hammer: 'hammer',
-	saw: 'saw'
+	saw: 'saw',
+	chainsaw: 'chainsaw'
 };
-soundManager.SOUND_VOLUME = 0.5;
+soundManager.MUSIC_VOLUME = 0.8;
+soundManager.SOUND_VOLUME = 1;
 
 
 /**
@@ -42,6 +44,7 @@ soundManager.init = function () {
 	        soundManager.playMusic();
 	    });
 
+	    this.musicTag.volume = this.MUSIC_VOLUME;
 	    this.soundTag.volume = this.SOUND_VOLUME;
 	} catch (e) {
 	}
@@ -77,7 +80,7 @@ soundManager.stopMusic = function () {
 */
 soundManager.playSound = function (filename) {
 	if (gameManager.musicEnabled && this.audioFilesFormat != null) {
-		this.soundTag.src = this.MUSIC_FILES_PATH + filename + this.audioFilesFormat;
+		this.soundTag.src = this.MUSIC_FILES_PATH + 'so_' + filename + this.audioFilesFormat;
 		this.soundTag.play();
 	}
 }
