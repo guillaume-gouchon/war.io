@@ -202,6 +202,7 @@
 function centerMainButtons() {
 	centerElement($('#mainButtons'));
 	$('#mountains').css('top', window.innerHeight * 0.37 - $('#mountains').height() / 2);
+	$('.leaf').css('left', 0.65 * window.innerWidth + 370);
 }
 
 
@@ -368,3 +369,6 @@ $('.rock1').hover(function() {
 	$('.tomato2').removeClass('hideTomato2');
 });
 
+$('.leaf').hover(function() {
+	$('.leaf').addClass('animLeaf');
+});
