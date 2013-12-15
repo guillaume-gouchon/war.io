@@ -53,13 +53,16 @@ userInput.doSelect = function (x, y, isCtrlKey, isShiftKey) {
 		gameContent.selectionRectangle[1] = y;
 
 		var intersect = gameSurface.getFirstIntersectObject(x, y);
-		if (intersect != null && intersect.elementId != null) {
-			if (isCtrlKey && gameContent.selected.indexOf(intersect.object.elementId) > -1) {
-				gameContent.selected.splice(gameContent.selected.indexOf(intersect.object.elementId), 1);
-				gameSurface.unselectElement(intersect.object.elementId);
-			} else {
-				gameContent.selected.push(intersect.object.elementId);
-				gameSurface.selectElement(intersect.object.elementId);
+		if (intersect != null) {
+
+			if (intersect.object.elementId != null) {
+				if (isCtrlKey && gameContent.selected.indexOf(intersect.object.elementId) > -1) {
+					gameContent.selected.splice(gameContent.selected.indexOf(intersect.object.elementId), 1);
+					gameSurface.unselectElement(intersect.object.elementId);
+				} else {
+					gameContent.selected.push(intersect.object.elementId);
+					gameSurface.selectElement(intersect.object.elementId);
+				}
 			}
 		}
 
@@ -325,8 +328,8 @@ userInput.updateMouseIcon = function (mouseX, mouseY) {
 	var x = - controls.scroll[0];
 	var y = controls.scroll[1];
 	
-	if (elementUnder != null && elementUnder.elementId != null) {
-		var e = utils.getElementFromId(elementUnder.elementId);
+	if (elementUnder != null && elementUnder.object.elementId != null) {
+		var e = utils.getElementFromId(elementUnder.object.elementId);
 		if (controls.clickMode != controls.MODES.normal) {
 			GUI.updateMouse(GUI.MOUSE_ICONS.crossHover);
 			return;

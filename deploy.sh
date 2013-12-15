@@ -1,6 +1,6 @@
 #!/bin/bash
 cd ~/warnode;
-git checkout .;
+git checkout . prod;
 git pull;
 cd ~;
 

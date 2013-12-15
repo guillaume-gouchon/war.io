@@ -305,10 +305,10 @@ gameSurface.updateBuildingGeometry = function () {
 *	Hides the building geometry.
 */
 gameSurface.removeBuildingGeometry = function () {
-	// for (var i in this.building.children) {
-	// 	this.building.children[i].visible = false;
-	// }
-	// this.building.visible = false;
+	for (var i in this.building.children) {
+		this.building.children[i].visible = false;
+	}
+	this.building.visible = false;
 }
 
 

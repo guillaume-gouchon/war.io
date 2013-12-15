@@ -622,7 +622,7 @@ button.red:hover {
     top: 1px;
     width: 100px;
     height: 55px;
-    opacity: 0.85;
+    opacity: 0.9;
     -webkit-animation: moveClouds 50s linear infinite;
     -moz-animation: moveClouds 50s linear infinite;
     -o-animation: moveClouds 50s linear infinite;
@@ -632,7 +632,7 @@ button.red:hover {
     top: 100px;
     width: 175px;
     height: 94px;
-    opacity: 0.9;
+    opacity: 0.8;
     -webkit-animation: moveClouds 40s linear infinite;
     -moz-animation: moveClouds 40s linear infinite;
     -o-animation: moveClouds 40s linear infinite;
@@ -642,7 +642,7 @@ button.red:hover {
     top: 50px;
     width: 150px;
     height: 110px;
-    opacity: 0.9;
+    opacity: 0.85;
     -webkit-animation: moveClouds 36s linear infinite;
     -moz-animation: moveClouds 36s linear infinite;
     -o-animation: moveClouds 36s linear infinite;
@@ -652,7 +652,7 @@ button.red:hover {
     top: 55px;
     width: 200px;
     height: 103px;
-    opacity: 0.9;
+    opacity: 0.8;
     -webkit-animation: moveClouds 25s linear infinite;
     -moz-animation: moveClouds 25s linear infinite;
     -o-animation: moveClouds 25s linear infinite;
