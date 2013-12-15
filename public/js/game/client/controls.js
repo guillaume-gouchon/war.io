@@ -11,7 +11,7 @@ controls.MODES = {
 		attack : order.SPECIAL_ORDERS.attack,
 		patrol : order.SPECIAL_ORDERS.patrol
 	};
-controls.MAP_SCROLL_SPEED = 2;
+controls.MAP_SCROLL_SPEED = 3;
 controls.SCROLL_THRESHOLD = 15;
 
 
@@ -33,7 +33,7 @@ controls.init = function () {
 	window.addEventListener( 'mousedown', controls.mousedown, false );
 	window.addEventListener( 'mousemove', controls.mousemove, false );
 	window.addEventListener( 'dblclick', controls.doubleClick, false );
-	this.cameraMovesLimits = [-100, -100, gameContent.map.size.x * gameSurface.PIXEL_BY_NODE + 100, gameContent.map.size.y * gameSurface.PIXEL_BY_NODE + 100];
+	this.cameraMovesLimits = [-300, -300, gameContent.map.size.x * gameSurface.PIXEL_BY_NODE + 300, gameContent.map.size.y * gameSurface.PIXEL_BY_NODE + 300];
 }
 
 
@@ -48,8 +48,8 @@ controls.updateCamera = function () {
         camera.beta = (Math.PI / 2) * 0.92;
 
     // limit zoom
-    if (camera.radius > 70)
-        camera.radius = 70;
+    if (camera.radius > 100)
+        camera.radius = 100;
     if (camera.radius < 5)
         camera.radius = 5;
 

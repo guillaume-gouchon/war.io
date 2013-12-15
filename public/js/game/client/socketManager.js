@@ -111,14 +111,14 @@ socketManager.sendOrder = function (gameId, orderType, params) {
 	this.sendSocketToServer(gameData.TO_SERVER_SOCKET.sendOrder, data);
 }
 
-socketManager.sendSocketToServer = function (socketType, data) {
-	this.socket.emit(socketType, data);
-}
-
 socketManager.rejoinGame = function (playerId, gameId) {
 	var data = {
 		playerId: playerId,
 		gameId: gameId
 	};
 	this.sendSocketToServer(gameData.TO_SERVER_SOCKET.rejoinGame, data);
+}
+
+socketManager.sendSocketToServer = function (socketType, data) {
+	this.socket.emit(socketType, data);
 }

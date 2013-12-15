@@ -16,10 +16,6 @@
         this.grassTexture = new BABYLON.Texture("shaders/Ground/grass.jpg", scene);
         this.grassTexture.uScale = 6.0;
         this.grassTexture.vScale = 6.0;
-
-        this.snowTexture = new BABYLON.Texture("shaders/Ground/snow.jpg", scene);
-        this.snowTexture.uScale = 20.0;
-        this.snowTexture.vScale = 20.0;
         
         this.sandTexture = new BABYLON.Texture("shaders/Ground/sand.jpg", scene);
         this.sandTexture.uScale = 4.0;
@@ -36,9 +32,8 @@
         this.blendTexture.wrapV = BABYLON.Texture.MIRROR_ADDRESSMODE;
 
 
-        this.sandLimit = 1;
-        this.rockLimit = 5;
-        this.snowLimit = 8;
+        this.sandLimit = 0;
+        this.rockLimit = 12;
     };
 
     WORLDMONGER.GroundMaterial.prototype = Object.create(BABYLON.Material.prototype);
@@ -58,8 +53,6 @@
 
         if (!this.groundTexture.isReady)
             return false;
-        if (!this.snowTexture.isReady)
-            return false;
         if (!this.sandTexture.isReady)
             return false;
         if (!this.rockTexture.isReady)
@@ -78,8 +71,8 @@
 
             this._effect = engine.createEffect("./shaders/Ground/ground",
                 ["position", "normal", "uv"],
-                ["worldViewProjection", "groundMatrix", "sandMatrix", "rockMatrix", "snowMatrix", "grassMatrix", "blendMatrix", "world", "vLightPosition", "vEyePosition", "vLimits", "vClipPlane"],
-                ["groundSampler", "sandSampler", "rockSampler", "snowSampler", "grassSampler", "blendSampler"],
+                ["worldViewProjection", "groundMatrix", "sandMatrix", "rockMatrix", "grassMatrix", "blendMatrix", "world", "vLightPosition", "vEyePosition", "vLimits", "vClipPlane"],
+                ["groundSampler", "sandSampler", "rockSampler", "grassSampler", "blendSampler"],
                 join);
         }
 
@@ -112,11 +105,6 @@
             this._effect.setMatrix("rockMatrix", this.rockTexture._computeTextureMatrix());
         }
         
-        if (this.snowTexture) {
-            this._effect.setTexture("snowSampler", this.snowTexture);
-            this._effect.setMatrix("snowMatrix", this.snowTexture._computeTextureMatrix());
-        }
-        
         if (this.grassTexture) {
             this._effect.setTexture("grassSampler", this.grassTexture);
             this._effect.setMatrix("grassMatrix", this.grassTexture._computeTextureMatrix());
@@ -127,7 +115,7 @@
             this._effect.setMatrix("blendMatrix", this.blendTexture._computeTextureMatrix());
         }
         
-        this._effect.setFloat3("vLimits", this.sandLimit, this.rockLimit, this.snowLimit);
+        this._effect.setFloat3("vLimits", this.sandLimit, this.rockLimit, this.rockLimit);
         
         if (BABYLON.clipPlane) {
             this._effect.setFloat4("vClipPlane", BABYLON.clipPlane.normal.x, BABYLON.clipPlane.normal.y, BABYLON.clipPlane.normal.z, BABYLON.clipPlane.d);
@@ -141,10 +129,6 @@
         
         if (this.groundTexture) {
             this.groundTexture.dispose();
-        }
-
-        if (this.snowTexture) {
-            this.snowTexture.dispose();
         }
 
         if (this.sandTexture) {
