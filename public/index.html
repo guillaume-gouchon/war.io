@@ -1,12 +1,4 @@
 <!doctype html>
-<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
-<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
-<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
-<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
-<!-- Consider adding a manifest.appcache: h5bp.com/d/Offline -->
-<!--[if gt IE 8]><!--> 
-<html class="no-js" lang="en" prefix="og: http:ogp.me/ns#"> <!--<![endif]-->
-
 	<head>
 	    <meta charset="utf-8">
 	    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -18,21 +10,15 @@
         <meta property="og:title" content="WarNode | Online Multiplayer 3D RTS Game">
         <meta property="og:image" content="http:www.warnode.com/img/logo.png">
         <meta property="og:type" content="game">
-
         <link rel="shortcut icon" href="img/favicon.png">
         <link rel="apple-touch-icon" href="img/logo.png">
-
 	    <title>WarNode | Online Multiplayer 3D RTS Game</title>
-
 	    <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
 	    <link href="css/style.css" rel="stylesheet">
 	    <link href="css/gui.css" rel="stylesheet">
 	</head>
-
 	<body>
-
 		<div id="website">
-
 		  	<header class="blackBackground">
 		  		<div id="playerName" class="sprite">
 		  			<input type="text"/>
@@ -43,29 +29,38 @@
 			  	</div>
 		  		<div id="music" class="sprite">Off</div>
 		  	</header>
-
 		  	<div id="websiteLoading" class="fullScreen">
 		  		<div><img src="img/loading.gif"></div>
 		  	</div>
 			
-		  	<div id="backgrounds">
-		  		<div id="sky"></div>
-				<div id="grass"></div>
-				<div id="mountains"></div>
-		  		<div id="clouds">
-					<div class="cloud1"></div>
-					<div class="cloud2"></div>
-					<div class="cloud3"></div>
-					<div class="cloud4"></div>
-					<div class="cloud5"></div>
-					<div class="plane1"></div>
-				</div>
-				<div id="tomatoes">
-					<div class="sprite z10 left10"></div>
-					<div class="sprite z30 left70"></div>
-				</div>
-				<div id="lemons" class="hideI"></div>
-  			</div>
+		<div id="backgrounds">
+			<div id="sky"></div>
+			<div id="grass"></div>
+			<div class="cloud1"></div>
+			<div class="cloud2"></div>
+			<div class="cloud3"></div>
+			<div class="cloud4"></div>
+			<div id="mountains"></div>
+			<div class="bird1"></div>
+			<div class="bird2"></div>
+			<div class="bird3"></div>
+			<div class="cloud6"></div>
+			<div class="cloud7"></div>
+			<div class="plane1"></div>
+			<div class="plane2"></div>
+			<div class="rock4"></div>
+			<div class="rock7"></div>
+			<div class="rock5"></div>
+			<div class="tomato1"></div>
+			<div class="rock6"></div>
+			<div class="rock8"></div>
+			<div class="cloud5"></div>
+			<div class="tomato2"></div>
+			<div class="rock1"></div>
+			<div class="rock2"></div>
+			<div class="rock3"></div>
+			<div class="leaf"></div>
+		</div>
 		  	<div id="mainButtons">
 		  		<div>
 		  			<button id="createGameButton">Create Game</button>
@@ -77,7 +72,6 @@
 					<button id="tutorialButton" type="button">Tutorial</button>
 				</div>
 		  	</div>
-
 		  	<div id="newGame" class="modal hide fade" tabindex="-1" role="dialog">
 		  		<div class="modal-header">
 		  			<h3>New Game</h3>
@@ -120,7 +114,6 @@
 			    	<button id="confirmGameCreation" class="green" type="button">Create !</button>
 			    </div>
 		  	</div>
-
 		  	<div id="joinGame" class="modal hide fade" tabindex="-1" role="dialog">
 		  		<div class="modal-header">
 		  			<h3>Join Game</h3>
@@ -144,7 +137,6 @@
 			    	<button class="cancelButton red" type="button">Cancel</button>
 				</div>
 		  	</div>
-
 		  	<div id="about" class="modal hide fade" tabindex="-1" role="dialog">
 		  		<div class="modal-header">
 		  			<h3>About WarNode</h3>
@@ -165,7 +157,6 @@
 			  		</p>
 		  		</div>
 		  	</div>
-
 		  	<div id="credits" class="modal hide fade" tabindex="-1" role="dialog">
 		  		<div class="modal-header">
 		  			<h3>Credits</h3>
@@ -197,7 +188,6 @@
 			  			<span class="name">Sonia</span>
 			  			<span class="label label-important">Illustrations</span>
 			  			<span class="label label-inverse">Marketing</span>
-
 			  		</p>
 			  		<p id="contactUs"><a href="mailto:guillaume.gouchon@gmail.com">Contact us !</a></p>
 		  		</div>
@@ -211,9 +201,6 @@
 		  		-<a id="creditsButton" href="#credits" data-toggle="modal">Credits</a>
 		  	</footer>
 		</div>
-
-
-
 	  	<div id="game" class="hide">
 		  	<div id="gui" class="fullScreen" onmousedown="return false">
 			  	<div id="topBar">
@@ -240,45 +227,10 @@
 							<div id="attackSpeedStat" class="enableTooltip unitOnly stat" title="Attack Speed"><div class="sprite"></div><span></span></div>
 							<div id="rangeStat" class="enableTooltip unitOnly stat" title="Range"><div class="sprite"></div><span></span></div>
 							<div id="popStat" class="enableTooltip stat" title="Population Size"><div class="sprite"></div><span></span></div>
-							<!-- <div id="weaponTypeStat" class="enableTooltip unitOnly" title="Weapon Type"></div>
-							<div id="armorTypeStat" class="enableTooltip" title="Armor Type"></div> -->
-							<div id="resourcesStatWood" class="enableTooltip landOnly stat" title="Amount of resources left"><div class="sprite"></div><span></span></div>
-							<div id="resourcesStatWater" class="enableTooltip landOnly stat" title="Amount of resources left"><div class="sprite"></div><span></span></div>
-							<div id="queueBuilding">
-								<div id="queueProgress"></div>
-								<button data-id="0"><div class="sprite"></div></button>
-								<button data-id="1"><div class="sprite"></div></button>
-								<button data-id="2"><div class="sprite"></div></button>
-								<button data-id="3"><div class="sprite"></div></button>
-								<button data-id="4"><div class="sprite"></div></button>
-							</div>
-						</div>
-					</div>
-				</div>
-				<canvas id="minimap"></canvas>
 			  	<div id="messages" class="hide"></div>
 		  		<div id="diplomacy" class="hide"></div>
 		  		<div id="selectionRectangle" class="hide"></div>
 		  	</div>
-
-			<div id="chat" class="hide">
-				<input class="input-xxlarge" type="text" placeholder="chat..."/>
-				<p>ENABLE SOUND&nbsp;&nbsp;&nbsp;/soundon&nbsp;&nbsp;&nbsp;OR&nbsp;&nbsp;&nbsp;olivier !</p>
-				<p>DISABLE SOUND&nbsp;&nbsp;&nbsp;/soundoff&nbsp;&nbsp;&nbsp;OR&nbsp;&nbsp;&nbsp;paranormalement</p>
-				<p>QUIT&nbsp;&nbsp;&nbsp;/surrender</p>
-			</div>
-
-			<div id="endGame" class="fullScreen blackBackground hide" >
-				<div id="endGameMessage"></div>
-				<div id="endGameStats">
-					<table class="table table-bordered">
-						<thead>
-							<tr>
-								<th class="black"></th>
-								<th colspan="4" class="big">Military</th>
-								<th colspan="4" class="big">Economy</th>
-								<th colspan="1" rowspan="2" class="big">Total<br>Score</th>
-							</tr>
 				  			<tr>
 				  				<th>Player</th>
 					  			<th>Units killed</th>
@@ -292,49 +244,19 @@
 					  		</tr>
 			  			</thead>
 			  			<tbody></tbody>
-					</table>
-					<h3>Population history</h3>
-					<div id="popChart"></div>
-				</div>
-				<a id="returnHome" class="btn" href="">Return Home</a>
-			</div>
-		</div>
-
-		<div id="loadingScreen" class="fullScreen easeTransition hide" >
-			<div id="loadingLabel">
 		  		<span id="labelLoading"></span>
 		  		<span class="one">.</span>
 		  		<span class="two">.</span>
 		  		<span class="three">.</span>​
 		  	</div>
 	  		<div id="loadingProgress" class="progress">
-				<div class="bar" style="width: 0%"></div>
-			</div>
-			<div id="playersLoading" class="hide"></div>
 	  	</div>
-
 	  	<div id="notifications" class="hide"></div>
-
 	  	<div id="errorWebGL" class="modal hide fade" tabindex="-1" role="dialog" >
-			<div class="modal-header">
-				<h3>Oops !</h3>
-			</div> 
-			<div class="modal-body">
-				<p>Your browser does not support WebGL.</p>
-				<p>Try <a class="redLink" href="http:google.com/chrome" target="_blank">Google Chrome</a> or <a class="redLink" href="http:get.webgl.org" target="_blank">follow this link</a> to know more about it !</p>
-			</div>
-		</div>
-
-		<div id="imagesPreload" class="hide"></div>
-
 	  	<div id="musicTags" class="hide">
 	  		<audio controls preload></audio><!-- MUSIC -->
 		  	<audio controls preload></audio><!-- GAME SOUNDS -->
-		</div>
-
-
 	<script src="/socket.io/socket.io.js"></script>
-
 	 <script type="text/javascript" src="js/game/engine/gameData.js"></script>
 	 <script type="text/javascript" src="js/game/engine/class/building.js"></script>
 	 <script type="text/javascript" src="js/game/engine/class/game.js"></script>
@@ -379,18 +301,12 @@
 	 <script type="text/javascript" src="js/game/client/socketManager.js"></script>
 	 <script type="text/javascript" src="js/game/client/gameManager.js"></script>
 	 <script type="text/javascript" src="js/game/client/soundManager.js"></script>
-
 	<!-- GAME 
 	<script src="js/game/engine.js"></script>
 	<script src="js/game/data.js"></script>
 	<script src="js/game/client.js"></script>-->
-
 	<!-- WEBSITE -->
 	<script src="http://code.jquery.com/jquery-latest.js"></script>
 	<script type="text/javascript" src="js/jquery.flot.min.js"></script>
 	<script type="text/javascript" src="js/index.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
-
-	</body>
-
-</html>

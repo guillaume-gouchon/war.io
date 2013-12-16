@@ -26,8 +26,6 @@ THREE.ShaderLib['lambert'].fragmentShader += [
 	"}"
 	].join("\n");
 
-	console.log(THREE.ShaderLib["lambert"]);
-
 /**
 *	CONSTANTS
 */

@@ -179,7 +179,8 @@
 
 function centerMainButtons() {
 	centerElement($('#mainButtons'));
-	$('#mountains').css('top', window.innerHeight * 0.38 - $('#mountains').height() / 2);
+	$('#mountains').css('top', window.innerHeight * 0.37 - $('#mountains').height() / 2);
+	$('.leaf').css('left', 0.65 * window.innerWidth + 370);
 }
 
 
@@ -242,7 +243,7 @@ function preloadImages() {
 		}
 	}
 	preload(
-		'img/mountains.png',
+		'img/montagnes.png',
 		'img/websiteSprite.png',
 		'img/GUI/guiSprite.png',
 		GUI.IMAGES_PATH + 'cursor.png',
@@ -329,4 +330,23 @@ $('a[data-toggle="tab"]').on('shown', function (e) {
 	    background: '-webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(1%,#3b423c), color-stop(100%,#000000))', /* Chrome,Safari4+ */
 	    background: '-webkit-radial-gradient(center, ellipse cover, #3b423c 1%,#000000 100%)' /* Chrome10+,Safari5.1+ */
 	});
+});
+
+// animations
+$('.rock6').hover(function() {
+	$('.tomato1').addClass('bounce');
+	soundManager.playSound(soundManager.SOUNDS_LIST.chainsaw);
+}, function () {
+	$('.tomato1').removeClass('bounce');
+});
+
+// animations
+$('.rock1').hover(function() {
+	$('.tomato2').addClass('hideTomato2');
+}, function () {
+	$('.tomato2').removeClass('hideTomato2');
+});
+
+$('.leaf').hover(function() {
+	$('.leaf').addClass('animLeaf');
 });

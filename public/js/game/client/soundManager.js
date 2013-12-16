@@ -5,14 +5,16 @@ var soundManager = {};
 *	CONSTANTS
 */
 soundManager.MUSIC_FILES_PATH = 'music/';
-soundManager.MUSICS_LIST = ['0', '1'];
+soundManager.MUSICS_LIST = ['main_theme'];
 soundManager.SOUNDS_LIST = {
 	mainButton: 'main_button',
 	button: 'button',
 	hammer: 'hammer',
-	saw: 'saw'
+	saw: 'saw',
+	chainsaw: 'chainsaw'
 };
-soundManager.SOUND_VOLUME = 0.5;
+soundManager.MUSIC_VOLUME = 0.8;
+soundManager.SOUND_VOLUME = 1;
 
 
 /**
@@ -42,6 +44,7 @@ soundManager.init = function () {
 	        soundManager.playMusic();
 	    });
 
+	    this.musicTag.volume = this.MUSIC_VOLUME;
 	    this.soundTag.volume = this.SOUND_VOLUME;
 	} catch (e) {
 	}
@@ -54,7 +57,7 @@ soundManager.init = function () {
 soundManager.playMusic = function () {
 	if (gameManager.musicEnabled && this.audioFilesFormat != null) {
 		if (this.musicTag.src == null || this.musicTag.src == '') {
-			this.musicTag.src = this.MUSIC_FILES_PATH + this.getRandomMusic() + this.audioFilesFormat;
+			this.musicTag.src = this.MUSIC_FILES_PATH + 'ms_' +  this.getRandomMusic() + this.audioFilesFormat;
 		}
 		this.musicTag.play();
 	}
@@ -77,7 +80,7 @@ soundManager.stopMusic = function () {
 */
 soundManager.playSound = function (filename) {
 	if (gameManager.musicEnabled && this.audioFilesFormat != null) {
-		this.soundTag.src = this.MUSIC_FILES_PATH + filename + this.audioFilesFormat;
+		this.soundTag.src = this.MUSIC_FILES_PATH + 'so_' + filename + this.audioFilesFormat;
 		this.soundTag.play();
 	}
 }
