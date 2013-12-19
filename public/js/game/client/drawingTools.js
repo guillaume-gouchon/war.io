@@ -255,20 +255,21 @@ gameSurface.unselectAll = function () {
 */
 gameSurface.updateOrientation = function (d, dx, dy) {
 	if (dx == 0 && dy < 0) {
-	} else if (dx > 0 && dy < 0) {
-		d.rotation.y = this.de2ra(45);
-	} else if (dx > 0 && dy == 0) {
-		d.rotation.y = this.de2ra(90);
-	} else if (dx > 0 && dy > 0) {
-		d.rotation.y = this.de2ra(135);
-	} else if (dx == 0 && dy > 0) {
-		d.rotation.y = this.de2ra(180);
-	} else if (dx < 0 && dy > 0) {
-		d.rotation.y = this.de2ra(225);
-	} else if (dx < 0 && dy == 0) {
 		d.rotation.y = this.de2ra(270);
-	} else if (dx < 0 && dy < 0) {
+	} else if (dx > 0 && dy < 0) {
 		d.rotation.y = this.de2ra(315);
+	} else if (dx > 0 && dy == 0) {
+		d.rotation.y = this.de2ra(0);
+	} else if (dx > 0 && dy > 0) {
+		d.rotation.y = this.de2ra(45);
+	} else if (dx == 0 && dy > 0) {
+		d.rotation.y = this.de2ra(90);
+	} else if (dx < 0 && dy > 0) {
+		d.rotation.y = this.de2ra(135);
+	} else if (dx < 0 && dy == 0) {
+		d.rotation.y = this.de2ra(180);
+	} else if (dx < 0 && dy < 0) {
+		d.rotation.y = this.de2ra(225);
 	}
 }
 

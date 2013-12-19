@@ -70,7 +70,7 @@ aiOrders.buildRax = function(game, player, playerID) {
  */
 aiOrders.buildTownHall = function(game, player, playerID) {
     var townHall = gameData.ELEMENTS[gameData.FAMILIES.building][player.r].mothertree;
-    if (player.re[0] > townHall.needs[0].value && player.re[1] > townHall.needs[1].value && player.pop.current > 30) {
+    if (player.re[0] > townHall.needs[0].value && player.re[1] > townHall.needs[1].value && player.pop.current > 20) {
         var worker = null;
         var n = 0;
         for (var n in game.gameElements.unit) {

@@ -49,7 +49,7 @@ gameSurface.CAN_BUILD_CUBE_COLOR = 0x00ff00;
 gameSurface.CANNOT_BUILD_CUBE_COLOR = 0xff0000;
 gameSurface.BUILD_CUBE_OPACITY = 0.3;
 
-gameSurface.CENTER_CAMERA_Y_OFFSET = 20 * gameSurface.PIXEL_BY_NODE;
+gameSurface.CENTER_CAMERA_Y_OFFSET = 40 * gameSurface.PIXEL_BY_NODE;
 gameSurface.BARS_HEIGHT = 0.5;
 gameSurface.BARS_DEPTH = 0.2;
 gameSurface.BUILDING_STRUCTURE_SIZE = 5;
@@ -189,8 +189,8 @@ gameSurface.init = function () {
 		// animations
 		TWEEN.update();
 
-		var clockDelta = gameSurface.clock.getDelta();
-		gameSurface.waterSurface.animate(clockDelta);
+		// var clockDelta = gameSurface.clock.getDelta();
+		// gameSurface.waterSurface.animate(clockDelta);
 
 		renderer.render(scene, camera);
 
@@ -308,13 +308,13 @@ gameSurface.createScene = function () {
     scene.add(transparentSurface);
     this.transparentSurface = transparentSurface;
 
-    var waterTexture = THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + "lava.png", new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
-    var waterTexture2 = THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + "lava2.png", new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
-    this.waterSurface = new WaterSurface(3000,3000, 2, waterTexture, waterTexture2);
-	this.waterSurface.model.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
-    this.waterSurface.model.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
-    this.waterSurface.model.position.z = -20;
-    scene.add(this.waterSurface.model);
+ //    var waterTexture = THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + "lava.png", new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
+ //    var waterTexture2 = THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + "lava2.png", new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
+ //    this.waterSurface = new WaterSurface(3000,3000, 2, waterTexture, waterTexture2);
+	// this.waterSurface.model.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
+ //    this.waterSurface.model.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
+ //    this.waterSurface.model.position.z = -20;
+ //    scene.add(this.waterSurface.model);
 
 	this.fogOfWarMatrix = [];
 	this.deepFogOfWarMatrix = [];
@@ -557,7 +557,6 @@ gameSurface.addElement = function (element) {
 		object.scale.x = 2;
 		object.scale.y = 2;
 		object.scale.z = 2;
-		object.rotation.x = this.de2ra(90);
 	} else if (model == 'swordsman') {
 		object.scale.x = 2;
 		object.scale.y = 2;

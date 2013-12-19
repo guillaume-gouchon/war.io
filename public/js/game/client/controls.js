@@ -37,7 +37,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 	// zoom
 	this.zoomSpeed = 1.2;
 	this.ZOOM_MAX = 30;
-	this.ZOOM_MIN = 230;
+	this.ZOOM_MIN = 350;
 
 	// rotation
 	this.WHEEL_ROTATION_SPEED = 40;
