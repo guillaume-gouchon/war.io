@@ -12,7 +12,7 @@ cat js/game/client/socketManager.js js/game/client/utils.js js/game/client/gameC
 #java -jar lib/yuicompressor-2.4.2.jar -v -o js/game/client.js js/game/client.js
 
 # compress data .js
-cat js/game/data/*.js js/game/data/armies/tomatoes/researches.js js/game/data/armies/tomatoes/units.js js/game/data/armies/tomatoes/buildings.js js/game/data/armies/lemons/researches.js js/game/data/armies/lemons/units.js js/game/data/armies/lemons/buildings.js js/game/data/armies/*.js js/game/data/map/*.js > js/game/data.js
+cat js/game/data/*.js js/game/data/armies/tomatoes/researches.js js/game/data/armies/tomatoes/units.js js/game/data/armies/tomatoes/buildings.js js/game/data/armies/*.js js/game/data/map/*.js > js/game/data.js
 java -jar lib/yuicompressor-2.4.2.jar -v -o js/game/data.js js/game/data.js 
 
 # compress engine .js
