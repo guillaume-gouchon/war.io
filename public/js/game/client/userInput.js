@@ -84,7 +84,6 @@ userInput.doSelect = function (x, y, isCtrlKey, isShiftKey) {
 
 
 userInput.doAction = function (x, y, isShiftKey, specialOrder) {
-	
 	var clickedPart = GUI.isGUIClicked(x, y);
 	if (clickedPart == GUI.GUI_ELEMENTS.bottomBar) {
 		return;
@@ -94,11 +93,9 @@ userInput.doAction = function (x, y, isShiftKey, specialOrder) {
 	if(gameContent.building != null) {
 		this.leaveConstructionMode();
 	} else if(gameContent.selected.length > 0) {
-
 		var selected = utils.getElementFromId(gameContent.selected[0]);
 		if (rank.isAlly(gameContent.players, gameContent.myArmy, selected)
 			&& (selected.f == gameData.FAMILIES.unit || selected.f == gameData.FAMILIES.building)) {
-
 			var isFromMinimap = false;
 
 			// minimap
@@ -109,96 +106,69 @@ userInput.doAction = function (x, y, isShiftKey, specialOrder) {
 				y = convertedDestination.y;
 				isFromMinimap = true;
 			}
-
 			this.dispatchUnitAction(x, y, isShiftKey, specialOrder, isFromMinimap);
 		}
 	}
-
 }
 
 
 userInput.doDoubleClick = function (x, y) {
-
 	if(gameContent.selected.length > 0) {
-
 		var selected = utils.getElementFromId(gameContent.selected[0]);
 		if(rank.isAlly(gameContent.players, gameContent.myArmy, selected)) {
-
 			var tiles = tools.getTilesAround(gameContent.grid, selected.p, this.DOUBLE_CLICK_RADIUS_SIZE, true);
 			for (var i in tiles) {
 				if (tiles[i] > 0) {
-
 					var element = utils.getElementFromId(tiles[i]);
 					if(gameContent.selected.indexOf(element.id) == -1 && element.f == selected.f && rank.isAlly(gameContent.players, gameContent.myArmy, element) && element.t == selected.t) {
-
 				  		// select the elements
 				  		gameContent.selected.push(element.id);
 			  	  		gameSurface.selectElement(element.id);
-
 				  	}
 				}
 			}
-
 		}
-
 	}
-
 }
 
 
-userInput.pressToolbarShortcut = function (i) {
-	// if(i < GUI.toolbar.length) {
-	// 	this.clickOnToolbar(GUI.toolbar[i]);
-	// }
+userInput.pressToolbarShortcut = function (keyCode) {
+	for (var i in GUI.toolbar) {
+		if (GUI.toolbar[i].isEnabled && GUI.toolbar[i].shortcut == keyCode) {
+			this.clickSpecialButton(GUI.toolbar[i].id);
+		}
+	}
 }
 
 
 userInput.pressEnterKey = function () {
-
 	if (this.isChatWindowOpen) {
-
 		$('#chat').addClass('hide');
 		var message = $('input', '#chat').val();
 
 		if (message != '') {
-
 			if (message == 'olivier !' || message == '/soundon') {
-
 				gameManager.musicEnabled = true;
 				soundManager.playMusic();
 				gameSurface.showMessage(gameSurface.MESSAGES.musicEnabled);
-
 			} else if (message == 'paranormalement' || message == '/soundoff') {
-
 				gameManager.musicEnabled = false;
 				soundManager.stopMusic();
 				gameSurface.showMessage(gameSurface.MESSAGES.musicDisabled);
-
 			} else if (message == '/surrender') {
-
 				gameManager.sendOrderToEngine(order.TYPES.surrender, [gameContent.myArmy]);
-
 			} else {
-
 				gameManager.sendOrderToEngine(order.TYPES.chat, [gameContent.myArmy, $('input', '#chat').val()]);
-
 			}
-
 		}
-
 		$('input', '#chat').val('');
-
 	} else {
-
 		$('#chat').removeClass('hide');
 		$('#chat').css('top', (window.innerHeight - $('#chat').height()) / 2);
 		$('#chat').css('left', (window.innerWidth - $('#chat').width()) / 2);
         $('input', '#chat')[0].focus();
-
 	}
-
 	this.isChatWindowOpen = !this.isChatWindowOpen;
-
 }
 
 userInput.pressSpaceKey = function () {
@@ -209,17 +179,13 @@ userInput.pressSpaceKey = function () {
 
 
 userInput.onMouseMove = function (x, y) {
-
 	this.updateConstructionMode(x, y);
 	this.updateMouseIcon(x, y);
-
 }
 
 
 userInput.onMouseUp = function () {
-
 	this.removeSelectionRectangle();
-
 }
 
 
@@ -507,21 +473,21 @@ userInput.removeSelectionRectangle = function () {
 
 
 userInput.pressStopKey = function () {
-	if (gameContent.selected.length > 0) {
+	if (gameContent.selected.length > 0 && !GUI.showBuildings) {
 		gameManager.sendOrderToEngine(order.TYPES.stop, [gameContent.selected]);
 	}
 }
 
 
 userInput.pressHoldKey = function () {
-	if (gameContent.selected.length > 0) {
+	if (gameContent.selected.length > 0 && !GUI.showBuildings) {
 		gameManager.sendOrderToEngine(order.TYPES.hold, [gameContent.selected]);
 	}
 }
 
 
 userInput.enterPatrolMode = function () {
-	if (gameContent.selected.length > 0) {
+	if (gameContent.selected.length > 0 && !GUI.showBuildings) {
 		GUI.unselectButtons();
 		$('#patrolButton').addClass('selected');
 		controls.clickMode = controls.MODES.patrol;
@@ -530,7 +496,7 @@ userInput.enterPatrolMode = function () {
 
 
 userInput.enterAttackMode = function () {
-	if (gameContent.selected.length > 0) {
+	if (gameContent.selected.length > 0 && !GUI.showBuildings) {
 		GUI.unselectButtons();
 		$('#attackButton').addClass('selected');
 		controls.clickMode = controls.MODES.attack;	

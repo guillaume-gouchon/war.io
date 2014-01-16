@@ -369,9 +369,9 @@ GUI.createToolbarButton = function (button) {
 		// build tooltip
 		var tooltip;
 		if (button.needs != null && button.needs.length > 0) {
-			tooltip = '<p>' + button.name + '</p>';
+			tooltip = '<p>' + button.tooltip + '</p>';
 		} else {
-			tooltip = button.name;
+			tooltip = button.tooltip;
 		}
 		for (var i in button.needs) {
 			var need = button.needs[i];

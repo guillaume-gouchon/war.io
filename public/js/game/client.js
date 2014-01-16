@@ -878,7 +878,7 @@ gameSurface.addElement = function (element) {
 		object.scale.y = 1.5;
 		object.rotation.x = this.de2ra(90);
 		object.rotation.y = this.de2ra(Math.random() * 360);
-	} else if ( model == 'tomato_mothertree') {
+	} else if ( model == 'hq') {
 		object.scale.x = 3;
 		object.scale.y = 3;
 		object.scale.z = 3;
@@ -899,7 +899,7 @@ gameSurface.addElement = function (element) {
 		object.scale.y = 2;
 		object.scale.z = 2;
 		object.rotation.x = this.de2ra(90);
-	} else if (model == 'tomato_builder') {
+	} else if (model == 'builder') {
 		object.scale.x = 2;
 		object.scale.y = 2;
 		object.scale.z = 2;

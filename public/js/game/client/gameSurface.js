@@ -328,64 +328,64 @@ gameSurface.createScene = function () {
 	}
 
 
-	var planeSize = gameContent.map.size.x * 20;
-	var steps = 70;
-	var stepSize = planeSize / steps;
-	var innerBorderThreshold = planeSize / 4;
-	var geometry = new THREE.PlaneGeometry(gameContent.map.size.x * this.PIXEL_BY_NODE * 1.5, gameContent.map.size.y * this.PIXEL_BY_NODE * 1.5, steps, steps);
-	for (var i=0, l=geometry.faces.length; i<l; i++) {
-		var centroid = geometry.faces[i].centroid;
-		if (Math.abs(centroid.x)<innerBorderThreshold-stepSize && Math.abs(centroid.y)<innerBorderThreshold-stepSize) {
-			geometry.faces.splice(i, 1);
-			l--;
-			i--;
-		}
-	}
-	var maxDist = planeSize/2-innerBorderThreshold;
-	for (var i=0, l=geometry.vertices.length; i<l; i++) {
-		var vertice = geometry.vertices[i];
-		if (Math.abs(vertice.x)<innerBorderThreshold-stepSize && Math.abs(vertice.y)<innerBorderThreshold-stepSize)
-			continue;
-		var dist;
-		if (Math.abs(vertice.x)<innerBorderThreshold) {
-			dist = Math.abs(vertice.y)-innerBorderThreshold;
-		} else if (Math.abs(vertice.y)<innerBorderThreshold) {
-			dist = Math.abs(vertice.x)-innerBorderThreshold;
-		} else {
-			dist = Math.sqrt(Math.pow(Math.abs(vertice.x)-innerBorderThreshold, 2) + Math.pow(Math.abs(vertice.y)-innerBorderThreshold, 2));
-		}
-		if (dist < stepSize)
-			continue;
+	// var planeSize = gameContent.map.size.x * 20;
+	// var steps = 70;
+	// var stepSize = planeSize / steps;
+	// var innerBorderThreshold = planeSize / 4;
+	// var geometry = new THREE.PlaneGeometry(gameContent.map.size.x * this.PIXEL_BY_NODE * 1.5, gameContent.map.size.y * this.PIXEL_BY_NODE * 1.5, steps, steps);
+	// for (var i=0, l=geometry.faces.length; i<l; i++) {
+	// 	var centroid = geometry.faces[i].centroid;
+	// 	if (Math.abs(centroid.x)<innerBorderThreshold-stepSize && Math.abs(centroid.y)<innerBorderThreshold-stepSize) {
+	// 		geometry.faces.splice(i, 1);
+	// 		l--;
+	// 		i--;
+	// 	}
+	// }
+	// var maxDist = planeSize/2-innerBorderThreshold;
+	// for (var i=0, l=geometry.vertices.length; i<l; i++) {
+	// 	var vertice = geometry.vertices[i];
+	// 	if (Math.abs(vertice.x)<innerBorderThreshold-stepSize && Math.abs(vertice.y)<innerBorderThreshold-stepSize)
+	// 		continue;
+	// 	var dist;
+	// 	if (Math.abs(vertice.x)<innerBorderThreshold) {
+	// 		dist = Math.abs(vertice.y)-innerBorderThreshold;
+	// 	} else if (Math.abs(vertice.y)<innerBorderThreshold) {
+	// 		dist = Math.abs(vertice.x)-innerBorderThreshold;
+	// 	} else {
+	// 		dist = Math.sqrt(Math.pow(Math.abs(vertice.x)-innerBorderThreshold, 2) + Math.pow(Math.abs(vertice.y)-innerBorderThreshold, 2));
+	// 	}
+	// 	if (dist < stepSize)
+	// 		continue;
 
-		var normDist = dist / maxDist * 10;
-			// TODO change here for height management
-		// vertice.z = Math.pow(.9, dist/10) * 80 - Math.pow(1.1, dist/10) * 20 + 10 - Math.random() * 20;
-		var z;
-		// if (normDist <= 40)
-			z = Math.exp(-Math.pow(-(normDist-2.5)*.75, 2)) * .7;
-		// else
-		// 	z = 1/(normDist-1) - .0221;
-		if (normDist > 2)
-			z -= normDist / 10;
-		vertice.z = z * 100 + 10 - Math.random() * 20;
-			//if (dist > 20 && dist < 100)
-			//	vertice.z += (100-dist);
-			//vertice.x += (Math.random()-.5) * 3;
-			//vertice.y += (Math.random()-.5) * 3;
-		//}
-	}
-	geometry.elementsNeedUpdate = true;
-	geometry.verticesNeedUpdate = true;
-	geometry.computeCentroids();
-	geometry.computeFaceNormals();
-	var rockTexture  = THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'rock.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
-	rockTexture.wrapT = rockTexture.wrapS = THREE.RepeatWrapping;
-	rockTexture.repeat.set(32,32);
-	var surface = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({map:rockTexture}));
-    surface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
-    surface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
-    surface.position.z = -.3;
-    scene.add(surface);
+	// 	var normDist = dist / maxDist * 10;
+	// 		// TODO change here for height management
+	// 	// vertice.z = Math.pow(.9, dist/10) * 80 - Math.pow(1.1, dist/10) * 20 + 10 - Math.random() * 20;
+	// 	var z;
+	// 	// if (normDist <= 40)
+	// 		z = Math.exp(-Math.pow(-(normDist-2.5)*.75, 2)) * .7;
+	// 	// else
+	// 	// 	z = 1/(normDist-1) - .0221;
+	// 	if (normDist > 2)
+	// 		z -= normDist / 10;
+	// 	vertice.z = z * 100 + 10 - Math.random() * 20;
+	// 		//if (dist > 20 && dist < 100)
+	// 		//	vertice.z += (100-dist);
+	// 		//vertice.x += (Math.random()-.5) * 3;
+	// 		//vertice.y += (Math.random()-.5) * 3;
+	// 	//}
+	// }
+	// geometry.elementsNeedUpdate = true;
+	// geometry.verticesNeedUpdate = true;
+	// geometry.computeCentroids();
+	// geometry.computeFaceNormals();
+	// var rockTexture  = THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'rock.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
+	// rockTexture.wrapT = rockTexture.wrapS = THREE.RepeatWrapping;
+	// rockTexture.repeat.set(32,32);
+	// var surface = new THREE.Mesh(geometry, new THREE.MeshLambertMaterial({map:rockTexture}));
+ //    surface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
+ //    surface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
+ //    surface.position.z = -.3;
+ //    scene.add(surface);
 
 
 	//add order geometry
@@ -532,7 +532,7 @@ gameSurface.addElement = function (element) {
 		object.scale.y = 1.5;
 		object.rotation.x = this.de2ra(90);
 		object.rotation.y = this.de2ra(Math.random() * 360);
-	} else if ( model == 'tomato_mothertree') {
+	} else if ( model == 'hq') {
 		object.scale.x = 3;
 		object.scale.y = 3;
 		object.scale.z = 3;
@@ -553,7 +553,7 @@ gameSurface.addElement = function (element) {
 		object.scale.y = 2;
 		object.scale.z = 2;
 		object.rotation.x = this.de2ra(90);
-	} else if (model == 'tomato_builder') {
+	} else if (model == 'builder') {
 		object.scale.x = 2;
 		object.scale.y = 2;
 		object.scale.z = 2;

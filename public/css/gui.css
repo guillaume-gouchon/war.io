@@ -32,7 +32,7 @@ button.selected {
 }
 
 .disabled {
-    opacity: 0.5;
+    opacity: 0.3;
 }
 
 /**
@@ -62,7 +62,7 @@ button.selected {
   height: 25px;
 }
 #resource0 .sprite {
-  background-image: url(../img/GUI/ic_water.png);/** sprite-ref: guiSprite; */
+  background-image: url(../img/GUI/ic_gold.png);/** sprite-ref: guiSprite; */
 }
 #resource1 .sprite {
   background-image: url(../img/GUI/ic_wood.png);/** sprite-ref: guiSprite; */
@@ -152,9 +152,7 @@ button.selected {
   background-image: url(../img/GUI/bg_patrol_btn.png);/** sprite-ref: guiSprite; */
 }
 
-.tomato_builder {
-  background-image: url(../img/GUI/ic_tomato_builder.png);/** sprite-ref: guiSprite; */
-}
+
 .ic_build {
   background-image: url(../img/GUI/ic_build.png);/** sprite-ref: guiSprite; */
 }
@@ -164,13 +162,48 @@ button.selected {
 .ic_back {
   background-image: url(../img/GUI/ic_back.png);/** sprite-ref: guiSprite; */
 }
-.ic_water {
-  background-image: url(../img/GUI/ic_water20.png);/** sprite-ref: guiSprite; */
+.ic_gold {
+  background-image: url(../img/GUI/ic_gold20.png);/** sprite-ref: guiSprite; */
 }
 .ic_wood {
   background-image: url(../img/GUI/ic_wood20.png);/** sprite-ref: guiSprite; */
 }
-
+.hq {
+  background-image: url(../img/GUI/ic_hq.png);/** sprite-ref: guiSprite; */
+}
+.house {
+  background-image: url(../img/GUI/ic_house.png);/** sprite-ref: guiSprite; */
+}
+.casern {
+  background-image: url(../img/GUI/ic_casern.png);/** sprite-ref: guiSprite; */
+}
+.factory {
+  background-image: url(../img/GUI/ic_factory.png);/** sprite-ref: guiSprite; */
+}
+.researchlab {
+  background-image: url(../img/GUI/ic_researchlab.png);/** sprite-ref: guiSprite; */
+}
+.tower {
+  background-image: url(../img/GUI/ic_tower.png);/** sprite-ref: guiSprite; */
+}
+.goldmine {
+  background-image: url(../img/GUI/ic_goldmine.png);/** sprite-ref: guiSprite; */
+}
+.tree {
+  background-image: url(../img/GUI/ic_tree.png);/** sprite-ref: guiSprite; */
+}
+.builder {
+  background-image: url(../img/GUI/ic_builder.png);/** sprite-ref: guiSprite; */
+}
+.swordsman {
+  background-image: url(../img/GUI/ic_swordsman.png);/** sprite-ref: guiSprite; */
+}
+.bowman {
+  background-image: url(../img/GUI/ic_bowman.png);/** sprite-ref: guiSprite; */
+}
+.knight {
+  background-image: url(../img/GUI/ic_knight.png);/** sprite-ref: guiSprite; */
+}
 
 /**
 *   INFO SECTION
@@ -211,7 +244,7 @@ button.selected {
   background-image: url(../img/GUI/ic_attackSpeed.png);/** sprite-ref: guiSprite; */
 }
 #resourcesStatWater .sprite {
-  background-image: url(../img/GUI/ic_water20.png);/** sprite-ref: guiSprite; */
+  background-image: url(../img/GUI/ic_gold20.png);/** sprite-ref: guiSprite; */
 }
 #resourcesStatWood .sprite {
   background-image: url(../img/GUI/ic_wood20.png);/** sprite-ref: guiSprite; */

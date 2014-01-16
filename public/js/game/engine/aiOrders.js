@@ -4,7 +4,6 @@ var aiOrders = {};
  *      Updates the orders that the AI gives to its units
  */
 aiOrders.update = function(game, player) {
-    //var player = game.players[0];
     var playerID = player.o;
     this.buildHouses(game, player, playerID);
     this.harvest(game, player, playerID);
@@ -69,7 +68,7 @@ aiOrders.buildRax = function(game, player, playerID) {
  *      Build Town Hall
  */
 aiOrders.buildTownHall = function(game, player, playerID) {
-    var townHall = gameData.ELEMENTS[gameData.FAMILIES.building][player.r].mothertree;
+    var townHall = gameData.ELEMENTS[gameData.FAMILIES.building][player.r].hq;
     if (player.re[0] > townHall.needs[0].value && player.re[1] > townHall.needs[1].value && player.pop.current > 20) {
         var worker = null;
         var n = 0;
@@ -190,7 +189,7 @@ aiOrders.finishBuildings = function(game, playerID) {
 aiOrders.trainHarvesters = function(game, playerID) {
     for (var n in game.gameElements.building) {
         var building = game.gameElements.building[n];
-        if (building.o == playerID && building.t == gameData.ELEMENTS[building.f][building.r].mothertree.t) {
+        if (building.o == playerID && building.t == gameData.ELEMENTS[building.f][building.r].hq.t) {
                 if (building.q.length < 2) { // Don't queue worker, it's useless
                     order.buy(game, [building.id], gameData.ELEMENTS[gameData.FAMILIES.unit][building.r].builder);
                 }

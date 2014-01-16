@@ -4,7 +4,7 @@
 gameData.RACES = {
 	tomatoes : {
 		id: 0,
-		name : 'Tomatoes',
+		name : 'Human Alliance',
 		image : 'human.png'
 	},
 	lemons : {
@@ -22,7 +22,7 @@ gameData.RESOURCES = {
 	water : {
 		id: 0,
 		name : 'Water',
-		image : 'ic_water'
+		image : 'ic_gold'
 	},
 	wood : {
 		id: 1,
@@ -98,19 +98,22 @@ gameData.getRandomName = function () {
 gameData.BUTTONS = {
 	build : {
 		id : 'build',
-		name: 'Build (B)',
-		g : 'ic_build', 
+		tooltip: 'Build (B)',
+		shortcut: 66,
+		g : 'ic_build',
 		isEnabled : true
 	},
 	back : {
 		id : 'back',
-		name: 'Back (ESC)',
+		tooltip: 'Back (ESC)',
+		shortcut: 27,
 		g : 'ic_back', 
 		isEnabled : true
 	},
 	cancel : {
 		id : 'cancel',
-		name: 'Cancel (ESC)',
+		tooltip: 'Cancel (ESC)',
+		shortcut: 27,
 		g : 'ic_cancel', 
 		isEnabled : true
 	}

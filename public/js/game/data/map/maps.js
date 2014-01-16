@@ -69,15 +69,15 @@ gameData.MAP_SIZES = {
 	medium : {
 		id : 1,
 		name : 'Medium',
-		x : 140,
-		y : 140
+		x : 130,
+		y : 130
 	},
 
 	large : {
 		id : 2,
 		name : 'Large',
-		x : 180,
-		y : 180
+		x : 160,
+		y : 160
 	}
 }
 

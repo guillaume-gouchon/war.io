@@ -456,14 +456,8 @@ THREE.TrackballControls = function ( object, domElement ) {
 		}
 
 		if (!userInput.isChatWindowOpen) {
-
 			// keyboard shortcuts
-			var index = _this.KEYBOARD_SHORTCUTS.indexOf(event.keyCode);
-			if (index >= 0) {
-				userInput.pressToolbarShortcut(index);
-				return false;
-			}
-
+			userInput.pressToolbarShortcut(event.keyCode);
 		}
 
 
