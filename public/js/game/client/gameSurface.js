@@ -462,7 +462,7 @@ gameSurface.loadObject = function (key, family, race) {
 			if (gameContent.players[n].r == race) {
 				var color = this.ARMIES_COLORS[n];
 				gameSurface.materials[key + color] = new THREE.MeshLambertMaterial({lights:true, map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key + color + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
-				gameSurface.materials["HIDDEN" + key + color] = new THREE.MeshLambertMaterial({lights:true, color: 0x555555, map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key, '' + color + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
+				gameSurface.materials["HIDDEN" + key + color] = new THREE.MeshLambertMaterial({lights:true, color: 0x555555, map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key + color + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
 			}
 		}
 	} else {
