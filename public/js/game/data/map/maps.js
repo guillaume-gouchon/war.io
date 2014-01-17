@@ -35,8 +35,8 @@ gameData.INITIAL_RESOURCES = {
 		id : 0,
 		name : 'Low',
 		re : [
-			{t : gameData.RESOURCES.wood.id, value : 50},
-			{t : gameData.RESOURCES.water.id, value : 50}
+			{t : gameData.RESOURCES.wood.id, value : 100},
+			{t : gameData.RESOURCES.water.id, value : 100}
 		]
 	},
 
@@ -44,8 +44,8 @@ gameData.INITIAL_RESOURCES = {
 		id : 1,
 		name : 'Standard',
 		re : [
-			{t : gameData.RESOURCES.wood.id, value : 100},
-			{t : gameData.RESOURCES.water.id, value : 100}
+			{t : gameData.RESOURCES.wood.id, value : 150},
+			{t : gameData.RESOURCES.water.id, value : 150}
 		]
 	},
 
@@ -53,8 +53,8 @@ gameData.INITIAL_RESOURCES = {
 		id : 2,
 		name : 'High',
 		re : [
-			{t : gameData.RESOURCES.wood.id, value : 250},
-			{t : gameData.RESOURCES.water.id, value : 250}
+			{t : gameData.RESOURCES.wood.id, value : 300},
+			{t : gameData.RESOURCES.water.id, value : 300}
 		]
 	}
 }

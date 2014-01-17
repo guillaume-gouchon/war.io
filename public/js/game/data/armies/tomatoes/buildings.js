@@ -74,8 +74,13 @@ gameData.ELEMENTS[gameData.FAMILIES.building][gameData.RACES.tomatoes.id] = {
 		t: 3,
 		shape: [[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1]],
 		timeConstruction: 45,
-		buttons: [, gameData.ELEMENTS[gameData.FAMILIES.research][gameData.RACES.tomatoes.id].doublekatana, gameData.ELEMENTS[gameData.FAMILIES.research][gameData.RACES.tomatoes.id].triplekatana],
-		needs: [{t: gameData.RESOURCES.water.id, value: 150}, {t: gameData.RESOURCES.wood.id, value: 150}],
+		buttons: [
+			gameData.ELEMENTS[gameData.FAMILIES.research][gameData.RACES.tomatoes.id].bastardsword, 
+			gameData.ELEMENTS[gameData.FAMILIES.research][gameData.RACES.tomatoes.id].leatherarmor, 
+			gameData.ELEMENTS[gameData.FAMILIES.research][gameData.RACES.tomatoes.id].longbow,
+			gameData.ELEMENTS[gameData.FAMILIES.research][gameData.RACES.tomatoes.id].spikedmace
+		],
+		needs: [{t: gameData.RESOURCES.water.id, value: 100}, {t: gameData.RESOURCES.wood.id, value: 100}],
 		l: 200,
 		defense: 0,
 		armorType: fightLogic.ARMOR_TYPES.building,
@@ -85,7 +90,7 @@ gameData.ELEMENTS[gameData.FAMILIES.building][gameData.RACES.tomatoes.id] = {
 		height: 18,
 		vision: 15,
 		lifeBarWidth: 40,
-		key: 'researchlab'
+		key: 'research lab'
 	},
 	tower: {
 		name: 'Defense Tower',
@@ -97,7 +102,7 @@ gameData.ELEMENTS[gameData.FAMILIES.building][gameData.RACES.tomatoes.id] = {
 		shape: [[1, 1, 1], [1, 1, 1], [1, 1, 1]],
 		timeConstruction: 45,
 		buttons: [],
-		needs: [{t: gameData.RESOURCES.water.id, value: 150}, {t: gameData.RESOURCES.wood.id, value: 100}],
+		needs: [{t: gameData.RESOURCES.water.id, value: 150}, {t: gameData.RESOURCES.wood.id, value: 150}, {t: "casern"}],
 		l: 200,
 		defense: 1,
 		armorType: fightLogic.ARMOR_TYPES.building,
@@ -124,7 +129,7 @@ gameData.ELEMENTS[gameData.FAMILIES.building][gameData.RACES.tomatoes.id] = {
 		shape: [[1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1], [1, 1, 1, 1]],
 		timeConstruction: 45,
 		buttons: [gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.tomatoes.id].specialUnit1],
-		needs: [{t: gameData.RESOURCES.water.id, value: 150}, {t: gameData.RESOURCES.wood.id, value: 150}],
+		needs: [{t: gameData.RESOURCES.water.id, value: 250}, {t: gameData.RESOURCES.wood.id, value: 250}, {t: 'research lab'}],
 		l: 200,
 		defense: 0,
 		armorType: fightLogic.ARMOR_TYPES.building,

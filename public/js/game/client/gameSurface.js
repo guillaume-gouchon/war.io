@@ -90,6 +90,7 @@ gameSurface.canBuildHereMaterial = null;
 gameSurface.cannotBuildHereMaterial = null;
 gameSurface.basicCubeGeometry = null;
 gameSurface.building = null;
+gameSurface.skybox = null;
 
 //fogs of war
 gameSurface.clock = null;
@@ -164,6 +165,8 @@ gameSurface.init = function () {
 	}
 
 	this.totalStuffToLoad += (Object.keys(gameData.ELEMENTS[gameData.FAMILIES.land][0]).length - 1) * 3;// water
+	this.totalStuffToLoad += 6 // skybox
+	
 
 	// init scene
 	this.createScene();
@@ -202,9 +205,40 @@ gameSurface.init = function () {
 			gameSurface.updateCameraViewBounds();
 			gameSurface.updateMinimap();
 		}
+
+		// rotate sky
+		gameSurface.skybox.rotation.y+= gameSurface.de2ra(0.01);
 	}
 
 	render();
+}
+
+gameSurface.addSkybox = function () {
+	var opts = {
+		folder: this.MODELS_PATH + 'skyboxes/',
+		skyboxName: 'comawhite',
+		filetype: '.jpg',
+		size: 5000
+	};
+
+	var urls = [];
+	['x','y','z'].forEach(function(axis){
+		urls.push(opts.folder + opts.skyboxName + '_' + axis + 'pos' + opts.filetype);
+		urls.push(opts.folder + opts.skyboxName + '_' + axis + 'neg' + opts.filetype);
+	});
+
+	var materialArray = [];
+	for (var i in urls) {
+	    materialArray.push( new THREE.MeshBasicMaterial({
+	        map: THREE.ImageUtils.loadTexture(urls[i], new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()}),
+	        side: THREE.BackSide
+	    }));
+	}
+	var skyMaterial = new THREE.MeshFaceMaterial(materialArray);
+	var skyGeometry = new THREE.CubeGeometry(opts.size, opts.size, opts.size);    
+	this.skybox = new THREE.Mesh(skyGeometry, skyMaterial);
+	this.skybox.rotation.x = this.de2ra(90);
+	scene.add(this.skybox);
 }
 
 /**
@@ -212,15 +246,8 @@ gameSurface.init = function () {
 */
 gameSurface.createScene = function () {
 
-
-	//add skybox
-	var directions  = ["xpos", "xneg", "ypos", "yneg", "zpos", "zneg"];
-	var skyGeometry = new THREE.CubeGeometry( 5000, 5000, 5000 );
-	var skyboxType = 'alien';
-	var fileExtension = '.jpg';
-
 	var light = new THREE.SpotLight(0xFFFFFF);
-	light.position.set(200,-2,200);
+	light.position.set(200,200,200);
 	light.rotation.x = light.rotation.y = light.rotation.z = 0;
 	light.target.position.set(0.0,0.0,0.0);
 	light.target.updateMatrixWorld();
@@ -229,17 +256,7 @@ gameSurface.createScene = function () {
 	var ambient = new THREE.AmbientLight( 0x808080 );
 	scene.add(ambient);
 
-	// var materialArray = [];
-	// for (var i = 0; i < 6; i++)
-	// 	materialArray.push( new THREE.MeshBasicMaterial({
-	// 		map: THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'skyboxes/' + skyboxType + '_' + directions[i] + fileExtension, new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()}),
-	// 		side: THREE.BackSide
-	// 	}));
-	// var skyMaterial = new THREE.MeshFaceMaterial(materialArray);
-	// var skyBox = new THREE.Mesh(skyGeometry, skyMaterial);
-	// skyBox.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
-	// skyBox.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
-	// scene.add(skyBox);
+	this.addSkybox();
 
 	//generate the land
 	var rwidth = gameContent.map.size.x, rheight = gameContent.map.size.y, rsize = rwidth * rheight;
@@ -294,27 +311,19 @@ gameSurface.createScene = function () {
     });
 	//var grassMaterial = new THREE.MeshBasicMaterial({ map: grassTexture });
 	// var landGeometry = new THREE.PlaneGeometry(2200, 2200, 64, 64);
-	var landGeometry = new THREE.PlaneGeometry(gameContent.map.size.x * this.PIXEL_BY_NODE, gameContent.map.size.y * this.PIXEL_BY_NODE);
+	var landGeometry = new THREE.CubeGeometry(gameContent.map.size.x * this.PIXEL_BY_NODE, gameContent.map.size.y * this.PIXEL_BY_NODE, 30);
 	var planeSurface = new THREE.Mesh(landGeometry, grassMaterial);
     planeSurface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
     planeSurface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
+    planeSurface.position.z = -30;
     scene.add(planeSurface);
     this.planeSurface = planeSurface;
 
-    var transparentSurface = new THREE.Mesh(new THREE.PlaneGeometry(5000, 5000), new THREE.MeshNormalMaterial({ transparent: true, opacity: 0 }));
-	transparentSurface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
-    transparentSurface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
-    transparentSurface.position.z = -1;
-    scene.add(transparentSurface);
-    this.transparentSurface = transparentSurface;
-
- //    var waterTexture = THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + "lava.png", new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
- //    var waterTexture2 = THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + "lava2.png", new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
- //    this.waterSurface = new WaterSurface(3000,3000, 2, waterTexture, waterTexture2);
-	// this.waterSurface.model.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
- //    this.waterSurface.model.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
- //    this.waterSurface.model.position.z = -20;
- //    scene.add(this.waterSurface.model);
+    this.transparentSurface = new THREE.Mesh(new THREE.PlaneGeometry(5000, 5000), new THREE.MeshNormalMaterial({ transparent: true, opacity: 0 }));
+	this.transparentSurface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
+    this.transparentSurface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
+    this.transparentSurface.position.z = planeSurface.position.z - 1;
+    scene.add(this.transparentSurface);
 
 	this.fogOfWarMatrix = [];
 	this.deepFogOfWarMatrix = [];

@@ -205,6 +205,11 @@ GUI.updateInfoBar = function () {
 			$('#lifeElement').html(element.l + '/' + elementData.l).attr('class', gameSurface.getLifeBarBackgroundColor(element.l / elementData.l) + ' stat');
 			// $('#armorTypeStat').html(elementData.armorType).removeClass('hideI');
 			$('span', '#popStat').html(elementData.pop).removeClass('hideI');
+			if (element.f == gameData.FAMILIES.building) {
+				$('#popStat').attr('data-original-title', 'Add to Population');
+			} else {
+				$('#popStat').attr('data-original-title', 'Population Size');
+			}
 			$('span', '#defenseStat').html(accessors.getStat(gameContent.players, element.o, elementData, fightLogic.STATS_BUFF.defense)).removeClass('hideI');
 
 			if (elementData.attack != null) {
@@ -378,7 +383,7 @@ GUI.createToolbarButton = function (button) {
 			if (need.t >= 0) {
 				tooltip += '<p class="price"><span class="' + gameData.RESOURCES[Object.keys(gameData.RESOURCES)[need.t]].image + ' sprite">&nbsp;</span>' + need.value + '</p>';
 			} else {
-				tooltip += '<p>' + need.t + '</p>';
+				tooltip += '<p class="technoNeed">' + need.t + '</p>';
 			}
 		}
 

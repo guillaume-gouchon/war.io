@@ -18,7 +18,7 @@ sed -i "s/style.css/style.min.css/g" index.html;
 sed -i "/js\\/game\\/engine\\//d" index.html;
 sed -i "/js\\/game\\/data\\//d" index.html;
 sed -i "/js\\/game\\/client\\//d" index.html;
-sed -i "s/<!-- GAME/<!-- GAME -->/g" index.html;
+sed -i "s/<!-- GAME/ -->/g" index.html;
 sed -i "s/<\\/script>-->/<\\/script>/g" index.html;
 
 # Restart server

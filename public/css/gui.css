@@ -88,6 +88,7 @@ button.selected {
 #toolbar {
   display: inline-block;
   width: 33%;
+  padding: 5px;
   vertical-align: top;
 }
 #toolbar button {
@@ -203,6 +204,18 @@ button.selected {
 }
 .knight {
   background-image: url(../img/GUI/ic_knight.png);/** sprite-ref: guiSprite; */
+}
+.bastardsword {
+  background-image: url(../img/GUI/ic_bastardsword.png);/** sprite-ref: guiSprite; */
+}
+.leatherarmor {
+  background-image: url(../img/GUI/ic_leatherarmor.png);/** sprite-ref: guiSprite; */
+}
+.longbow {
+  background-image: url(../img/GUI/ic_longbow.png);/** sprite-ref: guiSprite; */
+}
+.spikedmace {
+  background-image: url(../img/GUI/ic_spikedmace.png);/** sprite-ref: guiSprite; */
 }
 
 /**
@@ -364,6 +377,9 @@ div.lowLife {
   margin-right: 6px;
   width: 20px;
   height: 20px;
+}
+.tooltip .technoNeed {
+  color: yellow;
 }
 
 

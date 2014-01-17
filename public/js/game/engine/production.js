@@ -279,7 +279,7 @@ production.updateQueueProgress = function (game, building) {
 		// research
 		elementData = tools.getElementDataFrom(gameData.FAMILIES.research, building.r, building.q[0]);
 	}
-	building.qp += parseInt(100 / (gameLogic.FREQUENCY * elementData.timeConstruction));
+	building.qp += Math.max(1, parseInt(100 / (gameLogic.FREQUENCY * elementData.timeConstruction)));
 	if(building.qp >= 100) {
 		var canGoToNext = true;
 		if (building.q[0] >= 0) {

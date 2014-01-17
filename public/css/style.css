@@ -175,12 +175,11 @@ header #armies {
 }
 header #armies div {
     display: inline-block;
-    width: 48%;
     text-align: center;
     opacity: 0.2;
     cursor: pointer;
     color: #C41616;
-    padding: 5px 0px 5px 0px;
+    padding: 5px 0px 5px 5px;
 }
 header #armies div:hover {
     opacity: 0.6;
