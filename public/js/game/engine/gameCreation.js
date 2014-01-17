@@ -81,8 +81,8 @@ gameCreation.createMap = function (game, map, players, zones) {
 		var index = parseInt(Math.random() * basecampZones.length);
 		var playerZone = basecampZones[index];
 		var campPosition = {
-			x : playerZone[0] * zoneSize + parseInt(zoneSize / 3) + parseInt(Math.random() * zoneSize / 3), 
-			y : playerZone[1] * zoneSize + parseInt(zoneSize / 3) + parseInt(Math.random() * zoneSize / 3)
+			x : playerZone[0] * this.ZONE_SIZE + parseInt(this.ZONE_SIZE * 0.5),
+			y : playerZone[1] * this.ZONE_SIZE + parseInt(this.ZONE_SIZE * 0.5)
 		}
 		this.setupBasecamp(game, players[i], campPosition);
 		basecampZones.splice(index, 1);
@@ -292,9 +292,10 @@ gameCreation.dispatchPlayers = function (game, zones, players, dx, dy) {
 
 		//this zone is now owned by the player
 		zones[playerZone.x][playerZone.y] = gameData.ZONES.basecamp;
+
 		var campPosition = {
-			x : playerZone.x * this.ZONE_SIZE + parseInt(this.ZONE_SIZE / 4) + parseInt(Math.random() * this.ZONE_SIZE / 2), 
-			y : playerZone.y * this.ZONE_SIZE + parseInt(this.ZONE_SIZE / 4) + parseInt(Math.random() * this.ZONE_SIZE / 2)
+			x : playerZone.x * this.ZONE_SIZE + parseInt(this.ZONE_SIZE * (0.25 + 0.5 * Math.random())),
+			y : playerZone.y * this.ZONE_SIZE + parseInt(this.ZONE_SIZE * ( 0.25 + 0.5 * Math.random()))
 		}
 		this.setupBasecamp(game, players[i], campPosition);
 
