@@ -272,7 +272,7 @@ gameManager.showStats = function (playerStatus, gameStats) {
 		}
 
 		var scoreTotal = stats.getTotalScore(statPlayer, totalTec.length);
-		$('tbody', '#endGame').append('<tr class="' + gameSurface.PLAYERS_COLORS[i] + '"><td>' +  
+		$('tbody', '#endGame').append('<tr class="' + gameSurface.PLAYERS_COLORS[player.o] + '"><td>' +  
 			player.n + '</td><td>' +  
 			statPlayer.killed + '</td><td>' +  
 			statPlayer.lost + '</td><td>' +  
