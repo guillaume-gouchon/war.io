@@ -67,7 +67,10 @@ gameLogic.update = function (game) {
 
 		if (game.players[element.o].s != gameData.PLAYER_STATUSES.surrender) {
 			// player is still alive
-			game.players[element.o].s = gameData.PLAYER_STATUSES.ig;
+			var elementData = tools.getElementData(element);
+			if (elementData.isProduction) {
+				game.players[element.o].s = gameData.PLAYER_STATUSES.ig;
+			}
 		}
 		
 		this.updateBuildings(game, element);
@@ -250,8 +253,10 @@ gameLogic.updateBuildings = function (game, building) {
 *	Stops the game if the winning conditions are reached.
 */
 gameLogic.checkGameOver = function (game) {
-	var nbPlayersDefeated = 0;
 	var victory = -1;
+	var nbPlayersDefeated = 0;
+
+	// check if some players have surrendered
 	for (var i in game.players) {
 		if (game.players[i].s == gameData.PLAYER_STATUSES.defeat
 			|| game.players[i].s == gameData.PLAYER_STATUSES.surrender) {

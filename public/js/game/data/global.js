@@ -6,11 +6,6 @@ gameData.RACES = {
 		id: 0,
 		name : 'Human Alliance',
 		image : 'human.png'
-	},
-	lemons : {
-		id: 1,
-		name : 'Lemons',
-		image : 'human.png'
 	}
 }
 

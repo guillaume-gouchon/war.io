@@ -122,7 +122,6 @@
 		var aiPlayers = [gameData.RACES.tomatoes.id];
 		var game = gameManager.createGameObject(gameManager.playerId, gameManager.playerName, armyId, mapType, 
 									  				mapSize, initialResources, vegetation, victoryCondition, nbPlayers, aiPlayers);
-	 
 		// launch tutorial
 		gameManager.startOfflineGame(game);
 
@@ -137,16 +136,16 @@
 		showLoadingScreen('Waiting for opponents');
 		
 		var armyId = parseInt($('.checked', '#armies').attr('data-army'));
-		var mapType = $('#mapType').val();
-		var mapSize = $('#mapSize').val();
-		var initialResources = $('#initialResources').val();
-		var vegetation = $('#vegetation').val();
+		var mapType = parseInt($('#mapType').val());
+		var mapSize = parseInt($('#mapSize').val());
+		var initialResources = parseInt($('#initialResources').val());
+		var vegetation = parseInt($('#vegetation').val());
 		var victoryCondition = $('#vc1').val();
-		var nbPlayers = $('#nbPlayers').val();
+		var nbPlayers = parseInt($('#nbPlayers').val());
 		var aiPlayers = [];
 		$.each($('.player', '#players'), function () {
 			if (!$(this).hasClass('hideI') && $('.checked', this).attr('data-value') == 1) {
-				aiPlayers.push($('.aiArmy', $(this)).val());
+				aiPlayers.push(parseInt($('.aiArmy', $(this)).val()));
 			}
 		});
 		var game = gameManager.createGameObject(gameManager.playerId, gameManager.playerName, armyId, mapType, 

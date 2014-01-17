@@ -659,7 +659,7 @@ gameSurface.updateElement = function (element) {
 		if (element.cp < 100) {
 
 			// update construction progress
-			object.position.z = (100 - element.cp) / 100 * this.BUILDING_INIT_Z;
+			object.position.z = (100 - element.cp) / 100 * (this.BUILDING_INIT_Z - 20);
 
 		} else {
 			this.updateProgressBar(object, element, elementData);

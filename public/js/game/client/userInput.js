@@ -113,7 +113,7 @@ userInput.doAction = function (x, y, isShiftKey, specialOrder) {
 
 
 userInput.doDoubleClick = function (x, y) {
-	if(gameContent.selected.length > 0) {
+	if(gameContent.selected.length > 0 && GUI.isGUIClicked(x, y) == GUI.GUI_ELEMENTS.none ) {
 		var selected = utils.getElementFromId(gameContent.selected[0]);
 		if(rank.isAlly(gameContent.players, gameContent.myArmy, selected)) {
 			var tiles = tools.getTilesAround(gameContent.grid, selected.p, this.DOUBLE_CLICK_RADIUS_SIZE, true);

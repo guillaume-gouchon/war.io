@@ -5,7 +5,7 @@ var gameCreation = {};
 *	CONSTANTS
 */
 gameCreation.PROBABILITY_TREE = 0.6;
-gameCreation.ZONE_SIZE = 8;
+gameCreation.ZONE_SIZE = 12;
 
 
 /**

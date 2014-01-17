@@ -19,7 +19,8 @@ gameData.ELEMENTS[gameData.FAMILIES.building][gameData.RACES.tomatoes.id] = {
 		height: 21,
 		vision: 15,
 		lifeBarWidth: 50,
-		key: 'hq'
+		key: 'hq',
+		isProduction: true
 	},
 	house: {
 		name: 'House',
@@ -63,7 +64,8 @@ gameData.ELEMENTS[gameData.FAMILIES.building][gameData.RACES.tomatoes.id] = {
 		height: 18,
 		vision: 15,
 		lifeBarWidth: 40,
-		key: 'casern'
+		key: 'casern',
+		isProduction: true
 	},
 	researchlab: {
 		name: 'Research Lab',
@@ -80,7 +82,7 @@ gameData.ELEMENTS[gameData.FAMILIES.building][gameData.RACES.tomatoes.id] = {
 			gameData.ELEMENTS[gameData.FAMILIES.research][gameData.RACES.tomatoes.id].longbow,
 			gameData.ELEMENTS[gameData.FAMILIES.research][gameData.RACES.tomatoes.id].spikedmace
 		],
-		needs: [{t: gameData.RESOURCES.water.id, value: 100}, {t: gameData.RESOURCES.wood.id, value: 100}],
+		needs: [{t: gameData.RESOURCES.water.id, value: 100}, {t: gameData.RESOURCES.wood.id, value: 100}, {t: "casern"}],
 		l: 200,
 		defense: 0,
 		armorType: fightLogic.ARMOR_TYPES.building,
@@ -139,6 +141,7 @@ gameData.ELEMENTS[gameData.FAMILIES.building][gameData.RACES.tomatoes.id] = {
 		height: 18,
 		vision: 15,
 		lifeBarWidth: 40,
-		key: 'factory'
+		key: 'factory',
+		isProduction: true
 	}
 };

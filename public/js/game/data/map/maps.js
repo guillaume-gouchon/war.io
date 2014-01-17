@@ -63,21 +63,21 @@ gameData.MAP_SIZES = {
 	small : {
 		id : 0,
 		name : 'Small',
-		x : 100,
-		y : 100
+		x : 128,
+		y : 128
 	},
 	medium : {
 		id : 1,
 		name : 'Medium',
-		x : 130,
-		y : 130
+		x : 156,
+		y : 156
 	},
 
 	large : {
 		id : 2,
 		name : 'Large',
-		x : 160,
-		y : 160
+		x : 172,
+		y : 172
 	}
 }
 
@@ -87,7 +87,7 @@ gameData.VEGETATION_TYPES = {
 		name : 'Standard',
 		zones : [
 			{t : gameData.ZONES.nothing, factor : 20},
-			{t : gameData.ZONES.forest, factor : 12},
+			{t : gameData.ZONES.forest, factor : 5},
 			{t : gameData.ZONES.goldmine, factor : 1}
 		]
 	}
