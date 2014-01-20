@@ -447,7 +447,7 @@ button.red:hover {
     border-top: 1px solid #ddd;
 }
 #logoSmall {
-    height: 50px;
+    height: 48px;
     width: 50px;
     background-image: url(../img/logo_small.png);/** sprite-ref: websiteSprite; */
 }
