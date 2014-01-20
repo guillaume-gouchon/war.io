@@ -244,6 +244,10 @@ footer span {
     z-index: 1000;
 }
 
+#mainButtons button {
+    width: 300px;
+}
+
 
 /**
 *   NEW GAME SCREEN
@@ -433,15 +437,14 @@ button.red:hover {
     line-height: 50px;
 }
 #credits .name {
-    margin-right: 10px;
-    padding-left: 20px;
+    color: #fff;
+    font-size: 1.2em;
 }
 #contactUs {
-    border-top: 2px dashed #ddd;
-    border-bottom: 2px dashed #ddd;
     text-align: center;
-    font-size: 1.8em;
-    margin-top: 28px;
+    font-size: 1.5em;
+    margin-top: 30px;
+    border-top: 1px solid #ddd;
 }
 #logoSmall {
     height: 50px;
@@ -469,15 +472,24 @@ button.red:hover {
     background-image: url(../img/credits2.png);/** sprite-ref: websiteSprite; */
 }
 #teamMember3 {
-    background-image: url(../img/credits1.png);/** sprite-ref: websiteSprite; */
+    background-image: url(../img/credits3.png);/** sprite-ref: websiteSprite; */
 }
 #teamMember4 {
-    background-image: url(../img/credits2.png);/** sprite-ref: websiteSprite; */
+    background-image: url(../img/credits4.png);/** sprite-ref: websiteSprite; */
 }
 #teamMember5 {
-    background-image: url(../img/credits1.png);/** sprite-ref: websiteSprite; */
+    background-image: url(../img/credits5.png);/** sprite-ref: websiteSprite; */
 }
 
+#credits .label {
+    margin-left: 10px;
+}
+#credits table {
+    margin-left: 120px;
+}
+#credits table tr {
+    line-height: 55px;
+}
 
 /**
 *   LOADING SCREEN
@@ -708,9 +720,9 @@ button.red:hover {
     top: -150%;
     background-repeat: repeat-x ;
     background-image: url(../img/montagnes.png);
-    background-position: 0px 0px;
-    -webkit-animation: moveMountains 100s linear infinite;
-    -moz-animation: moveMountains 100s linear infinite;
+    background-position: -40px 0px;
+  /*  -webkit-animation: moveMountains 100s linear infinite;
+    -moz-animation: moveMountains 100s linear infinite;*/
 }
 .tomato1 {
     height: 180px;

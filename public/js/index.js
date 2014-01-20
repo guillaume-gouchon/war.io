@@ -331,21 +331,21 @@ $('a[data-toggle="tab"]').on('shown', function (e) {
 	});
 });
 
-// animations
-$('.rock6').hover(function() {
-	$('.tomato1').addClass('bounce');
-	soundManager.playSound(soundManager.SOUNDS_LIST.chainsaw);
-}, function () {
-	$('.tomato1').removeClass('bounce');
-});
+// // animations
+// $('.rock6').hover(function() {
+// 	$('.tomato1').addClass('bounce');
+// 	soundManager.playSound(soundManager.SOUNDS_LIST.chainsaw);
+// }, function () {
+// 	$('.tomato1').removeClass('bounce');
+// });
 
-// animations
-$('.rock1').hover(function() {
-	$('.tomato2').addClass('hideTomato2');
-}, function () {
-	$('.tomato2').removeClass('hideTomato2');
-});
+// // animations
+// $('.rock1').hover(function() {
+// 	$('.tomato2').addClass('hideTomato2');
+// }, function () {
+// 	$('.tomato2').removeClass('hideTomato2');
+// });
 
-$('.leaf').hover(function() {
-	$('.leaf').addClass('animLeaf');
-});
+// $('.leaf').hover(function() {
+// 	$('.leaf').addClass('animLeaf');
+// });
