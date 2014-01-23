@@ -462,7 +462,7 @@ button.red:hover {
     background-image: url(../img/chrome.png);/** sprite-ref: websiteSprite; */
 }
 #credits .sprite {
-    height: 50px;
+    height: 49px;
     width: 60px;
 }
 #teamMember1 {

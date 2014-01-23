@@ -194,7 +194,7 @@ production.gatherResources = function (game, builder, resource) {
 		}	
 	}
 
-	if (resource.ra == 0) {
+	if (resource.ra <= 0) {
 
 		// remove resource
 		gameCreation.removeGameElement(game, resource);

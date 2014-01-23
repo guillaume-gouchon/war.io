@@ -218,7 +218,7 @@ gameSurface.addSkybox = function () {
 		folder: this.MODELS_PATH + 'skyboxes/',
 		skyboxName: 'comawhite',
 		filetype: '.jpg',
-		size: 5000
+		size: 10000
 	};
 
 	var urls = [];
