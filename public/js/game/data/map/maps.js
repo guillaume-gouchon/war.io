@@ -44,8 +44,8 @@ gameData.INITIAL_RESOURCES = {
 		id : 1,
 		name : 'Standard',
 		re : [
-			{t : gameData.RESOURCES.wood.id, value : 150},
-			{t : gameData.RESOURCES.water.id, value : 150}
+			{t : gameData.RESOURCES.wood.id, value : 1500},
+			{t : gameData.RESOURCES.water.id, value : 1500}
 		]
 	},
 

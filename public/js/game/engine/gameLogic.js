@@ -4,8 +4,8 @@ var gameLogic = {};
 /**
 *	Number of times the game is being updated by second.
 */
-gameLogic.FREQUENCY = 5;
-gameLogic.OFFLINE_FREQUENCY = 6;
+gameLogic.FREQUENCY = 4;
+gameLogic.OFFLINE_FREQUENCY = 4;
 gameLogic.AI_FREQUENCY = 6;
 
 
@@ -131,7 +131,6 @@ gameLogic.synchronizeActions = function (game) {
 gameLogic.updateMoves = function (game, element) {
 	if(element.a != null && element.a.moveTo != null) {
 		move.moveElement(game, element, element.a.moveTo);
-		element.fl = gameData.ELEMENTS_FLAGS.moving;
 		tools.addUniqueElementToArray(game.modified, element);
 	}
 }

@@ -16,7 +16,7 @@ gameData.ELEMENTS[gameData.FAMILIES.building][gameData.RACES.tomatoes.id] = {
 		pop: 8,
 		g: 'hq',
 		gui: 'ic_hq.png',
-		height: 21,
+		height: 32,
 		vision: 15,
 		lifeBarWidth: 50,
 		key: 'hq',
@@ -39,7 +39,7 @@ gameData.ELEMENTS[gameData.FAMILIES.building][gameData.RACES.tomatoes.id] = {
 		pop: 6,
 		g: 'house',
 		gui: 'ic_house.png',
-		height: 12,
+		height: 16,
 		vision: 15,
 		lifeBarWidth: 40,
 		key: 'house'

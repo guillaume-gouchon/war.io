@@ -14,6 +14,8 @@ move.ASTAR_MAX_RADIUS_SEARCH = 10;
 */
 move.moveElement = function (game, element, destination) {
   var elementData = tools.getElementData(element);
+
+  element.fl = gameData.ELEMENTS_FLAGS.moving;
   
   if (game.iterate % accessors.getStat(game.players, element.o, elementData, fightLogic.STATS_BUFF.speed) == 0) {
 
@@ -41,6 +43,7 @@ move.moveElement = function (game, element, destination) {
 
         if (destination.c > 0) {// if destination is unreachable for now, stop the movement
           element.a.moveTo = null;
+          element.fl = gameData.ELEMENTS_FLAGS.nothing;
           return;
         }
         
@@ -78,6 +81,7 @@ move.moveElement = function (game, element, destination) {
         if (element.a.type == action.ACTION_TYPES.move) {
 
           element.a = null;
+          element.fl = gameData.ELEMENTS_FLAGS.nothing;
           
           if (element.pa.length > 0) {
 

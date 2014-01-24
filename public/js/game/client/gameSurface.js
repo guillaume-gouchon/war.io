@@ -57,7 +57,7 @@ gameSurface.BUILDING_INIT_Z = - 1.5 * gameSurface.PIXEL_BY_NODE;
 gameSurface.ARMIES_COLORS = ['_red', '_blu', '_gre', '_yel'];
 gameSurface.PLAYERS_COLORS = ['red', 'blue', 'green', 'yellow'];
 gameSurface.PLAYERS_COLORS_RGB = [{r:255,g:0,b:0}, {r:50,g:50,b:255}, {r:25,g:255,b:0}, {r:255,g:255,b:0}];
-gameSurface.MOVEMENT_EXTRAPOLATION_ITERATION = 8;
+gameSurface.MOVEMENT_EXTRAPOLATION_ITERATION = 50 / gameLogic.FREQUENCY;
 gameSurface.LAND_HEIGHT_SMOOTH_FACTOR = 65;
 
 gameSurface.FOG_OF_WAR_HEIGHT = 10;
@@ -91,6 +91,8 @@ gameSurface.cannotBuildHereMaterial = null;
 gameSurface.basicCubeGeometry = null;
 gameSurface.building = null;
 gameSurface.skybox = null;
+gameSurface.animations = [];
+
 
 //fogs of war
 gameSurface.clock = null;
@@ -136,9 +138,11 @@ gameSurface.init = function () {
 	//scene.fog = new THREE.Fog( 0xffffff, this.FOG_DENSITY, 1200);
 
 	// init renderer
-	renderer = new THREE.WebGLRenderer();
+	renderer = new THREE.WebGLRenderer({ antialias: true });
 	renderer.setSize(window.innerWidth, window.innerHeight);
+	renderer.sortObjects = false;
 	document.body.appendChild(renderer.domElement);
+
 
 	// init variables
 	this.projector = new THREE.Projector();
@@ -182,35 +186,7 @@ gameSurface.init = function () {
 	// add listeners
 	window.addEventListener('resize', this.onWindowResize, false);
 
-	function render() {
-		gameSurface.iteration = (gameSurface.iteration > 1000 ? 0 : gameSurface.iteration + 1);
-
-		requestAnimationFrame(render);
-		controls.update();
-
-		gameSurface.updateMoveExtrapolation();
-		// animations
-		TWEEN.update();
-
-		// var clockDelta = gameSurface.clock.getDelta();
-		// gameSurface.waterSurface.animate(clockDelta);
-
-		renderer.render(scene, camera);
-
-
-		// update GUI
-		if (gameSurface.iteration % (1 / GUI.UPDATE_FREQUENCY) == 0) {
-			gameSurface.updateOrderPosition();
-			GUI.update();
-			gameSurface.updateCameraViewBounds();
-			gameSurface.updateMinimap();
-		}
-
-		// rotate sky
-		gameSurface.skybox.rotation.y+= gameSurface.de2ra(0.01);
-	}
-
-	render();
+	this.loop();
 }
 
 gameSurface.addSkybox = function () {
@@ -240,6 +216,7 @@ gameSurface.addSkybox = function () {
 	this.skybox.rotation.x = this.de2ra(90);
 	scene.add(this.skybox);
 }
+
 
 /**
 *	Creates the scene.
@@ -487,32 +464,13 @@ gameSurface.loadObject = function (key, family, race) {
 gameSurface.geometryLoaded = function (key) {
 	return function (geometry, materials) {
 		gameSurface.geometries[key] = geometry;
+		if (geometry.animation) {
+			for (var i in geometry.animation) {
+				THREE.AnimationHandler.add(geometry.animation[i]);	
+			}
+		}
 		gameSurface.updateLoadingCounter();
 	};
-}
-
-
-/**
-*	Updates the loading counter and notifies the client about the progression.
-*/
-gameSurface.updateLoadingCounter = function () {
-	this.stuffLoaded ++;
-	gameManager.updateLoadingProgress(parseInt(100 * this.stuffLoaded / this.totalStuffToLoad));
-	console.log(this.stuffLoaded + ' ' + this.totalStuffToLoad)
-}
-
-
-
-/**
-*	Called when the user has resized the browser window.
-*/
-gameSurface.onWindowResize = function() {
-	camera.aspect = window.innerWidth / window.innerHeight;
-	camera.updateProjectionMatrix();
-	renderer.setSize( window.innerWidth, window.innerHeight );
-	GUI.initMinimapSize();
-
-	controls.handleResize();
 }
 
 
@@ -533,59 +491,30 @@ gameSurface.addElement = function (element) {
 			element.hiddenMaterial = this.materials["HIDDEN" + model + this.ARMIES_COLORS[element.o]];
 	}
 
-	var object = new THREE.Mesh(this.geometries[model], element.material);
+	var object;
+
+	if (this.geometries[model].animation) {
+		element.material.skinning = true;
+		object = new THREE.SkinnedMesh(this.geometries[model], element.material, false);
+		object.animationKeys = {};
+		for (var i in this.geometries[model].animation) {
+			var anim = this.geometries[model].animation[i];
+			var animation = new THREE.Animation(object, anim.name);
+			object.animationKeys[anim.name] = gameSurface.animations.length;
+			gameSurface.animations.push(animation);
+		}
+	} else  {
+		object = new THREE.Mesh(this.geometries[model], element.material);
+	}
+	
 	object.elementId = element.id;
 	this.setElementPosition(object, element.p.x, element.p.y);
 	object.rotation.x = this.de2ra(90);
+	
 	if (model == 'tree') {
-		object.scale.y = 1.5;
-		object.rotation.x = this.de2ra(90);
 		object.rotation.y = this.de2ra(Math.random() * 360);
-	} else if ( model == 'hq') {
-		object.scale.x = 3;
-		object.scale.y = 3;
-		object.scale.z = 3;
-		object.rotation.x = this.de2ra(90);
 	} else if (model == 'goldmine') {
-		object.scale.x = 1.5;
-		object.scale.y = 1.5;
-		object.scale.z = 1.5;
-		object.rotation.x = this.de2ra(90);
 		object.rotation.y = this.de2ra(Math.random() * 360);
-	} else if (model == 'house') {
-		object.scale.x = 3;
-		object.scale.y = 3;
-		object.scale.z = 3;
-		object.rotation.x = this.de2ra(90);
-	} else if (model == 'casern') {
-		object.scale.x = 2;
-		object.scale.y = 2;
-		object.scale.z = 2;
-		object.rotation.x = this.de2ra(90);
-	} else if (model == 'builder') {
-		object.scale.x = 2;
-		object.scale.y = 2;
-		object.scale.z = 2;
-	} else if (model == 'swordsman') {
-		object.scale.x = 2;
-		object.scale.y = 2;
-		object.scale.z = 2;
-		object.rotation.x = this.de2ra(90);
-	} else if (model == 'bowman') {
-		object.scale.x = 2;
-		object.scale.y = 2;
-		object.scale.z = 2;
-		object.rotation.x = this.de2ra(90);
-	} else if (model == 'knight') {
-		object.scale.x = 2;
-		object.scale.y = 2;
-		object.scale.z = 2;
-		object.rotation.x = this.de2ra(90);
-	} else if (model == 'tower') {
-		object.scale.x = 2;
-		object.scale.z = 2;
-		object.scale.y = 2;
-		object.rotation.x = this.de2ra(90);
 	}
 
 	// adds new element in the logic
@@ -615,6 +544,13 @@ gameSurface.addElement = function (element) {
 		}
 	}
 
+	// play standing animation
+	if (object.animationKeys != undefined) {
+		gameSurface.animations[object.animationKeys.standing].play();
+		object.activeAnimation = object.animationKeys.standing;
+	}
+
+
 	// add element to grid
 	var shape = elementData.shape;
 	for(var i in shape) {
@@ -627,6 +563,7 @@ gameSurface.addElement = function (element) {
 			}
 		}
 	}
+
 }
 
 
@@ -676,10 +613,28 @@ gameSurface.updateElement = function (element) {
 			}
 		}
 
-		
-
 		if (element.o == gameContent.myArmy && gameElement.l > element.l) {
 			// TODO : alert : you are being attacked
+		}
+	}
+
+	if (object.animationKeys != undefined) {
+		if (element.fl == gameData.ELEMENTS_FLAGS.moving) {
+			if (object.activeAnimation != object.animationKeys.move) {
+				if (object.activeAnimation >= 0) {
+					gameSurface.animations[object.activeAnimation].stop();
+				}
+				gameSurface.animations[object.animationKeys.move].play();
+				object.activeAnimation = object.animationKeys.move;
+			}
+		} else {
+			if (object.activeAnimation != object.animationKeys.standing) {
+				if (object.activeAnimation >= 0) {
+					gameSurface.animations[object.activeAnimation].stop();
+				}
+				gameSurface.animations[object.animationKeys.standing].play();
+				object.activeAnimation = object.animationKeys.standing;
+			}
 		}
 	}
 
@@ -815,7 +770,6 @@ gameSurface.updateCameraViewBounds = function () {
 		this.getAbsolutePositionFromPixelNoBounds(window.innerWidth,window.innerHeight),
 		this.getAbsolutePositionFromPixelNoBounds(0,window.innerHeight),
 	];
-	//console.log(this.cameraVisionCorners);
 }
 
 
@@ -901,6 +855,7 @@ gameSurface.showElementModel = function (element) {
 	var object = utils.getElementFromId(element.id).m;
 	scene.add(object);
 }
+
 
 /**
 *	Hides an element model if it is currently visible.
@@ -1109,3 +1064,59 @@ gameSurface.updateMinimap = function() {
 	ctx.lineTo(x, y);
 	ctx.fill();*/
 };
+
+
+/**
+*	Updates the loading counter and notifies the client about the progression.
+*/
+gameSurface.updateLoadingCounter = function () {
+	this.stuffLoaded ++;
+	gameManager.updateLoadingProgress(parseInt(100 * this.stuffLoaded / this.totalStuffToLoad));
+	console.log(this.stuffLoaded + ' ' + this.totalStuffToLoad)
+}
+
+
+/**
+*	Called when the user has resized the browser window.
+*/
+gameSurface.onWindowResize = function() {
+	camera.aspect = window.innerWidth / window.innerHeight;
+	camera.updateProjectionMatrix();
+	renderer.setSize( window.innerWidth, window.innerHeight );
+	GUI.initMinimapSize();
+
+	controls.handleResize();
+}
+
+
+gameSurface.loop = function () {
+	var delta = gameSurface.clock.getDelta();
+	gameSurface.iteration = (gameSurface.iteration > 1000 ? 0 : gameSurface.iteration + 1);
+
+	requestAnimationFrame(gameSurface.loop, renderer.domElement);
+
+	THREE.AnimationHandler.update(delta);
+
+
+	controls.update();
+
+	gameSurface.updateMoveExtrapolation();
+	// animations
+	TWEEN.update();
+
+
+	renderer.render(scene, camera);
+
+
+	// update GUI
+	if (gameSurface.iteration % (1 / GUI.UPDATE_FREQUENCY) == 0) {
+		gameSurface.updateOrderPosition();
+		GUI.update();
+		gameSurface.updateCameraViewBounds();
+		gameSurface.updateMinimap();
+	}
+
+	// rotate sky
+	gameSurface.skybox.rotation.y+= gameSurface.de2ra(0.01);
+
+}

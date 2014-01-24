@@ -55,6 +55,9 @@ gameSurface.drawSelectionCircle = function(radius, color) {
  	var cylinder =  new THREE.Mesh(new THREE.TorusGeometry(radius, 0.2, 2, radius * 20), new THREE.LineBasicMaterial( { color: color} ));
  	cylinder.id = 'select';
  	cylinder.rotation.x = this.de2ra(90);
+	cylinder.scale.x = 2;
+	cylinder.scale.z = 2;
+	cylinder.scale.y = 2;
 	return cylinder;
 }
 
@@ -67,7 +70,7 @@ gameSurface.drawLifeBar = function (element) {
 
 	var spriteMaterial = this.materials["billboardBar"].clone();
 	var lifeBar = new THREE.Sprite(spriteMaterial);
-	lifeBar.position.y = elementData.height;
+	lifeBar.position.y = elementData.height * 2;
 	lifeBar.scale.set(1, 1, 0);
 	lifeBar.id = 'life';
 
@@ -109,7 +112,7 @@ gameSurface.updateProgressBar = function (object, element, elementData) {
 			var spriteMaterial = this.materials["billboardBar"].clone();
 			var progressBar = new THREE.Sprite(spriteMaterial);
 			progressBar.scale.set(1, .6, 0);
-			progressBar.position.y = elementData.height-.5;
+			progressBar.position.y = elementData.height * 2 - 1;
 			progressBar.id = 'prog';
 			object.add(progressBar);
 		}
@@ -216,8 +219,7 @@ gameSurface.selectElement = function (elementId) {
 		} else {
 			color = this.SELECTION_NEUTRAL_COLOR;
 		}
-
-		model.add(this.drawSelectionCircle(elementData.shape.length / 2 * this.PIXEL_BY_NODE / 2, color));
+		model.add(this.drawSelectionCircle((elementData.f != gameData.FAMILIES.unit ? 1.5 : 1) * elementData.shape.length / 2 * this.PIXEL_BY_NODE / 2, color));
 	}
 }
 
@@ -271,6 +273,7 @@ gameSurface.updateOrientation = function (d, dx, dy) {
 	} else if (dx < 0 && dy < 0) {
 		d.rotation.y = this.de2ra(225);
 	}
+	d.rotation.y += this.de2ra(90);
 }
 
 
