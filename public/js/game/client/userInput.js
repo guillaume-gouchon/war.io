@@ -415,15 +415,13 @@ userInput.drawSelectionRectangle = function (x, y, isCtrlKey) {
 				for (var j = Math.min(selectionRectangleGamePosition[1], selectionRectangleGamePosition[3]); j <= Math.max(selectionRectangleGamePosition[1], selectionRectangleGamePosition[3]); j++) {
 					if (gameContent.grid[i][j] > 0) {
 						var element = utils.getElementFromId(gameContent.grid[i][j]);
-						if(rank.isAlly(gameContent.players, gameContent.myArmy, element)) {
-
+						if (rank.isAlly(gameContent.players, gameContent.myArmy, element)) {
 							if (!isCtrlKey || gameContent.selected.indexOf(element.id) == -1) {
 						  		// select the elements
 						  		gameContent.selected.push(element.id);
 					  	  		gameSurface.selectElement(element.id);
 					  	  		nonLandsSelected = true;
 				  	  		}
-
 					  	}
 					}
 				}

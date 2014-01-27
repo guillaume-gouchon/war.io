@@ -18,7 +18,22 @@ gameSurface.convertGamePositionToScenePosition = function (gamePosition) {
 	return {
 		x : gamePosition.x * this.PIXEL_BY_NODE,
 		y : gamePosition.y * this.PIXEL_BY_NODE,
-		z : 0.5
+		z : this.getZPositionFromHeightMap(gamePosition)
+	}
+}
+
+
+gameSurface.getZPositionFromHeightMap = function (gamePosition) {
+	var d = Math.sqrt(this.planeSurface.geometry.vertices.length);
+	if (gamePosition.x >= 0 && gamePosition.x < gameContent.map.size.x 
+		&& gamePosition.y >= 0 && gamePosition.y < gameContent.map.size.y ) {
+			// console.log(this.planeSurface.geometry.vertices[parseInt(d * gamePosition.y / gameContent.map.size.y + d * d * gamePosition.x / gameContent.map.size.x)].z)
+		return height[gamePosition.x][gamePosition.y];
+		var vertice = this.planeSurface.geometry.vertices[parseInt(d * d * gamePosition.y / gameContent.map.size.y + d * gamePosition.x / gameContent.map.size.x)];
+		window.console.log(gamePosition.x, gamePosition.y, vertice.x, vertice.y);
+		return this.planeSurface.geometry.vertices[parseInt(d * d * gamePosition.y / gameContent.map.size.y + d * gamePosition.x / gameContent.map.size.x)].z;
+	} else {
+		return this.planeSurface.position.z;
 	}
 }
 
@@ -56,8 +71,8 @@ gameSurface.drawSelectionCircle = function(radius, color) {
  	cylinder.id = 'select';
  	cylinder.rotation.x = this.de2ra(90);
 	cylinder.scale.x = 2;
-	cylinder.scale.z = 2;
 	cylinder.scale.y = 2;
+	cylinder.scale.z = 2;
 	return cylinder;
 }
 
@@ -405,9 +420,10 @@ gameSurface.showMessage = function (message, color) {
 /**
 *	Initializes movement extrapolation for one unit.
 */
-gameSurface.extrapol = function (model, dx, dy) {
+gameSurface.extrapol = function (model, dx, dy, dz) {
 	model.ex = dx;
 	model.ey = dy;
+	model.ez = dz;
 	model.et = this.MOVEMENT_EXTRAPOLATION_ITERATION;
 	this.ex.push(model);
 }
@@ -420,17 +436,19 @@ gameSurface.updateMoveExtrapolation = function () {
 	var index = this.ex.length;
 	while (index --) {
 		var model = this.ex[index];
+		var element = utils.getElementFromId(model.elementId);
 		model.position.x += model.ex * this.PIXEL_BY_NODE / this.MOVEMENT_EXTRAPOLATION_ITERATION;
 		model.position.y += model.ey * this.PIXEL_BY_NODE / this.MOVEMENT_EXTRAPOLATION_ITERATION;
-			
+		model.position.z += model.ez / this.MOVEMENT_EXTRAPOLATION_ITERATION;
+
 		model.et -= 1;
 
-		var element = utils.getElementFromId(model.elementId);
 		if (model.et <= 0 && element != null) {
 			this.setElementPosition(model, element.p.x, element.p.y);
 			model.et = 0;
 			model.ex = 0;
 			model.ey = 0;
+			model.ez = 0;
 			this.ex.splice(index, 1);
 		}
 	}

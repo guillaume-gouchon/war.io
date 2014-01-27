@@ -259,17 +259,18 @@ aiOrders.harvest = function(game, player, playerID) {
 /**
 *   Is there something under any part of this element ?
 */
-aiOrders.canBeBuiltHere = function (game, position, building) {
-    building.p = position;
-    var point1 = tools.getPartPosition(building, -1, -1);
+aiOrders.canBeBuiltHere = function (building) {
+    var point1 = tools.getPartPosition(building, 0, 0);
     var point2 = {
-        x : point1.x + building.shape[0].length ,
-        y : point1.y + building.shape.length
+        x : point1.x + building.shape[0].length - 1,
+        y : point1.y + building.shape.length - 1
     };
 
     for (var i = point1.x; i <= point2.x; i++) {
         for (var j = point1.y; j <= point2.y; j++) {
-            if (game.grid[i] != null && game.grid[i][j] != null && game.grid[i][j].c > 0) {
+            if (i == 0 || j == 0 || gameContent.grid[i] == null || gameContent.grid[i][j] == null 
+                || i == gameContent.grid[0].length - 1 || j == gameContent.grid.length - 1
+                || gameContent.grid[i][j] > 0 || gameSurface.fogOfWarMatrix[i] != null && !gameSurface.fogOfWarMatrix[i][j]) {
                 return false;
             }
         }

@@ -376,10 +376,52 @@
 	<script src="js/game/data.js"></script>
 	<script src="js/game/client.js"></script>-->
 	<!-- WEBSITE -->
-	<script src="http://code.jquery.com/jquery-latest.js"></script>
+	<script src="js/jquery-1.8.1.min.js"></script>
 	<script type="text/javascript" src="js/jquery.flot.min.js"></script>
 	<script type="text/javascript" src="js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="js/index.js"></script>
+
+	<script id="vertexShader" type="x-shader/x-vertex">
+	uniform sampler2D bumpTexture;
+	uniform float bumpScale;
+
+	varying float vAmount;
+	varying vec2 vUV;
+	varying vec2 vULVE;
+
+	void main() 
+	{ 
+		vUV = uv;
+        vULVE = vec2(uv.x, (1.0-uv.y));
+		vec4 bumpData = texture2D( bumpTexture, uv );
+		
+		vAmount = bumpData.r; // assuming map is grayscale it doesn't matter if you use r, g, or b.
+		
+		// move the position along the normal
+	    vec3 newPosition = position;// + normal * bumpScale * vAmount;
+		
+		gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 ); 
+	}
+	</script>
+	<script id="fragmentShader" type="x-shader/x-vertex">
+	uniform sampler2D sandyTexture;
+	uniform sampler2D grassTexture;
+	uniform sampler2D rockyTexture;
+	uniform sampler2D tFog;
+
+	varying vec2 vUV;
+	varying vec2 vULVE;
+
+	varying float vAmount;
+
+	void main() 
+	{
+		vec4 sandy = (smoothstep(0.01, 0.02, vAmount) - smoothstep(0.03, 0.25, vAmount)) * texture2D( sandyTexture, vUV * 10.0 );
+		vec4 grass = (smoothstep(0.03, 0.50, vAmount) - smoothstep(0.40, 0.70, vAmount)) * texture2D( grassTexture, vUV * 20.0 );
+		vec4 rocky = (smoothstep(0.50, 0.65, vAmount) * texture2D( rockyTexture, vUV * 20.0));
+		gl_FragColor = vec4(texture2D( tFog, vULVE ).rgb * (sandy + grass + rocky).xyz, 1.0);
+	}  
+	</script>
 
 	</body>
 

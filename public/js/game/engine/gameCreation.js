@@ -233,16 +233,16 @@ gameCreation.addGameElement = function (game, element) {
 		var row = shape[i];
 		for(var j in row) {
 			var part = row[j];
-			try {
-				if(part > 0 && (element.f != gameData.FAMILIES.land || !elementData.canMoveIn)) {
-					var position = tools.getPartPosition(element, i, j);
+			if(part > 0 && (element.f != gameData.FAMILIES.land || !elementData.canMoveIn)) {
+				var position = tools.getPartPosition(element, i, j);
+				if (game.grid[position.x] != null && game.grid[position.x][position.y] != null) {
 					game.grid[position.x][position.y].c = element.id;
-				} else {
-					var position = tools.getPartPosition(element, i, j);
+				}
+			} else {
+				var position = tools.getPartPosition(element, i, j);
+				if (game.grid[position.x] != null && game.grid[position.x][position.y] != null) {
 					game.grid[position.x][position.y].s = element.t;
 				}
-			} catch(err) {
-				console.log('Element Creation impossible. Error: ' + err);
 			}
 		}
 	}

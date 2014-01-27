@@ -107,7 +107,8 @@
 	});
 
 	// tutorial button
-	$('#tutorialButton').click(function () {
+	$(document).ready(function() {
+	// $('#tutorialButton').click(function () {
 		soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
 		$(this).unbind('click');
 		showLoadingScreen('Loading');

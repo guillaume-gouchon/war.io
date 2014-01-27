@@ -47,13 +47,13 @@ gameSurface.SELECTION_NEUTRAL_COLOR = '#e3e314';
 gameSurface.CAMERA_INIT_ANGLE = 0.7;
 gameSurface.CAN_BUILD_CUBE_COLOR = 0x00ff00;
 gameSurface.CANNOT_BUILD_CUBE_COLOR = 0xff0000;
-gameSurface.BUILD_CUBE_OPACITY = 0.3;
+gameSurface.BUILD_CUBE_OPACITY = 0.4;
 
 gameSurface.CENTER_CAMERA_Y_OFFSET = 40 * gameSurface.PIXEL_BY_NODE;
 gameSurface.BARS_HEIGHT = 0.5;
 gameSurface.BARS_DEPTH = 0.2;
 gameSurface.BUILDING_STRUCTURE_SIZE = 5;
-gameSurface.BUILDING_INIT_Z = - 1.5 * gameSurface.PIXEL_BY_NODE;
+gameSurface.BUILDING_INIT_Z = - 2 * gameSurface.PIXEL_BY_NODE;
 gameSurface.ARMIES_COLORS = ['_red', '_blu', '_gre', '_yel'];
 gameSurface.PLAYERS_COLORS = ['red', 'blue', 'green', 'yellow'];
 gameSurface.PLAYERS_COLORS_RGB = [{r:255,g:0,b:0}, {r:50,g:50,b:255}, {r:25,g:255,b:0}, {r:255,g:255,b:0}];
@@ -151,7 +151,7 @@ gameSurface.init = function () {
 	this.loader = new THREE.JSONLoader();
 
 	// count the number of stuff to be loaded
-	this.totalStuffToLoad += 2;// grass + skybox
+	this.totalStuffToLoad += 1;// grass + skybox
 	this.totalStuffToLoad += 2; // water textures
 	var races = [];
 	for (var i in gameContent.players) {
@@ -243,63 +243,67 @@ gameSurface.createScene = function () {
         dataColor[i * 3 + 1] = 0;
         dataColor[i * 3 + 2] = 0;
     }*/
+	// heightmap
 
 
-	var grassTexture  = THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'grass2.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
-	grassTexture.wrapT = grassTexture.wrapS = THREE.RepeatWrapping;
-	grassTexture.repeat.set(16,16);
+	// var grassTexture  = THREE.ImageUtils.loadTexture(this.MODELS_PATH + 'grass2.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()});
+	// grassTexture.wrapT = grassTexture.wrapS = THREE.RepeatWrapping;
+	// grassTexture.repeat.set(16,16);
+
 
 
     this.fogOfWarGroundTexture = new THREE.DataTexture( this.fogOfWarDataColor, rwidth, rheight, THREE.RGBFormat );
     this.fogOfWarGroundTexture.needsUpdate = true;
 
-	var attributes = {fogMap:{type: 'f', value: []}};
-	var uniforms = {
-    	tFog: {type: "t", value: this.fogOfWarGroundTexture},
-    	tGrass: {type: "t", value:grassTexture},
-    	textRepeat: {type: 'f', value: 16}
-    };
-	var grassMaterial = new THREE.ShaderMaterial({
-		transparent:true,
-        uniforms: uniforms,
-        attributes: attributes,
-        vertexShader: [
-            "// These have global scope",
-            "varying vec2 vUv;",
+	this.initHeightMap();
+	// var attributes = {fogMap:{type: 'f', value: []}};
+	// var uniforms = {
+ //    	tFog: {type: "t", value: this.fogOfWarGroundTexture},
+ //    	tGrass: {type: "t", value:grassTexture},
+ //    	textRepeat: {type: 'f', value: 16}
+ //    };
+	// var grassMaterial = new THREE.ShaderMaterial({
+	// 	transparent:true,
+ //        uniforms: uniforms,
+ //        attributes: attributes,
+ //        vertexShader: [
+ //            "// These have global scope",
+ //            "varying vec2 vUv;",
 
-            "void main() {",
-              "vUv = vec2(uv.x, (1.0-uv.y));",
-              "gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);",
-            "}",
-        ].join("\n"),
-        fragmentShader: [
-            "uniform sampler2D tFog;",
-            "uniform sampler2D tGrass;",
-            "varying vec2 vUv;",
-            "varying vec2 vUv2;",
-            "uniform float textRepeat;",
+ //            "void main() {",
+ //              "vUv = vec2(uv.x, (1.0-uv.y));",
+ //              "gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);",
+ //            "}",
+ //        ].join("\n"),
+ //        fragmentShader: [
+ //            "uniform sampler2D tFog;",
+ //            "uniform sampler2D tGrass;",
+ //            "varying vec2 vUv;",
+ //            "varying vec2 vUv2;",
+ //            "uniform float textRepeat;",
 
-            "void main() {",
-            	"vec2 uv = vUv;",
-                "vec4 texel = texture2D( tFog, uv ) * texture2D( tGrass, uv * textRepeat );",
-               "gl_FragColor = vec4(texel.rgb, 1.0);  // adjust the alpha",
-            "}",
-        ].join("\n"),
-    });
+ //            "void main() {",
+ //            	"vec2 uv = vUv;",
+ //                "vec4 texel = texture2D( tFog, uv ) * texture2D( tGrass, uv * textRepeat );",
+ //               "gl_FragColor = vec4(texel.rgb, 1.0);  // adjust the alpha",
+ //            "}",
+ //        ].join("\n"),
+ //    });
 	//var grassMaterial = new THREE.MeshBasicMaterial({ map: grassTexture });
 	// var landGeometry = new THREE.PlaneGeometry(2200, 2200, 64, 64);
-	var landGeometry = new THREE.CubeGeometry(gameContent.map.size.x * this.PIXEL_BY_NODE, gameContent.map.size.y * this.PIXEL_BY_NODE, 30);
-	var planeSurface = new THREE.Mesh(landGeometry, grassMaterial);
-    planeSurface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
-    planeSurface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
-    planeSurface.position.z = -30;
-    scene.add(planeSurface);
-    this.planeSurface = planeSurface;
+	// var landGeometry = new THREE.CubeGeometry(gameContent.map.size.x * this.PIXEL_BY_NODE, gameContent.map.size.y * this.PIXEL_BY_NODE, 30);
+	// this.planeSurface = new THREE.Mesh(landGeometry, grassMaterial);
+ //    this.planeSurface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
+ //    this.planeSurface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
+ //    this.planeSurface.position.z = -30;
+ //    scene.add(this.planeSurface);
+
+
 
     this.transparentSurface = new THREE.Mesh(new THREE.PlaneGeometry(5000, 5000), new THREE.MeshNormalMaterial({ transparent: true, opacity: 0 }));
 	this.transparentSurface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
     this.transparentSurface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
-    this.transparentSurface.position.z = planeSurface.position.z - 1;
+    this.transparentSurface.position.z = this.planeSurface.position.z - 1;
     scene.add(this.transparentSurface);
 
 	this.fogOfWarMatrix = [];
@@ -374,32 +378,122 @@ gameSurface.createScene = function () {
  //    scene.add(surface);
 
 
-	//add order geometry
+	// add order geometry
 	this.order = new THREE.Mesh(new THREE.TorusGeometry(3, 0.9, 2, 18), new THREE.LineBasicMaterial( { color: '#0f0'} ));
 	this.order.visible = false;
 	scene.add(this.order);
 
-	//init basic materials and geometries
-	this.canBuildHereMaterial = new THREE.LineBasicMaterial({color: this.CAN_BUILD_CUBE_COLOR, opacity: this.BUILD_CUBE_OPACITY, transparent: false });
-	this.cannotBuildHereMaterial = new THREE.LineBasicMaterial({color: this.CANNOT_BUILD_CUBE_COLOR, opacity: this.BUILD_CUBE_OPACITY, transparent: false });
+	// init basic materials and geometries
+	this.canBuildHereMaterial = new THREE.LineBasicMaterial({color: this.CAN_BUILD_CUBE_COLOR, opacity: this.BUILD_CUBE_OPACITY, transparent: true });
+	this.cannotBuildHereMaterial = new THREE.LineBasicMaterial({color: this.CANNOT_BUILD_CUBE_COLOR, opacity: this.BUILD_CUBE_OPACITY, transparent: true });
 	this.basicCubeGeometry = new THREE.CubeGeometry(this.PIXEL_BY_NODE, this.PIXEL_BY_NODE, this.PIXEL_BY_NODE);
 
-	//add building geometry
+	// add building geometry
 	this.building = new THREE.Object3D();
 	for (var i = 0; i < this.BUILDING_STRUCTURE_SIZE; i++) {
 		for (var j = 0; j < this.BUILDING_STRUCTURE_SIZE; j++) {
 			var cube = new THREE.Mesh(this.basicCubeGeometry, this.canBuildHereMaterial);
-			cube.position.x = i * this.PIXEL_BY_NODE;
-			cube.position.y = j * this.PIXEL_BY_NODE;
+			cube.position.x = i * (this.PIXEL_BY_NODE - 0.5);
+			cube.position.y = j * (this.PIXEL_BY_NODE - 0.5);
 			cube.visible = false;
 			this.building.add(cube);
 		}
 	}
 	this.building.visible = false;
 	scene.add(this.building);
-
 }
 
+
+/**
+*	Initializes the height map and textures related
+*/
+gameSurface.initHeightMap = function () {
+	var bumpTexture = new THREE.ImageUtils.loadTexture( this.MODELS_PATH + 'heightmap.png' );
+	bumpTexture.wrapS = bumpTexture.wrapT = THREE.RepeatWrapping; 
+	// magnitude of normal displacement
+	this.bumpScale = 100.0;
+
+	var sandyTexture = new THREE.ImageUtils.loadTexture( this.MODELS_PATH + 'sand-512.jpg' );
+	sandyTexture.wrapS = sandyTexture.wrapT = THREE.RepeatWrapping; 
+	
+	var grassTexture = new THREE.ImageUtils.loadTexture( this.MODELS_PATH + 'grass-512.png' );
+	grassTexture.wrapS = grassTexture.wrapT = THREE.RepeatWrapping; 
+	
+	var rockyTexture = new THREE.ImageUtils.loadTexture( this.MODELS_PATH + 'rock-512.png' );
+	rockyTexture.wrapS = rockyTexture.wrapT = THREE.RepeatWrapping; 
+
+	customUniforms = {
+		bumpScale: 		{ type: "f", value: this.bumpScale },
+		bumpTexture:	{ type: "t", value: bumpTexture },
+		sandyTexture:	{ type: "t", value: sandyTexture },
+		grassTexture:	{ type: "t", value: grassTexture },
+		rockyTexture:	{ type: "t", value: rockyTexture },
+		tFog:           { type: "t", value: gameSurface.fogOfWarGroundTexture }
+	};
+
+	// create custom material from the shader code above
+	//   that is within specially labelled script tags
+	var customMaterial = new THREE.ShaderMaterial( 
+	{
+	    uniforms: customUniforms,
+		vertexShader:   document.getElementById( 'vertexShader'   ).textContent,
+		fragmentShader: document.getElementById( 'fragmentShader' ).textContent,
+		// side: THREE.DoubleSide
+	}   
+	);
+
+	// var landGeometry = new THREE.CubeGeometry(gameContent.map.size.x * this.PIXEL_BY_NODE, gameContent.map.size.y * this.PIXEL_BY_NODE, 30);
+	this.landGeometry = new THREE.PlaneGeometry( gameContent.map.size.x * this.PIXEL_BY_NODE, gameContent.map.size.y * this.PIXEL_BY_NODE, 100, 100);
+
+    this.planeSurface = new THREE.Mesh(this.landGeometry, customMaterial);
+    this.planeSurface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
+    this.planeSurface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
+    this.planeSurface.position.z = -3;
+
+
+
+	var img = new Image(); 
+	img.src = this.MODELS_PATH + "heightmap.png";
+	img.onload = function () {
+		gameSurface.setHeightData(img);
+
+	scene.add( gameSurface.planeSurface );
+	};
+}
+
+var height = [];
+
+gameSurface.setHeightData = function (img) {
+    var canvas = document.createElement( 'canvas' );
+    canvas.width = img.width;
+    canvas.height = img.height;
+    var context = canvas.getContext( '2d' );
+    var size = img.width * img.height; 
+    context.drawImage(img,0,0);
+    var imgd = context.getImageData(0, 0, img.width, img.height);
+    var pix = imgd.data;
+    var j = 0;
+
+    var vertices = gameSurface.landGeometry.vertices;
+    var minX = -gameContent.map.size.x * gameSurface.PIXEL_BY_NODE / 2,
+    	maxX = -minX,
+    	minY = -gameContent.map.size.y * gameSurface.PIXEL_BY_NODE / 2,
+    	maxY = -minY;
+    for (var i in vertices) {
+    	var x = (vertices[i].x - minX) / (maxX - minX) * img.width,
+    	y = (vertices[i].y - minY) / (maxY - minY) * img.height;
+    	var pixIndex = (Math.floor(x) + Math.floor(y) * img.width) * 4;
+    	vertices[i].z = pix[pixIndex] / 255.0 * this.bumpScale;
+
+    }
+
+    for (var x = 0; x < gameContent.map.size.x; x++) {
+    	height[x] = [];
+    	for (var y = 0; y < gameContent.map.size.y; y++) {
+    		height[x][y] = pix[(x + y * img.width) * 4] / 255.0 * this.bumpScale;
+    	}
+    }
+}
 
 /**
 *	Loads all the 3D models needed.
@@ -540,7 +634,7 @@ gameSurface.addElement = function (element) {
 	// building in construction
 	if (element.f == gameData.FAMILIES.building) {
 		if (element.cp < 100) {
-			object.position.z += this.BUILDING_INIT_Z;
+			object.position.z = this.BUILDING_INIT_Z;
 		}
 	}
 
@@ -579,27 +673,26 @@ gameSurface.updateElement = function (element) {
 	if (gameElement.f == gameData.FAMILIES.unit) {
 		var dx = element.p.x - gameElement.p.x;
 		var dy = element.p.y - gameElement.p.y;
+		var dz = this.getZPositionFromHeightMap(element.p) - this.getZPositionFromHeightMap(gameElement.p);
 
 		if (dx != 0 || dy != 0) {
 			this.updateOrientation(object, dx, dy);
-			this.extrapol(object, dx, dy);
+			this.extrapol(object, dx, dy, dz);
 		}
 	}
 
-	if (element.f == gameData.FAMILIES.building) {
-		this.setElementPosition(object, element.p.x, element.p.y);	
-	}
-	
 	var elementData = tools.getElementData(element);
 
-	if (element.f == gameData.FAMILIES.building && rank.isAlly(gameContent.players, gameContent.myArmy, element)) {
+	if (element.f == gameData.FAMILIES.building) {
 		if (element.cp < 100) {
-
 			// update construction progress
-			object.position.z = (100 - element.cp) / 100 * (this.BUILDING_INIT_Z - 20);
-
+			object.position.z = gameSurface.convertGamePositionToScenePosition({x: element.p.x, y: element.p.y}).z + (100 - element.cp) / 100 * (this.BUILDING_INIT_Z);
 		} else {
-			this.updateProgressBar(object, element, elementData);
+			object.position.z = gameSurface.convertGamePositionToScenePosition({x: element.p.x, y: element.p.y}).z;
+			if (rank.isAlly(gameContent.players, gameContent.myArmy, element)) {
+				// update progress bar (only visible by active player)
+				this.updateProgressBar(object, element, elementData);
+			}
 		}
 	}
 
@@ -721,7 +814,7 @@ gameSurface.removeElement = function (element) {
 *	Returns the game coordinates from some screen coordinates.
 */
 gameSurface.getAbsolutePositionFromPixel = function (x, y) {
-	var intersect = this.getFirstIntersectObject(x, y);
+	var intersect = this.getFirstIntersectObject(x, y, [this.planeSurface]);
 	if (intersect != null) {
 		return this.convertScenePositionToGamePosition(intersect.point);
 	} else {

@@ -287,6 +287,7 @@ order.stopUnits = function (game, elementsIds) {
 		if (element.f == gameData.FAMILIES.unit) {
 			element.a = null;
 			element.pa = [];
+			element.fl = gameData.ELEMENTS_FLAGS.nothing;
 			tools.addUniqueElementToArray(game.modified, element);
 		}
 
@@ -304,6 +305,7 @@ order.holdUnits = function (game, elementsIds) {
 		if (element.f == gameData.FAMILIES.unit) {
 			element.a = new gameData.Order(action.ACTION_TYPES.hold, null, null);
 			element.pa = [];
+			element.fl = gameData.ELEMENTS_FLAGS.nothing;
 			tools.addUniqueElementToArray(game.modified, element);
 		}
 		
