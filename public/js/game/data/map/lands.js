@@ -9,7 +9,8 @@ gameData.ELEMENTS[gameData.FAMILIES.land].push(
 		ra : 3000,
 		g : 'goldmine',
 		gui : 'ic_goldmine.png',
-		minimapColor : {r:237,g:226,b:117}
+		minimapColor : {r:237,g:226,b:117},
+		nbTextures: 3
 	},
 	tree : {
 		name : 'Tree',
@@ -20,6 +21,7 @@ gameData.ELEMENTS[gameData.FAMILIES.land].push(
 		ra : 75,
 		g : 'tree',
 		gui : 'ic_tree.png',
-		minimapColor : {r:52,g:114,b:53}
+		minimapColor : {r:52,g:114,b:53},
+		nbTextures: 2
 	}
 });

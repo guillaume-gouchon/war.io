@@ -181,7 +181,7 @@ header #armies div {
     color: #C41616;
     padding: 5px 0px 5px 5px;
 }
-header #armies div:hover {
+header #armies div:hover, header #music:hover {
     opacity: 0.6;
 }
 header #armies .checked {
