@@ -485,7 +485,7 @@ button.red:hover {
     margin-left: 10px;
 }
 #credits table {
-    margin-left: 120px;
+    margin-left: 105px;
 }
 #credits table tr {
     line-height: 55px;
@@ -912,4 +912,8 @@ button.red:hover {
     top: 45%;
     height: 80px;
     width: 80px;
+}
+
+#errorWebGL {
+    text-align: center;
 }
