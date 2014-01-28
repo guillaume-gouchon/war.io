@@ -30,7 +30,7 @@ app.get('/', function (req, res) {
 });
 
 // start server
-var port = 3000;
+var port = 5000;
 var server = app.listen(port);
 
 // initializes Socket IO
