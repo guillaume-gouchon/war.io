@@ -418,9 +418,10 @@ gameSurface.initHeightMap = function () {
 	
 	var grassTexture = new THREE.ImageUtils.loadTexture( this.MODELS_PATH + 'grass-512.png' );
 	grassTexture.wrapS = grassTexture.wrapT = THREE.RepeatWrapping; 
-	
+
 	var rockyTexture = new THREE.ImageUtils.loadTexture( this.MODELS_PATH + 'rock-512.png' );
 	rockyTexture.wrapS = rockyTexture.wrapT = THREE.RepeatWrapping; 
+	this.grassTexture = sandyTexture;
 
 	customUniforms = {
 		bumpScale: 		{ type: "f", value: this.bumpScale },
@@ -442,7 +443,6 @@ gameSurface.initHeightMap = function () {
 	}   
 	);
 
-	// var landGeometry = new THREE.CubeGeometry(gameContent.map.size.x * this.PIXEL_BY_NODE, gameContent.map.size.y * this.PIXEL_BY_NODE, 30);
 	this.landGeometry = new THREE.PlaneGeometry( gameContent.map.size.x * this.PIXEL_BY_NODE, gameContent.map.size.y * this.PIXEL_BY_NODE, 100, 100);
 
     this.planeSurface = new THREE.Mesh(this.landGeometry, customMaterial);
@@ -450,27 +450,66 @@ gameSurface.initHeightMap = function () {
     this.planeSurface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
     this.planeSurface.position.z = -3;
 
-    // var under = new THREE.CubeGeometry( gameContent.map.size.x * this.PIXEL_BY_NODE, gameContent.map.size.y * this.PIXEL_BY_NODE, 30);
-
-    // var underSurface = new THREE.Mesh(under, new THREE.LineBasicMaterial( { color: '#007', opacity: 0.3, transparent: true} ));
-    // underSurface.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
-    // underSurface.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2;
-    // underSurface.position.z = -20;
-    // scene.add(underSurface)
-
-
 	var img = new Image(); 
 	img.src = this.MODELS_PATH + "heightmap.png";
 	img.onload = function () {
 		gameSurface.setHeightData(img);
 		scene.add( gameSurface.planeSurface );
+		gameSurface.addBorders();
 	};
 }
+
+gameSurface.addBorders = function () {
+  	// border on sides
+  	var borderMaterial = new THREE.LineBasicMaterial({ color: '#000', transparent: true, opacity: 0.2 });
+  	borderMaterial.side = THREE.DoubleSide;
+
+	var frontGeometry = new THREE.PlaneGeometry(gameContent.map.size.x * this.PIXEL_BY_NODE, 100, 127);
+	var frontMesh = new THREE.Mesh(frontGeometry, borderMaterial);
+	frontMesh.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
+	frontMesh.position.y = 0;
+	frontMesh.position.z = gameSurface.planeSurface.position.z;
+	frontMesh.rotation.x = Math.PI / 2;
+	var leftGeometry = new THREE.PlaneGeometry(gameContent.map.size.y * this.PIXEL_BY_NODE - 12, 100, 127);
+	var leftMesh = new THREE.Mesh(leftGeometry, borderMaterial);
+	leftMesh.position.x = -5;
+	leftMesh.position.y = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 6;
+	leftMesh.position.z = gameSurface.planeSurface.position.z;
+	leftMesh.rotation.x = Math.PI / 2;
+	leftMesh.rotation.y = -Math.PI / 2;
+	var rightGeometry = new THREE.PlaneGeometry(gameContent.map.size.y * this.PIXEL_BY_NODE - 12, 100, 127);
+	var rightMesh = new THREE.Mesh(rightGeometry, borderMaterial);
+	rightMesh.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE - 5;
+	rightMesh.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE / 2 - 6;
+	rightMesh.position.z = gameSurface.planeSurface.position.z;
+	rightMesh.rotation.x = Math.PI / 2;
+	rightMesh.rotation.y = -Math.PI / 2;
+	var backGeometry = new THREE.PlaneGeometry(gameContent.map.size.x * this.PIXEL_BY_NODE, 100, 127);
+	var backMesh = new THREE.Mesh(backGeometry, borderMaterial);
+	backMesh.position.x = gameContent.map.size.x * this.PIXEL_BY_NODE / 2 - 5;
+	backMesh.position.y = gameContent.map.size.y * this.PIXEL_BY_NODE - 12;
+	backMesh.position.z = gameSurface.planeSurface.position.z;
+	backMesh.rotation.x = Math.PI / 2;
+
+	for (var x = 0; x < 127; x++) {
+		frontGeometry.vertices[x].y = height[x][0];
+		leftGeometry.vertices[x].y = height[0][127 - x];
+		rightGeometry.vertices[x].y = height[0][127 - x];
+		backGeometry.vertices[x].y = height[x][127];
+	}
+
+	scene.add(frontMesh);
+	scene.add(leftMesh);
+	scene.add(rightMesh);
+	scene.add(backMesh);
+}
+
 
 var height = [];
 
 gameSurface.setHeightData = function (img) {
     var canvas = document.createElement( 'canvas' );
+    canvas.id = 'heightDataCanvas'
     canvas.width = img.width;
     canvas.height = img.height;
     var context = canvas.getContext( '2d' );
@@ -490,7 +529,6 @@ gameSurface.setHeightData = function (img) {
     	y = (vertices[i].y - minY) / (maxY - minY) * img.height;
     	var pixIndex = (Math.floor(x) + Math.floor(y) * img.width) * 4;
     	vertices[i].z = pix[pixIndex] / 255.0 * this.bumpScale;
-
     }
 
     for (var x = 0; x < gameContent.map.size.x; x++) {
@@ -499,6 +537,7 @@ gameSurface.setHeightData = function (img) {
     		height[x][y] = pix[(x + y * img.width) * 4] / 255.0 * this.bumpScale;
     	}
     }
+    $('#heightDataCanvas').remove();
 }
 
 /**
