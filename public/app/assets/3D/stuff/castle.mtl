@@ -1,0 +1,244 @@
+# Blender MTL File: ''
+# Material Count: 22
+newmtl Briques_STRiq4K.jpg
+Ns 98.039216
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 1.000000 1.000000 1.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /home/guillaume/Bureau/saint-riquier_obj/saint-riquier_obj/STRiq4K.jpg
+
+
+newmtl Chambranle_STRiq4K.jpg
+Ns 98.039216
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 1.000000 1.000000 1.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /home/guillaume/Bureau/saint-riquier_obj/saint-riquier_obj/STRiq4K.jpg
+
+
+newmtl Default_STRiq4K.jpg
+Ns 98.039216
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 1.000000 1.000000 1.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /home/guillaume/Bureau/saint-riquier_obj/saint-riquier_obj/STRiq4K.jpg
+
+
+newmtl FenetreCX1_STRiq4K.jpg
+Ns 98.039216
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 1.000000 1.000000 1.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /home/guillaume/Bureau/saint-riquier_obj/saint-riquier_obj/STRiq4K.jpg
+
+
+newmtl FenetreCX2_STRiq4K.jpg
+Ns 98.039216
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 1.000000 1.000000 1.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /home/guillaume/Bureau/saint-riquier_obj/saint-riquier_obj/STRiq4K.jpg
+
+
+newmtl FenetreCX3_STRiq4K.jpg
+Ns 98.039216
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 1.000000 1.000000 1.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /home/guillaume/Bureau/saint-riquier_obj/saint-riquier_obj/STRiq4K.jpg
+
+
+newmtl FenetreCX4_STRiq4K.jpg
+Ns 98.039216
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 1.000000 1.000000 1.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /home/guillaume/Bureau/saint-riquier_obj/saint-riquier_obj/STRiq4K.jpg
+
+
+newmtl FenetreX1_STRiq4K.jpg
+Ns 98.039216
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 1.000000 1.000000 1.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /home/guillaume/Bureau/saint-riquier_obj/saint-riquier_obj/STRiq4K.jpg
+
+
+newmtl FenetreX2_STRiq4K.jpg
+Ns 98.039216
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 1.000000 1.000000 1.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /home/guillaume/Bureau/saint-riquier_obj/saint-riquier_obj/STRiq4K.jpg
+
+
+newmtl FenetreZ1_STRiq4K.jpg
+Ns 98.039216
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 1.000000 1.000000 1.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /home/guillaume/Bureau/saint-riquier_obj/saint-riquier_obj/STRiq4K.jpg
+
+
+newmtl FenetreZ2_STRiq4K.jpg
+Ns 98.039216
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 1.000000 1.000000 1.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /home/guillaume/Bureau/saint-riquier_obj/saint-riquier_obj/STRiq4K.jpg
+
+
+newmtl MursBase_STRiq4K.jpg
+Ns 98.039216
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 1.000000 1.000000 1.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /home/guillaume/Bureau/saint-riquier_obj/saint-riquier_obj/STRiq4K.jpg
+
+
+newmtl MursMain_STRiq4K.jpg
+Ns 98.039216
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 1.000000 1.000000 1.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /home/guillaume/Bureau/saint-riquier_obj/saint-riquier_obj/STRiq4K.jpg
+
+
+newmtl MursTours_STRiq4K.jpg
+Ns 98.039216
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 1.000000 1.000000 1.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /home/guillaume/Bureau/saint-riquier_obj/saint-riquier_obj/STRiq4K.jpg
+
+
+newmtl POrte_STRiq4K.jpg
+Ns 98.039216
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 1.000000 1.000000 1.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /home/guillaume/Bureau/saint-riquier_obj/saint-riquier_obj/STRiq4K.jpg
+
+
+newmtl ToitPrincipal_STRiq4K.jpg
+Ns 98.039216
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 1.000000 1.000000 1.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /home/guillaume/Bureau/saint-riquier_obj/saint-riquier_obj/STRiq4K.jpg
+
+
+newmtl ToittourA_STRiq4K.jpg
+Ns 98.039216
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 1.000000 1.000000 1.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /home/guillaume/Bureau/saint-riquier_obj/saint-riquier_obj/STRiq4K.jpg
+
+
+newmtl ToittourC_STRiq4K.jpg
+Ns 98.039216
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 1.000000 1.000000 1.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /home/guillaume/Bureau/saint-riquier_obj/saint-riquier_obj/STRiq4K.jpg
+
+
+newmtl VoletX1_STRiq4K.jpg
+Ns 98.039216
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 1.000000 1.000000 1.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /home/guillaume/Bureau/saint-riquier_obj/saint-riquier_obj/STRiq4K.jpg
+
+
+newmtl VoletX2_STRiq4K.jpg
+Ns 98.039216
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 1.000000 1.000000 1.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /home/guillaume/Bureau/saint-riquier_obj/saint-riquier_obj/STRiq4K.jpg
+
+
+newmtl VoletZ1_STRiq4K.jpg
+Ns 98.039216
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 1.000000 1.000000 1.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /home/guillaume/Bureau/saint-riquier_obj/saint-riquier_obj/STRiq4K.jpg
+
+
+newmtl VoletZ2_STRiq4K.jpg
+Ns 98.039216
+Ka 0.000000 0.000000 0.000000
+Kd 0.800000 0.800000 0.800000
+Ks 1.000000 1.000000 1.000000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd /home/guillaume/Bureau/saint-riquier_obj/saint-riquier_obj/STRiq4K.jpg
+
+

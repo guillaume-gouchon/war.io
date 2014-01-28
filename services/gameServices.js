@@ -3,8 +3,7 @@ module.exports = function(app){
 	app.gameServices = {};
 
 	// get game's engine and data 
-	eval(require('fs').readFileSync('./public/js/game/engine.js', 'utf8'));
-	eval(require('fs').readFileSync('./public/js/game/data.js', 'utf8'));
+	eval(require('fs').readFileSync('./public/dist/scripts/game.js', 'utf8'));
 
 
 	/**

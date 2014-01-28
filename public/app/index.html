@@ -1,0 +1,458 @@
+<!doctype html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+	<head>
+	    <meta charset="utf-8">
+	    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="maximum-scale=1.0,user-scalable=no,width=device-width">
+        <meta name="author" content="Team Awesome">
+		<meta name="description" content="Online Multiplayer 3D Real-Time Strategy Game in HTML5">
+        <meta name="keywords" content="HTML5, browser, socketIO, webSockets, RTS, free, realtime, strategy, game, warcraft, starcraft, node.js, three.js, webGL">
+        
+        <meta property="og:title" content="WarNode | Online Multiplayer 3D RTS Game in HTML5">
+        <meta property="og:image" content="http:www.warnode.com/assets/logo.png">
+        <meta property="og:type" content="game">
+
+	    <title>WarNode | Online Multiplayer 3D RTS Game in HTML 5</title>
+
+        <link rel="shortcut icon" href="assets/favicon.png">
+        <link rel="apple-touch-icon" href="assets/logo.png">
+
+        <!-- build:css styles/vendor.css -->
+        <!-- bower:css -->
+		<link href="bower_components/sass-bootstrap/dist/css/bootstrap.css" rel="stylesheet" media="screen">
+        <!-- endbower -->
+        <!-- endbuild -->
+	    
+	    <!-- build:css(.tmp) styles/main.css -->
+        <link href="styles/style.css" rel="stylesheet">
+	    <link href="styles/gui.css" rel="stylesheet">
+        <!-- endbuild -->
+
+        <script src="bower_components/modernizr/modernizr.js"></script>
+
+	</head>
+	<body>
+		<!--[if lt IE 10]>
+            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+		
+		<div id="website">
+		  	<header class="blackBackground">
+		  		<div id="playerName" class="sprite">
+		  			<input type="text"/>
+		  		</div>
+			  	<div id="armies">
+			  		<div class="customRadio checked" dguita-name="armies" data-army="0">Human Alliance</div>
+			  		<!-- <div class="customRadio" data-name="armies" data-army="1">Lemons</div> -->
+			  	</div>
+		  		<div id="music" class="sprite">Off</div>
+		  	</header>
+		  	<div id="websiteLoading" class="fullScreen">
+		  		<div><img src="assets/loading.gif"></div>
+		  	</div>
+			
+		<div id="backgrounds">
+			<div id="sky"></div>
+			<div id="grass"></div>
+			<div class="cloud1"></div>
+			<div class="cloud2"></div>
+			<div class="cloud3"></div>
+			<div class="cloud4"></div>
+			<div id="mountains"></div>
+			<div class="bird1"></div>
+			<div class="bird2"></div>
+			<div class="bird3"></div>
+			<div class="cloud6"></div>
+			<div class="cloud7"></div>
+			<div class="plane1  hide"></div>
+			<div class="plane2  hide"></div>
+			<div class="rock4"></div>
+			<div class="rock7"></div>
+			<div class="rock5"></div>
+			<div class="tomato1 hide"></div>
+			<div class="rock6"></div>
+			<div class="rock8"></div>
+			<div class="cloud5"></div>
+			<div class="tomato2 hide"></div>
+			<div class="rock1"></div>
+			<div class="rock2"></div>
+			<div class="rock3"></div>
+			<div class="leaf hide"></div>
+		</div>
+		  	<div id="mainButtons">
+		  		<div>
+		  			<button id="createGameButton">Create Game</button>
+		  		</div>
+		  		<div>
+		  			<button id="joinGameButton">Join Game</button>
+		  		</div>
+				<div>
+					<button id="tutorialButton" type="button">Quick Game</button>
+				</div>
+		  	</div>
+		  	<div id="newGame" class="modal hide fade" tabindex="-1" role="dialog">
+		  		<div class="modal-header">
+		  			<h3>New Game</h3>
+	  			</div>
+	  			<div class="modal-body">
+	  				<ul id="tabs" class="nav nav-tabs">
+			          <li class="active"><a href="#tabPlayers" data-toggle="tab">Players</a></li>
+			          <li><a href="#tabMap" data-toggle="tab">Map</a></li>
+			          <li><a href="#tabVictory" data-toggle="tab">Objectives</a></li>
+			        </ul>
+			        <div id="myTabContent" class="tab-content">
+						<div id="tabPlayers" class="tab-pane fade in active">
+							<span id="nbPlayersLabel">Number of players</span>
+					    	<select id="nbPlayers" class="span1">
+					    		<option value="2">2</option>
+					    		<option value="3">3</option>
+					    		<option value="4" selected>4</option>
+					    	</select>
+						    <div id="players"></div>
+						</div>
+						<div id="tabMap" class="tab-pane fade">
+							<p><span>Map type</span>
+						    <select id="mapType" class="span2"></select></p>
+						    <p><span>Size of the map</span>
+						    <select id="mapSize" class="span2"></select></p>
+						    <p><span>Vegetation</span>
+						    <select id="vegetation" class="span2"></select></p>
+						    <p><span>Initial amount of resources</span>
+						    <select id="initialResources" class="span2"></select></p>
+						</div>
+						<div id="tabVictory" class="tab-pane fade">
+						    <p><span>Victory condition</span>
+						    <select id="vc1" class="span2"></select></p>
+						    <p class="well well-small description"> </p>
+						</div>
+					</div>
+				</div>
+				<div class="modal-footer">
+			    	<button class="cancelButton red" type="button">Cancel</button>
+			    	<button id="confirmGameCreation" class="green" type="button">Create !</button>
+			    </div>
+		  	</div>
+		  	<div id="joinGame" class="modal hide fade" tabindex="-1" role="dialog">
+		  		<div class="modal-header">
+		  			<h3>Join Game</h3>
+	  			</div>
+	  			<div class="modal-body">
+	  				<div class="noResult">No games available yet... create one !</div>
+			  		<table id="lstGames" class="table hide">
+			  			<thead>
+							<tr>
+								<th>Creator</th>
+								<th>Map Size</th>
+								<th>Initial Resources</th>
+								<th>Objectives</th>								
+								<th>Players</th>
+							</tr>
+						</thead>
+						<tbody></tbody>
+			  		</table>
+			  	</div>
+		  		<div class="modal-footer">
+			    	<button class="cancelButton red" type="button">Cancel</button>
+				</div>
+		  	</div>
+		  	<div id="about" class="modal hide fade" tabindex="-1" role="dialog">
+		  		<div class="modal-header">
+		  			<h3>About WarNode</h3>
+	  			</div>
+	  			<div class="modal-body">
+			  		<p>
+			  			<span id="logoSmall" class="sprite right">&nbsp;</span>
+			  			WarNode is an Online Multiplayer 3D Real-Time Strategy Game built
+			  			with the latest web technologies.
+		  			</p>
+			  		<p>
+			  			<span id="htmlLogo" class="sprite left">&nbsp;</span>
+			  			It is powered by HTML5, WebGL, and WebSockets, enabling the 3D and the real-time gaming on the modern web browsers.
+			  		</p>
+			  		<p>
+			  			<span id="compatBrowsers" class="sprite right">&nbsp;</span>
+			  			Warnode is compatible with Google Chrome, Safari, Firefox, Chromium as well as Google Chrome for Android / iOS.
+			  		</p>
+		  		</div>
+		  	</div>
+		  	<div id="credits" class="modal hide fade" tabindex="-1" role="dialog">
+		  		<div class="modal-header">
+		  			<h3>Credits</h3>
+		  		</div>
+		  		<div class="modal-body">
+		  			<table>
+				  		<tr>
+				  			<td id="teamMember1" class="sprite">&nbsp;</td>
+				  			<td class="name">
+				  				Guillaume Gouchon
+				  				<span class="label label-info">Dev</span>
+					  			<span class="label label-warning">Music</span>
+					  		</td>
+				  		</tr>
+				  		<tr>
+				  			<td id="teamMember2" class="sprite">&nbsp;</td>
+				  			<td class="name">
+				  				Thomas Cadiou
+				  				<span class="label label-info">Dev</span>
+				  			</td>
+				  		</tr>
+				  		<tr>
+				  			<td id="teamMember3" class="sprite">&nbsp;</td>
+				  			<td class="name">
+				  				Romain Bertrand
+				  				<span class="label label-info">Dev</span>
+				  			</td>
+				  		</tr>
+				  		<tr>
+				  			<td id="teamMember4" class="sprite">&nbsp;</td>
+				  			<td class="name">
+				  				Didier Brissaud
+				  				<span class="label label-success">3D Design</span>
+				  			</td>
+				  		</tr>
+				  		<tr>
+				  			<td id="teamMember5" class="sprite">&nbsp;</td>
+				  			<td class="name">
+				  				Sonia Lahcene
+					  			<span class="label label-important">Illustrations</span>
+					  			<span class="label label-inverse">Marketing</span>
+					  		</td>
+				  		</tr>
+			  		</table>
+			  		<p id="contactUs"><a href="mailto:guillaume.gouchon@gmail.com">Contact</a></p>
+		  		</div>
+		  	</div>
+		  	
+		  	<footer>
+	  			<span>Share on</span> 
+	  			<a id="fbButton" href="http://www.facebook.com/share.php?u=http://warnode.com" target="_blank">&amp;<div class="sprite"></div></a>
+	  			<a id="twButton" href="https://twitter.com/share?url=http://warnode.com&amp;text=Best%203D%20RTS%20Game%20in%20HTML5%20!%20" target="_blank"><div class="sprite"></div></a>
+		  		-<a id="aboutButton" href="#about" data-toggle="modal">About</a>
+		  		-<a id="creditsButton" href="#credits" data-toggle="modal">Credits</a>
+		  	</footer>
+		</div>
+	  	<div id="game" class="hide">
+		  	<div id="gui" class="fullScreen" onmousedown="return false">
+			  	<div id="topBar">
+					<div id="population"><div class="sprite"></div><span></span></div>
+				</div>
+				<div id="bottomBar">
+					<div id="toolbar">
+						<div id="commonButtons">
+							<button id="attackButton" class="enableTooltip" data-toggle="tooltip" title="Attack (A)"><div class="sprite"></div></button>
+							<button id="stopButton" class="enableTooltip" data-toggle="tooltip" title="Stop (S)"><div class="sprite"></div></button>
+							<button id="holdButton" class="enableTooltip" data-toggle="tooltip" title="Hold Position (H)"><div class="sprite"></div></button>							
+							<button id="patrolButton" class="enableTooltip" data-toggle="tooltip" title="Patrol (P)"><div class="sprite"></div></button>
+						</div>
+						<div id="specialButtons"></div>
+					</div>
+					<div id="listSelected"></div>
+					<div id="infoSelected" class="hideI">
+						<div id="nameElement" class="stat"></div>
+						<div id="lifeElement" class="stat"></div>
+						<div id="fragsStat" class="enableTooltip unitOnly stat" title="Frags"><div class="sprite"></div><span></span></div>
+						<div id="secondaryStats" class="stat">
+							<div id="attackStat" class="enableTooltip unitOnly stat" title="Attack"><div class="sprite"></div><span></span></div>
+							<div id="defenseStat" class="enableTooltip stat" title="Defense"><div class="sprite"></div><span></span></div>
+							<div id="attackSpeedStat" class="enableTooltip unitOnly stat" title="Attack Speed"><div class="sprite"></div><span></span></div>
+							<div id="rangeStat" class="enableTooltip unitOnly stat" title="Range"><div class="sprite"></div><span></span></div>
+							<div id="popStat" class="enableTooltip stat" title="Population Size"><div class="sprite"></div><span></span></div>
+							<!-- <div id="weaponTypeStat" class="enableTooltip unitOnly" title="Weapon Type"></div>
+							<div id="armorTypeStat" class="enableTooltip" title="Armor Type"></div> -->
+							<div id="resourcesStatWood" class="enableTooltip landOnly stat" title="Amount of resources left"><div class="sprite"></div><span></span></div>
+							<div id="resourcesStatWater" class="enableTooltip landOnly stat" title="Amount of resources left"><div class="sprite"></div><span></span></div>
+							<div id="queueBuilding">
+								<div id="queueProgress"></div>
+								<button data-id="0"><div class="sprite"></div></button>
+								<button data-id="1"><div class="sprite"></div></button>
+								<button data-id="2"><div class="sprite"></div></button>
+								<button data-id="3"><div class="sprite"></div></button>
+								<button data-id="4"><div class="sprite"></div></button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<canvas id="minimap"></canvas>
+			  	<div id="messages" class="hide"></div>
+		  		<div id="diplomacy" class="hide"></div>
+		  		<div id="selectionRectangle" class="hide"></div>
+		  	</div>
+
+			<div id="chat" class="hide">
+				<input class="input-xxlarge" type="text" placeholder="chat..."/>
+				<p>ENABLE SOUND&nbsp;&nbsp;&nbsp;/soundon&nbsp;&nbsp;&nbsp;OR&nbsp;&nbsp;&nbsp;olivier !</p>
+				<p>DISABLE SOUND&nbsp;&nbsp;&nbsp;/soundoff&nbsp;&nbsp;&nbsp;OR&nbsp;&nbsp;&nbsp;paranormalement</p>
+				<p>QUIT&nbsp;&nbsp;&nbsp;/surrender</p>
+			</div>
+
+			<div id="endGame" class="fullScreen blackBackground hide" >
+				<div id="endGameMessage"></div>
+				<div id="endGameStats">
+					<table class="table table-bordered">
+						<thead>
+							<tr>
+								<th class="black"></th>
+								<th colspan="4" class="big">Military</th>
+								<th colspan="4" class="big">Economy</th>
+								<th colspan="1" rowspan="2" class="big">Total<br>Score</th>
+							</tr>
+				  			<tr>
+				  				<th>Player</th>
+					  			<th>Units killed</th>
+					  			<th>Units lost</th>
+					  			<th>Buildings destroyed</th>
+					  			<th>Units created</th>
+					  			<th>Resources</th>
+					  			<th>Builders created</th>
+					  			<th>Buildings created</th>
+					  			<th>Technologies</th>
+					  		</tr>
+			  			</thead>
+			  			<tbody></tbody>
+					</table>
+					<h3>Population history</h3>
+					<div id="popChart"></div>
+				</div>
+				<a id="returnHome" class="btn" href="">Return Home</a>
+			</div>
+		</div>
+
+		<div id="loadingScreen" class="fullScreen easeTransition hide" >
+			<div id="loadingLabel">
+		  		<span id="labelLoading"></span>
+		  		<span class="one">.</span>
+		  		<span class="two">.</span>
+		  		<span class="three">.</span>​
+		  	</div>
+	  		<div id="loadingProgress" class="progress">
+				<div class="bar" style="width: 0%"></div>
+			</div>
+			<div id="playersLoading" class="hide"></div>
+	  	</div>
+	  	<div id="notifications" class="hide"></div>
+	  	<div id="errorWebGL" class="modal hide fade" tabindex="-1" role="dialog" >
+			<div class="modal-header">
+				<h3>Oops !</h3>
+			</div> 
+			<div class="modal-body">
+				<p>Your browser does not support WebGL.</p>
+				<p>Try <a class="redLink" href="http://google.com/chrome" target="_blank">Google Chrome</a> or <a class="redLink" href="http://get.webgl.org" target="_blank">follow this link</a> to know more about it !</p>
+			</div>
+		</div>
+
+		<div id="imagesPreload" class="hide"></div>
+
+	  	<div id="musicTags" class="hide">
+	  		<audio controls preload></audio><!-- MUSIC -->
+		  	<audio controls preload></audio><!-- GAME SOUNDS -->
+		</div>
+
+
+	<script src="/socket.io/socket.io.js"></script>
+
+	
+    <!-- build:js({app,.tmp}) scripts/game.js -->
+    <script type="text/javascript" src="scripts/game/engine/gameData.js"></script>
+	<script type="text/javascript" src="scripts/game/engine/class/building.js"></script>
+	<script type="text/javascript" src="scripts/game/engine/class/game.js"></script>
+	<script type="text/javascript" src="scripts/game/engine/class/map.js"></script>
+	<script type="text/javascript" src="scripts/game/engine/class/order.js"></script>
+	<script type="text/javascript" src="scripts/game/engine/class/player.js"></script>
+	<script type="text/javascript" src="scripts/game/engine/class/terrain.js"></script>
+	<script type="text/javascript" src="scripts/game/engine/class/unit.js"></script>
+	<script type="text/javascript" src="scripts/game/engine/AI.js"></script>
+	<script type="text/javascript" src="scripts/game/engine/action.js"></script>
+	<script type="text/javascript" src="scripts/game/engine/fight.js"></script>
+	<script type="text/javascript" src="scripts/game/engine/gameCreation.js"></script>
+	<script type="text/javascript" src="scripts/game/engine/gameLogic.js"></script>
+	<script type="text/javascript" src="scripts/game/engine/move.js"></script>
+	<script type="text/javascript" src="scripts/game/engine/order.js"></script>
+	<script type="text/javascript" src="scripts/game/engine/production.js"></script>
+	<script type="text/javascript" src="scripts/game/engine/rank.js"></script>
+	<script type="text/javascript" src="scripts/game/engine/stats.js"></script>
+	<script type="text/javascript" src="scripts/game/engine/tools.js"></script>
+	<script type="text/javascript" src="scripts/game/engine/aiOrders.js"></script>
+	<script type="text/javascript" src="scripts/game/engine/accessors.js"></script>
+	<script type="text/javascript" src="scripts/game/data/global.js"></script>
+	<script type="text/javascript" src="scripts/game/data/armies/tomatoes/researches.js"></script>
+	<script type="text/javascript" src="scripts/game/data/armies/tomatoes/units.js"></script>
+	<script type="text/javascript" src="scripts/game/data/armies/tomatoes/buildings.js"></script>
+	<script type="text/javascript" src="scripts/game/data/armies/basecamps.js"></script>
+	<script type="text/javascript" src="scripts/game/data/map/lands.js"></script>
+	<script type="text/javascript" src="scripts/game/data/map/maps.js"></script>
+    <!-- endbuild -->
+
+    <!-- build:js scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="bower_components/jquery/jquery.js"></script>
+    <script src="scripts/game/three.js"></script>
+	<script src="scripts/game/tween.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!-- build:js scripts/plugins.js -->
+	<script type="text/javascript" src="scripts/jquery.flot.min.js"></script>
+	<script type="text/javascript" src="scripts/bootstrap.min.js"></script>
+	<!-- endbuild -->
+	 
+	<!-- build:js scripts/gameClient.js -->
+	<script type="text/javascript" src="scripts/game/client/controls.js"></script>
+	<script type="text/javascript" src="scripts/game/client/userInput.js"></script>
+	<script type="text/javascript" src="scripts/game/client/GUI.js"></script>
+	<script type="text/javascript" src="scripts/game/client/gameSurface.js"></script>
+	<script type="text/javascript" src="scripts/game/client/drawingTools.js"></script>
+	<script type="text/javascript" src="scripts/game/client/gameContent.js"></script>
+	<script type="text/javascript" src="scripts/game/client/utils.js"></script>
+	<script type="text/javascript" src="scripts/game/client/socketManager.js"></script>
+	<script type="text/javascript" src="scripts/game/client/gameManager.js"></script>
+	<script type="text/javascript" src="scripts/game/client/soundManager.js"></script>
+	<script type="text/javascript" src="scripts/index.js"></script>
+	<!-- endbuild -->
+
+	<script id="vertexShader" type="x-shader/x-vertex">
+	uniform sampler2D bumpTexture;
+	uniform float bumpScale;
+
+	varying float vAmount;
+	varying vec2 vUV;
+	varying vec2 vULVE;
+
+	void main() 
+	{ 
+		vUV = uv;
+        vULVE = vec2(uv.x, (1.0-uv.y));
+		vec4 bumpData = texture2D( bumpTexture, uv );
+		
+		vAmount = bumpData.r; // assuming map is grayscale it doesn't matter if you use r, g, or b.
+		
+		// move the position along the normal
+	    vec3 newPosition = position;// + normal * bumpScale * vAmount;
+		
+		gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 ); 
+	}
+	</script>
+	<script id="fragmentShader" type="x-shader/x-vertex">
+	uniform sampler2D sandyTexture;
+	uniform sampler2D grassTexture;
+	uniform sampler2D rockyTexture;
+	uniform sampler2D tFog;
+
+	varying vec2 vUV;
+	varying vec2 vULVE;
+
+	varying float vAmount;
+
+	void main() 
+	{
+		vec4 sandy = (smoothstep(0.01, 0.02, vAmount) - smoothstep(0.03, 0.25, vAmount)) * texture2D( sandyTexture, vUV * 10.0 );
+		vec4 grass = (smoothstep(0.03, 0.50, vAmount) - smoothstep(0.40, 0.70, vAmount)) * texture2D( grassTexture, vUV * 20.0 );
+		vec4 rocky = (smoothstep(0.50, 0.65, vAmount) * texture2D( rockyTexture, vUV * 20.0));
+		gl_FragColor = vec4(texture2D( tFog, vULVE ).rgb * (sandy + grass + rocky).xyz, 1.0);
+	}  
+	</script>
+
+</body>
+</html>
