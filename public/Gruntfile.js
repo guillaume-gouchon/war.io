@@ -196,7 +196,8 @@ module.exports = function (grunt) {
             dist: {
                 files: {
                     src: [
-                        // '<%= yeoman.dist %>/scripts/{,*/}*.js',
+                        '<%= yeoman.dist %>/scripts/{,*/}*.js',
+                        '!<%= yeoman.dist %>/scripts/game.js',
                         '<%= yeoman.dist %>/styles/{,*/}*.css'
                     ]
                 }

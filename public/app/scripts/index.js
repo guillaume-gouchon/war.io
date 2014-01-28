@@ -107,8 +107,8 @@
 	});
 
 	// tutorial button
-	$(document).ready(function() {
-	// $('#tutorialButton').click(function () {
+	// $(document).ready(function() {
+	$('#tutorialButton').click(function () {
 		soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
 		$(this).unbind('click');
 		showLoadingScreen('Loading');
@@ -244,8 +244,6 @@ function preloadImages() {
 	}
 	preload(
 		'assets/montagnes.png',
-		'assets/websiteSprite.png',
-		'assets/GUI/guiSprite.png',
 		GUI.IMAGES_PATH + 'cursor.png',
 		GUI.IMAGES_PATH + 'cursor_hover.png',
 		GUI.IMAGES_PATH + 'cursor_attack.png',

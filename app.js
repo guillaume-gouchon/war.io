@@ -1,18 +1,9 @@
-var application_root = __dirname,
-    express = require("express");
+var express = require("express");
 
+// server config
 var app = module.exports = express();
-var server = app.listen(3000);
-console.log("WarNode Server is running !");
-
-// initializes Socket IO
-app.io = require('socket.io').listen(server);
-// removes debug logs
-app.io.set('log level', 1);
-
-
-// config
 app.configure(function () {
+  app.use(express.compress());
   app.use(express.bodyParser());
   app.use(express.methodOverride());
   app.use(app.router);
@@ -20,8 +11,7 @@ app.configure(function () {
   app.use(express.static(__dirname + '/public/dist', { maxAge: 100000 * 1000 }));
 });
 
-
-// console color
+// console colors
 var colors = require('colors');
 colors.setTheme({
   error: 'red',
@@ -31,14 +21,24 @@ colors.setTheme({
   debug: 'grey'
 });
 
-
-require('./services/gameServices')(app);
-
-
-// setup index page route
+// setup routes
 app.get('/', function (req, res) {
   if (!res.getHeader('Cache-Control')) {
     res.setHeader('Cache-Control', 'public, max-age=' + 100000);
   }
   res.sendfile(__dirname + '/public/dist/index.html');
 });
+
+// start server
+var port = 3000;
+var server = app.listen(port);
+
+// initializes Socket IO
+app.io = require('socket.io').listen(server);
+// removes debug logs
+app.io.set('log level', 1);
+
+// import game services
+require('./services/gameServices')(app);
+
+console.log("WarNode Server is running on port ".green + port + " !".green);

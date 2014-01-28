@@ -1,5 +1,3 @@
-/** sprite: guiSprite; sprite-image: url('../assets/GUI/guiSprite.png'); sprite-layout: vertical */
-
 /**
 *   MAIN 3D CANVAS
 */
@@ -42,8 +40,8 @@ button.selected {
   position: absolute;
   top: 10px;
   right: 25px;
-}
-#topBar #population, #topBar #resource0, #topBar #resource1 {
+
+  #population, #resource0, #resource1 {
     display: inline-block;
     min-width: 65px;
     font-size: 14px;
@@ -53,22 +51,25 @@ button.selected {
     line-height: 26px;
     margin-left: 30px;
     text-shadow: 1px 1px 2px #000000;
-}
-#topBar span {
-  padding-left: 8px;
-}
-#topBar .sprite {
-  width: 25px;
-  height: 25px;
+  }
+
+  span {
+    padding-left: 8px;
+  }
+
+  .sprite {
+    width: 25px;
+    height: 25px;
+  }
 }
 #resource0 .sprite {
-  background-image: url(../assets/GUI/ic_gold.png);/** sprite-ref: guiSprite; */
+  background-image: url(../assets/GUI/ic_gold.png);
 }
 #resource1 .sprite {
-  background-image: url(../assets/GUI/ic_wood.png);/** sprite-ref: guiSprite; */
+  background-image: url(../assets/GUI/ic_wood.png);
 }
 #population .sprite {
-  background-image: url(../assets/GUI/ic_pop.png);/** sprite-ref: guiSprite; */
+  background-image: url(../assets/GUI/ic_pop.png);
 }
 
 
@@ -90,23 +91,22 @@ button.selected {
   width: 33%;
   padding: 5px;
   vertical-align: top;
+
+  button {
+    padding: 5px;
+    margin: 3px;
+
+    .sprite {
+      height: 40px;
+      width: 40px;
+    }    
+  }
+
+  #specialButtons {
+    display: block;
+  }
 }
-#toolbar button {
-  padding: 5px;
-  margin: 3px;
-}
-#toolbar button .sprite {
-  height: 40px;
-  width: 40px;
-}
-.tooltip {
-  font-size: 15px;
-  opacity: 0.9;
-  background: #000;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  text-shadow: 1px 1px 2px #000000;
-}
+
 #minimap {
   position: absolute;
   right: 0px;
@@ -116,9 +116,6 @@ button.selected {
   opacity: 0.8;
   box-shadow: 12px 5px 21px 20px #000;
 }
-#toolbar #specialButtons {
-  display: block;
-}
 #listSelected {
   display: inline-block;
   width: 30%;
@@ -127,96 +124,99 @@ button.selected {
   padding-left: 3px;
   padding-right: 3px;
   text-align: center;
-}
-#listSelected button {
-  padding: 3px;
-  margin: 3px; 
-}
-#listSelected button .sprite {
-  height: 40px;
-  width: 40px;
-}
-#commonButtons button div {
-  height: 40px;
-  width: 40px;
+
+  button {
+    padding: 3px;
+    margin: 3px;
+
+    .sprite {
+      height: 40px;
+      width: 40px;
+    }
+
+    div {
+      height: 40px;
+      width: 40px;
+    }
+  }
 }
 #attackButton div {
-  background-image: url(../assets/GUI/bg_attack_btn.png);/** sprite-ref: guiSprite; */
+  background-image: url(../assets/GUI/bg_attack_btn.png);
 }
 #stopButton div {
-  background-image: url(../assets/GUI/bg_stop_btn.png);/** sprite-ref: guiSprite; */
+  background-image: url(../assets/GUI/bg_stop_btn.png);
 }
 #holdButton div {
-  background-image: url(../assets/GUI/bg_hold_btn.png);/** sprite-ref: guiSprite; */
+  background-image: url(../assets/GUI/bg_hold_btn.png);
 }
 #patrolButton div {
-  background-image: url(../assets/GUI/bg_patrol_btn.png);/** sprite-ref: guiSprite; */
+  background-image: url(../assets/GUI/bg_patrol_btn.png);
 }
-
 
 .ic_build {
-  background-image: url(../assets/GUI/ic_build.png);/** sprite-ref: guiSprite; */
+  background-image: url(../assets/GUI/ic_build.png);
 }
 .ic_cancel {
-  background-image: url(../assets/GUI/ic_cancel.png);/** sprite-ref: guiSprite; */
+  background-image: url(../assets/GUI/ic_cancel.png);
 }
 .ic_back {
-  background-image: url(../assets/GUI/ic_back.png);/** sprite-ref: guiSprite; */
+  background-image: url(../assets/GUI/ic_back.png);
 }
 .ic_gold {
-  background-image: url(../assets/GUI/ic_gold20.png);/** sprite-ref: guiSprite; */
+  background-image: url(../assets/GUI/ic_gold20.png);
 }
 .ic_wood {
-  background-image: url(../assets/GUI/ic_wood20.png);/** sprite-ref: guiSprite; */
+  background-image: url(../assets/GUI/ic_wood20.png);
 }
 .hq {
-  background-image: url(../assets/GUI/ic_hq.png);/** sprite-ref: guiSprite; */
+  background-image: url(../assets/GUI/ic_hq.png);
 }
 .house {
-  background-image: url(../assets/GUI/ic_house.png);/** sprite-ref: guiSprite; */
+  background-image: url(../assets/GUI/ic_house.png);
 }
 .casern {
-  background-image: url(../assets/GUI/ic_casern.png);/** sprite-ref: guiSprite; */
+  background-image: url(../assets/GUI/ic_casern.png);
 }
 .factory {
-  background-image: url(../assets/GUI/ic_factory.png);/** sprite-ref: guiSprite; */
+  background-image: url(../assets/GUI/ic_factory.png);
 }
 .researchlab {
-  background-image: url(../assets/GUI/ic_researchlab.png);/** sprite-ref: guiSprite; */
+  background-image: url(../assets/GUI/ic_researchlab.png);
 }
 .tower {
-  background-image: url(../assets/GUI/ic_tower.png);/** sprite-ref: guiSprite; */
+  background-image: url(../assets/GUI/ic_tower.png);
 }
 .goldmine {
-  background-image: url(../assets/GUI/ic_goldmine.png);/** sprite-ref: guiSprite; */
+  background-image: url(../assets/GUI/ic_goldmine.png);
 }
 .tree {
-  background-image: url(../assets/GUI/ic_tree.png);/** sprite-ref: guiSprite; */
+  background-image: url(../assets/GUI/ic_tree.png);
 }
 .builder {
-  background-image: url(../assets/GUI/ic_builder.png);/** sprite-ref: guiSprite; */
+  background-image: url(../assets/GUI/ic_builder.png);
 }
 .swordsman {
-  background-image: url(../assets/GUI/ic_swordsman.png);/** sprite-ref: guiSprite; */
+  background-image: url(../assets/GUI/ic_swordsman.png);
 }
 .bowman {
-  background-image: url(../assets/GUI/ic_bowman.png);/** sprite-ref: guiSprite; */
+  background-image: url(../assets/GUI/ic_bowman.png);
 }
 .knight {
-  background-image: url(../assets/GUI/ic_knight.png);/** sprite-ref: guiSprite; */
+  background-image: url(../assets/GUI/ic_knight.png);
 }
 .bastardsword {
-  background-image: url(../assets/GUI/ic_bastardsword.png);/** sprite-ref: guiSprite; */
+  background-image: url(../assets/GUI/ic_bastardsword.png);
 }
 .leatherarmor {
-  background-image: url(../assets/GUI/ic_leatherarmor.png);/** sprite-ref: guiSprite; */
+  background-image: url(../assets/GUI/ic_leatherarmor.png);
 }
 .longbow {
-  background-image: url(../assets/GUI/ic_longbow.png);/** sprite-ref: guiSprite; */
+  background-image: url(../assets/GUI/ic_longbow.png);
 }
 .spikedmace {
-  background-image: url(../assets/GUI/ic_spikedmace.png);/** sprite-ref: guiSprite; */
+  background-image: url(../assets/GUI/ic_spikedmace.png);
 }
+
 
 /**
 *   INFO SECTION
@@ -226,41 +226,43 @@ button.selected {
   height: 80%;
   width: 30%;
   padding: 5px;
-}
-#infoSelected .stat {
-  display: inline-block;
-  vertical-align: top;
-  padding: 10px;
-  text-shadow: 1px 1px 2px #000000;
-}
-#infoSelected .sprite {
-  height: 20px;
-  width: 20px;
-  margin-right: 5px;
+
+  .stat {
+    display: inline-block;
+    vertical-align: top;
+    padding: 10px;
+    text-shadow: 1px 1px 2px #000000;
+  }
+
+  .sprite {
+    height: 20px;
+    width: 20px;
+    margin-right: 5px;
+  }
 }
 #rangeStat .sprite {
-  background-image: url(../assets/GUI/ic_range.png);/** sprite-ref: guiSprite; */
+  background-image: url(../assets/GUI/ic_range.png);
 }
 #fragsStat .sprite {
-  background-image: url(../assets/GUI/ic_frag.png);/** sprite-ref: guiSprite; */
+  background-image: url(../assets/GUI/ic_frag.png);
 }
 #attackStat .sprite {
-  background-image: url(../assets/GUI/ic_attack.png);/** sprite-ref: guiSprite; */
+  background-image: url(../assets/GUI/ic_attack.png);
 }
 #defenseStat .sprite {
-  background-image: url(../assets/GUI/ic_defense.png);/** sprite-ref: guiSprite; */
+  background-image: url(../assets/GUI/ic_defense.png);
 }
 #popStat .sprite {
-  background-image: url(../assets/GUI/ic_pop20.png);/** sprite-ref: guiSprite; */
+  background-image: url(../assets/GUI/ic_pop20.png);
 }
 #attackSpeedStat .sprite {
-  background-image: url(../assets/GUI/ic_attackSpeed.png);/** sprite-ref: guiSprite; */
+  background-image: url(../assets/GUI/ic_attackSpeed.png);
 }
 #resourcesStatWater .sprite {
-  background-image: url(../assets/GUI/ic_gold20.png);/** sprite-ref: guiSprite; */
+  background-image: url(../assets/GUI/ic_gold20.png);
 }
 #resourcesStatWood .sprite {
-  background-image: url(../assets/GUI/ic_wood20.png);/** sprite-ref: guiSprite; */
+  background-image: url(../assets/GUI/ic_wood20.png);
 }
 #secondaryStats {
   display: block!important;
@@ -280,7 +282,7 @@ button.selected {
 /**
 *   BUILDINGS QUEUE
 */
-#queueBuilding, #queueBuilding div, #queueBuilding button {
+#queueBuilding, #queueBuilding div{
   display: inline-block;
 }
 #queueBuilding #queueProgress {
@@ -289,18 +291,19 @@ button.selected {
   margin: 9px 0px 0px 8px;
 }
 #queueBuilding button {
+  display: inline-block;
   padding: 0px;
   margin: 1px;
   vertical-align: middle;
   height: 25px;
   width: 25px;
   margin-top: 5px;
-}
-#queueBuilding button .sprite {
-  margin: 0px;
-  vertical-align: top;
-}
 
+  .sprite {
+    margin: 0px;
+    vertical-align: top;
+  }
+}
 
 
 /**
@@ -368,24 +371,51 @@ div.lowLife {
 /**
 *   TOOLTIPS
 */
-.tooltip .price {
-  display: inline-block;
-  padding-left: 10px;
-  padding-right: 10px;
-}
-.tooltip .price .sprite {
-  margin-right: 6px;
-  width: 20px;
-  height: 20px;
-}
-.tooltip .technoNeed {
-  color: yellow;
+.tooltip {
+  font-size: 15px;
+  opacity: 0.9;
+  background: #000;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  text-shadow: 1px 1px 2px #000000;
+  
+  .price {
+    display: inline-block;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .sprite {
+    margin-right: 6px;
+    width: 20px;
+    height: 20px;
+  }
+
+  .technoNeed {
+    color: yellow;
+  }
 }
 
 
 /**
 *   CHAT
 */
+#chat {
+  position: absolute;
+  font-size: 1.0em;
+  color: #ddd;
+  background: #000;
+  opacity: 0.8;
+  padding: 10px 10px 0px 10px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 6px 6px #000;
+
+  input {
+    font-size: 1.2em;
+    font-family: 'godofwar';
+  }
+}
+
 #messages {
   position: absolute;
   top: 10px;
@@ -398,16 +428,18 @@ div.lowLife {
   opacity: 0.8;
   background: #000;
   box-shadow: 0px 0px 5px 5px #000;
-}
-#messages div {
-  font-size: 0.8em;
-  padding: 2px 5px 2px 5px;
-  color: #eee;
-  line-height: 10px;
-}
-#messages div span {
-    font-size: 1.3em;
-    margin-left: 10px;
+
+  div {
+    font-size: 0.8em;
+    padding: 2px 5px 2px 5px;
+    color: #eee;
+    line-height: 10px;
+
+    span {
+      font-size: 1.3em;
+      margin-left: 10px;
+    }
+  }
 }
 .red {
     color: #C41616;
@@ -443,76 +475,63 @@ div.lowLife {
 
 
 /**
-*   CHAT BOX
-*/
-#chat {
-  position: absolute;
-  font-size: 1.0em;
-  color: #ddd;
-  background: #000;
-  opacity: 0.8;
-  padding: 10px 10px 0px 10px;
-  border-radius: 5px;
-  box-shadow: 0px 0px 6px 6px #000;
-}
-#chat input {
-  font-size: 1.2em;
-  font-family: 'godofwar';
-}
-
-
-/**
 *   END GAME STATS
 */
 #endGame {
   text-align: center;
   overflow: auto;
   text-shadow: 2px 2px 4px #000000;
-}
-#endGame h3 {
-  color: #eee;
-  font-weight: normal;
-  margin: 0px;
+
+  h3 {
+    color: #eee;
+    font-weight: normal;
+    margin: 0px;
+  }
+
+  .btn {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    color: #ccc;
+  }
+
+  .btn:hover {
+    background: #ddd;
+    color : #222;
+  }
 }
 #endGameMessage {
-    padding: 50px;
-    font-size: 4.0em;
+  padding: 50px;
+  font-size: 4.0em;
 
 }
 #endGameStats {
-    padding: 15px;
-}
-#endGameStats table {
+  padding: 15px;
+
+  table {
     box-shadow: 0px 0px 15px 8px #000;
     border: none;
-}
-#endGameStats table tr th {
-    color: #eee;
-    vertical-align: middle;
-    text-align: center;
-    font-weight: normal;
-    border: thin solid #ddd;
-    text-shadow: 1px 1px 2px #000000;
-}
-#endGameStats table tr td {
-    text-align: center;
-    border: thin solid #ddd;
+
+    tr th {
+      color: #eee;
+      vertical-align: middle;
+      text-align: center;
+      font-weight: normal;
+      border: thin solid #ddd;
+      text-shadow: 1px 1px 2px #000000;
+    }
+
+    tr td {
+      text-align: center;
+      border: thin solid #ddd;
+    }
+  }
 }
 .victory {
     color : #0d0;
 }
 .defeat {
     color : #d00;
-}
-#endGame .btn {
-    position: absolute;
-    left: 10px;
-    bottom: 10px;
-    color: #ccc;
-}
-#endGame .btn:hover {
-    background: #ddd;
-    color : #222;
 }
 #popChart canvas {
   background: none;
