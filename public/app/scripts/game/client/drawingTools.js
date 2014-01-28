@@ -67,7 +67,7 @@ gameSurface.convertScenePositionToGamePositionNoBounds = function (scenePosition
 *	Draws a selection circle.
 */
 gameSurface.drawSelectionCircle = function(radius, color) {
- 	var cylinder =  new THREE.Mesh(new THREE.TorusGeometry(radius, 0.2, 2, radius * 20), new THREE.LineBasicMaterial( { color: color} ));
+ 	var cylinder =  new THREE.Mesh(new THREE.TorusGeometry(radius, 0.2, 2, radius * 20), new THREE.LineBasicMaterial( { color: color, transparent: true, opacity: 0.7 } ));
  	cylinder.id = 'select';
  	cylinder.rotation.x = this.de2ra(90);
 	cylinder.scale.x = 2;

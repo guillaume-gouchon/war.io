@@ -463,8 +463,7 @@ gameSurface.initHeightMap = function () {
 	img.src = this.MODELS_PATH + "heightmap.png";
 	img.onload = function () {
 		gameSurface.setHeightData(img);
-
-	scene.add( gameSurface.planeSurface );
+		scene.add( gameSurface.planeSurface );
 	};
 }
 
@@ -553,8 +552,8 @@ gameSurface.loadObject = function (key, family, race) {
 			}
 		}
 	} else {
-		gameSurface.materials[key] = new THREE.MeshLambertMaterial({lights:true, map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
-		gameSurface.materials["HIDDEN" + key] = new THREE.MeshLambertMaterial({lights:true, color: 0x555555, map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
+		gameSurface.materials[key] = new THREE.MeshLambertMaterial({transparent: true, lights:true, map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
+		gameSurface.materials["HIDDEN" + key] = new THREE.MeshLambertMaterial({transparent: true, lights:true, color: 0x555555, map: THREE.ImageUtils.loadTexture(gameSurface.MODELS_PATH + key + '.png', new THREE.UVMapping(), function () {gameSurface.updateLoadingCounter()})});
 	}
 }
 
@@ -565,11 +564,21 @@ gameSurface.loadObject = function (key, family, race) {
 gameSurface.geometryLoaded = function (key) {
 	return function (geometry, materials) {
 		gameSurface.geometries[key] = geometry;
+
 		if (geometry.animation) {
 			for (var i in geometry.animation) {
 				THREE.AnimationHandler.add(geometry.animation[i]);	
 			}
 		}
+		
+		if (materials && materials.length > 0) {
+			materials[0].transparent = true;
+			materials[0].lights = true;
+			materials[0].color = 0x555555;
+			gameSurface.materials[key] = materials[0];
+			gameSurface.materials["HIDDEN" + key] = materials[0];
+		}
+
 		gameSurface.updateLoadingCounter();
 	};
 }
@@ -724,6 +733,14 @@ gameSurface.updateElement = function (element) {
 				}
 				gameSurface.animations[object.animationKeys.move].play();
 				object.activeAnimation = object.animationKeys.move;
+			}
+		} else if (element.fl == gameData.ELEMENTS_FLAGS.building || element.fl == gameData.ELEMENTS_FLAGS.mining) {
+			if (object.activeAnimation != object.animationKeys.building) {
+				if (object.activeAnimation >= 0) {
+					gameSurface.animations[object.activeAnimation].stop();
+				}
+				gameSurface.animations[object.animationKeys.building].play();
+				object.activeAnimation = object.animationKeys.building;
 			}
 		} else {
 			if (object.activeAnimation != object.animationKeys.standing) {

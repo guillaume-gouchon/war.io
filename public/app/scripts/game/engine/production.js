@@ -4,7 +4,7 @@ var production = {};
 /**
 *	CONSTANTS
 */
-production.RESOURCE_AMOUNT_PER_GATHERING_ACTION = 2;
+production.RESOURCE_AMOUNT_PER_GATHERING_ACTION = 1;
 production.BUILDINGS_QUEUE_MAX_SIZE = 5;
 production.REPAIRING_SPEED = 5;
 
