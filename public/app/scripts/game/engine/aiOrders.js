@@ -9,9 +9,22 @@ aiOrders.update = function(game, player) {
     this.harvest(game, player, playerID);
     this.trainHarvesters(game, playerID);
     this.trainSoldiers(game, player, playerID);
-    this.buildRax(game, player, playerID);
+    // count buildings
+    var doIHaveATownHall = false;
+    var nbCaserns = 0
+    for (var i in game.buildings) {
+        var building = game.buildings[i];
+        if (building.o == player.o) {
+            if (building.t == gameData.ELEMENTS[gameData.FAMILIES.building][player.r].hq.t) {
+                doIHaveATownHall = true;
+            } else if (building.t == gameData.ELEMENTS[gameData.FAMILIES.building][player.r].casern.t) {
+                nbCaserns++;
+            }
+        }
+    }
+    this.buildRax(game, player, playerID, nbCaserns);
     this.finishBuildings(game, playerID);
-    this.buildTownHall(game, player, playerID);
+    this.buildTownHall(game, player, playerID, doIHaveATownHall);
     this.shoudIAttack(game, playerID);
 };
 
@@ -25,9 +38,9 @@ aiOrders.update = function(game, player) {
 /**
  *      Build Rax
  */
-aiOrders.buildRax = function(game, player, playerID) {
+aiOrders.buildRax = function(game, player, playerID, nbCaserns) {
     var rax = gameData.ELEMENTS[gameData.FAMILIES.building][player.r].casern;
-    if (player.re[0] > rax.needs[0].value && player.re[1] > rax.needs[1].value) {
+    if (production.canBuyIt(game.players, playerID, rax)) {
         var worker = null;
         var n = 0;
         for (var n in game.gameElements.unit) {
@@ -41,24 +54,23 @@ aiOrders.buildRax = function(game, player, playerID) {
         }
         var pos = worker.p;
         var i = 0;
-        try {
-            for (var i = 0; i < 10; i++) {
-                pos = worker.p;
-                order.move(game, [worker], parseInt(Math.random() * game.grid[0].length - 1), parseInt(Math.random() * game.grid.length - 1), true);
-                var tilesAround = tools.getFreeTilesAroundElements(game, worker);
-                for (var n in tilesAround) {
-                    var neighbors = tools.getNeighbors(game.grid, pos.x, pos.y);
-                    for (var j in neighbors) {
-                        pos = neighbors[j];
-                        if (this.canBeBuiltHere(game, pos, rax)) {
-                            order.buildThatHere(game, [worker.id], rax, pos.x, pos.y, true); 
+        for (var i = 0; i < 10; i++) {
+            pos = worker.p;
+            order.move(game, [worker], parseInt(Math.random() * game.grid[0].length - 1), parseInt(Math.random() * game.grid.length - 1), true);
+            var tilesAround = tools.getFreeTilesAroundElements(game, worker);
+            for (var n in tilesAround) {
+                var neighbors = tools.getNeighbors(game.grid, pos.x, pos.y);
+                for (var j in neighbors) {
+                    pos = neighbors[j];
+                    if (this.canBeBuiltHere(game, pos, rax)) {
+                        if (nbCaserns > 0 && Math.random() < 0.5) { // build towers sometimes 
+                            order.buildThatHere(game, [worker.id], gameData.ELEMENTS[gameData.FAMILIES.building][player.r].tower, pos.x, pos.y, true); 
+                        } else {
+                            order.buildThatHere(game, [worker.id], rax, pos.x, pos.y, true);     
                         }
                     }
                 }
             }
-        }
-        catch(err) {
-            return; //??!!! :'(
         }
     }
 };
@@ -67,14 +79,14 @@ aiOrders.buildRax = function(game, player, playerID) {
 /**
  *      Build Town Hall
  */
-aiOrders.buildTownHall = function(game, player, playerID) {
+aiOrders.buildTownHall = function(game, player, playerID, doIHaveATownHall) {
     var townHall = gameData.ELEMENTS[gameData.FAMILIES.building][player.r].hq;
-    if (player.re[0] > townHall.needs[0].value && player.re[1] > townHall.needs[1].value && player.pop.current > 20) {
+    if (production.canBuyIt(game.players, playerID, townHall) && (player.pop.current > 20 || !doIHaveATownHall)) {
         var worker = null;
         var n = 0;
         for (var n in game.gameElements.unit) {
             var unit = game.gameElements.unit[n];
-            if (this.isHarvestingOrIdleWorker(unit, playerID)) {
+            if (this.isHarvestingOrIdleWorker(unit, playerID) || !doIHaveATownHall) {
                 worker = unit;
             }
         }
@@ -83,24 +95,19 @@ aiOrders.buildTownHall = function(game, player, playerID) {
         }
         var pos = worker.p;
         var i = 0;
-        try {
-            for (var i = 0; i < 10; i++) {
-                pos = worker.p;
-                order.move(game, [worker], parseInt(Math.random() * game.grid[0].length - 1), parseInt(Math.random() * game.grid.length - 1), true);
-                var tilesAround = tools.getFreeTilesAroundElements(game, worker);
-                for (var n in tilesAround) {
-                    var neighbors = tools.getNeighbors(game.grid, pos.x, pos.y);
-                    for (var j in neighbors) {
-                        pos = neighbors[j];
-                        if (this.canBeBuiltHere(game, pos, townHall)) {
-                            order.buildThatHere(game, [worker.id], townHall, pos.x, pos.y, true); 
-                        }
+        for (var i = 0; i < 10; i++) {
+            pos = worker.p;
+            order.move(game, [worker], parseInt(Math.random() * game.grid[0].length - 1), parseInt(Math.random() * game.grid.length - 1), true);
+            var tilesAround = tools.getFreeTilesAroundElements(game, worker);
+            for (var n in tilesAround) {
+                var neighbors = tools.getNeighbors(game.grid, pos.x, pos.y);
+                for (var j in neighbors) {
+                    pos = neighbors[j];
+                    if (this.canBeBuiltHere(game, pos, townHall)) {
+                        order.buildThatHere(game, [worker.id], townHall, pos.x, pos.y, true); 
                     }
                 }
             }
-        }
-        catch(err) {
-            return; //??!!! :'(
         }
     }
 };
@@ -111,7 +118,7 @@ aiOrders.buildTownHall = function(game, player, playerID) {
  */
 aiOrders.buildHouses = function(game, player, playerID) {
     var house = gameData.ELEMENTS[gameData.FAMILIES.building][player.r].house;
-    if (player.re[0] > house.needs[0].value && player.pop.current > player.pop.max - 8) {
+    if (production.canBuyIt(game.players, playerID, house) && player.pop.current > player.pop.max - 3) {
         var worker = null;
         var n = 0;
         for (var n in game.gameElements.unit) {
@@ -126,25 +133,20 @@ aiOrders.buildHouses = function(game, player, playerID) {
         }
         var pos = worker.p;
         var i = 0;
-        try {
-            for (var i = 0; i < 10; i++) {
-                order.move(game, [worker], parseInt(Math.random() * game.grid[0].length - 1), parseInt(Math.random() * game.grid.length - 1), false);
-                var tilesAround = tools.getFreeTilesAroundElements(game, worker);
-                for (var n in tilesAround) {
-                    pos = tilesAround[n];
-                    var neighbors = tools.getNeighbors(game.grid, pos.x, pos.y);
-                    for (var j in neighbors) {
-                        pos = neighbors[j];
-                        if (this.canBeBuiltHere(game, pos, house)) {
-                            order.buildThatHere(game, [worker.id], house, pos.x, pos.y, false); 
-                            return;
-                        }
+        for (var i = 0; i < 10; i++) {
+            order.move(game, [worker], parseInt(Math.random() * game.grid[0].length - 1), parseInt(Math.random() * game.grid.length - 1), false);
+            var tilesAround = tools.getFreeTilesAroundElements(game, worker);
+            for (var n in tilesAround) {
+                pos = tilesAround[n];
+                var neighbors = tools.getNeighbors(game.grid, pos.x, pos.y);
+                for (var j in neighbors) {
+                    pos = neighbors[j];
+                    if (this.canBeBuiltHere(game, pos, house)) {
+                        order.buildThatHere(game, [worker.id], house, pos.x, pos.y, false); 
+                        return;
                     }
                 }
             }
-        }
-        catch(err) {
-            return; // ?!?? :-(
         }
     }
 };
@@ -157,12 +159,12 @@ aiOrders.buildHouses = function(game, player, playerID) {
 aiOrders.finishBuildings = function(game, playerID) {
     for (var n in game.gameElements.building) {
         var building = game.gameElements.building[n];
-        if (building.o == playerID && building.l < 2) { // building with 1 HP
+        if (building.o == playerID && building.cp < 100) { // building with 1 HP
             var worker = null;
             var i = 0;
             for (var i in game.gameElements.unit) {
                 var unit = game.gameElements.unit[i];
-                if (this.isHarvestingOrIdleWorker(unit, playerID)) {
+                if (this.isIdleWorker(unit, playerID)) {
                     worker = unit;
                 }
             }
@@ -208,8 +210,7 @@ aiOrders.trainSoldiers = function(game, player, playerID) {
             if (building.q.length < 2) { // Don't queue soldiers, it's useless
                 if (player.re[1] < 200) { // Train Bowman
                     order.buy(game, [building.id], gameData.ELEMENTS[gameData.FAMILIES.unit][building.r].baseUnit2);
-                }
-                else { // Train Knight
+                } else { // Train Swordsman
                     order.buy(game, [building.id], gameData.ELEMENTS[gameData.FAMILIES.unit][building.r].baseUnit1);
                 }
             }
@@ -232,19 +233,20 @@ aiOrders.harvest = function(game, player, playerID) {
     }
     // Gather Gold
     for (var i in idleWorkers) {
-        if (player.re[1] < player.re[0] || (player.re[1] < 102 && player.re[0] > 80)) {// Gather Gold
-            var nearestHarvestable = tools.getNearestStuff(game, idleWorkers[i], gameData.FAMILIES.land, 1, null, true);
+        if (player.re[0] <= player.re[1] || player.re[0] < 100 && player.re[1] > 80 || player.re[0] < 50) {// Gather Gold
+            var nearestHarvestable = tools.getNearestStuff(game, idleWorkers[i], gameData.FAMILIES.land, gameData.RESOURCES.gold.id, null, true);
             if (nearestHarvestable != null) {
-                order.gather(game, [idleWorkers[i]], tools.getNearestStuff(game, idleWorkers[i], gameData.FAMILIES.land, 1, null, true), true);
+                order.gather(game, [idleWorkers[i]], tools.getNearestStuff(game, idleWorkers[i], gameData.FAMILIES.land, gameData.RESOURCES.gold.id, null, true), true);
             }
         }
         else {// Gather Wood
-            var nearestHarvestable = tools.getNearestStuff(game, idleWorkers[i], gameData.FAMILIES.land, 1, null, true);
+            var nearestHarvestable = tools.getNearestStuff(game, idleWorkers[i], gameData.FAMILIES.land, gameData.RESOURCES.wood.id, null, true);
             if (nearestHarvestable != null) {
-                order.gather(game, [idleWorkers[i]], tools.getNearestStuff(game, idleWorkers[i], gameData.FAMILIES.land, 0, null, true), true);
+                order.gather(game, [idleWorkers[i]], tools.getNearestStuff(game, idleWorkers[i], gameData.FAMILIES.land, gameData.RESOURCES.wood.id, null, true), true);
             }
         }
     }
+
 };
 
 
@@ -259,18 +261,18 @@ aiOrders.harvest = function(game, player, playerID) {
 /**
 *   Is there something under any part of this element ?
 */
-aiOrders.canBeBuiltHere = function (building) {
+aiOrders.canBeBuiltHere = function (game, pos, building) {
+    building.p = pos;
     var point1 = tools.getPartPosition(building, 0, 0);
     var point2 = {
         x : point1.x + building.shape[0].length - 1,
         y : point1.y + building.shape.length - 1
     };
-
     for (var i = point1.x; i <= point2.x; i++) {
         for (var j = point1.y; j <= point2.y; j++) {
-            if (i == 0 || j == 0 || gameContent.grid[i] == null || gameContent.grid[i][j] == null 
-                || i == gameContent.grid[0].length - 1 || j == gameContent.grid.length - 1
-                || gameContent.grid[i][j] > 0 || gameSurface.fogOfWarMatrix[i] != null && !gameSurface.fogOfWarMatrix[i][j]) {
+            if (i == 0 || j == 0 || game.grid[i] == null || game.grid[i][j] == null 
+                || i == game.grid[0].length - 1 || j == game.grid.length - 1
+                || game.grid[i][j].c > 0) {
                 return false;
             }
         }
@@ -296,7 +298,7 @@ aiOrders.isIdleWorker = function(unit, playerID) {
  */
 aiOrders.isHarvestingOrIdleWorker = function(unit, playerID) {
     var unitData = tools.getElementData(unit);
-    if (unit.o == playerID && unitData.isBuilder && (unit.a == null || unit.a.type != 4)) {
+    if (unit.o == playerID && unitData.isBuilder && (unit.a == null || unit.a.type == action.ACTION_TYPES.gather)) {
         return true;
     }
     return false;

@@ -14,6 +14,8 @@ AI.searchForNewResources = function (game, builder, resourceType) {
 		builder.a = new gameData.Order(action.ACTION_TYPES.gather, null, nearestResource.id, resourceType);
 	} else {
 		builder.a = null;
+		builder.pa = [];
+		builder.fl = gameData.ELEMENTS_FLAGS.nothing;
 	}
 	
 }

@@ -6,7 +6,7 @@ var userInput = {};
 */
 userInput.CAN_BE_BUILT_HERE = 10;
 userInput.CANNOT_BE_BUILT_HERE = 1;
-userInput.DOUBLE_CLICK_RADIUS_SIZE = 15;
+userInput.DOUBLE_CLICK_RADIUS_SIZE = 25;
 
 
 /**
@@ -76,6 +76,11 @@ userInput.doSelect = function (x, y, isCtrlKey, isShiftKey) {
 				}
 			}
 		}
+
+		// debug
+		// if (gameContent.selected.length > 0) {
+		// 	console.log(utils.getElementFromId(gameContent.selected[0]));
+		// }
 
 	  	return true;
 

@@ -6,7 +6,7 @@ var gameLogic = {};
 */
 gameLogic.FREQUENCY = 4;
 gameLogic.OFFLINE_FREQUENCY = 4;
-gameLogic.AI_FREQUENCY = 6;
+gameLogic.AI_FREQUENCY = 10;
 
 
 /**
