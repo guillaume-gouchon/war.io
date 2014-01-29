@@ -339,13 +339,13 @@ function requestFullScreen() {
 						|| (document.mozFullScreen || document.webkitIsFullScreen);
 	var docElm = document.documentElement;
 	if (!isInFullScreen) {
-	    if (docElm.requestFullscreen) {
-	        docElm.requestFullscreen();
+		if (docElm.webkitRequestFullScreen) {
+	        docElm.webkitRequestFullscreen();
 	    } else if (docElm.mozRequestFullScreen) {
 	        docElm.mozRequestFullScreen();
-	    } else if (docElm.webkitRequestFullScreen) {
-	        docElm.webkitRequestFullScreen();
-	    }
+	    } else if (docElm.requestFullscreen) {
+	        docElm.requestFullscreen();
+	    } 
 	}
 }
 
