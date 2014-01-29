@@ -178,6 +178,8 @@ gameManager.updateJoinableGamesList = function (data) {
 
 		socketManager.joinGame(gameManager.playerId, gameManager.playerName, gameId, armyId);
 
+		requestFullScreen();
+
 		removeWebsiteDom();
 	});
 

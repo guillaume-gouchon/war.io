@@ -124,7 +124,7 @@ var chibre = 0;
 gameSurface.init = function () {
 	this.clock = new THREE.Clock();
 
-	$('#loadingLabel').html('Loading');
+	$('#labelLoading').html('Loading');
 
 	scene = new THREE.Scene();
 
@@ -408,7 +408,7 @@ gameSurface.createScene = function () {
 *	Initializes the height map and textures related
 */
 gameSurface.initHeightMap = function () {
-	var bumpTexture = new THREE.ImageUtils.loadTexture( this.MODELS_PATH + 'heightmap.png' );
+	var bumpTexture = new THREE.ImageUtils.loadTexture( this.MODELS_PATH + 'heightmap-' + gameContent.map.size.x + '.png' );
 	bumpTexture.wrapS = bumpTexture.wrapT = THREE.RepeatWrapping; 
 	// magnitude of normal displacement
 	this.bumpScale = 100.0;
@@ -451,7 +451,7 @@ gameSurface.initHeightMap = function () {
     this.planeSurface.position.z = -3;
 
 	var img = new Image(); 
-	img.src = this.MODELS_PATH + "heightmap.png";
+	img.src = this.MODELS_PATH + "heightmap-" + gameContent.map.size.x + ".png";
 	img.onload = function () {
 		gameSurface.setHeightData(img);
 		scene.add( gameSurface.planeSurface );

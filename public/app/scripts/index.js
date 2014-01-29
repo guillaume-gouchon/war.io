@@ -106,7 +106,7 @@
 		$('#newGame').modal('show');
 	});
 
-	// tutorial button
+	// quick game button
 	// $(document).ready(function() {
 	$('#tutorialButton').click(function () {
 		soundManager.playSound(soundManager.SOUNDS_LIST.mainButton);
@@ -123,9 +123,11 @@
 		var aiPlayers = [gameData.RACES.tomatoes.id];
 		var game = gameManager.createGameObject(gameManager.playerId, gameManager.playerName, armyId, mapType, 
 									  				mapSize, initialResources, vegetation, victoryCondition, nbPlayers, aiPlayers);
-		// launch tutorial
-		gameManager.startOfflineGame(game);
+		
+		requestFullScreen();
 
+		// launch quick game
+		gameManager.startOfflineGame(game);
 		removeWebsiteDom();
 	});
 
@@ -158,6 +160,8 @@
 		} else {
 			socketManager.createNewGame(game);	
 		}
+
+		requestFullScreen();
 
 		removeWebsiteDom();
 	});
@@ -329,6 +333,21 @@ $('a[data-toggle="tab"]').on('shown', function (e) {
 	    background: '-webkit-radial-gradient(center, ellipse cover, #3b423c 1%,#000000 100%)' /* Chrome10+,Safari5.1+ */
 	});
 });
+
+function requestFullScreen() {
+	var isInFullScreen = (document.fullScreenElement && document.fullScreenElement !== null) 
+						|| (document.mozFullScreen || document.webkitIsFullScreen);
+	var docElm = document.documentElement;
+	if (!isInFullScreen) {
+	    if (docElm.requestFullscreen) {
+	        docElm.requestFullscreen();
+	    } else if (docElm.mozRequestFullScreen) {
+	        docElm.mozRequestFullScreen();
+	    } else if (docElm.webkitRequestFullScreen) {
+	        docElm.webkitRequestFullScreen();
+	    }
+	}
+}
 
 // // animations
 // $('.rock6').hover(function() {

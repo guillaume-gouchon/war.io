@@ -49,6 +49,7 @@
 			  		<!-- <div class="customRadio" data-name="armies" data-army="1">Lemons</div> -->
 			  	</div>
 		  		<div id="music" class="sprite">Off</div>
+				<div class="helpButton" href="#helpModal" data-toggle="modal" title="Help"><img alt="help" src="assets/GUI/ic_help.png"/> Help</div>
 		  	</header>
 		  	<div id="websiteLoading" class="fullScreen">
 		  		<div><img src="assets/loading.gif"></div>
@@ -218,7 +219,6 @@
 				  			<td class="name">
 				  				Sonia Lahcene
 					  			<span class="label label-important">Illustrations</span>
-					  			<span class="label label-inverse">Marketing</span>
 					  		</td>
 				  		</tr>
 			  		</table>
@@ -287,8 +287,9 @@
 
 			<div id="chat" class="hide">
 				<input class="input-xxlarge" type="text" placeholder="chat..."/>
-				<p>ENABLE SOUND&nbsp;&nbsp;&nbsp;/soundon&nbsp;&nbsp;&nbsp;OR&nbsp;&nbsp;&nbsp;olivier !</p>
-				<p>DISABLE SOUND&nbsp;&nbsp;&nbsp;/soundoff&nbsp;&nbsp;&nbsp;OR&nbsp;&nbsp;&nbsp;paranormalement</p>
+				<p>DISPLAY HELP&nbsp;&nbsp;&nbsp;/help</p>
+				<p>ENABLE SOUND&nbsp;&nbsp;&nbsp;/soundon</p>
+				<p>DISABLE SOUND&nbsp;&nbsp;&nbsp;/soundoff</p>
 				<p>QUIT&nbsp;&nbsp;&nbsp;/surrender</p>
 			</div>
 
@@ -322,10 +323,30 @@
 				</div>
 				<a id="returnHome" class="btn" href="">Return Home</a>
 			</div>
+
 		</div>
 
+		<div id="helpModal" class="modal hide fade" tabindex="-1" role="dialog">
+	  		<div class="modal-header">
+	  			<h3>Help</h3>
+	  		</div>
+	  		<div class="modal-body">
+	  			<p><strong>Left Click</strong> Select</p>
+	  			<p><strong>Right Click</strong> Give Orders</p>
+	  			<p><strong>Middle Click / Shift + Mouse Wheel</strong> Rotate Camera</p>
+	  			<p><strong>Mouse Wheel</strong> Zoom</p>
+	  			<p><strong>Double click</strong> Select elements of same kind</p>
+	  			<p><strong>Ctrl + Left Click</strong> Add / remove from selection</p>
+	  			<p><strong>Shift + Right Click</strong> Chain orders</p>
+	  			<p><strong>Ctrl + Number Keys</strong> Memorize selected group</p>
+	  			<p><strong>Number Keys</strong> Select memorized group</p>
+	  			<p><strong>Space</strong> Center screen on selection</p>
+	  			<p><strong>Enter</strong> Open / close chat</p>
+	  		</div>
+  		</div>
+
 		<div id="loadingScreen" class="fullScreen easeTransition hide" >
-			<div id="loadingLabel">
+			<div id="loadingLabelLayout">
 		  		<span id="labelLoading"></span>
 		  		<span class="one">.</span>
 		  		<span class="two">.</span>

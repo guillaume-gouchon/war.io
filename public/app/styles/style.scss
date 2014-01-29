@@ -156,6 +156,8 @@ header {
     }
 
     #music {
+        float: right;
+        width: 30px;
         color: #C41616;
         font-size: 13px;
         cursor: pointer;
@@ -523,7 +525,7 @@ button.red:hover {
     background-color: #000;
     z-index: 100000;
 
-    #loadingProgress, #loadingLabel {
+    #loadingProgress, #loadingLabelLayout {
         position: relative;
         top: 25%;
     }
@@ -947,4 +949,32 @@ button.red:hover {
 
 #errorWebGL {
     text-align: center;
+}
+
+.helpButton {
+    float: left;
+    cursor: pointer;
+    line-height: 15px;
+    font-size: 13px;
+    color: #ddd;
+    margin-top: 3px;
+
+    img {
+        height: 16px;
+        width: 16px;
+    }
+}
+.helpButton:hover {
+    opacity: 0.6;
+}
+#helpModal {
+    text-align:right;
+
+    strong {
+        font-weight: normal;
+        font-size: 1.1em;
+        margin-right: 10px;
+        color: #922;
+        float: left;
+    }
 }

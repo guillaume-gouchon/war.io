@@ -147,16 +147,18 @@ userInput.pressEnterKey = function () {
 		var message = $('input', '#chat').val();
 
 		if (message != '') {
-			if (message == 'olivier !' || message == '/soundon') {
+			if (message == '/soundon') {
 				gameManager.musicEnabled = true;
 				soundManager.playMusic();
 				gameSurface.showMessage(gameSurface.MESSAGES.musicEnabled);
-			} else if (message == 'paranormalement' || message == '/soundoff') {
+			} else if (message == '/soundoff') {
 				gameManager.musicEnabled = false;
 				soundManager.stopMusic();
 				gameSurface.showMessage(gameSurface.MESSAGES.musicDisabled);
 			} else if (message == '/surrender') {
 				gameManager.sendOrderToEngine(order.TYPES.surrender, [gameContent.myArmy]);
+			} else if (message == '/help') {
+				$('#helpModal').modal('show');
 			} else {
 				gameManager.sendOrderToEngine(order.TYPES.chat, [gameContent.myArmy, $('input', '#chat').val()]);
 			}
