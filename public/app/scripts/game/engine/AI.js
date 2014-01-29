@@ -7,6 +7,9 @@ var AI = {};
 AI.searchForNewResources = function (game, builder, resourceType) {
 
 	var nearestResource = tools.getNearestStuff(game, builder, gameData.FAMILIES.land, resourceType);
+	if (nearestResource == null && resourceType == gameData.RESOURCES.wood.id) {// builders can gather wood far from the town hall
+		nearestResource = tools.getNearestStuff(game, builder, gameData.FAMILIES.land, resourceType, null, true);
+	}
 	if(nearestResource != null) {
 		builder.a = new gameData.Order(action.ACTION_TYPES.gather, null, nearestResource.id, resourceType);
 	} else {

@@ -213,7 +213,7 @@ tools.getNearestStuff = function (game, fromElement, family, type, rank, noLimit
 				if (distance < min) {
 					min = distance;
 					nearestStuff = element;
-					if (min < 5) { return nearestStuff; }
+					if (min < 4) { return nearestStuff; }
 				}
 			}  
 		}

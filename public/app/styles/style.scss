@@ -542,8 +542,8 @@ button.red:hover {
 }
 .three {
     opacity: 0;
-    -webkit-animation: dot 1s linear 0.02s infinite;
-    -moz-animation: dot 1s linear 0.02s infinite;
+    -webkit-animation: dot 1s linear 0.2s infinite;
+    -moz-animation: dot 1s linear 0.2s infinite;
 }
 @-webkit-keyframes dot {
       0% { opacity: 0; }
@@ -551,6 +551,11 @@ button.red:hover {
     100% { opacity: 1; }
 }
 @-moz-keyframes dot {
+      0% { opacity: 0; }
+     50% { opacity: 0; }
+    100% { opacity: 1; }
+}
+@keyframes dot {
       0% { opacity: 0; }
      50% { opacity: 0; }
     100% { opacity: 1; }
@@ -789,11 +794,19 @@ button.red:hover {
     0% {left: 150%;}
     100% {left: -150%;}
 }
+@keyframes moveClouds {
+    0% {left: 150%;}
+    100% {left: -150%;}
+}
 @-webkit-keyframes moveMountains {
     from { background-position: 0 0; }
     to { background-position: -1269px 0; }
 }
 @-moz-keyframes moveMountains {
+    from { background-position: 0 0; }
+    to { background-position: -1269px 0; }
+}
+@keyframes moveMountains {
     from { background-position: 0 0; }
     to { background-position: -1269px 0; }
 }
@@ -805,6 +818,10 @@ button.red:hover {
      from {-moz-transform: translateY(0px);}
      to   {-moz-transform: translateY(6px);}
 }
+@keyframes bounce {
+     from {-moz-transform: translateY(0px);}
+     to   {-moz-transform: translateY(6px);}
+}
 @-webkit-keyframes moveBirds {
      from {-webkit-transform: translateY(0px);}
      to   {-webkit-transform: translateY(40px);}
@@ -813,11 +830,19 @@ button.red:hover {
      from {-moz-transform: translateY(0px);}
      to   {-moz-transform: translateY(40px);}
 }
+@keyframes moveBirds {
+     from {-moz-transform: translateY(0px);}
+     to   {-moz-transform: translateY(40px);}
+}
 @-webkit-keyframes leafFall {
      from {-webkit-transform: translateY(0px) rotate(0deg) skew(0deg);}
      to   {-webkit-transform: translateY(100px) rotate(100deg) skew(30deg);}
 }
 @-moz-keyframes leafFall {
+     from {-moz-transform: translateY(0px) rotate(0deg) skew(0deg);}
+     to   {-moz-transform: translateY(100px) rotate(100deg) skew(30deg);}
+}
+@keyframes leafFall {
      from {-moz-transform: translateY(0px) rotate(0deg) skew(0deg);}
      to   {-moz-transform: translateY(100px) rotate(100deg) skew(30deg);}
 }
@@ -974,7 +999,7 @@ button.red:hover {
         font-weight: normal;
         font-size: 1.1em;
         margin-right: 10px;
-        color: #922;
+        color: #C41616;
         float: left;
     }
 }

@@ -687,7 +687,7 @@ gameSurface.addElement = function (element) {
 	// building in construction
 	if (element.f == gameData.FAMILIES.building) {
 		if (element.cp < 100) {
-			object.position.z = -5;
+			object.position.z = gameSurface.convertGamePositionToScenePosition({x: element.p.x, y: element.p.y}).z + this.BUILDING_INIT_Z;
 		}
 	}
 
@@ -729,8 +729,15 @@ gameSurface.updateElement = function (element) {
 		var dz = this.getZPositionFromHeightMap(element.p) - this.getZPositionFromHeightMap(gameElement.p);
 
 		if (dx != 0 || dy != 0) {
+			// rotate and move element because of movement
 			this.updateOrientation(object, dx, dy);
 			this.extrapol(object, dx, dy, dz);
+		} else if (element.a != null && element.a.id != null) {
+			// rotate element because of action
+			var target = utils.getElementFromId(element.a.id);
+			if (target != null) {
+				this.updateOrientation(object, target.p.x - element.p.x, target.p.y - element.p.y);
+			}
 		}
 	}
 
@@ -739,7 +746,7 @@ gameSurface.updateElement = function (element) {
 	if (element.f == gameData.FAMILIES.building) {
 		if (element.cp < 100) {
 			// update construction progress
-			object.position.z = gameSurface.convertGamePositionToScenePosition({x: element.p.x, y: element.p.y}).z + (100 - element.cp) / 100 * (this.BUILDING_INIT_Z);
+			object.position.z = gameSurface.convertGamePositionToScenePosition({x: element.p.x, y: element.p.y}).z + (100 - element.cp) / 100 * this.BUILDING_INIT_Z;
 		} else {
 			object.position.z = gameSurface.convertGamePositionToScenePosition({x: element.p.x, y: element.p.y}).z;
 			if (rank.isAlly(gameContent.players, gameContent.myArmy, element)) {

@@ -2,7 +2,7 @@
 *	The different races available.
 */
 gameData.RACES = {
-	tomatoes : {
+	human : {
 		id: 0,
 		name : 'Human Alliance',
 		image : 'human.png'
@@ -100,15 +100,15 @@ gameData.BUTTONS = {
 	},
 	back : {
 		id : 'back',
-		tooltip: 'Back (ESC)',
-		shortcut: 27,
+		tooltip: 'Back (B)',
+		shortcut: 66,
 		g : 'ic_back', 
 		isEnabled : true
 	},
 	cancel : {
 		id : 'cancel',
-		tooltip: 'Cancel (ESC)',
-		shortcut: 27,
+		tooltip: 'Cancel (C)',
+		shortcut: 67,
 		g : 'ic_cancel', 
 		isEnabled : true
 	}

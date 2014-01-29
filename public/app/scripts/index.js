@@ -52,12 +52,12 @@
 
 	// init armies buttons
 	$('.customRadio', '#armies').click(function () {
-		if ($(this).attr('data-army') == gameData.RACES.tomatoes.id) {
-			$('#tomatoes').removeClass('hideI');
+		if ($(this).attr('data-army') == gameData.RACES.human.id) {
+			$('#human').removeClass('hideI');
 			$('#lemons').addClass('hideI');
 		} else if ($(this).attr('data-army') == gameData.RACES.lemons.id) {
 			$('#lemons').removeClass('hideI');
-			$('#tomatoes').addClass('hideI');
+			$('#human').addClass('hideI');
 		}
 	});
 
@@ -120,7 +120,7 @@
 		var vegetation = gameData.VEGETATION_TYPES.standard.id;
 		var victoryCondition = $('#vc1').val();
 		var nbPlayers = 2;
-		var aiPlayers = [gameData.RACES.tomatoes.id];
+		var aiPlayers = [gameData.RACES.human.id];
 		var game = gameManager.createGameObject(gameManager.playerId, gameManager.playerName, armyId, mapType, 
 									  				mapSize, initialResources, vegetation, victoryCondition, nbPlayers, aiPlayers);
 		

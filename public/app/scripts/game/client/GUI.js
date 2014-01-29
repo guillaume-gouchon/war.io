@@ -405,7 +405,7 @@ GUI.createToolbarButton = function (button) {
 */
 GUI.selectButton = function (button) {
 	this.unselectButtons();
-	$('#toolbar' + button.buttonId).addClass('selected');
+	$('button[data-id="' + button.id + '"]', '#toolbar').addClass('selected');
 }
 
 

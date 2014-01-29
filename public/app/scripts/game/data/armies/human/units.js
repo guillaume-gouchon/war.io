@@ -1,10 +1,10 @@
-gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.tomatoes.id] = {
+gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.human.id] = {
 	builder: {
 		name: 'Builder',
 		tooltip: 'Builder (B)',
 		shortcut: 66,
 		f: gameData.FAMILIES.unit,
-		r: gameData.RACES.tomatoes.id,
+		r: gameData.RACES.human.id,
 		t: 0,
 		shape: [[1]],
 		speed: 1,
@@ -32,10 +32,10 @@ gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.tomatoes.id] = {
 	},
 	baseUnit1: {
 		name: 'Swordsman',
-		tooltip: 'Swordsman (W)',
-		shortcut: 87,
+		tooltip: 'Swordsman (S)',
+		shortcut: 83,
 		f: gameData.FAMILIES.unit,
-		r: gameData.RACES.tomatoes.id,
+		r: gameData.RACES.human.id,
 		t: 1,
 		shape: [[1]],
 		speed: 1,
@@ -57,14 +57,14 @@ gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.tomatoes.id] = {
 		vision: 12,
 		lifeBarWidth: 8,
 		passiveSkill: {},
-		techs: [gameData.ELEMENTS[gameData.FAMILIES.research][gameData.RACES.tomatoes.id].leatherarmor.t, gameData.ELEMENTS[gameData.FAMILIES.research][gameData.RACES.tomatoes.id].bastardsword.t]
+		techs: [gameData.ELEMENTS[gameData.FAMILIES.research][gameData.RACES.human.id].leatherarmor.t, gameData.ELEMENTS[gameData.FAMILIES.research][gameData.RACES.human.id].bastardsword.t]
 	},
 	baseUnit2: {
 		name: 'Bowman',
-		tooltip: 'Bowman (Q)',
-		shortcut: 81,
+		tooltip: 'Bowman (W)',
+		shortcut: 87,
 		f: gameData.FAMILIES.unit,
-		r: gameData.RACES.tomatoes.id,
+		r: gameData.RACES.human.id,
 		t: 2,
 		shape: [[1]],
 		speed: 1,
@@ -86,14 +86,14 @@ gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.tomatoes.id] = {
 		vision: 15,
 		lifeBarWidth: 8,
 		passiveSkill: {},
-		techs: [gameData.ELEMENTS[gameData.FAMILIES.research][gameData.RACES.tomatoes.id].longbow.t]
+		techs: [gameData.ELEMENTS[gameData.FAMILIES.research][gameData.RACES.human.id].longbow.t]
 	},
 	specialUnit1: {
 		name: 'Knight',
 		tooltip: 'Knight (K)',
 		shortcut: 75,
 		f: gameData.FAMILIES.unit,
-		r: gameData.RACES.tomatoes.id,
+		r: gameData.RACES.human.id,
 		t: 3,
 		shape: [[1]],
 		speed: 2,
@@ -115,6 +115,6 @@ gameData.ELEMENTS[gameData.FAMILIES.unit][gameData.RACES.tomatoes.id] = {
 		vision: 12,
 		lifeBarWidth: 8,
 		passiveSkill: {},
-		techs: [gameData.ELEMENTS[gameData.FAMILIES.research][gameData.RACES.tomatoes.id].spikedmace.t]
+		techs: [gameData.ELEMENTS[gameData.FAMILIES.research][gameData.RACES.human.id].spikedmace.t]
 	}
 };

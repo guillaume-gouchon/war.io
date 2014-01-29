@@ -365,12 +365,14 @@ gameSurface.animateSelectionCircle = function (elementId) {
 *	Returns the color of the life bar.
 */
 gameSurface.getLifeBarColor = function (lifeRatio) {
-	if (lifeRatio < 0.3) {
-		return 0xff0000;
-	} else if (lifeRatio < 0.6) {
-		return 0xe3e314;
+	if (lifeRatio < 0.25) {
+		return 0xcc0000;
+	} else if (lifeRatio < 0.5) {
+		return 0xFF7700;
+	} else if (lifeRatio < 0.75) {
+		return 0xFFE100;
 	} else {
-		return 0x00ff00;
+		return 0x299a0b;
 	}
 }
 /**

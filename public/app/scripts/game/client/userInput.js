@@ -174,6 +174,7 @@ userInput.pressEnterKey = function () {
 }
 
 userInput.pressSpaceKey = function () {
+	if (this.isChatWindowOpen) { return }
 	if (gameContent.selected.length > 0) {
 		gameSurface.centerCameraOnElement(utils.getElementFromId(gameContent.selected[0]));
 	}
@@ -206,16 +207,18 @@ userInput.onMouseUp = function () {
 * 	@param button : the button that was clicked
 */
 userInput.clickSpecialButton = function (buttonId) {
-
 	soundManager.playSound(soundManager.SOUNDS_LIST.button);
 	if (buttonId == gameData.BUTTONS.build.id) {
 		// build something
+		this.highlightButton(buttonId);
 		GUI.showBuildings = true;
 	} else if (buttonId == gameData.BUTTONS.back.id) {
 		// back button
+		this.highlightButton(buttonId);
 		GUI.showBuildings = false;
 	} else if (buttonId == gameData.BUTTONS.cancel.id) {
 		// cancel construction
+		this.highlightButton(buttonId);
 		gameManager.sendOrderToEngine(order.TYPES.cancelConstruction, [utils.getElementFromId(gameContent.selected[0]).id]);
 	} else if (GUI.showBuildings) {
 		// building
@@ -235,10 +238,17 @@ userInput.clickSpecialButton = function (buttonId) {
 			var researches = gameData.ELEMENTS[gameData.FAMILIES.research][gameContent.players[gameContent.myArmy].r];
 			elementBought = researches[('' + buttonId).substring(2)];
 		}
-		
+		this.highlightButton(buttonId);
 		gameManager.sendOrderToEngine(order.TYPES.buy, [gameContent.selected, elementBought]);
-	}
-	
+	}	
+}
+
+userInput.highlightButton = function (buttonId) {
+	var button = $('button[data-id="' + buttonId +  '"]', '#toolbar');
+	button.addClass('selected');
+	setTimeout(function () {
+		button.removeClass('selected');
+	}, 150);
 }
 
 
@@ -337,6 +347,10 @@ userInput.updateMouseIcon = function (mouseX, mouseY) {
 */
 userInput.tryBuildHere = function (isShiftKey) {
 	if(gameContent.building.canBeBuiltHere) {
+		if (isShiftKey && !production.canBuyIt(gameContent.players, gameContent.myArmy, gameContent.building)) {
+			this.leaveConstructionMode();
+			return;
+		}
 		soundManager.playSound(soundManager.SOUNDS_LIST.hammer);
 		// let's start the construction
 		gameManager.sendOrderToEngine(order.TYPES.buildThatHere,
@@ -473,21 +487,26 @@ userInput.removeSelectionRectangle = function () {
 
 
 userInput.pressStopKey = function () {
-	if (gameContent.selected.length > 0 && !GUI.showBuildings) {
+	if (this.isChatWindowOpen) { return }
+	if (gameContent.selected.length > 0) {
 		gameManager.sendOrderToEngine(order.TYPES.stop, [gameContent.selected]);
+		this.highlightButton("stop");
 	}
 }
 
 
 userInput.pressHoldKey = function () {
-	if (gameContent.selected.length > 0 && !GUI.showBuildings) {
+	if (this.isChatWindowOpen) { return }
+	if (gameContent.selected.length > 0) {
 		gameManager.sendOrderToEngine(order.TYPES.hold, [gameContent.selected]);
+		this.highlightButton("hold");
 	}
 }
 
 
 userInput.enterPatrolMode = function () {
-	if (gameContent.selected.length > 0 && !GUI.showBuildings) {
+	if (this.isChatWindowOpen) { return }
+	if (gameContent.selected.length > 0) {
 		GUI.unselectButtons();
 		$('#patrolButton').addClass('selected');
 		controls.clickMode = controls.MODES.patrol;
@@ -496,7 +515,8 @@ userInput.enterPatrolMode = function () {
 
 
 userInput.enterAttackMode = function () {
-	if (gameContent.selected.length > 0 && !GUI.showBuildings) {
+	if (this.isChatWindowOpen) { return }
+	if (gameContent.selected.length > 0) {
 		GUI.unselectButtons();
 		$('#attackButton').addClass('selected');
 		controls.clickMode = controls.MODES.attack;	
@@ -512,7 +532,7 @@ userInput.leaveSpecialClickMode = function () {
 
 
 userInput.pressHotKey = function (index, isCtrlKey) {
-
+	if (this.isChatWindowOpen) { return }
 	if (isCtrlKey) {
 
 		this.hotKeysContent[index] = [];

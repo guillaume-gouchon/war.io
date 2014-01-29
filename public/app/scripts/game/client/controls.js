@@ -382,11 +382,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 		if ( _this.enabled === false ) return;
 
 		_prevState = _state;
-
-		/*if ( _state !== STATE.NONE ) {
-			return;
-		}*/
-
+		
 		switch(event.keyCode) {
 			case 8 :// back key
 				return true;
@@ -413,20 +409,28 @@ THREE.TrackballControls = function ( object, domElement ) {
 				return false;
 				break;
 			case 83 :// S
-				userInput.pressStopKey();
-				return true;
+				if (!GUI.showBuildings) {
+					userInput.pressStopKey();
+					return true;
+				}
 				break;
 			case 72 :// H
-				userInput.pressHoldKey();
-				return true;
+				if (!GUI.showBuildings) {
+					userInput.pressHoldKey();
+					return true;
+				}
 				break;
 			case 80 :// P
-				userInput.enterPatrolMode();
-				return true;
+				if (!GUI.showBuildings) {
+					userInput.enterPatrolMode();
+					return true;
+				}
 				break;
 			case 65 :// A
-				userInput.enterAttackMode();
-				return true;
+				if (!GUI.showBuildings) {
+					userInput.enterAttackMode();
+					return true;
+				}
 				break;
 			case 49 :
 				event.preventDefault();
@@ -498,13 +502,12 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 		if ( _state === STATE.NONE ) {
 
-			_state = event.button;
+			_state = event.button;	
 
 		}
 
 		if ( _state === STATE.ROTATE_ZOOM  ) {
-
-			if (event.keyCode == 0 && !_this.noRotate) {
+			if (!_this.noRotate) {
 
 				// rotation
 				_rotateStart = _rotateEnd = _this.getMouseProjectionOnBall( event.clientX, event.clientY );
@@ -562,7 +565,7 @@ THREE.TrackballControls = function ( object, domElement ) {
 
 		if ( _state === STATE.ROTATE_ZOOM) {
 
-			if (!_this.noRotate && event.keyCode == 0) {
+			if (!_this.noRotate) {
 
 				// rotation
 				_rotateEnd = _this.getMouseProjectionOnBall( event.clientX, event.clientY );
