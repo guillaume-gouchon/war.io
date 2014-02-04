@@ -4,7 +4,7 @@ module.exports = function(app){
 
 	// get game's engine and data 
 	eval(require('fs').readFileSync('./public/dist/scripts/game.js', 'utf8'));
-
+	gameLogic.FREQUENCY = 8;
 
 	/**
 	*	Main games loop.
@@ -93,8 +93,6 @@ module.exports = function(app){
 			game.players.push(player);
 			game.sockets.push(null);
 		}
-
-		console.log(game.players)
 
 		game.nbPlayers = data.nbPlayers;
 		game.map = new gameData.Map(gameData.MAP_TYPES[Object.keys(gameData.MAP_TYPES)[data.mapType]],

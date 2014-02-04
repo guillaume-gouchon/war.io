@@ -64,6 +64,7 @@ socketManager.onDataSocket = function (data) {
 }
 
 socketManager.onGameDataSocket = function (data) {
+	console.log("Socket received !");
 	gameContent.update(data);
 }
 
