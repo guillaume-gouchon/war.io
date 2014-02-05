@@ -4,7 +4,7 @@ module.exports = function(app){
 
 	// get game's engine and data 
 	eval(require('fs').readFileSync('./public/dist/scripts/game.js', 'utf8'));
-	gameLogic.FREQUENCY = 8;
+
 
 	/**
 	*	Main games loop.
