@@ -30,7 +30,7 @@ socketManager.connect = function () {
 */
 socketManager.onDataSocket = function (data) {
 
-	switch (data.type) {
+	switch (data.type) {	
 
 		case gameData.TO_CLIENT_SOCKET.login :
 			this.sendSocketToServer(gameData.TO_SERVER_SOCKET.login, gameManager.playerId);
@@ -64,7 +64,7 @@ socketManager.onDataSocket = function (data) {
 }
 
 socketManager.onGameDataSocket = function (data) {
-	console.log("Socket received !");
+	console.log("Socket received ! Size = " + JSON.stringify(data).length / 1000 + " kb");
 	gameContent.update(data);
 }
 
