@@ -5,8 +5,7 @@ module.exports = function(app){
 	// get game's engine and data 
 	eval(require('fs').readFileSync('./public/dist/scripts/game.js', 'utf8'));
 
-	gameLogic.FREQUENCY = 10;
-
+	gameLogic.FREQUENCY = 8;
 
 	/**
 	*	Main games loop.
@@ -84,7 +83,7 @@ module.exports = function(app){
 		game.sockets = [socket];
 
 		// add creator
-		var player = new gameData.Player(data.playerId, 0, data.armyId, true);
+		var player = new gameData.Player(data.playerId, 0, data.armyId, false);
 		player.n = data.playerName;
 		game.players = [player];
 
@@ -148,7 +147,7 @@ module.exports = function(app){
 		app.gameServices.leaveSalon(socket);
 
     	// create player
-    	var player = new gameData.Player(data.playerId, game.players.length, data.armyId, true);
+    	var player = new gameData.Player(data.playerId, game.players.length, data.armyId);
     	player.n = data.playerName;
 
     	game.players.push(player);
