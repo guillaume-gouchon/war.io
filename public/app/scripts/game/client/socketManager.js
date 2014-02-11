@@ -64,7 +64,6 @@ socketManager.onDataSocket = function (data) {
 }
 
 socketManager.onGameDataSocket = function (data) {
-	console.log("Socket received ! Size = " + JSON.stringify(data).length / 1000 + " kb");
 	gameContent.update(data);
 }
 
