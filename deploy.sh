@@ -8,5 +8,5 @@ grunt build;
 
 # Restart server
 cd ..;
-forever stop app.js;
-forever -a -l node.log -o node.log -e node.log start app.js;
+forever stop warnode.js;
+forever -a -l node.log -o node.log -e node.log start warnode.js;
