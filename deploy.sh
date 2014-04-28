@@ -9,4 +9,4 @@ grunt build;
 # Restart server
 cd ..;
 forever stop warnode.js;
-forever -a -l node.log -o node.log -e node.log start warnode.js;
+forever --uuid warnode -a -l node.log -o node.log -e node.log start warnode.js;
