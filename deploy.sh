@@ -8,5 +8,5 @@ grunt build;
 
 # Restart server
 cd ..;
-forever stop warnode.js;
+sudo forever stop warnode;
 forever --uuid warnode -a -l node.log -o node.log -e node.log start warnode.js;
