@@ -3,8 +3,7 @@ module.exports = function(app){
 	app.gameServices = {};
 
 	// get game's engine and data 
-	eval(require('fs').readFileSync('./public/js/game/engine.js', 'utf8'));
-	eval(require('fs').readFileSync('./public/js/game/data.js', 'utf8'));
+	eval(require('fs').readFileSync('./public/dist/scripts/game.js', 'utf8'));
 
 
 	/**
@@ -94,8 +93,6 @@ module.exports = function(app){
 			game.players.push(player);
 			game.sockets.push(null);
 		}
-
-		console.log(game.players)
 
 		game.nbPlayers = data.nbPlayers;
 		game.map = new gameData.Map(gameData.MAP_TYPES[Object.keys(gameData.MAP_TYPES)[data.mapType]],

@@ -1,5 +1,0 @@
-/* TEAM */
-  Team Awesome
-
-/* SITE */
-  Standards: HTML5, Three.js, WebGL

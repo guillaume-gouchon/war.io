@@ -1,4 +1,9 @@
 {
-  "name" : "warnode",
-  "version" : "1.0.0"
+  "name": "warnode",
+  "version": "1.0.0",
+  "dependencies": {
+    "colors": "0.6.0-1",
+    "express": "3.3.3",
+    "socket.io": "0.9.16"
+  }
 }

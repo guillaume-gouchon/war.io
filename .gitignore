@@ -36,8 +36,5 @@ Icon?
 ehthumbs.db
 Thumbs.db
 
-rts.sublime-workspace
-rts.sublime-project
 node_modules/
-restartWarnode.sh
 config.js
