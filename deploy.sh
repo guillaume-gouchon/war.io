@@ -1,5 +1,5 @@
 #!/bin/bash
-git checkout . prod;
+git checkout .;
 git pull;
 
 # Update prod version
