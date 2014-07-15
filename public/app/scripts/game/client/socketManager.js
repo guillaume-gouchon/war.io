@@ -12,7 +12,7 @@ socketManager.socket = null;
 */
 socketManager.connect = function () {
 
-	this.socket = io.connect();
+	this.socket = io.connect("warnode.com:5000");
 
 	this.socket.on('data', function (data) {
 		socketManager.onDataSocket(data);
