@@ -5,4 +5,4 @@ server:
 nginx:
     build: ./client
     ports:
-        - "80:80"
+        - "82:80"
