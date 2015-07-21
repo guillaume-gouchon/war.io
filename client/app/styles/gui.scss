@@ -1,0 +1,559 @@
+/**
+*   MAIN 3D CANVAS
+*/
+canvas {
+	background-color: #000;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+button.selected {
+    background: #cc0000; /* Old browsers */
+    background: -moz-linear-gradient(top, #cc0000 0%, #000000 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cc0000), color-stop(100%,#000000)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #cc0000 0%,#000000 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #cc0000 0%,#000000 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #cc0000 0%,#000000 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #cc0000 0%,#000000 100%); /* W3C */
+}
+
+#game button, #game .btn {
+    cursor: url(../assets/GUI/cursor_hover.png) 0 0, auto;
+}
+
+.big {
+    font-size: 1.5em;
+}
+
+.disabled {
+    opacity: 0.3;
+}
+
+/**
+*   TOP BAR
+*/
+#topBar {
+  position: absolute;
+  top: 10px;
+  right: 25px;
+
+  #population, #resource0, #resource1 {
+    display: inline-block;
+    min-width: 65px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    vertical-align: top;
+    line-height: 26px;
+    margin-left: 30px;
+    text-shadow: 1px 1px 2px #000000;
+  }
+
+  span {
+    padding-left: 8px;
+  }
+
+  .sprite {
+    width: 25px;
+    height: 25px;
+  }
+}
+#resource0 .sprite {
+  background-image: url(../assets/GUI/ic_gold.png);
+}
+#resource1 .sprite {
+  background-image: url(../assets/GUI/ic_wood.png);
+}
+#population .sprite {
+  background-image: url(../assets/GUI/ic_pop.png);
+}
+
+
+/**
+*   BOTTOM BAR
+*/
+#bottomBar {
+  position: absolute;
+  bottom: 0px;
+  height: 120px;
+  background: #000;
+  opacity: 0.8;
+  width: 88%;
+  padding: 5px 0px 5px 0px;
+  box-shadow: -17px 5px 21px 20px #000;
+}
+#toolbar {
+  display: inline-block;
+  width: 33%;
+  padding: 5px;
+  vertical-align: top;
+
+  button {
+    padding: 5px;
+    margin: 3px;
+
+    .sprite {
+      height: 40px;
+      width: 40px;
+    }    
+  }
+
+  #specialButtons {
+    display: block;
+  }
+}
+
+#minimap {
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  width: 12%;
+  background: #000;
+  opacity: 0.8;
+  box-shadow: 12px 5px 21px 20px #000;
+}
+#listSelected {
+  display: inline-block;
+  width: 30%;
+  height: 80%;
+  vertical-align: top;
+  padding-left: 3px;
+  padding-right: 3px;
+  text-align: center;
+
+  button {
+    padding: 3px;
+    margin: 3px;
+
+    .sprite {
+      height: 40px;
+      width: 40px;
+    }
+
+    div {
+      height: 40px;
+      width: 40px;
+    }
+  }
+}
+#attackButton div {
+  background-image: url(../assets/GUI/bg_attack_btn.png);
+}
+#stopButton div {
+  background-image: url(../assets/GUI/bg_stop_btn.png);
+}
+#holdButton div {
+  background-image: url(../assets/GUI/bg_hold_btn.png);
+}
+#patrolButton div {
+  background-image: url(../assets/GUI/bg_patrol_btn.png);
+}
+
+.ic_build {
+  background-image: url(../assets/GUI/ic_build.png);
+}
+.ic_cancel {
+  background-image: url(../assets/GUI/ic_cancel.png);
+}
+.ic_back {
+  background-image: url(../assets/GUI/ic_back.png);
+}
+.ic_gold {
+  background-image: url(../assets/GUI/ic_gold20.png);
+}
+.ic_wood {
+  background-image: url(../assets/GUI/ic_wood20.png);
+}
+.hq {
+  background-image: url(../assets/GUI/ic_hq.png);
+}
+.house {
+  background-image: url(../assets/GUI/ic_house.png);
+}
+.casern {
+  background-image: url(../assets/GUI/ic_casern.png);
+}
+.factory {
+  background-image: url(../assets/GUI/ic_factory.png);
+}
+.researchlab {
+  background-image: url(../assets/GUI/ic_researchlab.png);
+}
+.tower {
+  background-image: url(../assets/GUI/ic_tower.png);
+}
+.goldmine {
+  background-image: url(../assets/GUI/ic_goldmine.png);
+}
+.tree {
+  background-image: url(../assets/GUI/ic_tree.png);
+}
+.builder {
+  background-image: url(../assets/GUI/ic_builder.png);
+}
+.swordsman {
+  background-image: url(../assets/GUI/ic_swordsman.png);
+}
+.bowman {
+  background-image: url(../assets/GUI/ic_bowman.png);
+}
+.knight {
+  background-image: url(../assets/GUI/ic_knight.png);
+}
+.bastardsword {
+  background-image: url(../assets/GUI/ic_bastardsword.png);
+}
+.leatherarmor {
+  background-image: url(../assets/GUI/ic_leatherarmor.png);
+}
+.longbow {
+  background-image: url(../assets/GUI/ic_longbow.png);
+}
+.spikedmace {
+  background-image: url(../assets/GUI/ic_spikedmace.png);
+}
+
+
+/**
+*   INFO SECTION
+*/
+#infoSelected {
+  display: inline-block;
+  height: 80%;
+  width: 30%;
+  padding: 5px;
+
+  .stat {
+    display: inline-block;
+    vertical-align: top;
+    padding: 10px;
+    text-shadow: 1px 1px 2px #000000;
+  }
+
+  .sprite {
+    height: 20px;
+    width: 20px;
+    margin-right: 5px;
+  }
+}
+#rangeStat .sprite {
+  background-image: url(../assets/GUI/ic_range.png);
+}
+#fragsStat .sprite {
+  background-image: url(../assets/GUI/ic_frag.png);
+}
+#attackStat .sprite {
+  background-image: url(../assets/GUI/ic_attack.png);
+}
+#defenseStat .sprite {
+  background-image: url(../assets/GUI/ic_defense.png);
+}
+#popStat .sprite {
+  background-image: url(../assets/GUI/ic_pop20.png);
+}
+#attackSpeedStat .sprite {
+  background-image: url(../assets/GUI/ic_attackSpeed.png);
+}
+#resourcesStatWater .sprite {
+  background-image: url(../assets/GUI/ic_gold20.png);
+}
+#resourcesStatWood .sprite {
+  background-image: url(../assets/GUI/ic_wood20.png);
+}
+#secondaryStats {
+  display: block!important;
+}
+#nameElement {
+  font-size: 22px;
+  vertical-align: middle;
+}
+#lifeElement {
+  font-size: 15px;
+  vertical-align: middle;
+  background: none;
+  margin-top: 4px;
+}
+
+
+/**
+*   BUILDINGS QUEUE
+*/
+#queueBuilding, #queueBuilding div{
+  display: inline-block;
+}
+#queueBuilding #queueProgress {
+  width: 35px;
+  vertical-align: middle;
+  margin: 9px 0px 0px 8px;
+}
+#queueBuilding button {
+  display: inline-block;
+  padding: 0px;
+  margin: 1px;
+  vertical-align: middle;
+  height: 25px;
+  width: 25px;
+  margin-top: 5px;
+
+  .sprite {
+    margin: 0px;
+    vertical-align: top;
+  }
+}
+
+
+/**
+*   SELECTED UNITS LIFE BAR COLORS
+*/
+.veryHighLife {
+  background: #299a0b; /* Old browsers */
+  background: -moz-linear-gradient(top, #299a0b 0%, #000000 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#299a0b), color-stop(100%,#000000)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #299a0b 0%,#000000 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #299a0b 0%,#000000 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #299a0b 0%,#000000 100%); /* IE10+ */
+  background: linear-gradient(to bottom, #299a0b 0%,#000000 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#299a0b', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
+}
+div.veryHighLife {
+  color: #299a0b;
+}
+.highLife {
+  background: #FFE100; /* Old browsers */
+  background: -moz-linear-gradient(top, #FFE100 0%, #000000 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#FFE100), color-stop(100%,#000000)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #FFE100 0%,#000000 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #FFE100 0%,#000000 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #FFE100 0%,#000000 100%); /* IE10+ */
+  background: linear-gradient(to bottom, #FFE100 0%,#000000 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#FFE100', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
+}
+div.highLife {
+  color: #FFE100;
+}
+.mediumLife {
+  background: #FF7700; /* Old browsers */
+  background: -moz-linear-gradient(top, #FF7700 0%, #000000 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#FF7700), color-stop(100%,#000000)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #FF7700 0%,#000000 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #FF7700 0%,#000000 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #FF7700 0%,#000000 100%); /* IE10+ */
+  background: linear-gradient(to bottom, #FF7700 0%,#000000 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#FF7700', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
+}
+div.mediumLife {
+  color: #FF7700;
+}
+.lowLife {
+  background: #cc0000; /* Old browsers */
+  background: -moz-linear-gradient(top, #cc0000 0%, #000000 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#cc0000), color-stop(100%,#000000)); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top, #cc0000 0%,#000000 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top, #cc0000 0%,#000000 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top, #cc0000 0%,#000000 100%); /* IE10+ */
+  background: linear-gradient(to bottom, #cc0000 0%,#000000 100%); /* W3C */
+}
+div.lowLife {
+  color: #cc0000;
+}
+
+#selectionRectangle {
+  position: absolute;
+  border: 2px solid #3f3;
+  opacity: 0.8;
+}
+
+
+/**
+*   TOOLTIPS
+*/
+.tooltip {
+  font-size: 15px;
+  opacity: 0.9;
+  background: #000;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  text-shadow: 1px 1px 2px #000000;
+  
+  .price {
+    display: inline-block;
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .sprite {
+    margin-right: 6px;
+    width: 20px;
+    height: 20px;
+  }
+
+  .technoNeed {
+    color: yellow;
+  }
+}
+
+
+/**
+*   CHAT
+*/
+#chat {
+  position: absolute;
+  font-size: 1.0em;
+  color: #ddd;
+  background: #000;
+  opacity: 0.8;
+  padding: 10px 10px 0px 10px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 6px 6px #000;
+
+  input {
+    font-size: 1.2em;
+    font-family: 'godofwar';
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: inset 0 1px 1px rgba(0,0,0,0.075);
+    transition: border linear .2s,box-shadow linear .2s;
+    display: inline-block;
+    height: 20px;
+    padding: 4px 6px;
+    margin-bottom: 10px;
+    line-height: 20px;
+    color: #555;
+    vertical-align: middle;
+    border-radius: 4px;
+  }
+}
+
+#messages {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  min-height: 0px;
+  max-height: 13%;
+  width: 25%;
+  overflow: auto;
+  padding: 3px;
+  opacity: 0.8;
+  background: #000;
+  box-shadow: 0px 0px 5px 5px #000;
+
+  div {
+    font-size: 0.8em;
+    padding: 2px 5px 2px 5px;
+    color: #eee;
+    line-height: 10px;
+
+    span {
+      font-size: 1.3em;
+      margin-left: 10px;
+    }
+  }
+}
+.red {
+    color: #C41616;
+}
+.blue {
+    color: #9E9EF0;
+}
+.green {
+    color: #70CC83;
+}
+.yellow {
+    color: #EDC71C;
+}
+.black {
+    color: #000;
+}
+.white {
+    color: #eee;
+}
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(200,200,200,0.3);
+    border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: inset 0 0 6px rgba(200,200,200,0.5);
+    border-radius: 10px;
+}
+
+
+/**
+*   END GAME STATS
+*/
+#endGame {
+  text-align: center;
+  overflow: auto;
+  text-shadow: 2px 2px 4px #000000;
+
+  h3 {
+    color: #eee;
+    font-weight: normal;
+    margin: 0px;
+  }
+
+  .btn {
+    position: absolute;
+    left: 10px;
+    bottom: 10px;
+    color: #ccc;
+  }
+
+  .btn:hover {
+    background: #ddd;
+    color : #222;
+  }
+}
+#endGameMessage {
+  padding: 50px;
+  font-size: 4.0em;
+
+}
+#endGameStats {
+  padding: 15px;
+
+  table {
+    box-shadow: 0px 0px 15px 8px #000;
+    border: none;
+
+    tr th {
+      color: #eee;
+      vertical-align: middle;
+      text-align: center;
+      font-weight: normal;
+      border: thin solid #ddd;
+      text-shadow: 1px 1px 2px #000000;
+    }
+
+    tr td {
+      text-align: center;
+      border: thin solid #ddd;
+    }
+  }
+}
+.victory {
+    color : #0d0;
+}
+.defeat {
+    color : #d00;
+}
+#popChart canvas {
+  background: none;
+}
+
+#game {
+  .helpButton {
+    position: absolute;
+    top: 13px;
+    right: 330px;
+    
+  }
+}
