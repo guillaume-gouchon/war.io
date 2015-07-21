@@ -3,6 +3,6 @@ server:
     ports:
         - "5000:5000"
 nginx:
-    build: ./public
+    build: ./client
     ports:
         - "80:80"
