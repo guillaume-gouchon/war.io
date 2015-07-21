@@ -21,14 +21,6 @@ colors.setTheme({
   debug: 'grey'
 });
 
-// setup routes
-app.get('/', function (req, res) {
-  if (!res.getHeader('Cache-Control')) {
-    res.setHeader('Cache-Control', 'public, max-age=' + 100000);
-  }
-  res.sendfile(__dirname + '/public/dist/index.html');
-});
-
 // start server
 var port = 5000;
 var server = app.listen(port);
