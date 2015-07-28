@@ -7,4 +7,4 @@ nginx:
     links:
         - node
     ports:
-        - "80:80"
+        - "82:80"
