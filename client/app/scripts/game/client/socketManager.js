@@ -12,7 +12,7 @@ socketManager.socket = null;
 */
 socketManager.connect = function () {
 
-	this.socket = io.connect("war.gcorp.io:5000");
+	this.socket = io.connect("war.gcorp.io/api");
 
 	this.socket.on('data', function (data) {
 		socketManager.onDataSocket(data);
