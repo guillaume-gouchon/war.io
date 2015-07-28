@@ -1,8 +1,10 @@
-server:
+node:
     build: .
     ports:
         - "5000:5000"
 nginx:
     build: ./client
+    links:
+        - node
     ports:
-        - "82:80"
+        - "80:80"
