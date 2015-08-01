@@ -1,4 +1,4 @@
-nginx:
+web:
     build: ./client
     links:
         - node
