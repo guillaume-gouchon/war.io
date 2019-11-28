@@ -1,0 +1,65 @@
+version: 2.1
+commands:
+  login_on_gcp:
+    description: Login to Google Cloud SDK
+    parameters:
+      gcloud_key:
+        type: string
+      project:
+        type: string
+    steps:
+      - run: |
+          echo << parameters.gcloud_key >> | gcloud auth activate-service-account --key-file=-
+          gcloud --quiet config set project << parameters.project >>
+
+  upload_image_on_gcp:
+    description: Upload Docker image on GCP
+    parameters:
+      image:
+        type: string
+    steps:
+      - run: gcloud builds submit --tag gcr.io/<< parameters.image >>
+
+  deploy_on_gcp:
+    description: Deploy Docker
+    parameters:
+      image:
+        type: string
+      env:
+        type: string
+    steps:
+      - run: gcloud beta run deploy --image gcr.io/<< parameters.image >> --platform managed --region europe-west1 --allow-unauthenticated --set-env-vars ENV=<< parameters.env >>
+
+  delete_container_image:
+    description: Delete container image
+    parameters:
+      image:
+        type: string
+    steps:
+      - run: gcloud container images delete gcr.io/<< parameters.image >> -q --force-delete-tags
+
+jobs:
+  build_deploy_prod:
+    docker:
+      - image: google/cloud-sdk
+    steps:
+      - checkout
+      - login_on_gcp:
+          gcloud_key: $GCLOUD_SERVICE_KEY_PROD
+          project: api-project-725491021247
+      - upload_image_on_gcp:
+          image: api-project-725491021247/war
+      - deploy_on_gcp:
+          image: api-project-725491021247/war
+          env: production
+      - delete_container_image:
+          image: api-project-725491021247/war
+
+workflows:
+  build_deploy:
+    jobs:
+      - build_deploy_prod:
+          filters:
+            branches:
+              only:
+                - master

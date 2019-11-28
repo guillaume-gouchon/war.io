@@ -1,9 +1,45 @@
 {
-  "name": "war.io",
+  "name": "cv",
   "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "start": "node .",
+    "build": "grunt build"
+  },
+  "author": "Guillaume Gouchon",
   "dependencies": {
-    "colors": "0.6.0-1",
-    "express": "3.3.3",
-    "socket.io": "0.9.16"
+    "ejs": "^2.5.7",
+    "express": "^4.17.1",
+    "jquery": "^3.4.1"
+  },
+  "devDependencies": {
+    "connect-modrewrite": "^0.9.0",
+    "grunt": "^1.0.4",
+    "grunt-autoprefixer": "^3.0.4",
+    "grunt-cli": "^1.2.0",
+    "grunt-concurrent": "^2.2.1",
+    "grunt-connect-proxy": "^0.2.0",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-compass": "~0.7.0",
+    "grunt-contrib-concat": "^1.0.0",
+    "grunt-contrib-connect": "^1.0.1",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-cssmin": "^3.0.0",
+    "grunt-contrib-imagemin": "~0.9.4",
+    "grunt-contrib-htmlmin": "^3.1.0",
+    "grunt-contrib-less": "^1.2.0",
+    "grunt-contrib-uglify": "^1.0.1",
+    "grunt-contrib-watch": "^1.1.0",
+    "grunt-ejs-render": "^0.2.7",
+    "grunt-filerev": "^2.3.1",
+    "grunt-newer": "^1.1.0",
+    "grunt-remove-logging": "^0.2.0",
+    "grunt-rev": "~0.1.0",
+    "grunt-svgmin": "^6.0.0",
+    "grunt-usemin": "^3.1.1",
+    "less": "^2.7.1",
+    "load-grunt-config": "^3.0.1",
+    "load-grunt-tasks": "^3.5.2",
+    "nodemon": "^1.19.4"
   }
 }

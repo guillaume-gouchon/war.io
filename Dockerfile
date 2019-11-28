@@ -1,27 +1,11 @@
-# Set the base image to Ubuntu
-FROM ubuntu
+FROM node:8.9.4-slim
 
-# File Author / Maintainer
-MAINTAINER Guillaume Gouchon
+COPY . /usr/src
+WORKDIR /usr/src
 
-# Install Node.js and other dependencies
-RUN apt-get update && \
-    apt-get -y install curl && \
-    curl -sL https://deb.nodesource.com/setup | sudo bash - && \
-    apt-get -y install python build-essential nodejs
+RUN npm install
+RUN npm run build
 
-# Install nodemon
-RUN npm install -g forever
+CMD ["node", "."]
 
-# Provides cached layer for node_modules
-ADD package.json /tmp/package.json
-RUN cd /tmp && npm install
-RUN mkdir -p / && cp -a /tmp/node_modules /
-
-# Define working directory
-ADD . /
-
-ENV NODE_ENV production
-
-# Run app using forever
-CMD forever server.js
+EXPOSE 8080
