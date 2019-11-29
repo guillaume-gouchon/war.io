@@ -7,9 +7,9 @@ const app = express();
 app.set('port', process.env.PORT || 8080);
 
 // serve html
-app.use(express.static(path.join(__dirname, './build')));
+app.use(express.static(path.join(__dirname, './dist')));
 app.get('/', (req, res, next) => {
-	res.sendFile(path.join(__dirname, './build/index.html'));
+	res.sendFile(path.join(__dirname, './dist/index.html'));
 });
 
 app.listen(app.get('port'), function() {
