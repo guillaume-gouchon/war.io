@@ -3,7 +3,7 @@
 */
 gameData.RACES = {
 	human : {
-		id: 10,
+		id: 0,
 		name : 'Human Alliance',
 		image : 'human.png'
 	}

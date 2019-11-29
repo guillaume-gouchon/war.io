@@ -2,5 +2,5 @@
 *.log
 .tmp
 node_modules/
-build
 .sass-cache
+dist

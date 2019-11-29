@@ -13,7 +13,7 @@ GUI.toolbar = [];
 */
 GUI.IMAGES_PATH = 'assets/GUI/';
 GUI.MOUSE_ICONS = {
-	standard : 'url("' + GUI.IMAGES_PATH + 'cursor.png"), auto', 
+	standard : 'url("' + GUI.IMAGES_PATH + 'cursor.png"), auto',
 	select : 'url("' + GUI.IMAGES_PATH + 'cursor_hover.png"), auto',
 	attack : 'url("' + GUI.IMAGES_PATH + 'cursor_attack.png"), auto',
 	cross : 'url("' + GUI.IMAGES_PATH + 'cursor_cross.png"), auto',
@@ -36,7 +36,7 @@ GUI.GUI_ELEMENTS = {
 
 
 /**
-*	Show the buildings the player can build. 
+*	Show the buildings the player can build.
 */
 GUI.showBuildings = false;
 GUI.minimapSize = 0;
@@ -53,11 +53,12 @@ GUI.init = function () {
 	this.initSpecialButtons();
 	this.initInfobarEvents();
 	$('#gui').tooltip({
-	    selector: '.enableTooltip'
+	    selector: '.enableTooltip',
+			html: true,
 	});
 	$.extend($.fn.tooltip.defaults, {
     	animation: false,
-    	html: true
+    	html: true,
 	});
 }
 
@@ -67,12 +68,10 @@ GUI.init = function () {
 *	Called in the main thread.
 */
 GUI.update = function () {
-
 	this.updatePopulation();
 	this.updateResources();
 	this.updateToolbar();
 	this.updateInfoBar();
-
 }
 
 
@@ -127,7 +126,7 @@ GUI.initInfobarEvents = function () {
 			}
 		}
 	});
-	
+
 	// TODO
 }
 GUI.initMinimapSize = function () {
@@ -146,7 +145,7 @@ GUI.updatePopulation = function () {
 GUI.updateResources = function () {
 	var player = gameContent.players[gameContent.myArmy];
 	for (var i in gameData.RESOURCES) {
-		var resource = gameData.RESOURCES[i]; 
+		var resource = gameData.RESOURCES[i];
 		$('span', '#resource' + resource.id).html(player.re[resource.id]);
 	}
 }
@@ -168,7 +167,7 @@ GUI.updateInfoBar = function () {
 				$('#listSelected').append('<button data-id="' + element.id + '" class="' + gameSurface.getLifeBarBackgroundColor(element.l / elementData.l) + '"><div class="' + elementData.g + ' sprite"></div></button>');
 			} else {
 				guiElement.attr('class', gameSurface.getLifeBarBackgroundColor(element.l / elementData.l));
-			}	
+			}
 		}
 
 		// update info
@@ -415,4 +414,3 @@ GUI.selectButton = function (button) {
 GUI.unselectButtons = function () {
 	$('button', '#toolbar').removeClass('selected');
 }
-
