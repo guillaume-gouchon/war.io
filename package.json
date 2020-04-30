@@ -10,7 +10,7 @@
   "dependencies": {
     "ejs": "^2.5.7",
     "express": "^4.17.1",
-    "jquery": "^1.10.2"
+    "jquery": "^3.5.0"
   },
   "devDependencies": {
     "connect-modrewrite": "^0.9.0",
