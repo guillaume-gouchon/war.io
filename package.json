@@ -9,11 +9,11 @@
   "author": "Guillaume Gouchon",
   "dependencies": {
     "ejs": "^2.5.7",
-    "express": "^4.17.1",
+    "express": "^4.18.2",
     "jquery": "^1.10.2"
   },
   "devDependencies": {
-    "connect-modrewrite": "^0.9.0",
+    "connect-modrewrite": "^0.10.2",
     "grunt": "^1.0.4",
     "grunt-autoprefixer": "^3.0.4",
     "grunt-cli": "^1.2.0",
