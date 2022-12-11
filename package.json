@@ -9,7 +9,7 @@
   "author": "Guillaume Gouchon",
   "dependencies": {
     "ejs": "^2.5.7",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "jquery": "^1.10.2"
   },
   "devDependencies": {
